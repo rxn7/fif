@@ -10,8 +10,8 @@ namespace fif::gfx {
 	static std::unordered_map<std::string, std::shared_ptr<Shader>> s_Shaders;
 
 	void ShaderLibrary::init() {
-		add("circle", std::make_shared<Shader>(shaders::circle::VERTEX, shaders::circle::FRAGMENT));
-		add("quad", std::make_shared<Shader>(shaders::quad::VERTEX, shaders::quad::FRAGMENT));
+		add("circle", std::make_shared<Shader>(priv::shaders::Circle::VERTEX, priv::shaders::Circle::FRAGMENT));
+		add("quad", std::make_shared<Shader>(priv::shaders::Quad::VERTEX, priv::shaders::Quad::FRAGMENT));
 	}
 
 	std::shared_ptr<Shader> ShaderLibrary::get(const std::string &name) {
