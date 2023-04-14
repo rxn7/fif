@@ -10,17 +10,19 @@ set(LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vendor)
 set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 set(INC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
+if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE Debug)
+endif()
+
 add_compile_options(-fPIC)
 
 if(FIF_BUILD_CORE)
   FILE(GLOB_RECURSE CoreSources ${SRC_DIR}/core/*.cpp)
   add_library(fif-core SHARED ${CoreSources})
 
-  target_include_directories(fif-core PUBLIC ${INC_DIR} PRIVATE ${SRC_DIR}/core)
   target_compile_definitions(fif-core PRIVATE GLFW_INCLUDE_NONE)
-  target_link_libraries(fif-core PRIVATE glfw ${GLFW_LIBRARIES})
-  target_link_libraries(fif-core PRIVATE glad)
-  target_link_libraries(fif-core PRIVATE EnTT::EnTT)
+  target_include_directories(fif-core PUBLIC ${INC_DIR} PRIVATE ${SRC_DIR}/core)
+  target_link_libraries(fif-core PRIVATE glfw glad EnTT::EnTT)
 endif()
 
 if(FIF_BUILD_GFX)
@@ -28,8 +30,7 @@ if(FIF_BUILD_GFX)
   add_library(fif-gfx SHARED ${GfxSources})
 
   target_include_directories(fif-gfx PUBLIC ${INC_DIR} PRIVATE ${SRC_DIR}/gfx)
-  target_link_libraries(fif-gfx PUBLIC fif-core)
-  target_link_libraries(fif-gfx PRIVATE glad)
+  target_link_libraries(fif-gfx PUBLIC fif-core glad)
 endif()
 
 if(FIF_BUILD_EXAMPLE)
