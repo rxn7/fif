@@ -2,6 +2,7 @@
 #include "fif/core/assertion.h"
 
 #include "shaders/circle.h"
+#include "shaders/quad.h"
 
 #include <memory>
 
@@ -10,6 +11,7 @@ namespace fif::gfx {
 
 	void ShaderLibrary::init() {
 		add("circle", std::make_shared<Shader>(shaders::circle::VERTEX, shaders::circle::FRAGMENT));
+		add("quad", std::make_shared<Shader>(shaders::quad::VERTEX, shaders::quad::FRAGMENT));
 	}
 
 	std::shared_ptr<Shader> ShaderLibrary::get(const std::string &name) {

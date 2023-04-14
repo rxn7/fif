@@ -12,7 +12,6 @@ namespace fif::core {
 		s_Instance = this;
 
 		mp_Window = std::make_unique<Window>(windowProperties);
-
 		gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress));
 	}
 

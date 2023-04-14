@@ -2,7 +2,7 @@
 
 #include <memory>
 
-namespace fif::gfx::shaders::circle {
+namespace fif::gfx::shaders::quad {
 	const std::string VERTEX = R"(
 	#version 330 core
 
@@ -28,8 +28,6 @@ namespace fif::gfx::shaders::circle {
 	out vec4 f_Color;
 
 	void main() {
-		float dist = distance(vec2(0.5, 0.5), v_UV) * 2.0;
-		float alpha = dist > 0.99 ? 1.0 - smoothstep(0.99, 1.0, dist) : 1.0;
-		f_Color = mix(vec4(0.0), v_Color * vec4(v_UV, 0.0, 1.0), alpha);
+		f_Color = v_Color * vec4(0.0, v_UV, 1.0);
 	})";
 }
