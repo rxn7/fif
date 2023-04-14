@@ -12,7 +12,7 @@ namespace fif::gfx {
 		Renderable(const std::vector<Vertex> &vertices, const std::vector<std::uint32_t> &elements);
 		void render() const;
 
-	private:
+	protected:
 		std::shared_ptr<Shader> mp_Shader;
 		std::uint32_t m_ElementCount;
 		std::uint32_t m_Vao;

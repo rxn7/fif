@@ -6,8 +6,8 @@
 
 namespace fif::gfx {
 	struct Vertex {
-		glm::vec3 position;
-		glm::vec2 uv;
-		glm::u8vec4 color;
+		glm::vec3 position = {0,0,0};
+		glm::vec2 uv = {0,0};
+		glm::u8vec4 color = {255,255,255,255};
 	};
 }

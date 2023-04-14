@@ -1,5 +1,6 @@
 #include "fif/core/application.h"
 #include "fif/core/window.h"
+#include "fif/gfx/primitives/circle.h"
 #include "fif/gfx/renderable.h"
 #include "fif/gfx/vertex.h"
 
@@ -11,32 +12,12 @@ constexpr fif::core::WindowProperties WINDOW_PROPS = {
 class ExampleApplication : public fif::core::Application {
 public:
 	ExampleApplication() : fif::core::Application(WINDOW_PROPS) {
-		std::vector<fif::gfx::Vertex> vertices = {
-			fif::gfx::Vertex{
-				.position = glm::vec3(-0.5f, -0.5f, 0.0f),
-				.uv = {0.0f, 0.0f},
-				.color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f),
-			},
-			fif::gfx::Vertex{
-				.position = glm::vec3( 0.5f, -0.5f, 0.0f),
-				.uv = {1.0f, 0.0f},
-				.color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f),
-			},
-			fif::gfx::Vertex{
-				.position = glm::vec3( 0.0f,  0.5f, 0.0f),
-				.uv = {0.0f, 1.0f},
-				.color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f),
-			},
-		};
-
-		std::vector<std::uint32_t> elements = {0,1,2};
-
-		mp_Triangle = std::make_unique<fif::gfx::Renderable>(vertices, elements);
+		mp_Circle = std::make_unique<fif::gfx::CirclePrimitive>();
 	}
 
 	void startFrame() override {
 		fif::core::Application::startFrame();
-		mp_Triangle->render();
+		mp_Circle->render();
 	}
 
 	void endFrame() override {
@@ -44,7 +25,7 @@ public:
 	}
 
 private:
-	std::unique_ptr<fif::gfx::Renderable> mp_Triangle;
+	std::unique_ptr<fif::gfx::Renderable> mp_Circle;
 };
 
 int main() {
