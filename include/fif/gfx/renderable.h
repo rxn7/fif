@@ -1,0 +1,22 @@
+#pragma once
+
+#include "fif/gfx/shader.h"
+#include "fif/gfx/vertex.h"
+
+#include <vector>
+#include <memory>
+
+namespace fif::gfx {
+	class Renderable {
+	public:
+		Renderable(const std::vector<Vertex> &vertices, const std::vector<std::uint32_t> &elements);
+		void render() const;
+
+	private:
+		std::shared_ptr<Shader> mp_Shader;
+		std::uint32_t m_ElementCount;
+		std::uint32_t m_Vao;
+		std::uint32_t m_Vbo;
+		std::uint32_t m_Ebo;
+	};
+}

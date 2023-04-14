@@ -1,5 +1,5 @@
-#include "fif/application.h"
-#include "fif/assertion.h"
+#include "fif/core/application.h"
+#include "fif/core/assertion.h"
 
 #include "GLFW/glfw3.h"
 #include "glad/glad.h"
@@ -21,8 +21,15 @@ fif::core::Application::~Application() {
 void fif::core::Application::start() {
 	while(!mp_Window->shouldClose()) {
 		glClear(GL_COLOR_BUFFER_BIT);
-		mp_Window->startFrame();
-
-		mp_Window->endFrame();
+		startFrame();
+		endFrame();
 	}
+}
+
+void fif::core::Application::startFrame() {
+	mp_Window->startFrame();
+}
+
+void fif::core::Application::endFrame() {
+	mp_Window->endFrame();
 }

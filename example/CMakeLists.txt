@@ -10,4 +10,4 @@ FILE(GLOB Sources ${SRC_DIR}/*.cpp)
 add_executable(${PROJECT_NAME} ${Sources})
 include_directories(${INC_DIR})
 
-target_link_libraries(${PROJECT_NAME} fif)
+target_link_libraries(${PROJECT_NAME} fif-core fif-gfx)

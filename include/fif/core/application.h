@@ -11,6 +11,8 @@ namespace fif::core {
 
 		inline const Window &getWindow() const { return *mp_Window; }
 		void start();
+		virtual void startFrame();
+		virtual void endFrame();
 
 	private:
 		static Application *s_Instance;

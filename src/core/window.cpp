@@ -1,5 +1,5 @@
-#include "fif/window.h"
-#include "fif/assertion.h"
+#include "fif/core/window.h"
+#include "fif/core/assertion.h"
 
 #include "GLFW/glfw3.h"
 
