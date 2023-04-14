@@ -5,7 +5,7 @@
 #include <unordered_map>
 
 namespace fif::gfx {
-	class Shader {
+	class Shader final {
 	public:
 		Shader(const std::string &vertexSrc, const std::string &fragmentSrc);
 		~Shader();

@@ -12,6 +12,10 @@ namespace fif::gfx {
 		Renderable(const std::vector<Vertex> &vertices, const std::vector<std::uint16_t> &elements, const std::shared_ptr<Shader> &shader);
 		void render() const;
 
+		inline const Shader &getShader() const {
+			return *mp_Shader;
+		}
+
 	protected:
 		std::shared_ptr<Shader> mp_Shader;
 		glm::u8vec4 m_Color;

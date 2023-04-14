@@ -19,9 +19,6 @@ namespace fif::gfx {
 		glEnableVertexAttribArray(1);
 		glVertexAttribPointer(1, 2, GL_FLOAT, false, sizeof(Vertex), reinterpret_cast<const void*>(offsetof(Vertex, uv)));
 
-		glEnableVertexAttribArray(2);
-		glVertexAttribPointer(2, 4, GL_UNSIGNED_BYTE, true, sizeof(Vertex), reinterpret_cast<const void*>(offsetof(Vertex, color)));
-
 		glGenBuffers(1, &m_Ebo);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_Ebo);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, elements.size() * sizeof(std::uint16_t), elements.data(), GL_STATIC_DRAW);

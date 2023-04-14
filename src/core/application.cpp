@@ -1,10 +1,13 @@
 #include "fif/core/application.h"
 #include "fif/core/assertion.h"
+#include "fif/core/events/updateEvent.h"
+#include "fif/core/events/renderEvent.h"
 #include "fif/core/layers/imGuiLayer.h"
+#include "fif/core/performanceStats.h"
 
 #include "GLFW/glfw3.h"
-#include "fif/core/performanceStats.h"
 #include "glad/glad.h"
+
 #include <chrono>
 
 using namespace std::chrono;
@@ -39,19 +42,30 @@ namespace fif::core {
 			m_LastFramePerformanceStats.frameTimeMs = dt * 1000.0f;
 
 			glClear(GL_COLOR_BUFFER_BIT);
-			startFrame();
+			startFrame(dt);
 			endFrame();
 		}
 	}
 
-	void Application::startFrame() {
+	void Application::startFrame(float dt) {
 		mp_Window->startFrame();
 
-		for(std::unique_ptr<Layer> &layer : m_Layers)
-			layer->render();
+		for(const Module * mod : m_Modules)
+			mod->updateFunc(dt);
 	}
 
 	void Application::endFrame() {
+		for(const Module *mod : m_Modules)
+			mod->renderFunc();
+
+		for(std::unique_ptr<Layer> &layer : m_Layers)
+			layer->render();
+
 		mp_Window->endFrame();
+	}
+
+	void Application::registerModule(const Module *mod) {
+		mod->initFunc();
+		m_Modules.push_back(mod);
 	}
 }

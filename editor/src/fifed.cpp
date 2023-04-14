@@ -1,5 +1,7 @@
 #include "fifed.h"
+#include "editorLayer.h"
 #include "fif/core/application.h"
+#include "fif/gfx/gfx.h"
 
 constexpr fif::core::WindowProperties WINDOW_PROPS = {
 	.title = "fifed",
@@ -7,6 +9,8 @@ constexpr fif::core::WindowProperties WINDOW_PROPS = {
 };
 
 Fifed::Fifed() : fif::core::Application(WINDOW_PROPS) {
+	registerModule(&fif::gfx::gfxModule);
+	m_Layers.push_back(std::make_unique<EditorLayer>());
 }
 
 Fifed::~Fifed() {

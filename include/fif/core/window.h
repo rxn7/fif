@@ -6,13 +6,13 @@
 struct GLFWwindow;
 
 namespace fif::core {
-	struct WindowProperties {
+	struct WindowProperties final {
 		const std::string title; 
 		const glm::i16vec2 size;
 		bool vsync = true;
 	};
 
-	class Window {
+	class Window final {
 	friend class Application;
 	public:
 		Window(const WindowProperties &props);

@@ -23,7 +23,7 @@ if(FIF_BUILD_CORE)
   set_target_properties(fif-core PROPERTIES PUBLIC_HEADER ${INC_DIR}/gfx)
   target_compile_definitions(fif-core PRIVATE GLFW_INCLUDE_NONE)
   target_include_directories(fif-core PUBLIC ${INC_DIR} PRIVATE ${SRC_DIR}/core)
-  target_link_libraries(fif-core PRIVATE glfw glad EnTT::EnTT ImGui)
+  target_link_libraries(fif-core PUBLIC EnTT PRIVATE glfw glad ImGui)
 endif()
 
 if(FIF_BUILD_GFX)
@@ -32,7 +32,7 @@ if(FIF_BUILD_GFX)
 
   set_target_properties(fif-gfx PROPERTIES PUBLIC_HEADER ${INC_DIR}/gfx)
   target_include_directories(fif-gfx PUBLIC ${INC_DIR}/gfx PRIVATE ${SRC_DIR}/gfx)
-  target_link_libraries(fif-gfx PUBLIC fif-core glad)
+  target_link_libraries(fif-gfx PUBLIC fif-core glad EnTT)
 endif()
 
 if(FIF_BUILD_EDITOR)
@@ -49,7 +49,6 @@ add_subdirectory(${LIB_DIR}/entt)
 add_subdirectory(${LIB_DIR}/glad)
 include_directories(${LIB_DIR}/glm)
 
-# ImGui
 set(IMGUI_PATH "vendor/imgui")
 
 file(GLOB IMGUI_SOURCES

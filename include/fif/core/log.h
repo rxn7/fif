@@ -1,5 +1,7 @@
 #pragma once
 
+#include <iostream>
+
 #define FIF_ANSI_RESET "\033[m"
 #define FIF_ANSI_RED "\033[0;31m"
 #define FIF_ANSI_YELLOW "\033[0;33m"

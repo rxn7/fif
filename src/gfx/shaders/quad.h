@@ -7,17 +7,19 @@ namespace fif::gfx::priv::shaders {
 		const std::string VERTEX = R"(
 		#version 330 core
 
+		uniform vec4 u_Color;
+		uniform mat4 u_ModelMatrix;
+
 		layout(location = 0) in vec3 l_Position;
 		layout(location = 1) in vec2 l_UV;
-		layout(location = 2) in vec4 l_Color;
 
 		out vec4 v_Color;
 		out vec2 v_UV;
 
 		void main() {
-			v_Color = l_Color;
+			v_Color = u_Color;
 			v_UV = l_UV;
-			gl_Position = vec4(l_Position, 1.0);
+			gl_Position = u_ModelMatrix * vec4(l_Position, 1.0);
 		})";
 
 		const std::string FRAGMENT = R"(
