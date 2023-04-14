@@ -25,8 +25,9 @@ namespace fif::core {
 
 	private:
 		static void glfwErrorCallback(int error, const char *msg);
+		static void glfwResizeCallback(GLFWwindow *window, int width, int height);
 
 	private:
-		GLFWwindow *m_GlfwWindow = nullptr;
+		GLFWwindow *mp_GlfwWindow = nullptr;
 	};
 }
