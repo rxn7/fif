@@ -1,5 +1,6 @@
 #include "fif/gfx/shader.h"
 #include "fif/core/assertion.h"
+#include "fif/core/log.h"
 
 #include "glad/glad.h"
 
@@ -23,7 +24,7 @@ namespace fif::gfx {
 
 			char *buffer = new char[logLength];
 			glGetProgramInfoLog(id, logLength, NULL, buffer);
-			std::cerr << "Failed to link shader program: " << buffer << std::endl;
+			FIF_LOG_ERROR("Failed to link shader program: " << buffer);
 
 			delete[] buffer;
 		};
@@ -70,7 +71,7 @@ namespace fif::gfx {
 			char *buffer = new char[logLength];
 			glGetShaderInfoLog(id, logLength, NULL, buffer);
 
-			std::cerr << "Failed to compile shader: " << buffer << std::endl;
+			FIF_LOG_ERROR("Failed to compile shader: " << buffer);
 
 			delete[] buffer;
 		}
