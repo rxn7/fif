@@ -9,16 +9,19 @@ namespace fif::core {
 	struct WindowProperties {
 		const std::string title; 
 		const glm::i16vec2 size;
+		bool vsync = true;
 	};
 
 	class Window {
+	friend class Application;
 	public:
 		Window(const WindowProperties &props);
 		~Window();
 		bool shouldClose() const;
 		void close();
 
-	friend class Application;
+		inline GLFWwindow *getGlfwWindow() const { return mp_GlfwWindow; }
+
 	private:
 		void startFrame();
 		void endFrame();

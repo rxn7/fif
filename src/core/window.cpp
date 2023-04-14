@@ -15,6 +15,8 @@ namespace fif::core {
 
 		glfwMakeContextCurrent(mp_GlfwWindow);
 		glfwSetWindowSizeCallback(mp_GlfwWindow, glfwResizeCallback);
+
+		glfwSwapInterval(props.vsync);
 	} 
 
 	Window::~Window() {

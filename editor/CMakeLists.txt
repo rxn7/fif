@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.15)
-project(example)
+project(fifed)
 
 set(CMAKE_CXX_STANDARD 20)
 set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
