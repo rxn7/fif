@@ -1,6 +1,8 @@
 #pragma once
 
 #include <string>
+#include <memory>
+#include <unordered_map>
 
 namespace fif::gfx {
 	class Shader {

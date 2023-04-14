@@ -4,70 +4,37 @@
 #include "glad/glad.h"
 #include <memory>
 
-const std::string VERTEX = R"(
-#version 330 core
+namespace fif::gfx {
+	Renderable::Renderable(const std::vector<Vertex> &vertices, const std::vector<std::uint32_t> &elements, const std::shared_ptr<Shader> &shader) : mp_Shader(shader) {
+		glCreateVertexArrays(1, &m_Vao);
+		glBindVertexArray(m_Vao);
 
-layout(location = 0) in vec3 l_Position;
-layout(location = 1) in vec2 l_UV;
-layout(location = 2) in vec4 l_Color;
+		glGenBuffers(1, &m_Vbo);
+		glBindBuffer(GL_ARRAY_BUFFER, m_Vbo);
+		glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), vertices.data(), GL_STATIC_DRAW);
 
-out vec4 v_Color;
-out vec2 v_UV;
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, false, sizeof(Vertex), reinterpret_cast<const void*>(offsetof(Vertex, position)));
 
-void main() {
-	v_Color = l_Color;
-	v_UV = l_UV;
-	gl_Position = vec4(l_Position, 1.0);
-})";
+		glEnableVertexAttribArray(1);
+		glVertexAttribPointer(1, 2, GL_FLOAT, false, sizeof(Vertex), reinterpret_cast<const void*>(offsetof(Vertex, uv)));
 
-const std::string FRAGMENT = R"(
-#version 330 core
+		glEnableVertexAttribArray(2);
+		glVertexAttribPointer(2, 4, GL_UNSIGNED_BYTE, true, sizeof(Vertex), reinterpret_cast<const void*>(offsetof(Vertex, color)));
 
-in vec4 v_Color;
-in vec2 v_UV;
+		glGenBuffers(1, &m_Ebo);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_Ebo);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, elements.size() * sizeof(std::uint32_t), elements.data(), GL_STATIC_DRAW);
 
-out vec4 f_Color;
+		glBindVertexArray(0);
+	}
 
-void main() {
-	f_Color = v_Color;
-})";
+	void Renderable::render() const {
+		mp_Shader->bind();
 
-static std::shared_ptr<fif::gfx::Shader> s_PrimitiveShader = nullptr;
+		glBindVertexArray(m_Vao);
+		glDrawElements(GL_TRIANGLES, m_ElementCount, GL_UNSIGNED_INT, nullptr);
 
-fif::gfx::Renderable::Renderable(const std::vector<Vertex> &vertices, const std::vector<std::uint32_t> &elements) {
-	glCreateVertexArrays(1, &m_Vao);
-	glBindVertexArray(m_Vao);
-
-	glGenBuffers(1, &m_Vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, m_Vbo);
-	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), vertices.data(), GL_STATIC_DRAW);
-
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<const void*>(offsetof(Vertex, position)));
-
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<const void*>(offsetof(Vertex, uv)));
-
-	glEnableVertexAttribArray(2);
-	glVertexAttribPointer(2, 4, GL_UNSIGNED_BYTE, GL_FALSE, sizeof(Vertex), reinterpret_cast<const void*>(offsetof(Vertex, color)));
-
-	glGenBuffers(1, &m_Ebo);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_Ebo);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, elements.size() * sizeof(std::uint32_t), elements.data(), GL_STATIC_DRAW);
-
-	glBindVertexArray(0);
-
-	if(s_PrimitiveShader.get() == nullptr)
-		s_PrimitiveShader = std::make_unique<Shader>(VERTEX, FRAGMENT);
-
-	mp_Shader = s_PrimitiveShader;
-}
-
-void fif::gfx::Renderable::render() const {
-	mp_Shader->bind();
-
-	glBindVertexArray(m_Vao);
-	glDrawElements(GL_TRIANGLES, m_ElementCount, GL_UNSIGNED_INT, nullptr);
-
-	glBindVertexArray(0);
+		glBindVertexArray(0);
+	}
 }

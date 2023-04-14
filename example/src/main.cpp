@@ -3,6 +3,7 @@
 #include "fif/gfx/primitives/circle.h"
 #include "fif/gfx/renderable.h"
 #include "fif/gfx/vertex.h"
+#include "fif/gfx/gfx.h"
 
 constexpr fif::core::WindowProperties WINDOW_PROPS = {
 	.title = "fif Example",
@@ -12,7 +13,8 @@ constexpr fif::core::WindowProperties WINDOW_PROPS = {
 class ExampleApplication : public fif::core::Application {
 public:
 	ExampleApplication() : fif::core::Application(WINDOW_PROPS) {
-		mp_Circle = std::make_unique<fif::gfx::CirclePrimitive>();
+		fif::gfx::init();
+		mp_Circle = std::make_unique<fif::gfx::primitives::CirclePrimitive>();
 	}
 
 	void startFrame() override {

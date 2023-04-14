@@ -2,7 +2,7 @@
 
 #include "fif/gfx/renderable.h"
 
-namespace fif::gfx {
+namespace fif::gfx::primitives {
 	class CirclePrimitive : public Renderable {
 	public:
 		CirclePrimitive();
