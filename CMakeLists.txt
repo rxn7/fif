@@ -6,7 +6,7 @@ option(FIF_BUILD_CORE "Build the core module" ON)
 option(FIF_BUILD_GFX "Build the gfx module" ON)
 
 set(CMAKE_CXX_STANDARD 20)
-set(LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/libs)
+set(LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vendor)
 set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 set(INC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
 

@@ -1,9 +1,9 @@
 [submodule "libs/glfw"]
-	path = libs/glfw
+	path = vendor/glfw
 	url = https://github.com/glfw/glfw
 [submodule "libs/glad"]
-	path = libs/glad
+	path = vendor/glad
 	url = https://github.com/nitrix/glad
 [submodule "libs/glm"]
-	path = libs/glm
+	path = vendor/glm
 	url = https://github.com/g-truc/glm
