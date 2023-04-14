@@ -1,0 +1,9 @@
+[submodule "core/libs/glfw"]
+	path = core/libs/glfw
+	url = https://github.com/glfw/glfw
+[submodule "core/libs/glm"]
+	path = core/libs/glm
+	url = https://github.com/g-truc/glm
+[submodule "core/libs/glad"]
+	path = core/libs/glad
+	url = https://github.com/nitrix/glad

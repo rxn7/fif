@@ -1,0 +1,30 @@
+cmake_minimum_required(VERSION 3.15)
+project(fif-core DESCRIPTION "Core of the fif engine")
+
+set(CMAKE_CXX_STANDARD 20)
+set(LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/libs)
+
+FILE(GLOB Sources src/*.cpp)
+add_library(${PROJECT_NAME} SHARED ${Sources})
+
+# Link GLFW
+set(GLFW_DIR ${LIB_DIR}/glfw)
+set(GLFW_BUILD_EXAMPLES OFF CACHE INTERNAL "Build GLFW examples")
+set(GLFW_BUILD_TESTS OFF CACHE INTERNAL "Build GLFW tests")
+set(GLFW_BUILD_DOCS OFF CACHE INTERNAL "Build GLFW docs")
+set(GLFW_INSTALL OFF CACHE INTERNAL "Install GLFW")
+add_subdirectory(${GLFW_DIR})
+target_link_libraries(${PROJECT_NAME} PRIVATE glfw ${GLFW_LIBRARIES})
+target_include_directories(${PROJECT_NAME} PRIVATE ${GLFW_DIR}/include)
+target_compile_definitions(${PROJECT_NAME} PRIVATE GLFW_INCLUDE_NONE)
+
+# Link GLAD
+set(GLAD_DIR ${LIB_DIR}/glad)
+add_subdirectory(${GLAD_DIR})
+target_link_libraries(${PROJECT_NAME} PRIVATE glad)
+
+# Link GLM
+set(GLM_DIR ${LIB_DIR}/glm)
+include_directories(${GLM_DIR})
+
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
