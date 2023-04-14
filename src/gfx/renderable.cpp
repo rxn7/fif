@@ -5,7 +5,7 @@
 #include <memory>
 
 namespace fif::gfx {
-	Renderable::Renderable(const std::vector<Vertex> &vertices, const std::vector<std::uint32_t> &elements, const std::shared_ptr<Shader> &shader) : mp_Shader(shader) {
+	Renderable::Renderable(const std::vector<Vertex> &vertices, const std::vector<std::uint16_t> &elements, const std::shared_ptr<Shader> &shader) : mp_Shader(shader), m_ElementCount(elements.size()) {
 		glCreateVertexArrays(1, &m_Vao);
 		glBindVertexArray(m_Vao);
 
@@ -24,7 +24,7 @@ namespace fif::gfx {
 
 		glGenBuffers(1, &m_Ebo);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_Ebo);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, elements.size() * sizeof(std::uint32_t), elements.data(), GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, elements.size() * sizeof(std::uint16_t), elements.data(), GL_STATIC_DRAW);
 
 		glBindVertexArray(0);
 	}
@@ -33,7 +33,7 @@ namespace fif::gfx {
 		mp_Shader->bind();
 
 		glBindVertexArray(m_Vao);
-		glDrawElements(GL_TRIANGLES, m_ElementCount, GL_UNSIGNED_INT, nullptr);
+		glDrawElements(GL_TRIANGLES, m_ElementCount, GL_UNSIGNED_SHORT, 0);
 
 		glBindVertexArray(0);
 	}

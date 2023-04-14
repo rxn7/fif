@@ -22,7 +22,7 @@ namespace fif::gfx::primitives {
 		} 
 	};
 
-	const std::vector<std::uint32_t> ELEMENTS = {
+	const std::vector<std::uint16_t> ELEMENTS = {
 		0,1,2,
 		2,3,0
 	};
