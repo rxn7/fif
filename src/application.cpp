@@ -1,5 +1,5 @@
-#include "fif/core/application.h"
-#include "fif/core/assertion.h"
+#include "fif/application.h"
+#include "fif/assertion.h"
 
 #include "GLFW/glfw3.h"
 #include "glad/glad.h"

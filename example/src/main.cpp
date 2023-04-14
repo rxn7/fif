@@ -1,5 +1,5 @@
-#include "fif/core/application.h"
-#include "fif/core/window.h"
+#include "fif/application.h"
+#include "fif/window.h"
 
 int main() {
 	fif::core::WindowProperties props = {
