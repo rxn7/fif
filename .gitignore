@@ -20,6 +20,8 @@
 *.out
 *.app
 
+**/libs/**/*.pc
+**/libs/**/*.cmake
 **/.cache
 **/cmake-build-debug
 **/CMakeCache.txt
