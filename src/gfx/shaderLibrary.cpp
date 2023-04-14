@@ -1,7 +1,7 @@
 #include "fif/gfx/shaderLibrary.h"
-#include "shaders/circle.h"
-
 #include "fif/core/assertion.h"
+
+#include "shaders/circle.h"
 
 #include <memory>
 
@@ -19,6 +19,7 @@ namespace fif::gfx {
 	}
 
 	void ShaderLibrary::add(const std::string &name, const std::shared_ptr<Shader> &shader) {
+		FIF_ASSERT(shader.get() != nullptr, "The shader cannot be nullptr");
 		s_Shaders.insert({name, shader});
 	}
 }
