@@ -89,8 +89,6 @@ namespace fif::gfx {
 
 		const std::uint32_t id = glGetUniformLocation(m_ID, name.c_str());
 		m_UniformIDs.insert({name, id});
-
-		FIF_LOG("Uniform " << name << " registered");
 	}
 
 	std::uint32_t Shader::getUniformLocation(const std::string &name) const {

@@ -2,11 +2,13 @@
 #include "fif/core/assertion.h"
 #include "fif/core/events/updateEvent.h"
 #include "fif/core/events/renderEvent.h"
-#include "fif/core/layers/imGuiLayer.h"
 #include "fif/core/performanceStats.h"
 
 #include "GLFW/glfw3.h"
 #include "glad/glad.h"
+#include "imgui.h"
+#include "backends/imgui_impl_opengl3.h"
+#include "backends/imgui_impl_glfw.h"
 
 #include <algorithm>
 #include <chrono>
@@ -23,10 +25,14 @@ namespace fif::core {
 		mp_Window = std::make_unique<Window>(windowProperties);
 		gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress));
 
-		m_Layers.push_back(std::make_unique<ImGuiLayer>());
+		ImGui::CreateContext();
+		ImGui_ImplOpenGL3_Init();
+		ImGui_ImplGlfw_InitForOpenGL(mp_Window->getGlfwWindow(), true);
 	}
 
 	Application::~Application() {
+		ImGui_ImplOpenGL3_Shutdown();
+		ImGui_ImplGlfw_Shutdown();
 	}
 
 	void Application::start() {
@@ -64,6 +70,14 @@ namespace fif::core {
 
 		for(std::unique_ptr<Layer> &layer : m_Layers)
 			layer->render();
+
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplGlfw_NewFrame();
+		ImGui::NewFrame();
+		for(std::unique_ptr<Layer> &layer : m_Layers)
+			layer->renderImGui();
+		ImGui::Render();
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 		mp_Window->endFrame();
 	}

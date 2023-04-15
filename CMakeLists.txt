@@ -23,7 +23,7 @@ if(FIF_BUILD_CORE)
   set_target_properties(fif-core PROPERTIES PUBLIC_HEADER ${INC_DIR}/gfx)
   target_compile_definitions(fif-core PRIVATE GLFW_INCLUDE_NONE)
   target_include_directories(fif-core PUBLIC ${INC_DIR} PRIVATE ${SRC_DIR}/core)
-  target_link_libraries(fif-core PUBLIC EnTT PRIVATE glfw glad ImGui)
+  target_link_libraries(fif-core PUBLIC EnTT ImGui glfw PRIVATE glad)
 endif()
 
 if(FIF_BUILD_GFX)

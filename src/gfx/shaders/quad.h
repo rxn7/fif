@@ -7,7 +7,7 @@ namespace fif::gfx::priv::shaders {
 		const std::string VERTEX = 
 		Shader::GLSL_VERSION + 
 		R"(
-		uniform mat4 u_ModelMatrix;
+		uniform mat4 u_MVP;
 
 		layout(location = 0) in vec3 l_Position;
 		layout(location = 1) in vec2 l_UV;
@@ -16,7 +16,7 @@ namespace fif::gfx::priv::shaders {
 
 		void main() {
 			v_UV = l_UV;
-			gl_Position = u_ModelMatrix * vec4(l_Position, 1.0);
+			gl_Position = u_MVP * vec4(l_Position, 1.0);
 		})";
 
 		const std::string FRAGMENT =
