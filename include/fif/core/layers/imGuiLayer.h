@@ -11,5 +11,6 @@ namespace fif::core {
 		~ImGuiLayer();
 
 		void render() override;
+		constexpr int getZIndex() override { return 100; }
 	};
 }

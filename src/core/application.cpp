@@ -8,6 +8,7 @@
 #include "GLFW/glfw3.h"
 #include "glad/glad.h"
 
+#include <algorithm>
 #include <chrono>
 
 using namespace std::chrono;
@@ -68,5 +69,14 @@ namespace fif::core {
 		mod->initFunc();
 		m_Modules.push_back(mod);
 		FIF_LOG("Module " << mod->name << " registered");
+	}
+
+	void Application::addLayer(std::unique_ptr<Layer> layer) {
+		const auto sortFunc = [](std::unique_ptr<Layer> &a, std::unique_ptr<Layer> &b) {
+			return a->getZIndex() < b->getZIndex();
+		};
+
+		m_Layers.push_back(std::move(layer));
+		std::sort(m_Layers.begin(), m_Layers.end(), sortFunc);
 	}
 }

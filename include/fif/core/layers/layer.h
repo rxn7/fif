@@ -7,5 +7,6 @@ namespace fif::core {
 		virtual ~Layer() = default;
 
 		virtual void render() {}
+		virtual constexpr int getZIndex() { return 0; }
 	};
 }

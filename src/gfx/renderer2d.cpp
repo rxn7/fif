@@ -33,7 +33,10 @@ namespace fif::gfx {
 
 	void Renderer2D::renderCircle(const glm::vec2 &position, float radiu, const glm::vec4 &color) {
 		s_TempStats.primitivesRendered++;
-		s_Circle->getShader().bind();
+
+		const Shader &shader = s_Circle->getShader(); 
+		shader.bind();
+		shader.setUniform("u_Color", color);
 		s_Circle->render();
 	}
 }

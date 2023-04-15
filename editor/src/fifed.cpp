@@ -10,7 +10,7 @@ constexpr fif::core::WindowProperties WINDOW_PROPS = {
 
 Fifed::Fifed() : fif::core::Application(WINDOW_PROPS) {
 	registerModule(&fif::gfx::gfxModule);
-	m_Layers.push_back(std::make_unique<EditorLayer>());
+	addLayer(std::make_unique<EditorLayer>());
 }
 
 Fifed::~Fifed() {

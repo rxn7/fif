@@ -31,6 +31,9 @@ namespace fif::core {
 		inline const PerformanceStats &getLastFramePerformanceStats() const { 
 			return m_LastFramePerformanceStats;
 		}
+
+	protected:
+		void addLayer(std::unique_ptr<Layer> layer);
 		
 	private:
 		void startFrame(float dt);
@@ -38,10 +41,10 @@ namespace fif::core {
 
 	protected:
 		std::vector<const Module*> m_Modules;
-		std::vector<std::unique_ptr<Layer>> m_Layers;
 		std::unique_ptr<Window> mp_Window;
 
 	private:
+		std::vector<std::unique_ptr<Layer>> m_Layers;
 		PerformanceStats m_LastFramePerformanceStats;
 		static Application *s_Instance;
 	};
