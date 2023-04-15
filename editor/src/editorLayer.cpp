@@ -17,7 +17,7 @@ void EditorLayer::update(float dt) {
 }
 
 void EditorLayer::render() {
-	fif::gfx::Renderer2D::renderQuad({0.0f, 0.0f}, {100, 100}, glfwGetTime(), {1.0f, 0.0f, 1.0f, 1.0f});
+	fif::gfx::Renderer2D::renderQuad({0.0f, 0.0f}, {100, 100}, glfwGetTime() * 100.0f, {1.0f, 0.0f, 1.0f, 1.0f});
 	fif::gfx::Renderer2D::renderCircle({0.0f, 0.0f}, 100, {1.0f, 1.0f, 0.0f, 1.0f});
 	fif::gfx::Renderer2D::renderCircle({5.0f, 0.0f}, 25, {0.0f, 1.0f, 1.0f, 1.0f});
 }

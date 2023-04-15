@@ -42,7 +42,7 @@ namespace fif::gfx {
 	static void render(const glm::vec2 &position, const glm::vec2 &size, float angle, const glm::vec4 &color, const Renderable &renderable) {
 		s_PrimitivesRenderered++;
 
-		const glm::mat4 modelMatrix = core::Transform::getModelMatrix(glm::vec3(position, 0.0f), glm::vec3(size, 1.0f) * 0.5f, glm::vec3(0.0f, 0.0f, angle));
+		const glm::mat4 modelMatrix = core::Transform::getModelMatrix(glm::vec3(position, 0.0f), glm::vec3(size, 1.0f) * 0.5f, glm::vec3(0.0f, 0.0f, glm::radians(angle)));
 		const glm::mat4 mvp = s_Camera->getMatrix() * modelMatrix;
 
 		const Shader &shader = renderable.getShader(); 
