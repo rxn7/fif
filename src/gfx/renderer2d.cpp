@@ -10,12 +10,16 @@
 #include "glm/ext/matrix_transform.hpp"
 #include "glm/ext/matrix_float4x4.hpp"
 
+#include <chrono>
 #include <memory>
+#include <ratio>
 
 namespace fif::gfx {
-	static RendererStats s_Stats, s_TempStats;
+	static RendererStats s_Stats;
 	static std::unique_ptr<Renderable> s_Quad, s_Circle;
 	static std::unique_ptr<OrthoCamera> s_Camera;
+	static std::chrono::time_point<std::chrono::high_resolution_clock> s_BeginTime;
+	static std::uint32_t s_PrimitivesRenderered = 0u;
 
 	void Renderer2D::init() {
 		s_Camera = std::make_unique<OrthoCamera>();
@@ -24,18 +28,21 @@ namespace fif::gfx {
 	}
 
 	void Renderer2D::begin() {
-		s_TempStats.primitivesRendered = 0u;
+		s_BeginTime = std::chrono::high_resolution_clock::now();
 	}
 
 	void Renderer2D::end() {
 		s_Camera->update();
-		s_Stats = s_TempStats;
+		s_Stats.frameTimeMs = std::chrono::duration<float, std::milli>((std::chrono::high_resolution_clock::now() - s_BeginTime)).count();
+		s_Stats.primitivesRendered = s_PrimitivesRenderered;
+
+		s_PrimitivesRenderered = 0u;
 	}
 
-	static void render(const glm::vec2 &position, const glm::vec2 &size, const glm::vec4 &color, const Renderable &renderable) {
-		s_TempStats.primitivesRendered++;
+	static void render(const glm::vec2 &position, const glm::vec2 &size, float angle, const glm::vec4 &color, const Renderable &renderable) {
+		s_PrimitivesRenderered++;
 
-		const glm::mat4 modelMatrix = core::Transform::getModelMatrix(glm::vec3(position, 0.0f), glm::vec3(size, 1.0f) * 0.5f, glm::vec3(0.0f));
+		const glm::mat4 modelMatrix = core::Transform::getModelMatrix(glm::vec3(position, 0.0f), glm::vec3(size, 1.0f) * 0.5f, glm::vec3(0.0f, 0.0f, angle));
 		const glm::mat4 mvp = s_Camera->getMatrix() * modelMatrix;
 
 		const Shader &shader = renderable.getShader(); 
@@ -45,12 +52,12 @@ namespace fif::gfx {
 		renderable.render();
 	}
 
-	void Renderer2D::renderQuad(const glm::vec2 &position, const glm::vec2 &size, const glm::vec4 &color) {
-		render(position, size, color, *s_Quad);
+	void Renderer2D::renderQuad(const glm::vec2 &position, const glm::vec2 &size, float angle, const glm::vec4 &color) {
+		render(position, size, angle, color, *s_Quad);
 	}
 
-	void Renderer2D::renderCircle(const glm::vec2 &position, float radius, const glm::vec4 &color) {
-		render(position, {radius,radius}, color, *s_Circle);
+	void Renderer2D::renderCircle(const glm::vec2 &position, float diameter, const glm::vec4 &color) {
+		render(position, {diameter,diameter}, 0.0f, color, *s_Circle);
 	}
 
 	const RendererStats &Renderer2D::getStats() {

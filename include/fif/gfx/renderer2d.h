@@ -18,7 +18,7 @@ namespace fif::gfx {
 		void begin();
 		void end();
 
-		void renderQuad(const glm::vec2 &position, const glm::vec2 &size = {10.0f, 10.0f}, const glm::vec4 &color = {1.0f, 1.0f, 1.0f, 1.0f});
-		void renderCircle(const glm::vec2 &position, float radius = 5, const glm::vec4 &color = {1.0f, 1.0f, 1.0f, 1.0f});
+		void renderQuad(const glm::vec2 &position, const glm::vec2 &size, float angle = 0.0f, const glm::vec4 &color = {1.0f, 1.0f, 1.0f, 1.0f});
+		void renderCircle(const glm::vec2 &position, float diameter, const glm::vec4 &color = {1.0f, 1.0f, 1.0f, 1.0f});
 	}
 }
