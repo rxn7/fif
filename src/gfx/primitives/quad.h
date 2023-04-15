@@ -5,7 +5,7 @@
 
 namespace fif::gfx::priv::primitives {
 	namespace Quad {
-		const std::vector<fif::gfx::Vertex> VERTICES = { 
+		const fif::gfx::Vertex VERTICES[4] = {
 			{
 				.position = {-0.5f, -0.5f, 0.0f},
 				.uv = {0.0f, 0.0f},
@@ -24,6 +24,6 @@ namespace fif::gfx::priv::primitives {
 			} 
 		};
 
-		const std::vector<std::uint16_t> ELEMENTS = { 0,1,2, 2,3,0 };
+		const std::uint16_t ELEMENTS[6] = { 0,1,2, 2,3,0 };
 	}
 }

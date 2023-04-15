@@ -53,6 +53,9 @@ namespace fif::core {
 
 		for(const Module * mod : m_Modules)
 			mod->updateFunc(dt);
+
+		for(std::unique_ptr<Layer> &layer : m_Layers)
+			layer->update(dt);
 	}
 
 	void Application::endFrame() {

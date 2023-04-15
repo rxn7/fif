@@ -4,5 +4,6 @@
 
 class EditorLayer : public fif::core::Layer {
 public:
+	void update(float dt) override;
 	void render() override;
 };

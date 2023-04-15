@@ -9,7 +9,7 @@
 namespace fif::gfx {
 	class Renderable {
 	public:
-		Renderable(const std::vector<Vertex> &vertices, const std::vector<std::uint16_t> &elements, const std::shared_ptr<Shader> &shader);
+		Renderable(const Vertex *vertices, std::uint32_t vertexCount, const std::uint16_t *elements, std::uint32_t elementCount, const std::shared_ptr<Shader> &shader);
 		void render() const;
 
 		inline const Shader &getShader() const {

@@ -110,23 +110,23 @@ namespace fif::gfx {
 		glUniform1f(getUniformLocation(name), value);
 	}
 
-	void Shader::setUniform(const std::string &name, glm::vec2 value) const {
+	void Shader::setUniform(const std::string &name, const glm::vec2 &value) const {
 		glUniform2f(getUniformLocation(name), value.x, value.y);
 	}
 
-	void Shader::setUniform(const std::string &name, glm::vec3 value) const {
+	void Shader::setUniform(const std::string &name, const glm::vec3 &value) const {
 		glUniform3f(getUniformLocation(name), value.x, value.y, value.z);
 	}
 
-	void Shader::setUniform(const std::string &name, glm::vec4 value) const {
+	void Shader::setUniform(const std::string &name, const glm::vec4 &value) const {
 		glUniform4f(getUniformLocation(name), value.x, value.y, value.z, value.w);
 	}
 
-	void Shader::setUniform(const std::string &name, glm::mat3 value) const {
-		glUniformMatrix3fv(getUniformLocation(name), value.length(), false, glm::value_ptr(value));
+	void Shader::setUniform(const std::string &name, const glm::mat3 &value) const {
+		glUniformMatrix3fv(getUniformLocation(name), 1, false, glm::value_ptr(value));
 	}
 
-	void Shader::setUniform(const std::string &name, glm::mat4 value) const {
-		glUniformMatrix4fv(getUniformLocation(name), value.length(), false, glm::value_ptr(value));
+	void Shader::setUniform(const std::string &name, const glm::mat4 &value) const {
+		glUniformMatrix4fv(getUniformLocation(name), 1, false, glm::value_ptr(value));
 	}
 }

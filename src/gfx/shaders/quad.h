@@ -4,9 +4,9 @@
 
 namespace fif::gfx::priv::shaders {
 	namespace Quad {
-		const std::string VERTEX = R"(
-		#version 330 core
-
+		const std::string VERTEX = 
+		Shader::GLSL_VERSION + 
+		R"(
 		uniform mat4 u_ModelMatrix;
 
 		layout(location = 0) in vec3 l_Position;
@@ -19,11 +19,10 @@ namespace fif::gfx::priv::shaders {
 			gl_Position = u_ModelMatrix * vec4(l_Position, 1.0);
 		})";
 
-		const std::string FRAGMENT = R"(
-		#version 330 core
-
+		const std::string FRAGMENT =
+		Shader::GLSL_VERSION + 
+		R"(
 		uniform vec4 u_Color;
-		in vec2 v_UV;
 
 		out vec4 f_Color;
 

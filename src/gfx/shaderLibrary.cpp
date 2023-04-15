@@ -11,12 +11,14 @@ namespace fif::gfx {
 
 	void ShaderLibrary::init() {
 		{
-			const std::shared_ptr<Shader> shader = add("circle", std::make_shared<Shader>(priv::shaders::Circle::VERTEX, priv::shaders::Circle::FRAGMENT));
+			const std::shared_ptr<Shader> shader = add("circle", std::make_shared<Shader>(priv::shaders::Quad::VERTEX, priv::shaders::Circle::FRAGMENT));
 			shader->registerUniform("u_Color");
+			shader->registerUniform("u_ModelMatrix");
 		}
 		{
 			const std::shared_ptr<Shader> shader = add("quad", std::make_shared<Shader>(priv::shaders::Quad::VERTEX, priv::shaders::Quad::FRAGMENT));
 			shader->registerUniform("u_Color");
+			shader->registerUniform("u_ModelMatrix");
 		}
 	}
 
