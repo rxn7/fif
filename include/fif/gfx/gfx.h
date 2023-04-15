@@ -8,6 +8,7 @@ namespace fif::gfx {
 	void render();
 
 	inline core::Module gfxModule = {
+		.name = "GFX",
 		.initFunc = fif::gfx::init,
 		.updateFunc = fif::gfx::update,
 		.renderFunc = fif::gfx::render

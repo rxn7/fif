@@ -67,5 +67,6 @@ namespace fif::core {
 	void Application::registerModule(const Module *mod) {
 		mod->initFunc();
 		m_Modules.push_back(mod);
+		FIF_LOG("Module " << mod->name << " registered");
 	}
 }
