@@ -2,6 +2,7 @@
 #include "fif/core/application.h"
 #include "fif/core/performanceStats.h"
 #include "fif/gfx/gfx.h"
+#include "fif/gfx/orthoCamera.h"
 #include "fif/gfx/renderer2d.h"
 
 #include "imgui.h"
@@ -9,15 +10,15 @@
 
 #include <cmath>
 
-static float x = 0.0f;
-
 void EditorLayer::update(float dt) {
-	x += dt;
+	fif::gfx::OrthoCamera &cam = fif::gfx::Renderer2D::getCamera();
+	cam.m_Position.x = std::cos(glfwGetTime() * 10) * 5;
+	cam.m_Position.y = std::sin(glfwGetTime() * 10) * 5;
 }
 
 void EditorLayer::render() {
-	fif::gfx::Renderer2D::renderQuad({std::cos(x),std::sin(x)}, {100, 100}, {1.0f, 0.0f, 1.0f, 1.0f});
-	fif::gfx::Renderer2D::renderCircle({std::sin(x),std::cos(x)}, 50, {1.0f, 1.0f, 0.0f, 1.0f});
+	fif::gfx::Renderer2D::renderQuad({0.0f, 0.0f}, {100, 100}, {1.0f, 0.0f, 1.0f, 1.0f});
+	fif::gfx::Renderer2D::renderCircle({0.0f, 0.0f}, 50, {1.0f, 1.0f, 0.0f, 1.0f});
 }
 
 void EditorLayer::renderImGui() {
@@ -34,13 +35,9 @@ void EditorLayer::renderImGui() {
 			glfwSwapInterval(vsync);
 
 		if(ImGui::Begin("Camera")) {
-			fif::gfx::Camera &camera = fif::gfx::getCamera();
-			ImGui::SliderFloat3("Position", &camera.m_Position[0], -100.0f, 100.0f);
-			ImGui::SliderFloat3("Direction", &camera.m_Direction[0], -1.0f, 1.0f);
-			ImGui::Checkbox("Ortho", &camera.m_Ortho);
-			ImGui::SliderFloat("Fov", &camera.m_Fov, 1.0f, 100.0f);
-			ImGui::SliderFloat("Z Near", &camera.m_ZNear, 0.0f, 1.0f);
-			ImGui::SliderFloat("Z Far", &camera.m_ZFar, 1.0f, 100.0f);
+			fif::gfx::OrthoCamera &camera = fif::gfx::Renderer2D::getCamera();
+			ImGui::SliderFloat2("Position", &camera.m_Position[0], -1000.0f, 1000.0f);
+			ImGui::SliderFloat("Size", &camera.m_Size, 0.1f, 1000.0f);
 		}
 		ImGui::End();
 	}

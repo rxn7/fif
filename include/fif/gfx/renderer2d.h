@@ -1,6 +1,6 @@
 #pragma once
 
-#include "fif/gfx/camera.h"
+#include "fif/gfx/orthoCamera.h"
 #include "fif/gfx/primitiveType.h"
 #include "fif/gfx/rendererStats.h"
 
@@ -12,9 +12,10 @@
 namespace fif::gfx {
 	namespace Renderer2D {
 		const RendererStats &getStats();
+		OrthoCamera &getCamera();
 
 		void init();
-		void begin(const std::shared_ptr<Camera> &camera);
+		void begin();
 		void end();
 
 		void renderQuad(const glm::vec2 &position, const glm::vec2 &size = {10.0f, 10.0f}, const glm::vec4 &color = {1.0f, 1.0f, 1.0f, 1.0f});

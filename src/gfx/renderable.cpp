@@ -27,8 +27,6 @@ namespace fif::gfx {
 	}
 
 	void Renderable::render() const {
-		mp_Shader->bind();
-
 		glBindVertexArray(m_Vao);
 		glDrawElements(GL_TRIANGLES, m_ElementCount, GL_UNSIGNED_SHORT, 0);
 
