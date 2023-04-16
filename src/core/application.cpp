@@ -3,6 +3,7 @@
 #include "fif/core/events/updateEvent.h"
 #include "fif/core/events/renderEvent.h"
 #include "fif/core/performanceStats.h"
+#include "fif/core/profiler.h"
 
 #include "GLFW/glfw3.h"
 #include "glad/glad.h"
@@ -55,6 +56,9 @@ namespace fif::core {
 	}
 
 	void Application::startFrame(float dt) {
+		FIF_PROFILE_FUNC();
+
+		fif::core::Profiler::clear();
 		mp_Window->startFrame();
 
 		for(const Module * mod : m_Modules)
@@ -65,6 +69,8 @@ namespace fif::core {
 	}
 
 	void Application::endFrame() {
+		FIF_PROFILE_FUNC();
+
 		for(const Module *mod : m_Modules)
 			mod->renderFunc();
 

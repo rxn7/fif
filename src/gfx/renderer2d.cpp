@@ -1,7 +1,7 @@
 #include "fif/gfx/renderer2d.h"
+#include "fif/core/profiler.h"
 #include "fif/gfx/batch.h"
 #include "fif/gfx/orthoCamera.h"
-#include "fif/gfx/rendererStats.h"
 #include "fif/gfx/shaderLibrary.h"
 #include "fif/gfx/vertexBuffer.h"
 #include "fif/core/log.h"
@@ -17,13 +17,10 @@
 namespace fif::gfx {
 	static constexpr std::uint32_t BATCH_SIZE = 100;
 
-	static RendererStats s_Stats;
-
 	static std::unique_ptr<Batch> s_SimpleBatch, s_CircleBatch;
 	static std::unique_ptr<OrthoCamera> s_Camera;
 
 	static std::chrono::time_point<std::chrono::high_resolution_clock> s_BeginTime;
-	static std::uint32_t s_PrimitivesRenderered = 0u;
 
 	void Renderer2D::init() {
 		s_Camera = std::make_unique<OrthoCamera>();
@@ -32,10 +29,12 @@ namespace fif::gfx {
 	}
 
 	void Renderer2D::begin() {
+		FIF_PROFILE_FUNC();
 		s_BeginTime = std::chrono::high_resolution_clock::now();
 	}
 
 	void Renderer2D::end() {
+		FIF_PROFILE_FUNC();
 		s_Camera->update();
 
 		{
@@ -52,13 +51,10 @@ namespace fif::gfx {
 			s_CircleBatch->render();
 		}
 
-		s_Stats.frameTimeMs = std::chrono::duration<float, std::milli>((std::chrono::high_resolution_clock::now() - s_BeginTime)).count();
-		s_Stats.primitivesRendered = s_PrimitivesRenderered;
-
-		s_PrimitivesRenderered = 0u;
 	}
 
 	void Renderer2D::renderQuad(const glm::vec2 &position, const glm::vec2 &size, float angle, const glm::u8vec4 &color) {
+		FIF_PROFILE_FUNC();
 		const uint32_t vertCount = s_SimpleBatch->getVertexCount();
 
 		glm::mat4 matrix(1.0f);
@@ -80,6 +76,7 @@ namespace fif::gfx {
 	}
 
 	void Renderer2D::renderCircleTriangle(const glm::vec2 &position, float diameter, std::uint16_t segmentCount, const glm::u8vec4 &color) {
+		FIF_PROFILE_FUNC();
 		FIF_ASSERT(segmentCount > 2, "Circle must have at least 3 segments!");
 
 		const uint32_t vertCount = s_SimpleBatch->getVertexCount();
@@ -104,6 +101,8 @@ namespace fif::gfx {
 	}
 
 	void Renderer2D::renderCircleFrag(const glm::vec2 &position, float diameter, const glm::u8vec4 &color) {
+		FIF_PROFILE_FUNC();
+
 		const uint32_t vertCount = s_CircleBatch->getVertexCount();
 		const float radius = diameter * 0.5f;
 
@@ -118,10 +117,6 @@ namespace fif::gfx {
 		s_CircleBatch->addElement(vertCount+2);
 		s_CircleBatch->addElement(vertCount+3);
 		s_CircleBatch->addElement(vertCount);
-	}
-
-	const RendererStats &Renderer2D::getStats() {
-		return s_Stats;
 	}
 
 	OrthoCamera &Renderer2D::getCamera() {

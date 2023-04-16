@@ -1,6 +1,8 @@
 #include "editorLayer.h"
 #include "fif/core/application.h"
 #include "fif/core/performanceStats.h"
+#include "fif/core/profiler.h"
+#include "fif/core/scopeTimer.h"
 #include "fif/gfx/gfx.h"
 #include "fif/gfx/orthoCamera.h"
 #include "fif/gfx/renderer2d.h"
@@ -14,6 +16,7 @@ void EditorLayer::update(float dt) {
 }
 
 void EditorLayer::render() {
+	FIF_PROFILE_FUNC();
 	float time = glfwGetTime();
 	float cos = (std::cos(time) + 1.0f) * 0.5f;
 	float sin = (std::sin(time) + 1.0f) * 0.5f;
@@ -33,10 +36,13 @@ void EditorLayer::renderImGui() {
 			ImGui::Text("Frame time: %f ms", stats.frameTimeMs);
 			ImGui::Text("FPS: %f", stats.fps);
 		}
-		if(ImGui::TreeNode("Renderer2D")) {
-			const RendererStats &stats = fif::gfx::Renderer2D::getStats();
-			ImGui::Text("Frame time: %f", stats.frameTimeMs);
-			ImGui::Text("Primitives rendererd: %u", stats.primitivesRendered);
+
+		if(ImGui::TreeNode("Profiler")) {
+			const std::vector<fif::core::TimerResult> profilerResults = fif::core::Profiler::getResults();
+
+			for(const fif::core::TimerResult &result : profilerResults)
+				ImGui::Text("%s: %f ms", result.name.c_str(), result.durationMs);
+
 			ImGui::TreePop();
 		}
 	}

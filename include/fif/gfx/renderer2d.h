@@ -2,7 +2,6 @@
 
 #include "fif/gfx/orthoCamera.h"
 #include "fif/gfx/primitiveType.h"
-#include "fif/gfx/rendererStats.h"
 
 #include "glm/vec2.hpp"
 #include "glm/vec4.hpp"
@@ -11,7 +10,6 @@
 
 namespace fif::gfx {
 	namespace Renderer2D {
-		const RendererStats &getStats();
 		OrthoCamera &getCamera();
 
 		void init();

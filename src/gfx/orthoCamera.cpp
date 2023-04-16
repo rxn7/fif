@@ -1,6 +1,7 @@
 #include "fif/gfx/orthoCamera.h"
 
 #include "fif/core/application.h"
+#include "fif/core/profiler.h"
 
 #include "glm/ext/matrix_clip_space.hpp"
 #include "glm/vec2.hpp"
@@ -12,6 +13,7 @@ namespace fif::gfx {
 	}
 
 	void OrthoCamera::update() {
+		FIF_PROFILE_FUNC();
 		std::int32_t width, height;
 		glfwGetWindowSize(core::Application::getInstance().getWindow().getGlfwWindow(), &width, &height);
 
