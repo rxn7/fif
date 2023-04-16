@@ -1,13 +1,13 @@
 #pragma once
 
 #include "entt/signal/fwd.hpp"
-#include "fif/core/events/updateEvent.h"
 #include "fif/core/layers/layer.h"
 #include "fif/core/module.h"
 #include "fif/core/performanceStats.h"
 #include "fif/core/window.h"
 #include "entt/signal/dispatcher.hpp"
 
+#include <chrono>
 #include <vector>
 #include <memory>
 
@@ -36,6 +36,7 @@ namespace fif::core {
 		void addLayer(std::unique_ptr<Layer> layer);
 		
 	private:
+		void gameLoop();
 		void startFrame(float dt);
 		void endFrame();
 
@@ -44,6 +45,7 @@ namespace fif::core {
 		std::unique_ptr<Window> mp_Window;
 
 	private:
+		std::chrono::time_point<std::chrono::high_resolution_clock> m_LastFrameTime;
 		std::vector<std::unique_ptr<Layer>> m_Layers;
 		PerformanceStats m_LastFramePerformanceStats;
 		static Application *s_Instance;

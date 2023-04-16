@@ -11,3 +11,9 @@ add_executable(${PROJECT_NAME} ${Sources})
 include_directories(${INC_DIR})
 
 target_link_libraries(${PROJECT_NAME} fif-core fif-gfx)
+
+if(EMSCRIPTEN)
+  set(CMAKE_EXECUTABLE_SUFFIX ".html")
+  set(LFLAGS "-sUSE_GLFW=3 -sMIN_WEBGL_VERSION=2 -sMAX_WEBGL_VERSION=2 -sASSERTIONS=1 -sWASM=1 -sASYNCIFY")
+  set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "${LFLAGS}")
+endif()

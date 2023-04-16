@@ -9,6 +9,9 @@
 #include "glm/mat3x3.hpp"
 #include "glm/mat4x4.hpp"
 
+#define FIF_GLSL_VERSION "#version 300 es\n"
+#define FIF_GLSL_PRECISION "precision mediump float;\n"
+
 namespace fif::gfx {
 	class Shader final {
 	public:
@@ -27,7 +30,6 @@ namespace fif::gfx {
 		static void unbind();
 
 	public:
-		static constexpr std::string GLSL_VERSION = "#version 330"; 
 
 	private:
 		std::uint32_t getUniformLocation(const std::string &name) const;

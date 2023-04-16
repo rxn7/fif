@@ -20,6 +20,8 @@
 *.out
 *.app
 
+build*
+
 **/libs/**/*.pc
 **/libs/**/*.cmake
 **/.cache

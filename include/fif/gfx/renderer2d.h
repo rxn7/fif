@@ -3,9 +3,6 @@
 #include "fif/gfx/orthoCamera.h"
 #include "fif/gfx/primitiveType.h"
 
-#include "glm/vec2.hpp"
-#include "glm/vec4.hpp"
-
 #include <memory>
 
 namespace fif::gfx {

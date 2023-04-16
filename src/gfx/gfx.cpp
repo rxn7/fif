@@ -1,15 +1,11 @@
 #include "entt/signal/fwd.hpp"
 #include "fif/core/application.h"
-#include "fif/core/events/renderEvent.h"
 #include "fif/core/module.h"
 #include "fif/gfx/gfx.h"
 #include "fif/gfx/shaderLibrary.h"
 #include "fif/gfx/renderer2d.h"
 
-#include "fif/core/events/updateEvent.h"
-
-#include "entt/entt.hpp"
-#include "glad/glad.h"
+#include "fif/core/opengl.h"
 
 #include <memory>
 

@@ -3,7 +3,7 @@
 #include "fif/core/application.h"
 #include "fif/gfx/gfx.h"
 
-constexpr fif::core::WindowProperties WINDOW_PROPS = {
+const fif::core::WindowProperties WINDOW_PROPS = {
 	.title = "fifed",
 	.size = glm::i16vec2(420, 420)
 };

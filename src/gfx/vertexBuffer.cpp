@@ -1,12 +1,14 @@
 #include "fif/gfx/vertexBuffer.h"
 #include "fif/core/assertion.h"
 
-#include "glad/glad.h"
+#include "fif/core/opengl.h"
+
 #include <memory>
+
 
 namespace fif::gfx {
 	VertexBuffer::VertexBuffer(std::uint32_t vertexCount, std::uint32_t elementCount) : m_ElementCount(elementCount), m_VertexCount(vertexCount)  {
-		glCreateVertexArrays(1, &m_Vao);
+		glGenVertexArrays(1, &m_Vao);
 		glBindVertexArray(m_Vao);
 
 		glGenBuffers(1, &m_Vbo);
@@ -23,7 +25,7 @@ namespace fif::gfx {
 	}
 
 	VertexBuffer::VertexBuffer(const Vertex *vertices, std::uint32_t vertexCount, const std::uint16_t *elements, std::uint32_t elementCount) : m_ElementCount(elementCount), m_VertexCount(vertexCount) {
-		glCreateVertexArrays(1, &m_Vao);
+		glGenVertexArrays(1, &m_Vao);
 		glBindVertexArray(m_Vao);
 
 		glGenBuffers(1, &m_Vbo);

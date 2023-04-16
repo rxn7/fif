@@ -1,16 +1,17 @@
 #include "fif/core/window.h"
+#include "GLFW/glfw3.h"
 #include "fif/core/assertion.h"
 
-#include "GLFW/glfw3.h"
-#include "glad/glad.h"
+#include "fif/core/opengl.h"
 
 namespace fif::core {
 	Window::Window(const WindowProperties &props) {
 		glfwSetErrorCallback(glfwErrorCallback);
 		FIF_ASSERT(glfwInit(), "Failed to initialize GLFW");
 
+		glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 		mp_GlfwWindow = glfwCreateWindow(props.size.x, props.size.y, props.title.c_str(), NULL, NULL);
 
 		glfwMakeContextCurrent(mp_GlfwWindow);

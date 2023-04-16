@@ -1,12 +1,10 @@
 #include "fif/core/application.h"
+#include "GLFW/glfw3.h"
 #include "fif/core/assertion.h"
-#include "fif/core/events/updateEvent.h"
-#include "fif/core/events/renderEvent.h"
 #include "fif/core/performanceStats.h"
 #include "fif/core/profiler.h"
 
-#include "GLFW/glfw3.h"
-#include "glad/glad.h"
+#include "fif/core/opengl.h"
 #include "imgui.h"
 #include "backends/imgui_impl_opengl3.h"
 #include "backends/imgui_impl_glfw.h"
@@ -24,10 +22,15 @@ namespace fif::core {
 		s_Instance = this;
 
 		mp_Window = std::make_unique<Window>(windowProperties);
+
+#ifndef __EMSCRIPTEN__
 		gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress));
+#endif
+
+		FIF_LOG(glfwGetVersionString());
 
 		ImGui::CreateContext();
-		ImGui_ImplOpenGL3_Init();
+		ImGui_ImplOpenGL3_Init("#version 300 es");
 		ImGui_ImplGlfw_InitForOpenGL(mp_Window->getGlfwWindow(), true);
 	}
 
@@ -41,18 +44,29 @@ namespace fif::core {
 		auto lastFrame = now;
 		float dt = 0.0f;
 
-		while(!mp_Window->shouldClose()) {
-			now = high_resolution_clock::now();
-			dt = duration_cast<microseconds>(now - lastFrame).count() * 0.000001f;
-			lastFrame = now;
+#ifdef __EMSCRIPTEN__
+		auto loop = []() {
+			Application::getInstance().gameLoop();
+		};
 
-			m_LastFramePerformanceStats.fps = 1.0f / dt;
-			m_LastFramePerformanceStats.frameTimeMs = dt * 1000.0f;
+		emscripten_set_main_loop(loop, 0, true);
+#else
+		while(!mp_Window->shouldClose())
+			gameLoop();
+#endif
+	}
 
-			glClear(GL_COLOR_BUFFER_BIT);
-			startFrame(dt);
-			endFrame();
-		}
+	void Application::gameLoop() {
+		const auto now = high_resolution_clock::now();
+		const float dt = duration_cast<microseconds>(now - m_LastFrameTime).count() * 0.000001f;
+		m_LastFrameTime = now;
+
+		m_LastFramePerformanceStats.fps = 1.0f / dt;
+		m_LastFramePerformanceStats.frameTimeMs = dt * 1000.0f;
+
+		glClear(GL_COLOR_BUFFER_BIT);
+		startFrame(dt);
+		endFrame();
 	}
 
 	void Application::startFrame(float dt) {

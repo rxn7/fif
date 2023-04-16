@@ -1,8 +1,8 @@
 #include "fif/gfx/shader.h"
 #include "fif/core/assertion.h"
 #include "fif/core/log.h"
+#include "fif/core/opengl.h"
 
-#include "glad/glad.h"
 #include "glm/gtc/type_ptr.hpp"
 
 #include <array>

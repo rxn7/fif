@@ -5,7 +5,8 @@
 namespace fif::gfx::priv::shaders {
 	namespace Simple {
 		const std::string VERTEX = 
-		Shader::GLSL_VERSION + 
+		FIF_GLSL_VERSION
+		FIF_GLSL_PRECISION
 		R"(
 		uniform mat4 u_MVP;
 
@@ -23,7 +24,8 @@ namespace fif::gfx::priv::shaders {
 		})";
 
 		const std::string FRAGMENT =
-		Shader::GLSL_VERSION + 
+		FIF_GLSL_VERSION
+		FIF_GLSL_PRECISION
 		R"(
 
 		in vec4 v_Color;

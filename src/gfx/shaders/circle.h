@@ -5,7 +5,8 @@
 namespace fif::gfx::priv::shaders {
 	namespace Circle {
 		const std::string FRAGMENT =
-		Shader::GLSL_VERSION + 
+		FIF_GLSL_VERSION
+		FIF_GLSL_PRECISION
 		R"(
 		in vec4 v_Color;
 		in vec2 v_UV;
