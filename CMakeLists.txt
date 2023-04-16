@@ -45,11 +45,6 @@ if(FIF_BUILD_EDITOR)
   add_subdirectory(editor)
 endif()
 
-if(EMSCRIPTEN)
-  set(LFLAGS "-sUSE_GLFW=3 -sMIN_WEBGL_VERSION=2 -sMAX_WEBGL_VERSION=2 -sASSERTIONS=1 -sWASM=1 -sASYNCIFY")
-  set_target_properties(fif-core PROPERTIES LINK_FLAGS "${LFLAGS}")
-endif()
-
 set(GLFW_BUILD_EXAMPLES OFF CACHE INTERNAL "Build GLFW examples")
 set(GLFW_BUILD_TESTS OFF CACHE INTERNAL "Build GLFW tests")
 set(GLFW_BUILD_DOCS OFF CACHE INTERNAL "Build GLFW docs")
@@ -85,4 +80,10 @@ file(GLOB IMGUI_SOURCES
 )
 
 add_library("ImGui" STATIC ${IMGUI_SOURCES})
-target_include_directories("ImGui" PUBLIC ${IMGUI_PATH} ${LIB_DIR/glfw/include})
+target_include_directories("ImGui" PUBLIC ${IMGUI_PATH})
+
+if(EMSCRIPTEN)
+  set(LFLAGS "-sUSE_GLFW=3 -sMIN_WEBGL_VERSION=2 -sMAX_WEBGL_VERSION=2 -sASSERTIONS=1 -sWASM=1 -sASYNCIFY")
+  set_target_properties("ImGui" PROPERTIES LINK_FLAGS "${LFLAGS}")
+  set_target_properties(fif-core PROPERTIES LINK_FLAGS "${LFLAGS}")
+endif()
