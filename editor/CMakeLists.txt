@@ -13,7 +13,7 @@ include_directories(${INC_DIR})
 target_link_libraries(${PROJECT_NAME} fif-core fif-gfx)
 
 if(EMSCRIPTEN)
-  set(SHELL_PATH "${CMAKE_CURRENT_SOURCE_DIR}/emsc/shell.html")
+  set(SHELL_PATH "${CMAKE_CURRENT_SOURCE_DIR}/emsc/index.html")
 
   # TODO: Recompile when shell file has changed
 
