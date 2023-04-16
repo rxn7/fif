@@ -13,9 +13,4 @@ namespace fif::core {
 	}
 }
 
-#ifndef __EMSCRIPTEN__
-#include <source_location>
-#define FIF_PROFILE_FUNC() fif::core::ScopeTimer(std::source_location::current().function_name(), [&](fif::core::TimerResult result) { fif::core::Profiler::addResult(result); })
-#else
-#define FIF_PROFILE_FUNC() 
-#endif
+#define FIF_PROFILE_FUNC() fif::core::ScopeTimer(__FUNCTION_NAME__, [&](fif::core::TimerResult result) { fif::core::Profiler::addResult(result); })

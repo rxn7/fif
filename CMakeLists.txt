@@ -85,4 +85,4 @@ file(GLOB IMGUI_SOURCES
 )
 
 add_library("ImGui" STATIC ${IMGUI_SOURCES})
-target_include_directories("ImGui" PUBLIC ${IMGUI_PATH})
+target_include_directories("ImGui" PUBLIC ${IMGUI_PATH} ${LIB_DIR/glfw/include})
