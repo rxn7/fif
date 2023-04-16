@@ -22,6 +22,8 @@
 
 build*
 
+**/imgui.ini
+
 **/libs/**/*.pc
 **/libs/**/*.cmake
 **/.cache
