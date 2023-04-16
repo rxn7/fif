@@ -2,35 +2,31 @@
 #include "fif/core/assertion.h"
 
 #include "shaders/circle.h"
-#include "shaders/quad.h"
-
+#include "shaders/simple.h"
 #include <memory>
 
 namespace fif::gfx {
-	static std::unordered_map<std::string, std::shared_ptr<Shader>> s_Shaders;
+	static std::unordered_map<std::string, std::unique_ptr<Shader>> s_Shaders;
 
 	void ShaderLibrary::init() {
 		{
-			const std::shared_ptr<Shader> shader = add("circle", std::make_shared<Shader>(priv::shaders::Quad::VERTEX, priv::shaders::Circle::FRAGMENT));
-			shader->registerUniform("u_Color");
-			shader->registerUniform("u_MVP");
+			Shader &shader = add("circle", priv::shaders::Simple::VERTEX, priv::shaders::Circle::FRAGMENT);
+			shader.registerUniform("u_MVP");
 		}
 		{
-			const std::shared_ptr<Shader> shader = add("quad", std::make_shared<Shader>(priv::shaders::Quad::VERTEX, priv::shaders::Quad::FRAGMENT));
-			shader->registerUniform("u_Color");
-			shader->registerUniform("u_MVP");
+			Shader &shader = add("simple", priv::shaders::Simple::VERTEX, priv::shaders::Simple::FRAGMENT);
+			shader.registerUniform("u_MVP");
 		}
 	}
 
-	std::shared_ptr<Shader> ShaderLibrary::get(const std::string &name) {
+	Shader &ShaderLibrary::get(const std::string &name) {
 		auto it = s_Shaders.find(name);
 		FIF_ASSERT(it != s_Shaders.end(), "Shader with name '" << name << "' doesn't exists");
-		return it->second;
+		return *it->second;
 	}
 
-	std::shared_ptr<Shader> ShaderLibrary::add(const std::string &name, const std::shared_ptr<Shader> &shader) {
-		FIF_ASSERT(shader.get() != nullptr, "The shader cannot be nullptr");
-		s_Shaders.insert({name, shader});
-		return shader;
+	Shader &ShaderLibrary::add(const std::string &name, const std::string &vertexSrc, const std::string &fragmentSrc) {
+		auto result = s_Shaders.insert({name, std::make_unique<Shader>(vertexSrc, fragmentSrc)});
+		return *result.first->second;
 	}
 }

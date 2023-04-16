@@ -1,12 +1,14 @@
 #pragma once
 
-#include <memory>
 #include "fif/gfx/shader.h"
+
+#include <memory>
+#include <initializer_list>
 
 namespace fif::gfx {
 	namespace ShaderLibrary {
 		void init();
-		std::shared_ptr<Shader> add(const std::string &name, const std::shared_ptr<Shader> &shader);
-		std::shared_ptr<Shader> get(const std::string &name);
+		Shader &add(const std::string &name, const std::string &vertexSrc, const std::string &fragmentSrc);
+		Shader &get(const std::string &name);
 	};
 }

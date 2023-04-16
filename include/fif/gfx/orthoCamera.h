@@ -10,7 +10,7 @@ namespace fif::gfx {
 		void update() override;
 
 	public:
-		float m_Size = 100.0f;
+		float m_Size = 500.0f;
 		glm::vec2 m_Position;
 	};
 }

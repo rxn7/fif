@@ -11,15 +11,19 @@
 #include <cmath>
 
 void EditorLayer::update(float dt) {
-	fif::gfx::OrthoCamera &cam = fif::gfx::Renderer2D::getCamera();
-	cam.m_Position.x = std::cos(glfwGetTime() * 10) * 5;
-	cam.m_Position.y = std::sin(glfwGetTime() * 10) * 5;
 }
 
 void EditorLayer::render() {
-	fif::gfx::Renderer2D::renderQuad({0.0f, 0.0f}, {100, 100}, glfwGetTime() * 100.0f, {1.0f, 0.0f, 1.0f, 1.0f});
-	fif::gfx::Renderer2D::renderCircle({0.0f, 0.0f}, 100, {1.0f, 1.0f, 0.0f, 1.0f});
-	fif::gfx::Renderer2D::renderCircle({5.0f, 0.0f}, 25, {0.0f, 1.0f, 1.0f, 1.0f});
+	float time = glfwGetTime();
+	float cos = (std::cos(time) + 1.0f) * 0.5f;
+	float sin = (std::sin(time) + 1.0f) * 0.5f;
+
+	fif::gfx::Renderer2D::renderQuad({0.0f, 0.0f}, {100, 100}, 0.0f, {cos * 255, sin*255, 0, 255});
+	fif::gfx::Renderer2D::renderQuad({0.0f, 100.0f}, {100,100}, glfwGetTime(), {sin*255, 0, cos*255, 255});
+	fif::gfx::Renderer2D::renderQuad({0.0f, -100.0f}, {100,100}, -glfwGetTime(), {cos*255, 0, sin*255, 255});
+
+	fif::gfx::Renderer2D::renderCircleFrag({-100.0f, 0.0f}, 100, {sin*255, cos*255, cos*255, 255});
+	fif::gfx::Renderer2D::renderCircleTriangle({100.0f, 0.0f}, 100, 8, {sin*255, cos*255, sin, 255});
 }
 
 void EditorLayer::renderImGui() {
