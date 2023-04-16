@@ -3,7 +3,8 @@
 - glm  
 - entt  
 - glfw  
-- glad  
+- glad
+- ImGui    
 
 ## Need to be manually installed   
 - emscripten (emsdk) (optional)
