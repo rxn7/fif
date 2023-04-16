@@ -19,11 +19,11 @@ void EditorLayer::render() {
 	float sin = (std::sin(time) + 1.0f) * 0.5f;
 
 	fif::gfx::Renderer2D::renderQuad({0.0f, 0.0f}, {100, 100}, 0.0f, {cos * 255, sin*255, 0, 255});
-	fif::gfx::Renderer2D::renderQuad({0.0f, 100.0f}, {100,100}, glfwGetTime(), {sin*255, 0, cos*255, 255});
-	fif::gfx::Renderer2D::renderQuad({0.0f, -100.0f}, {100,100}, -glfwGetTime(), {cos*255, 0, sin*255, 255});
+	fif::gfx::Renderer2D::renderQuad({0.0f, 120.0f}, {100,100}, glfwGetTime(), {sin*255, 0, cos*255, 255});
+	fif::gfx::Renderer2D::renderQuad({0.0f, -120.0f}, {100,100}, -glfwGetTime(), {cos*255, 0, sin*255, 255});
 
 	fif::gfx::Renderer2D::renderCircleFrag({-100.0f, 0.0f}, 100, {sin*255, cos*255, cos*255, 255});
-	fif::gfx::Renderer2D::renderCircleTriangle({100.0f, 0.0f}, 100, 8, {sin*255, cos*255, sin, 255});
+	fif::gfx::Renderer2D::renderCircleTriangle({100.0f, 0.0f}, 100, m_CircleSegments, {sin*255, cos*255, sin, 255});
 }
 
 void EditorLayer::renderImGui() {
@@ -53,6 +53,8 @@ void EditorLayer::renderImGui() {
 			ImGui::SliderFloat("Size", &camera.m_Size, 0.1f, 1000.0f);
 			ImGui::TreePop();
 		}
+
+		ImGui::SliderInt("Circle segments", &m_CircleSegments, 4, 100);
 	}
 	ImGui::End();
 }

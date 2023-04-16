@@ -5,6 +5,7 @@
 #include "fif/gfx/shaderLibrary.h"
 #include "fif/gfx/vertexBuffer.h"
 #include "fif/core/log.h"
+#include "fif/core/assertion.h"
 
 #include "glm/ext/matrix_transform.hpp"
 #include "glm/ext/matrix_float4x4.hpp"
@@ -78,14 +79,16 @@ namespace fif::gfx {
 		s_SimpleBatch->addElement(vertCount);
 	}
 
-	void Renderer2D::renderCircleTriangle(const glm::vec2 &position, float diameter, std::uint16_t segments, const glm::u8vec4 &color) {
-		const uint32_t vertCount = s_SimpleBatch->getVertexCount();
+	void Renderer2D::renderCircleTriangle(const glm::vec2 &position, float diameter, std::uint16_t segmentCount, const glm::u8vec4 &color) {
+		FIF_ASSERT(segmentCount > 2, "Circle must have at least 3 segments!");
 
-		const float segmentAngle = glm::two_pi<float>() / segments;
+		const uint32_t vertCount = s_SimpleBatch->getVertexCount();
 		const float radius = diameter * 0.5f;
+
+		const float segmentAngle = glm::two_pi<float>() / segmentCount;
 		float angle = 0.0f;
 
-		for(std::uint16_t i=0; i<segments; ++i) {
+		for(std::uint16_t i=0; i<segmentCount; ++i) {
 			s_SimpleBatch->addVertex({
 				.position = glm::vec3(position, 0.0f) + glm::vec3(radius * glm::cos(angle), radius * glm::sin(angle), 0.0f),
 				.color = color,
@@ -93,7 +96,7 @@ namespace fif::gfx {
 			angle += segmentAngle;
 		}
 
-		for(std::uint16_t i=1; i<segments-1; ++i) {
+		for(std::uint16_t i=1; i<segmentCount-1; ++i) {
 			s_SimpleBatch->addElement(vertCount);
 			s_SimpleBatch->addElement(vertCount+i);
 			s_SimpleBatch->addElement(vertCount+i+1);
