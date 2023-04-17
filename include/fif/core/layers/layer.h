@@ -1,5 +1,6 @@
 #pragma once
 
+#include "fif/core/event/event.h"
 #include <cinttypes>
 
 namespace fif::core {
@@ -13,6 +14,8 @@ namespace fif::core {
 		virtual void update([[maybe_unused]] float dt) = 0;
 		virtual void renderImGui() = 0;
 		virtual void render() = 0;
+		virtual void onEvent(Event &event) = 0;;
+
 		virtual constexpr std::uint8_t getZIndex() const = 0;
 	};
 }

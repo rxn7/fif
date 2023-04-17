@@ -10,7 +10,7 @@ FILE(GLOB FIFED_SOURCES ${SRC_DIR}/*.cpp)
 add_executable(${PROJECT_NAME} ${FIFED_SOURCES})
 include_directories(${INC_DIR})
 
-target_link_libraries(${PROJECT_NAME} fif-core fif-gfx)
+target_link_libraries(${PROJECT_NAME} fif-core fif-gfx fif-input)
 
 if(EMSCRIPTEN)
   set(SHELL_PATH "${CMAKE_CURRENT_SOURCE_DIR}/emsc/index.html")

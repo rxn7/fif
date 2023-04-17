@@ -1,5 +1,8 @@
 #include "editorLayer.h"
 #include "fif/core/application.h"
+#include "fif/core/event/event.h"
+#include "fif/core/event/eventDispatcher.h"
+#include "fif/core/event/mouseEvent.h"
 #include "fif/core/performanceStats.h"
 #include "fif/core/profiler.h"
 #include "fif/core/scopeTimer.h"
@@ -68,4 +71,21 @@ void EditorLayer::renderImGui() {
 		ImGui::SliderInt("Circle segments", &m_CircleSegments, 4, 100);
 	}
 	ImGui::End();
+}
+
+void EditorLayer::onEvent(fif::core::Event &event) {
+	fif::core::EventDispatcher dispatcher(event);
+	dispatcher.dispatch<fif::core::MouseScrolledEvent>([&](fif::core::MouseScrolledEvent &scrollEvent) {
+		if(scrollEvent.isHanlded() && scrollEvent.getValue().y == 0)
+			return false;
+
+		fif::gfx::OrthoCamera &cam = fif::gfx::Renderer2D::getCamera();
+		cam.m_Size *= scrollEvent.getValue().y > 0 ? 0.9f : 1.1f;
+		return true;
+	});
+
+	dispatcher.dispatch<fif::core::MouseMovedEvent>([&](fif::core::MouseMovedEvent &movedEvent) {
+		fif::gfx::OrthoCamera &cam = fif::gfx::Renderer2D::getCamera();
+		return false;
+	});
 }

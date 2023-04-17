@@ -36,6 +36,7 @@ namespace fif::core {
 
 			FIF_PROFILE_FUNC();
 			std::unique_ptr<T> mod = std::make_unique<T>(args...);
+			FIF_LOG("Module " << mod->getName() << " attached");
 			m_Modules.emplace_back(std::move(mod));
 			mod->onAttach(*this);
 		}

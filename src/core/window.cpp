@@ -2,11 +2,14 @@
 #include "fif/core/application.h"
 #include "fif/core/assertion.h"
 
+#include "fif/core/event/mouseEvent.h"
 #include "fif/core/event/windowEvent.h"
+#include "fif/core/event/keyEvent.h"
 #include "fif/core/opengl.h"
+#include <GLFW/glfw3.h>
 
 namespace fif::core {
-	Window::Window(const WindowProperties &props) {
+	Window::Window(Application &app, const WindowProperties &props) : m_App(app) {
 		glfwSetErrorCallback([]([[maybe_unused]] int error, const char *msg) {
 			FIF_LOG_ERROR("GLFW Error: " << msg);
 		});
@@ -19,17 +22,18 @@ namespace fif::core {
 
 		mp_GlfwWindow = glfwCreateWindow(props.size.x, props.size.y, props.title.c_str(), NULL, NULL);
 		glfwMakeContextCurrent(mp_GlfwWindow);
-
 		glfwSetWindowUserPointer(mp_GlfwWindow, this);
 
 		glfwSetWindowSizeCallback(mp_GlfwWindow, []([[maybe_unused]] GLFWwindow *glfwWindow, int width, int height) {
+			Window *window = FIF_GET_WINDOW_FROM_GLFW_WINDOW(glfwWindow);
 			WindowResizeEvent event({width, height});
-			Application::getInstance().onEvent(event);
+			window->m_App.onEvent(event);
 		});
 
 		glfwSetWindowCloseCallback(mp_GlfwWindow, []([[maybe_unused]] GLFWwindow *glfwWindow) {
+			Window *window = FIF_GET_WINDOW_FROM_GLFW_WINDOW(glfwWindow);
 			WindowCloseEvent event;
-			Application::getInstance().onEvent(event);
+			window->m_App.onEvent(event);
 		});
 
 		glfwSwapInterval(props.vsync);

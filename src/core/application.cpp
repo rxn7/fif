@@ -26,18 +26,13 @@ namespace fif::core {
 		FIF_ASSERT(s_Instance == nullptr, "Only 1 instance of fif::core::Application can exist!");
 		s_Instance = this;
 
-		mp_Window = std::make_unique<Window>(windowProperties);
+		mp_Window = std::make_unique<Window>(*this, windowProperties);
 
 #ifndef __EMSCRIPTEN__
 		gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress));
 #endif
 
 		FIF_LOG(glfwGetVersionString());
-
-		// TODO: ImgGui module
-		ImGui::CreateContext();
-		ImGui_ImplOpenGL3_Init("#version 300 es");
-		ImGui_ImplGlfw_InitForOpenGL(mp_Window->getGlfwWindow(), true);
 	}
 
 	Application::~Application() {
@@ -47,6 +42,11 @@ namespace fif::core {
 	}
 
 	void Application::start() {
+		// TODO: ImgGui module
+		ImGui::CreateContext();
+		ImGui_ImplOpenGL3_Init("#version 300 es");
+		ImGui_ImplGlfw_InitForOpenGL(mp_Window->getGlfwWindow(), true);
+
 		FIF_PROFILE_FUNC();
 
 #ifdef __EMSCRIPTEN__

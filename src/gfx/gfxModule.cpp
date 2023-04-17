@@ -1,5 +1,6 @@
 #include "entt/signal/fwd.hpp"
 #include "fif/core/application.h"
+#include "fif/core/assertion.h"
 #include "fif/core/event/event.h"
 #include "fif/core/module.h"
 #include "fif/gfx/gfxModule.h"
@@ -11,6 +12,12 @@
 #include <memory>
 
 namespace fif::gfx {
+	FIF_MODULE_INSTANCE_IMPL(GfxModule);
+
+	GfxModule::GfxModule() {
+		FIF_MODULE_INIT_INSTANCE();
+	}
+
 	void GfxModule::onAttach([[maybe_unused]] core::Application &app) {
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

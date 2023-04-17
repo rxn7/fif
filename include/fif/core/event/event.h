@@ -12,6 +12,7 @@ namespace fif::core {
 	public:
 		virtual EventType getType() const = 0;
 		virtual EventCategory getCategory() const = 0;
+		inline bool isHanlded() const { return m_Handled; }
 
 	protected:
 		bool m_Handled = false;

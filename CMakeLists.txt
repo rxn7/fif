@@ -4,7 +4,7 @@ project(fif)
 option(FIF_BUILD_EDITOR "Build the editor (fifed)" ON)
 option(FIF_BUILD_CORE "Build the core module" ON)
 option(FIF_BUILD_GFX "Build the gfx module" ON)
-option(FIF_BUILD_GFX "Build the gfx module" ON)
+option(FIF_BUILD_INPUT "Build the input module" ON)
 
 set(CMAKE_CXX_STANDARD 20)
 set(LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vendor)
@@ -16,6 +16,12 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 add_compile_options(-fPIC)
+
+if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+   add_compile_options(-fdiagnostics-color=always)
+elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+   add_compile_options(-fcolor-diagnostics)
+endif ()
 
 if(FIF_BUILD_CORE)
   FILE(GLOB_RECURSE FIF_CORE_SOURCES ${SRC_DIR}/core/*.cpp)
@@ -50,6 +56,21 @@ if(FIF_BUILD_GFX)
     target_compile_options(fif-gfx PUBLIC -O2 PRIVATE -Wall -Wextra)
   elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
     target_compile_options(fif-gfx PUBLIC -O3)
+  endif()
+endif()
+
+if(FIF_BUILD_INPUT)
+  FILE(GLOB_RECURSE FIF_INPUT_SOURCES ${SRC_DIR}/input/*.cpp)
+  add_library(fif-input STATIC ${FIF_INPUT_SOURCES})
+
+  set_target_properties(fif-input PROPERTIES PUBLIC_HEADER ${INC_DIR}/input)
+  target_include_directories(fif-input PUBLIC ${INC_DIR}/input PRIVATE ${SRC_DIR}/input)
+  target_link_libraries(fif-input PUBLIC fif-core)
+
+  if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    target_compile_options(fif-input PUBLIC -O2 PRIVATE -Wall -Wextra)
+  elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
+    target_compile_options(fif-input PUBLIC -O3)
   endif()
 endif()
 
