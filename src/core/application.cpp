@@ -34,6 +34,7 @@ namespace fif::core {
 
 		FIF_LOG(glfwGetVersionString());
 
+		// TODO: ImgGui module
 		ImGui::CreateContext();
 		ImGui_ImplOpenGL3_Init("#version 300 es");
 		ImGui_ImplGlfw_InitForOpenGL(mp_Window->getGlfwWindow(), true);

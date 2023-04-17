@@ -21,7 +21,7 @@ namespace fif::core {
 
 		void start();
 		void registerModule(const Module *mod);
-		void onEvent(Event &event);
+		virtual void onEvent(Event &event);
 
 		inline static Application &getInstance() { 
 			return *s_Instance;
