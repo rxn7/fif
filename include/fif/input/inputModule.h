@@ -23,7 +23,6 @@ namespace fif::input {
 		static constexpr std::int32_t BUTTON_COUNT = GLFW_MOUSE_BUTTON_LAST+1;
 		static constexpr std::int32_t KEY_COUNT = GLFW_KEY_LAST+1;
 
-		GLFWwindow *mp_GlfwWindow;
 		bool m_Buttons[BUTTON_COUNT];
 		bool m_Keys[KEY_COUNT];
 	};
