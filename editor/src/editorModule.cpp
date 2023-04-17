@@ -62,7 +62,6 @@ void EditorModule::onRenderImGui() {
 		if(ImGui::TreeNode("Camera")) {
 			fif::gfx::OrthoCamera &camera = fif::gfx::Renderer2D::getCamera();
 			ImGui::SliderFloat2("Position", &camera.m_Position[0], -1000.0f, 1000.0f);
-			ImGui::SliderFloat("Size", &camera.m_Size, 0.1f, 1000.0f);
 			ImGui::TreePop();
 		}
 	}
