@@ -58,15 +58,6 @@ void EditorModule::onRenderImGui() {
 		}
 	}
 	ImGui::End();
-
-	if(ImGui::Begin("Options")) {
-		if(ImGui::TreeNode("Camera")) {
-			fif::gfx::OrthoCamera &camera = fif::gfx::Renderer2D::getCamera();
-			ImGui::SliderFloat2("Position", &camera.m_Position[0], -1000.0f, 1000.0f);
-			ImGui::TreePop();
-		}
-	}
-	ImGui::End();
 }
 
 void EditorModule::onEvent(fif::core::Event &event) {
