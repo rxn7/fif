@@ -1,32 +1,43 @@
 #include "fif/core/window.h"
-#include "GLFW/glfw3.h"
+#include "fif/core/application.h"
 #include "fif/core/assertion.h"
 
+#include "fif/core/event/windowEvent.h"
 #include "fif/core/opengl.h"
 
 namespace fif::core {
 	Window::Window(const WindowProperties &props) {
-		glfwSetErrorCallback(glfwErrorCallback);
+		glfwSetErrorCallback([]([[maybe_unused]] int error, const char *msg) {
+			FIF_LOG_ERROR("GLFW Error: " << msg);
+		});
+
 		FIF_ASSERT(glfwInit(), "Failed to initialize GLFW");
 
 		glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-		mp_GlfwWindow = glfwCreateWindow(props.size.x, props.size.y, props.title.c_str(), NULL, NULL);
 
+		mp_GlfwWindow = glfwCreateWindow(props.size.x, props.size.y, props.title.c_str(), NULL, NULL);
 		glfwMakeContextCurrent(mp_GlfwWindow);
-		glfwSetWindowSizeCallback(mp_GlfwWindow, glfwResizeCallback);
+
+		glfwSetWindowUserPointer(mp_GlfwWindow, this);
+
+		glfwSetWindowSizeCallback(mp_GlfwWindow, []([[maybe_unused]] GLFWwindow *glfwWindow, int width, int height) {
+			WindowResizeEvent event({width, height});
+			Application::getInstance().onEvent(event);
+		});
+
+		glfwSetWindowCloseCallback(mp_GlfwWindow, []([[maybe_unused]] GLFWwindow *glfwWindow) {
+			WindowCloseEvent event;
+			Application::getInstance().onEvent(event);
+		});
 
 		glfwSwapInterval(props.vsync);
 	} 
 
 	Window::~Window() {
 		FIF_ASSERT(mp_GlfwWindow != nullptr, "Glfw window is not created!");
-		close();
 		glfwDestroyWindow(mp_GlfwWindow);
-	}
-
-	void Window::startFrame() {
 	}
 
 	void Window::endFrame() {
@@ -34,20 +45,11 @@ namespace fif::core {
 		glfwPollEvents();
 	}
 
-	bool Window::shouldClose() const {
+	bool Window::getShouldClose() const {
 		return glfwWindowShouldClose(mp_GlfwWindow);
 	}
 
-	void Window::close() {
-		glfwSetWindowShouldClose(mp_GlfwWindow, true);
-	}
-
-	void Window::glfwErrorCallback([[maybe_unused]] int error, const char *msg) {
-		// TODO: Logger
-		std::cerr << "GLFW Error: " << msg << std::endl;
-	}
-
-	void Window::glfwResizeCallback([[maybe_unused]] GLFWwindow *window, int width, int height) {
-		glViewport(0, 0, width, height);
+	void Window::setShouldClose(bool value) {
+		glfwSetWindowShouldClose(mp_GlfwWindow, value);
 	}
 }

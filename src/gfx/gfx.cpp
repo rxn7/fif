@@ -19,6 +19,7 @@ namespace fif::gfx {
 	}
 
 	void update([[maybe_unused]] float dt) {
+		glClear(GL_COLOR_BUFFER_BIT);
 		Renderer2D::begin();
 	}
 

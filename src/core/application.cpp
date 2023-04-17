@@ -2,6 +2,8 @@
 #include "GLFW/glfw3.h"
 #include "fif/core/assertion.h"
 #include "fif/core/clock.h"
+#include "fif/core/event/eventDispatcher.h"
+#include "fif/core/event/windowEvent.h"
 #include "fif/core/performanceStats.h"
 #include "fif/core/profiler.h"
 
@@ -19,6 +21,8 @@ namespace fif::core {
 	Application *fif::core::Application::s_Instance = nullptr;
 
 	Application::Application(const WindowProperties &windowProperties) {
+		FIF_PROFILE_FUNC();
+
 		FIF_ASSERT(s_Instance == nullptr, "Only 1 instance of fif::core::Application can exist!");
 		s_Instance = this;
 
@@ -36,11 +40,14 @@ namespace fif::core {
 	}
 
 	Application::~Application() {
+		FIF_PROFILE_FUNC();
 		ImGui_ImplOpenGL3_Shutdown();
 		ImGui_ImplGlfw_Shutdown();
 	}
 
 	void Application::start() {
+		FIF_PROFILE_FUNC();
+
 #ifdef __EMSCRIPTEN__
 		auto loop = []() {
 			Application::getInstance().gameLoop();
@@ -48,12 +55,14 @@ namespace fif::core {
 
 		emscripten_set_main_loop(loop, -1, true);
 #else
-		while(!mp_Window->shouldClose())
+		while(!mp_Window->getShouldClose())
 			gameLoop();
 #endif
 	}
 
 	void Application::gameLoop() {
+		FIF_PROFILE_FUNC();
+
 		const Clock::time_point now = Clock::now();
 		const float dt = duration_cast<nanoseconds>(now - m_LastFrameTime).count() * 0.000000001f;
 		m_LastFrameTime = now;
@@ -61,16 +70,13 @@ namespace fif::core {
 		m_LastFramePerformanceStats.fps = 1.0f / dt;
 		m_LastFramePerformanceStats.frameTimeMs = dt * 1000.0f;
 
-		glClear(GL_COLOR_BUFFER_BIT);
-		startFrame(dt);
-		endFrame();
+		update(dt);
+		render();
 	}
 
-	void Application::startFrame(float dt) {
+	void Application::update(float dt) {
 		FIF_PROFILE_FUNC();
-
 		fif::core::Profiler::clear();
-		mp_Window->startFrame();
 
 		for(const Module * mod : m_Modules)
 			mod->updateFunc(dt);
@@ -79,7 +85,7 @@ namespace fif::core {
 			layer->update(dt);
 	}
 
-	void Application::endFrame() {
+	void Application::render() {
 		FIF_PROFILE_FUNC();
 
 		for(const Module *mod : m_Modules)
@@ -87,6 +93,8 @@ namespace fif::core {
 
 		for(std::unique_ptr<Layer> &layer : m_Layers)
 			layer->render();
+
+		// TODO: ImGui as a separate module
 
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
@@ -100,12 +108,26 @@ namespace fif::core {
 	}
 
 	void Application::registerModule(const Module *mod) {
+		FIF_PROFILE_FUNC();
+
 		mod->initFunc();
 		m_Modules.push_back(mod);
 		FIF_LOG("Module " << mod->name << " registered");
 	}
 
+	void Application::onEvent(Event &event) {
+		FIF_PROFILE_FUNC();
+
+		EventDispatcher dispatcher(event);
+		dispatcher.dispatch<WindowResizeEvent>([&](WindowResizeEvent &resizeEvent) {
+			glViewport(0, 0, resizeEvent.getSize().x, resizeEvent.getSize().y);
+			return false;
+		});
+	}
+
 	void Application::addLayer(std::unique_ptr<Layer> layer) {
+		FIF_PROFILE_FUNC();
+
 		const auto sortFunc = [](std::unique_ptr<Layer> &a, std::unique_ptr<Layer> &b) {
 			return a->getZIndex() < b->getZIndex();
 		};

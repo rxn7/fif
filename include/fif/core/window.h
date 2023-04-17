@@ -17,18 +17,13 @@ namespace fif::core {
 	public:
 		Window(const WindowProperties &props);
 		~Window();
-		bool shouldClose() const;
-		void close();
+		bool getShouldClose() const;
+		void setShouldClose(bool value);
 
 		inline GLFWwindow *getGlfwWindow() const { return mp_GlfwWindow; }
 
 	private:
-		void startFrame();
 		void endFrame();
-
-	private:
-		static void glfwErrorCallback(int error, const char *msg);
-		static void glfwResizeCallback(GLFWwindow *window, int width, int height);
 
 	private:
 		GLFWwindow *mp_GlfwWindow = nullptr;

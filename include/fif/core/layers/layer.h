@@ -6,9 +6,9 @@ namespace fif::core {
 		Layer() = default;
 		virtual ~Layer() = default;
 
-		virtual void update([[maybe_unused]] float dt) {}
-		virtual void renderImGui() {}
-		virtual void render() {}
+		virtual void update([[maybe_unused]] float dt) = 0;
+		virtual void renderImGui() = 0;
+		virtual void render() = 0;
 		virtual constexpr int getZIndex() { return 0; }
 	};
 }

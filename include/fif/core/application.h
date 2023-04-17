@@ -6,6 +6,7 @@
 #include "fif/core/module.h"
 #include "fif/core/performanceStats.h"
 #include "fif/core/window.h"
+#include "fif/core/event/event.h"
 #include "entt/signal/dispatcher.hpp"
 
 #include <chrono>
@@ -20,6 +21,7 @@ namespace fif::core {
 
 		void start();
 		void registerModule(const Module *mod);
+		void onEvent(Event &event);
 
 		inline static Application &getInstance() { 
 			return *s_Instance;
@@ -38,8 +40,8 @@ namespace fif::core {
 		
 	private:
 		void gameLoop();
-		void startFrame(float dt);
-		void endFrame();
+		void update(float dt);
+		void render();
 
 	protected:
 		std::vector<const Module*> m_Modules;
