@@ -84,7 +84,11 @@ namespace fif::core {
 		EventDispatcher dispatcher(event);
 		dispatcher.dispatch<WindowResizeEvent>([&](WindowResizeEvent &resizeEvent) {
 			glViewport(0, 0, resizeEvent.getSize().x, resizeEvent.getSize().y);
-			return false;
+			return true;
 		});
+
+
+		for(auto &mod : m_Modules)
+			mod->onEvent(event);
 	}
 }

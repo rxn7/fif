@@ -74,7 +74,7 @@ void EditorModule::onEvent(fif::core::Event &event) {
 
 	fif::core::EventDispatcher dispatcher(event);
 	dispatcher.dispatch<fif::core::MouseScrolledEvent>([&](fif::core::MouseScrolledEvent &scrollEvent) {
-		if(scrollEvent.isHanlded() && scrollEvent.getValue().y == 0)
+		if(scrollEvent.isHanlded() || scrollEvent.getValue().y == 0)
 			return false;
 
 		fif::gfx::OrthoCamera &cam = fif::gfx::Renderer2D::getCamera();
