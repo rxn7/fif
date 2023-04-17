@@ -87,7 +87,7 @@ namespace fif::gfx {
 
 		for(std::uint16_t i=0; i<segmentCount; ++i) {
 			s_SimpleBatch->addVertex({
-				.position = glm::vec3(position, 0.0f) + glm::vec3(radius * glm::cos(angle), radius * glm::sin(angle), 0.0f),
+				.position = position + glm::vec2(radius * glm::cos(angle), radius * glm::sin(angle)),
 				.color = color,
 			});
 			angle += segmentAngle;
@@ -106,10 +106,10 @@ namespace fif::gfx {
 		const uint32_t vertCount = s_CircleBatch->getVertexCount();
 		const float radius = diameter * 0.5f;
 
-		s_CircleBatch->addVertex({glm::vec3(position.x - radius, position.y - radius, 0.0f), glm::vec2(0.0f,0.0f), color});
-		s_CircleBatch->addVertex({glm::vec3(position.x - radius, position.y + radius, 0.0f), glm::vec2(0.0f,1.0f), color});
-		s_CircleBatch->addVertex({glm::vec3(position.x + radius, position.y + radius, 0.0f), glm::vec2(1.0f,1.0f), color});
-		s_CircleBatch->addVertex({glm::vec3(position.x + radius, position.y - radius, 0.0f), glm::vec2(1.0f,0.0f), color});
+		s_CircleBatch->addVertex({glm::vec2(position.x - radius, position.y - radius), glm::vec2(0.0f,0.0f), color});
+		s_CircleBatch->addVertex({glm::vec2(position.x - radius, position.y + radius), glm::vec2(0.0f,1.0f), color});
+		s_CircleBatch->addVertex({glm::vec2(position.x + radius, position.y + radius), glm::vec2(1.0f,1.0f), color});
+		s_CircleBatch->addVertex({glm::vec2(position.x + radius, position.y - radius), glm::vec2(1.0f,0.0f), color});
 
 		s_CircleBatch->addElement(vertCount);
 		s_CircleBatch->addElement(vertCount+1);

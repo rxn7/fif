@@ -12,7 +12,7 @@ set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 set(INC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 if(NOT CMAKE_BUILD_TYPE)
-  set(CMAKE_BUILD_TYPE Release ... FORCE)
+  set(CMAKE_BUILD_TYPE Debug)
 endif()
 
 add_compile_options(-fPIC)
