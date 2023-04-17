@@ -79,41 +79,32 @@ namespace fif::core {
 		FIF_PROFILE_FUNC();
 		fif::core::Profiler::clear();
 
-		for(const Module * mod : m_Modules)
-			mod->updateFunc(dt);
+		for(auto &mod : m_Modules)
+			mod->update(dt);
 
-		for(std::unique_ptr<Layer> &layer : m_Layers)
+		for(auto &layer : m_Layers)
 			layer->update(dt);
 	}
 
 	void Application::render() {
 		FIF_PROFILE_FUNC();
 
-		for(const Module *mod : m_Modules)
-			mod->renderFunc();
+		for(auto &mod : m_Modules)
+			mod->render();
 
-		for(std::unique_ptr<Layer> &layer : m_Layers)
+		for(auto &layer : m_Layers)
 			layer->render();
 
 		// TODO: ImGui as a separate module
-
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
-		for(std::unique_ptr<Layer> &layer : m_Layers)
+		for(auto &layer : m_Layers)
 			layer->renderImGui();
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 		mp_Window->endFrame();
-	}
-
-	void Application::registerModule(const Module *mod) {
-		FIF_PROFILE_FUNC();
-
-		mod->initFunc();
-		m_Modules.push_back(mod);
-		FIF_LOG("Module " << mod->name << " registered");
 	}
 
 	void Application::onEvent(Event &event) {
@@ -124,16 +115,5 @@ namespace fif::core {
 			glViewport(0, 0, resizeEvent.getSize().x, resizeEvent.getSize().y);
 			return false;
 		});
-	}
-
-	void Application::addLayer(std::unique_ptr<Layer> layer) {
-		FIF_PROFILE_FUNC();
-
-		const auto sortFunc = [](std::unique_ptr<Layer> &a, std::unique_ptr<Layer> &b) {
-			return a->getZIndex() < b->getZIndex();
-		};
-
-		m_Layers.push_back(std::move(layer));
-		std::sort(m_Layers.begin(), m_Layers.end(), sortFunc);
 	}
 }

@@ -5,12 +5,14 @@
 #include "fif/core/layers/layer.h"
 #include "fif/core/module.h"
 #include "fif/core/performanceStats.h"
+#include "fif/core/profiler.h"
 #include "fif/core/window.h"
 #include "fif/core/event/event.h"
 #include "entt/signal/dispatcher.hpp"
 
 #include <chrono>
 #include <vector>
+#include <set>
 #include <memory>
 
 namespace fif::core {
@@ -20,23 +22,32 @@ namespace fif::core {
 		virtual ~Application();
 
 		void start();
-		void registerModule(const Module *mod);
+
 		virtual void onEvent(Event &event);
 
-		inline static Application &getInstance() { 
-			return *s_Instance;
-		} 
-
-		inline const Window &getWindow() const {
-			return *mp_Window;
-		}
-
-		inline const PerformanceStats &getLastFramePerformanceStats() const { 
-			return m_LastFramePerformanceStats;
-		}
+		inline static Application &getInstance() { return *s_Instance; } 
+		inline const Window &getWindow() const { return *mp_Window; }
+		inline const PerformanceStats &getLastFramePerformanceStats() const { return m_LastFramePerformanceStats; }
 
 	protected:
-		void addLayer(std::unique_ptr<Layer> layer);
+		template<class T, class ...Args>
+		void attachModule(Args&&... args) {
+			static_assert(std::is_base_of<Module, T>().value, "T doesn't derive from Module!");
+
+			FIF_PROFILE_FUNC();
+			std::unique_ptr<T> mod = std::make_unique<T>(args...);
+			m_Modules.emplace_back(std::move(mod));
+			mod->onAttach(*this);
+		}
+
+		template<class T, class ...Args>
+		void addLayer(Args&&... args) {
+			static_assert(std::is_base_of<Layer, T>().value, "T doesn't derive from Layer!");
+
+			FIF_PROFILE_FUNC();
+			std::unique_ptr<T> layer = std::make_unique<T>(args...);
+			m_Layers.emplace(std::move(layer));
+		}
 		
 	private:
 		void gameLoop();
@@ -44,12 +55,12 @@ namespace fif::core {
 		void render();
 
 	protected:
-		std::vector<const Module*> m_Modules;
 		std::unique_ptr<Window> mp_Window;
 
 	private:
 		Clock::time_point m_LastFrameTime;
-		std::vector<std::unique_ptr<Layer>> m_Layers;
+		std::vector<std::unique_ptr<Module>> m_Modules;
+		std::set<std::unique_ptr<Layer>> m_Layers;
 		PerformanceStats m_LastFramePerformanceStats;
 		static Application *s_Instance;
 	};

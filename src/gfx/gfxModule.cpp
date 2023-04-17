@@ -1,7 +1,8 @@
 #include "entt/signal/fwd.hpp"
 #include "fif/core/application.h"
+#include "fif/core/event/event.h"
 #include "fif/core/module.h"
-#include "fif/gfx/gfx.h"
+#include "fif/gfx/gfxModule.h"
 #include "fif/gfx/shaderLibrary.h"
 #include "fif/gfx/renderer2d.h"
 
@@ -10,7 +11,7 @@
 #include <memory>
 
 namespace fif::gfx {
-	void init() {
+	void GfxModule::onAttach([[maybe_unused]] core::Application &app) {
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -18,12 +19,18 @@ namespace fif::gfx {
 		Renderer2D::init();
 	}
 
-	void update([[maybe_unused]] float dt) {
+	void GfxModule::onDetach() {
+	}
+
+	void GfxModule::update([[maybe_unused]] float dt) {
 		glClear(GL_COLOR_BUFFER_BIT);
 		Renderer2D::begin();
 	}
 
-	void render() {
+	void GfxModule::render() {
 		Renderer2D::end();
+	}
+
+	void GfxModule::onEvent([[maybe_unused]] core::Event &event) {
 	}
 }

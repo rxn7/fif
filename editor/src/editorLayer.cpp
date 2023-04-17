@@ -3,7 +3,6 @@
 #include "fif/core/performanceStats.h"
 #include "fif/core/profiler.h"
 #include "fif/core/scopeTimer.h"
-#include "fif/gfx/gfx.h"
 #include "fif/gfx/orthoCamera.h"
 #include "fif/gfx/renderer2d.h"
 
@@ -11,6 +10,12 @@
 #include "GLFW/glfw3.h"
 
 #include <cmath>
+
+EditorLayer::EditorLayer() {
+}
+
+EditorLayer::~EditorLayer() {
+}
 
 void EditorLayer::update([[maybe_unused]] float dt) {
 }
