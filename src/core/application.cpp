@@ -81,8 +81,7 @@ namespace fif::core {
 	void Application::onEvent(Event &event) {
 		FIF_PROFILE_FUNC();
 
-		EventDispatcher dispatcher(event);
-		dispatcher.dispatch<WindowResizeEvent>([&](WindowResizeEvent &resizeEvent) {
+		EventDispatcher::dispatch<WindowResizeEvent>(event, [&](WindowResizeEvent &resizeEvent) {
 			glViewport(0, 0, resizeEvent.getSize().x, resizeEvent.getSize().y);
 			return true;
 		});

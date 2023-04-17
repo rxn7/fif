@@ -72,8 +72,7 @@ void EditorModule::onRenderImGui() {
 void EditorModule::onEvent(fif::core::Event &event) {
 	FIF_PROFILE_FUNC();
 
-	fif::core::EventDispatcher dispatcher(event);
-	dispatcher.dispatch<fif::core::MouseScrolledEvent>([&](fif::core::MouseScrolledEvent &scrollEvent) {
+	fif::core::EventDispatcher::dispatch<fif::core::MouseScrolledEvent>(event, [&](fif::core::MouseScrolledEvent &scrollEvent) {
 		if(scrollEvent.isHanlded() || scrollEvent.getValue().y == 0)
 			return false;
 
@@ -82,7 +81,7 @@ void EditorModule::onEvent(fif::core::Event &event) {
 		return true;
 	});
 
-	dispatcher.dispatch<fif::core::MouseMovedEvent>([&](fif::core::MouseMovedEvent &movedEvent) {
+	fif::core::EventDispatcher::dispatch<fif::core::MouseMovedEvent>(event, [&](fif::core::MouseMovedEvent &movedEvent) {
 		fif::gfx::OrthoCamera &cam = fif::gfx::Renderer2D::getCamera();
 		return false;
 	});
