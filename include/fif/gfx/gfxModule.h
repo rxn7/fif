@@ -11,10 +11,8 @@ namespace fif::gfx {
 
 		constexpr std::string_view getName() const override { return "GFX"; }
 
-		void onAttach(core::Application &app) override;
-		void onDetach() override;
-		void onEvent(core::Event &event) override;
-		void update(float dt) override;
-		void render() override;
+		void onStart(core::Application &app) override;
+		void onUpdate(float dt) override;
+		void onRender() override;
 	};
 }

@@ -13,11 +13,10 @@ namespace fif::core {
 			virtual ~Module() { }
 
 			virtual constexpr std::string_view getName() const = 0;
-			virtual void onAttach(Application &app) = 0;
-			virtual void onDetach() = 0;
-			virtual void onEvent(Event &event) = 0;
-			virtual void update(float dt) = 0;
-			virtual void render() = 0;
+			virtual void onStart([[maybe_unused]] Application &app) { }
+			virtual void onEvent([[maybe_unused]] Event &event) { }
+			virtual void onUpdate([[maybe_unused]] float dt) { }
+			virtual void onRender() { }
 
 		protected:
 			Module() { }

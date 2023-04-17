@@ -16,7 +16,7 @@ namespace fif::input {
 		FIF_MODULE_INIT_INSTANCE();
 	}
 
-	void InputModule::onAttach(core::Application &app) {
+	void InputModule::onStart(core::Application &app) {
 		GLFWwindow *glfwWindow = app.getWindow().getGlfwWindow();
 
 		glfwSetKeyCallback(glfwWindow, []([[maybe_unused]] GLFWwindow *glfwWindow, int key, [[maybe_unused]] int scancode, int action, [[maybe_unused]] int mods) {
@@ -64,17 +64,5 @@ namespace fif::input {
 			s_LastMousePosition = position;
 			window->getApplication().onEvent(event);
 		});
-	}
-
-	void InputModule::onDetach() {
-	}
-
-	void InputModule::onEvent([[maybe_unused]] core::Event &event) {
-	}
-
-	void InputModule::update([[maybe_unused]] float dt) {
-	}
-
-	void InputModule::render() {
 	}
 }

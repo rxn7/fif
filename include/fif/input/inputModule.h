@@ -4,7 +4,7 @@
 #include "fif/core/window.h"
 #include "fif/gfx/camera.h"
 
-#include "GLFW/glfw3.h"
+#include "fif/core/opengl.h"
 
 namespace fif::input {
 	class InputModule final : public core::Module {
@@ -14,11 +14,7 @@ namespace fif::input {
 
 		constexpr std::string_view getName() const override { return "Input"; }
 
-		void onAttach(core::Application &app) override;
-		void onDetach() override;
-		void onEvent(core::Event &event) override;
-		void update(float dt) override;
-		void render() override;
+		void onStart(core::Application &app) override;
 
 		inline bool isKeyHeld(int key) const  { return m_Keys[key]; }
 		inline bool isButtonHeld(int btn) const { return m_Buttons[btn]; }

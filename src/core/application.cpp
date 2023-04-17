@@ -1,5 +1,4 @@
 #include "fif/core/application.h"
-#include "GLFW/glfw3.h"
 #include "fif/core/assertion.h"
 #include "fif/core/clock.h"
 #include "fif/core/event/eventDispatcher.h"
@@ -8,9 +7,6 @@
 #include "fif/core/profiler.h"
 
 #include "fif/core/opengl.h"
-#include "imgui.h"
-#include "backends/imgui_impl_opengl3.h"
-#include "backends/imgui_impl_glfw.h"
 
 #include <algorithm>
 #include <chrono>
@@ -31,30 +27,20 @@ namespace fif::core {
 #ifndef __EMSCRIPTEN__
 		gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress));
 #endif
-
-		FIF_LOG(glfwGetVersionString());
 	}
 
 	Application::~Application() {
 		FIF_PROFILE_FUNC();
-		ImGui_ImplOpenGL3_Shutdown();
-		ImGui_ImplGlfw_Shutdown();
 	}
 
 	void Application::start() {
-		// TODO: ImgGui module
-		ImGui::CreateContext();
-		ImGui_ImplOpenGL3_Init("#version 300 es");
-		ImGui_ImplGlfw_InitForOpenGL(mp_Window->getGlfwWindow(), true);
-
 		FIF_PROFILE_FUNC();
 
-#ifdef __EMSCRIPTEN__
-		auto loop = []() {
-			Application::getInstance().gameLoop();
-		};
+		for(const auto &mod : m_Modules)
+			mod->onStart(*this);
 
-		emscripten_set_main_loop(loop, -1, true);
+#ifdef __EMSCRIPTEN__
+		emscripten_set_main_loop([](){ Application::getInstance().gameLoop(); }, -1, true);
 #else
 		while(!mp_Window->getShouldClose())
 			gameLoop();
@@ -80,29 +66,14 @@ namespace fif::core {
 		fif::core::Profiler::clear();
 
 		for(auto &mod : m_Modules)
-			mod->update(dt);
-
-		for(auto &layer : m_Layers)
-			layer->update(dt);
+			mod->onUpdate(dt);
 	}
 
 	void Application::render() {
 		FIF_PROFILE_FUNC();
 
 		for(auto &mod : m_Modules)
-			mod->render();
-
-		for(auto &layer : m_Layers)
-			layer->render();
-
-		// TODO: ImGui as a separate module
-		ImGui_ImplOpenGL3_NewFrame();
-		ImGui_ImplGlfw_NewFrame();
-		ImGui::NewFrame();
-		for(auto &layer : m_Layers)
-			layer->renderImGui();
-		ImGui::Render();
-		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+			mod->onRender();
 
 		mp_Window->endFrame();
 	}

@@ -2,7 +2,6 @@
 
 #include "entt/signal/fwd.hpp"
 #include "fif/core/clock.h"
-#include "fif/core/layers/layer.h"
 #include "fif/core/module.h"
 #include "fif/core/performanceStats.h"
 #include "fif/core/profiler.h"
@@ -35,19 +34,9 @@ namespace fif::core {
 			static_assert(std::is_base_of<Module, T>().value, "T doesn't derive from Module!");
 
 			FIF_PROFILE_FUNC();
-			std::unique_ptr<T> mod = std::make_unique<T>(args...);
+
+			std::unique_ptr<Module> &mod = m_Modules.emplace_back(std::make_unique<T>(args...));
 			FIF_LOG("Module " << mod->getName() << " attached");
-			m_Modules.emplace_back(std::move(mod));
-			mod->onAttach(*this);
-		}
-
-		template<class T, class ...Args>
-		void addLayer(Args&&... args) {
-			static_assert(std::is_base_of<Layer, T>().value, "T doesn't derive from Layer!");
-
-			FIF_PROFILE_FUNC();
-			std::unique_ptr<T> layer = std::make_unique<T>(args...);
-			m_Layers.emplace(std::move(layer));
 		}
 		
 	private:
@@ -61,7 +50,6 @@ namespace fif::core {
 	private:
 		Clock::time_point m_LastFrameTime;
 		std::vector<std::unique_ptr<Module>> m_Modules;
-		std::set<std::unique_ptr<Layer>> m_Layers;
 		PerformanceStats m_LastFramePerformanceStats;
 		static Application *s_Instance;
 	};

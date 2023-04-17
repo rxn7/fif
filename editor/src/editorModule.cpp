@@ -1,4 +1,4 @@
-#include "editorLayer.h"
+#include "editorModule.h"
 #include "fif/core/application.h"
 #include "fif/core/event/event.h"
 #include "fif/core/event/eventDispatcher.h"
@@ -8,36 +8,38 @@
 #include "fif/core/scopeTimer.h"
 #include "fif/gfx/orthoCamera.h"
 #include "fif/gfx/renderer2d.h"
+#include "fif/imGui/imGuiModule.h"
 
 #include "imgui.h"
-#include "GLFW/glfw3.h"
 
 #include <cmath>
 
-EditorLayer::EditorLayer() {
+EditorModule::EditorModule() {
 }
 
-EditorLayer::~EditorLayer() {
+EditorModule::~EditorModule() {
 }
 
-void EditorLayer::update([[maybe_unused]] float dt) {
+void EditorModule::onStart(fif::core::Application &app) {
+	fif::imgui::ImGuiModule::getInstance()->addRenderFunc(std::bind(&EditorModule::onRenderImGui, this));
 }
 
-void EditorLayer::render() {
+void EditorModule::onRender() {
 	FIF_PROFILE_FUNC();
-	float time = glfwGetTime();
+	float time = std::chrono::duration<float>(fif::core::Clock::now().time_since_epoch()).count();
 	float cos = (std::cos(time) + 1.0f) * 0.5f;
 	float sin = (std::sin(time) + 1.0f) * 0.5f;
 
 	fif::gfx::Renderer2D::renderQuad({0.0f, 0.0f}, {100, 100}, 0.0f, {cos * 255, sin*255, 0, 255});
-	fif::gfx::Renderer2D::renderQuad({0.0f, 120.0f}, {100,100}, glfwGetTime(), {sin*255, 0, cos*255, 255});
-	fif::gfx::Renderer2D::renderQuad({0.0f, -120.0f}, {100,100}, -glfwGetTime(), {cos*255, 0, sin*255, 255});
+	fif::gfx::Renderer2D::renderQuad({0.0f, 120.0f}, {100,100}, time, {sin*255, 0, cos*255, 255});
+	fif::gfx::Renderer2D::renderQuad({0.0f, -120.0f}, {100,100}, -time, {cos*255, 0, sin*255, 255});
 
 	fif::gfx::Renderer2D::renderCircleFrag({-100.0f, 0.0f}, 100, {sin*255, cos*255, cos*255, 255});
-	fif::gfx::Renderer2D::renderCircleTriangle({100.0f, 0.0f}, 100, m_CircleSegments, {sin*255, cos*255, sin, 255});
+	fif::gfx::Renderer2D::renderCircleTriangle({100.0f, 0.0f}, 100, 16, {sin*255, cos*255, sin, 255});
 }
 
-void EditorLayer::renderImGui() {
+void EditorModule::onRenderImGui() {
+	FIF_PROFILE_FUNC();
 	if(ImGui::Begin("Performance")) {
 		{
 			const PerformanceStats &stats = fif::core::Application::getInstance().getLastFramePerformanceStats();
@@ -57,23 +59,19 @@ void EditorLayer::renderImGui() {
 	ImGui::End();
 
 	if(ImGui::Begin("Options")) {
-		static bool vsync = true;
-		if(ImGui::Checkbox("VSync", &vsync))
-			glfwSwapInterval(vsync);
-
 		if(ImGui::TreeNode("Camera")) {
 			fif::gfx::OrthoCamera &camera = fif::gfx::Renderer2D::getCamera();
 			ImGui::SliderFloat2("Position", &camera.m_Position[0], -1000.0f, 1000.0f);
 			ImGui::SliderFloat("Size", &camera.m_Size, 0.1f, 1000.0f);
 			ImGui::TreePop();
 		}
-
-		ImGui::SliderInt("Circle segments", &m_CircleSegments, 4, 100);
 	}
 	ImGui::End();
 }
 
-void EditorLayer::onEvent(fif::core::Event &event) {
+void EditorModule::onEvent(fif::core::Event &event) {
+	FIF_PROFILE_FUNC();
+
 	fif::core::EventDispatcher dispatcher(event);
 	dispatcher.dispatch<fif::core::MouseScrolledEvent>([&](fif::core::MouseScrolledEvent &scrollEvent) {
 		if(scrollEvent.isHanlded() && scrollEvent.getValue().y == 0)

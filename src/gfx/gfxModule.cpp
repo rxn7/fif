@@ -18,7 +18,11 @@ namespace fif::gfx {
 		FIF_MODULE_INIT_INSTANCE();
 	}
 
-	void GfxModule::onAttach([[maybe_unused]] core::Application &app) {
+	void GfxModule::onStart([[maybe_unused]] core::Application &app) {
+		FIF_LOG("OpenGL Renderer: " << glGetString(GL_RENDERER));
+		FIF_LOG("OpenGL Version: " << glGetString(GL_VERSION));
+		FIF_LOG("OpenGL Vendor: " << glGetString(GL_VENDOR));
+
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -26,18 +30,12 @@ namespace fif::gfx {
 		Renderer2D::init();
 	}
 
-	void GfxModule::onDetach() {
-	}
-
-	void GfxModule::update([[maybe_unused]] float dt) {
+	void GfxModule::onUpdate([[maybe_unused]] float dt) {
 		glClear(GL_COLOR_BUFFER_BIT);
 		Renderer2D::begin();
 	}
 
-	void GfxModule::render() {
+	void GfxModule::onRender() {
 		Renderer2D::end();
-	}
-
-	void GfxModule::onEvent([[maybe_unused]] core::Event &event) {
 	}
 }
