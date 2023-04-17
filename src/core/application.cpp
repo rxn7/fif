@@ -1,6 +1,7 @@
 #include "fif/core/application.h"
 #include "GLFW/glfw3.h"
 #include "fif/core/assertion.h"
+#include "fif/core/clock.h"
 #include "fif/core/performanceStats.h"
 #include "fif/core/profiler.h"
 
@@ -40,16 +41,12 @@ namespace fif::core {
 	}
 
 	void Application::start() {
-		auto now = high_resolution_clock::now();
-		auto lastFrame = now;
-		float dt = 0.0f;
-
 #ifdef __EMSCRIPTEN__
 		auto loop = []() {
 			Application::getInstance().gameLoop();
 		};
 
-		emscripten_set_main_loop(loop, 0, true);
+		emscripten_set_main_loop(loop, -1, true);
 #else
 		while(!mp_Window->shouldClose())
 			gameLoop();
@@ -57,8 +54,8 @@ namespace fif::core {
 	}
 
 	void Application::gameLoop() {
-		const auto now = high_resolution_clock::now();
-		const float dt = duration_cast<microseconds>(now - m_LastFrameTime).count() * 0.000001f;
+		const Clock::time_point now = Clock::now();
+		const float dt = duration_cast<nanoseconds>(now - m_LastFrameTime).count() * 0.000000001f;
 		m_LastFrameTime = now;
 
 		m_LastFramePerformanceStats.fps = 1.0f / dt;

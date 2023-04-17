@@ -18,7 +18,7 @@ namespace fif::gfx {
 		Renderer2D::init();
 	}
 
-	void update(float dt) {
+	void update([[maybe_unused]] float dt) {
 		Renderer2D::begin();
 	}
 

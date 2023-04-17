@@ -12,7 +12,7 @@
 
 #include <cmath>
 
-void EditorLayer::update(float dt) {
+void EditorLayer::update([[maybe_unused]] float dt) {
 }
 
 void EditorLayer::render() {

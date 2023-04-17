@@ -13,4 +13,4 @@ namespace fif::core {
 	}
 }
 
-#define FIF_PROFILE_FUNC() fif::core::ScopeTimer(__FUNCTION_NAME__, [&](fif::core::TimerResult result) { fif::core::Profiler::addResult(result); })
+#define FIF_PROFILE_FUNC() fif::core::ScopeTimer __timer##__LINE__ = fif::core::ScopeTimer(FIF_FUNCTION_NAME, [&](fif::core::TimerResult result) { fif::core::Profiler::addResult(result); })

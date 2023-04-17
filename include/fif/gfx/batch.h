@@ -28,8 +28,8 @@ namespace fif::gfx {
 		}
 
 	private:
+		VertexBuffer m_Buffer;
 		std::vector<Vertex> m_Vertices;
 		std::vector<std::uint16_t> m_Elements;
-		VertexBuffer m_Buffer;
 	};
 }

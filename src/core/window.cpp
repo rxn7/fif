@@ -42,12 +42,12 @@ namespace fif::core {
 		glfwSetWindowShouldClose(mp_GlfwWindow, true);
 	}
 
-	void Window::glfwErrorCallback(int error, const char *msg) {
+	void Window::glfwErrorCallback([[maybe_unused]] int error, const char *msg) {
 		// TODO: Logger
 		std::cerr << "GLFW Error: " << msg << std::endl;
 	}
 
-	void Window::glfwResizeCallback(GLFWwindow *window, int width, int height) {
+	void Window::glfwResizeCallback([[maybe_unused]] GLFWwindow *window, int width, int height) {
 		glViewport(0, 0, width, height);
 	}
 }
