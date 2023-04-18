@@ -69,8 +69,10 @@ void EditorModule::onRenderImGui() {
 #endif
 
 		const fif::gfx::Renderer2D::Stats &rendererStats = fif::gfx::Renderer2D::getStats();
-		ImGui::Text("Circles rendered: %i", rendererStats.circlesRendered);
-		ImGui::Text("Quads rendered: %i", rendererStats.quadsRendered);
+		ImGui::Text("Circles: %i", rendererStats.circles);
+		ImGui::Text("Quads: %i", rendererStats.quads);
+		ImGui::Text("Vertices: %i", rendererStats.vertices);
+		ImGui::Text("Elements: %i", rendererStats.elements);
 	}
 	ImGui::End();
 
@@ -78,14 +80,17 @@ void EditorModule::onRenderImGui() {
 		const std::vector<fif::core::Entity> &entities = fif::core::Application::getInstance().getEntities();
 
 		ImGui::Text("Count: %lu", entities.size());
-		std::uint32_t i = 1;
-		for (const fif::core::Entity &ent : entities) {
-			if (ImGui::TreeNode(std::to_string(i++).c_str())) {
-				for (const auto &comp : ent.getComponents())
-					ImGui::Text("%s", comp->getName());
+		if (ImGui::BeginChild("EntityList")) {
+			std::uint32_t i = 1;
+			for (const fif::core::Entity &ent : entities) {
+				if (ImGui::TreeNode(std::to_string(i++).c_str())) {
+					for (const auto &comp : ent.getComponents())
+						ImGui::Text("%s", comp->getName());
 
-				ImGui::TreePop();
+					ImGui::TreePop();
+				}
 			}
+			ImGui::EndChild();
 		}
 	}
 	ImGui::End();

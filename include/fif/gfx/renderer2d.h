@@ -8,8 +8,10 @@
 namespace fif::gfx {
 	namespace Renderer2D {
 		struct Stats {
-			std::uint32_t circlesRendered = 0;
-			std::uint32_t quadsRendered = 0;
+			std::uint32_t circles = 0;
+			std::uint32_t quads = 0;
+			std::uint32_t vertices = 0;
+			std::uint32_t elements = 0;
 		};
 
 		OrthoCamera &getCamera();

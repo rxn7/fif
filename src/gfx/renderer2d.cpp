@@ -61,8 +61,6 @@ namespace fif::gfx {
 		if (!s_Camera->containsQuad(position, size))
 			return;
 
-		s_TempStats.quadsRendered++;
-
 		const uint32_t vertCount = s_SimpleBatch->getVertexCount();
 		glm::mat4 matrix(1.0f);
 		matrix = glm::translate(glm::mat4(1.0f), glm::vec3(position, 0.0f));
@@ -80,6 +78,10 @@ namespace fif::gfx {
 		s_SimpleBatch->addElement(vertCount + 2);
 		s_SimpleBatch->addElement(vertCount + 3);
 		s_SimpleBatch->addElement(vertCount);
+
+		s_TempStats.quads++;
+		s_TempStats.vertices += 4;
+		s_TempStats.elements += 6;
 	}
 
 	void Renderer2D::renderCircleTriangle(const glm::vec2 &position, float radius, std::uint16_t segmentCount, const glm::u8vec4 &color) {
@@ -88,8 +90,6 @@ namespace fif::gfx {
 
 		if (!s_Camera->containsCircle(position, radius))
 			return;
-
-		s_TempStats.circlesRendered++;
 
 		const uint32_t vertCount = s_SimpleBatch->getVertexCount();
 		const float segmentAngle = glm::two_pi<float>() / segmentCount;
@@ -108,6 +108,10 @@ namespace fif::gfx {
 			s_SimpleBatch->addElement(vertCount + i);
 			s_SimpleBatch->addElement(vertCount + i + 1);
 		}
+
+		s_TempStats.circles++;
+		s_TempStats.vertices += vertCount;
+		s_TempStats.elements += (segmentCount - 2) * 3;
 	}
 
 	void Renderer2D::renderCircleFrag(const glm::vec2 &position, float radius, const glm::u8vec4 &color) {
@@ -115,8 +119,6 @@ namespace fif::gfx {
 
 		if (!s_Camera->containsCircle(position, radius))
 			return;
-
-		s_TempStats.circlesRendered++;
 
 		const uint32_t vertCount = s_CircleBatch->getVertexCount();
 
@@ -131,6 +133,10 @@ namespace fif::gfx {
 		s_CircleBatch->addElement(vertCount + 2);
 		s_CircleBatch->addElement(vertCount + 3);
 		s_CircleBatch->addElement(vertCount);
+
+		s_TempStats.circles++;
+		s_TempStats.vertices += 4;
+		s_TempStats.elements += 6;
 	}
 
 	Renderer2D::Stats &Renderer2D::getStats() {
