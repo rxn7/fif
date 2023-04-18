@@ -7,6 +7,7 @@
 #include "fif/core/profiler.h"
 
 #include "fif/core/opengl.h"
+#include "fif/core/timing.h"
 
 #include <algorithm>
 #include <chrono>
@@ -36,13 +37,13 @@ namespace fif::core {
 	void Application::start() {
 		FIF_PROFILE_FUNC();
 
-		for(const auto &mod : m_Modules)
+		for (const auto &mod : m_Modules)
 			mod->onStart(*this);
 
 #ifdef __EMSCRIPTEN__
-		emscripten_set_main_loop([](){ Application::getInstance().gameLoop(); }, -1, true);
+		emscripten_set_main_loop([]() { Application::getInstance().gameLoop(); }, -1, true);
 #else
-		while(!mp_Window->getShouldClose())
+		while (!mp_Window->getShouldClose())
 			gameLoop();
 #endif
 	}
@@ -50,33 +51,31 @@ namespace fif::core {
 	void Application::gameLoop() {
 		FIF_PROFILE_FUNC();
 
-		const Clock::time_point now = Clock::now();
-		const float dt = duration_cast<nanoseconds>(now - m_LastFrameTime).count() * 0.000000001f;
-		m_LastFrameTime = now;
+		Time::update();
 
-		m_LastFramePerformanceStats.fps = 1.0f / dt;
-		m_LastFramePerformanceStats.frameTimeMs = dt * 1000.0f;
+		m_LastFramePerformanceStats.fps = 1.0f / Time::getDeltaTime();
+		m_LastFramePerformanceStats.frameTimeMs = Time::getDeltaTime() * 1000.0f;
 
 		fif::core::Profiler::beginFrame();
 
-		update(dt);
+		update();
 		render();
 	}
 
-	void Application::update(float dt) {
+	void Application::update() {
 		FIF_PROFILE_FUNC();
 
-		for(auto &mod : m_Modules)
-			mod->onUpdate(dt);
+		for (auto &mod : m_Modules)
+			mod->onUpdate();
 	}
 
 	void Application::render() {
 		FIF_PROFILE_FUNC();
 
-		for(auto &mod : m_Modules)
+		for (auto &mod : m_Modules)
 			mod->onRender();
-		
-		for(auto &ent : m_Entities)
+
+		for (auto &ent : m_Entities)
 			ent.render();
 
 		mp_Window->endFrame();
@@ -90,10 +89,10 @@ namespace fif::core {
 			return true;
 		});
 
-		for(auto &mod : m_Modules)
+		for (auto &mod : m_Modules)
 			mod->onEvent(event);
 
-		for(auto &ent : m_Entities)
+		for (auto &ent : m_Entities)
 			ent.onEvent(event);
 	}
-}
+} // namespace fif::core

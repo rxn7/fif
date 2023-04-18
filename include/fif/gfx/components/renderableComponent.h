@@ -5,16 +5,16 @@
 #include "glm/vec4.hpp"
 
 namespace fif::gfx {
-	class RenderableComponent : public core::Component {
-	public:
-		virtual void onCreate() override;
-		virtual void onRender() override = 0;
+    class RenderableComponent : public core::Component {
+      public:
+        virtual void onCreate() override;
+        virtual void onRender() override = 0;
 
-	public:
-		glm::u8vec4 m_Color;
-		TransformComponent *mp_Transform;
+      public:
+        glm::u8vec4 m_Color;
+        TransformComponent *mp_Transform;
 
-	protected:
-		RenderableComponent() { }
-	};
-}
+      protected:
+        RenderableComponent() {}
+    };
+} // namespace fif::gfx

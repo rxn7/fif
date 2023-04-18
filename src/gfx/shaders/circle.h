@@ -3,11 +3,9 @@
 #include <memory>
 
 namespace fif::gfx::priv::shaders {
-	namespace Circle {
-		const std::string FRAGMENT =
-		FIF_GLSL_VERSION
-		FIF_GLSL_PRECISION
-		R"(
+    namespace Circle {
+        const std::string FRAGMENT = FIF_GLSL_VERSION FIF_GLSL_PRECISION
+            R"(
 		in vec4 v_Color;
 		in vec2 v_UV;
 
@@ -18,5 +16,5 @@ namespace fif::gfx::priv::shaders {
 			float alpha = dist > 0.99 ? 1.0 - smoothstep(0.99, 1.0, dist) : 1.0;
 			f_Color = mix(vec4(0.0), v_Color, alpha);
 		})";
-	}
-}
+    }
+} // namespace fif::gfx::priv::shaders

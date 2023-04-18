@@ -5,36 +5,43 @@
 
 struct GLFWwindow;
 
-#define FIF_GET_WINDOW_FROM_GLFW_WINDOW(glfwWindow) reinterpret_cast<fif::core::Window*>(glfwGetWindowUserPointer(glfwWindow))
+#define FIF_GET_WINDOW_FROM_GLFW_WINDOW(glfwWindow) reinterpret_cast<fif::core::Window *>(glfwGetWindowUserPointer(glfwWindow))
 
 namespace fif::core {
-	class Application;
+    class Application;
 
-	struct WindowProperties final {
-		const std::string title; 
-		const glm::i16vec2 size;
-		bool vsync = true;
-	};
+    struct WindowProperties final {
+        const std::string title;
+        const glm::i16vec2 size;
+        bool vsync = true;
+    };
 
-	class Window final {
-	friend class Application;
-	public:
-		Window(Application &app, const WindowProperties &props);
-		~Window();
+    class Window final {
+        friend class Application;
 
-		inline glm::i16vec2 getSize() const { return m_Size; }
-		bool getShouldClose() const;
-		void setShouldClose(bool value);
+      public:
+        Window(Application &app, const WindowProperties &props);
+        ~Window();
 
-		inline GLFWwindow *getGlfwWindow() const { return mp_GlfwWindow; }
-		inline Application &getApplication() const { return m_App; }
+        inline glm::i16vec2 getSize() const {
+            return m_Size;
+        }
+        bool getShouldClose() const;
+        void setShouldClose(bool value);
 
-	private:
-		void endFrame();
+        inline GLFWwindow *getGlfwWindow() const {
+            return mp_GlfwWindow;
+        }
+        inline Application &getApplication() const {
+            return m_App;
+        }
 
-	private:
-		glm::i16vec2 m_Size;
-		Application &m_App;
-		GLFWwindow *mp_GlfwWindow = nullptr;
-	};
-}
+      private:
+        void endFrame();
+
+      private:
+        glm::i16vec2 m_Size;
+        Application &m_App;
+        GLFWwindow *mp_GlfwWindow = nullptr;
+    };
+} // namespace fif::core

@@ -3,13 +3,13 @@
 #include "fif/gfx/components/renderableComponent.h"
 
 namespace fif::gfx {
-	class RenderableCircleComponent final : public RenderableComponent {
-	public:
-		COMPONENT_NAME(RenderableCircleComponent);
+    class RenderableCircleComponent final : public RenderableComponent {
+      public:
+        COMPONENT_NAME(RenderableCircleComponent);
 
-		void onRender() override;
+        void onRender() override;
 
-	public:
-		float m_Diameter = 50.0f;
-	};
-}
+      public:
+        float m_Diameter = 50.0f;
+    };
+} // namespace fif::gfx

@@ -11,14 +11,14 @@
 #include "fif/input/inputModule.h"
 
 const fif::core::WindowProperties WINDOW_PROPS = {
-	.title = "fifed",
-	.size = glm::i16vec2(1280, 720),
-	.vsync = false,
+    .title = "fifed",
+    .size = glm::i16vec2(1280, 720),
+    .vsync = false,
 };
 
 Fifed::Fifed() : fif::core::Application(WINDOW_PROPS) {
-	attachModule<fif::gfx::GfxModule>();
-	attachModule<fif::input::InputModule>();
-	attachModule<fif::imgui::ImGuiModule>();
-	attachModule<EditorModule>();
+    attachModule<fif::gfx::GfxModule>();
+    attachModule<fif::input::InputModule>();
+    attachModule<fif::imgui::ImGuiModule>();
+    attachModule<EditorModule>();
 }

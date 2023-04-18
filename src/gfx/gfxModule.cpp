@@ -1,10 +1,10 @@
+#include "fif/gfx/gfxModule.h"
 #include "fif/core/application.h"
 #include "fif/core/assertion.h"
 #include "fif/core/event/event.h"
 #include "fif/core/module.h"
-#include "fif/gfx/gfxModule.h"
-#include "fif/gfx/shaderLibrary.h"
 #include "fif/gfx/renderer2d.h"
+#include "fif/gfx/shaderLibrary.h"
 
 #include "fif/core/opengl.h"
 
@@ -29,7 +29,7 @@ namespace fif::gfx {
 		Renderer2D::init();
 	}
 
-	void GfxModule::onUpdate([[maybe_unused]] float dt) {
+	void GfxModule::onUpdate() {
 		glClear(GL_COLOR_BUFFER_BIT);
 		Renderer2D::begin();
 	}
@@ -37,4 +37,4 @@ namespace fif::gfx {
 	void GfxModule::onRender() {
 		Renderer2D::end();
 	}
-}
+} // namespace fif::gfx

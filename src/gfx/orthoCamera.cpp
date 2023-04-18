@@ -1,15 +1,14 @@
 #include "fif/gfx/orthoCamera.h"
 
 #include "fif/core/application.h"
-#include "fif/core/profiler.h"
 #include "fif/core/opengl.h"
+#include "fif/core/profiler.h"
 
 #include "glm/ext/matrix_clip_space.hpp"
 #include "glm/vec2.hpp"
 
 namespace fif::gfx {
-	OrthoCamera::~OrthoCamera() {
-	}
+	OrthoCamera::~OrthoCamera() {}
 
 	void OrthoCamera::update() {
 		FIF_PROFILE_FUNC();
@@ -29,6 +28,6 @@ namespace fif::gfx {
 		const glm::i16vec2 windowSize = core::Application::getInstance().getWindow().getSize();
 		const glm::vec2 normalizedPosition((position.x * 2.0f) / windowSize.x - 1.0f, 1.0f - (2.0f * position.y) / windowSize.y);
 
-		return m_CameraMatrixInverse * glm::vec4(normalizedPosition, 0.0f, 1.0f);
+		return glm::vec2(m_CameraMatrixInverse * glm::vec4(normalizedPosition, 0.0f, 1.0f));
 	}
-}
+} // namespace fif::gfx

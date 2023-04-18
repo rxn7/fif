@@ -9,9 +9,8 @@
 
 namespace fif::core {
 	class Entity final {
-	public:
-		template<class T, class ...Args>
-		T *addComponent(Args &&...args) {
+	  public:
+		template <class T, class... Args> T *addComponent(Args &&...args) {
 			FIF_PROFILE_FUNC();
 			static_assert(std::is_base_of<Component, T>().value, "T is not a Component");
 
@@ -19,30 +18,31 @@ namespace fif::core {
 			comp->mp_Entity = this;
 			comp->onCreate();
 
-			return static_cast<T*>(comp.get());
+			return static_cast<T *>(comp.get());
 		}
 
-		template<class T>
-		T *getComponent() {
+		template <class T> T *getComponent() {
 			FIF_PROFILE_FUNC();
 			static_assert(std::is_base_of<Component, T>().value, "T is not a Component");
 
-			for(std::unique_ptr<Component> &comp : m_Components) {
-				T *c = dynamic_cast<T*>(comp.get());
-				if(c != nullptr)
+			for (std::unique_ptr<Component> &comp : m_Components) {
+				T *c = dynamic_cast<T *>(comp.get());
+				if (c != nullptr)
 					return c;
 			}
 
 			return nullptr;
 		}
 
-		inline const std::vector<std::unique_ptr<Component>> &getComponents() const { return m_Components; }
+		inline const std::vector<std::unique_ptr<Component>> &getComponents() const {
+			return m_Components;
+		}
 
-		void update(float dt);
+		void update();
 		void render();
 		void onEvent(Event &event);
 
-	private:
+	  private:
 		std::vector<std::unique_ptr<Component>> m_Components;
 	};
-}
+} // namespace fif::core

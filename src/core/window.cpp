@@ -2,9 +2,9 @@
 #include "fif/core/application.h"
 #include "fif/core/assertion.h"
 
+#include "fif/core/event/keyEvent.h"
 #include "fif/core/event/mouseEvent.h"
 #include "fif/core/event/windowEvent.h"
-#include "fif/core/event/keyEvent.h"
 #include "fif/core/opengl.h"
 #include "fif/core/profiler.h"
 #include <GLFW/glfw3.h>
@@ -13,9 +13,7 @@ namespace fif::core {
 	Window::Window(Application &app, const WindowProperties &props) : m_Size(props.size), m_App(app) {
 		FIF_PROFILE_FUNC();
 
-		glfwSetErrorCallback([]([[maybe_unused]] int error, const char *msg) {
-			FIF_LOG_ERROR("GLFW Error: " << msg);
-		});
+		glfwSetErrorCallback([]([[maybe_unused]] int error, const char *msg) { FIF_LOG_ERROR("GLFW Error: " << msg); });
 
 		FIF_ASSERT(glfwInit(), "Failed to initialize GLFW");
 
@@ -41,7 +39,7 @@ namespace fif::core {
 		});
 
 		glfwSwapInterval(props.vsync);
-	} 
+	}
 
 	Window::~Window() {
 		FIF_ASSERT(mp_GlfwWindow != nullptr, "Glfw window is not created!");
@@ -61,4 +59,4 @@ namespace fif::core {
 	void Window::setShouldClose(bool value) {
 		glfwSetWindowShouldClose(mp_GlfwWindow, value);
 	}
-}
+} // namespace fif::core

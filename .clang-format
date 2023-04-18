@@ -1,0 +1,11 @@
+---
+ColumnLimit: 200
+CompactNamespaces: 'false'
+NamespaceIndentation: All
+UseTab: Always
+IndentWidth: 4
+TabWidth: 4
+AllowShortFunctionsOnASingleLine: Empty
+SortIncludes: CaseInsensitive
+
+...

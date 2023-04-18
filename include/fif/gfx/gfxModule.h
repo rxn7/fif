@@ -5,14 +5,14 @@
 
 namespace fif::gfx {
 	class GfxModule final : public core::Module {
-	public:
+	  public:
+		FIF_MODULE_NAME(GFX)
+
 		GfxModule();
 		FIF_MODULE_INSTANCE_FUNC_DECL(GfxModule)
 
-		constexpr std::string_view getName() const override { return "GFX"; }
-
 		void onStart(core::Application &app) override;
-		void onUpdate(float dt) override;
+		void onUpdate() override;
 		void onRender() override;
 	};
-}
+} // namespace fif::gfx
