@@ -13,9 +13,8 @@ Fif is split into core module and other independent modules:
 Fif is using OpenGL ES 3.0 as the rendering backend, which is why it is so easy to port apps made with fif to web using emscripten
 
 # Dependencies
-## Submodules (no need to install them manually)   
 - glm  
 - glfw  
 - glad
 - ImGui      
-- emscripten optional)
+- emscripten (optional)
