@@ -1,13 +1,13 @@
-[submodule "vendor/glfw"]
-	path = vendor/glfw
+[submodule "fif/vendor/glfw"]
+	path = fif/vendor/glfw
 	url = https://github.com/glfw/glfw
-[submodule "vendor/glad"]
-	path = vendor/glad
+[submodule "fif/vendor/glad"]
+	path = fif/vendor/glad
 	url = https://github.com/nitrix/glad
-[submodule "vendor/glm"]
-	path = vendor/glm
+[submodule "fif/vendor/glm"]
+	path = fif/vendor/glm
 	url = https://github.com/g-truc/glm
-[submodule "vendor/imgui"]
-	path = vendor/imgui
+[submodule "fif/vendor/imgui"]
+	path = fif/vendor/imgui
 	url = https://github.com/ocornut/imgui
 	branch = docking
