@@ -10,6 +10,6 @@ namespace fif::gfx {
 		void onRender() override;
 
 	public:
-		glm::vec2 m_Size;
+		glm::vec2 m_Size{50.0f, 50.0f};
 	};
 }

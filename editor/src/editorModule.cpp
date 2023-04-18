@@ -8,6 +8,7 @@
 #include "fif/core/performanceStats.h"
 #include "fif/core/profiler.h"
 #include "fif/core/scopeTimer.h"
+#include "fif/gfx/components/renderableCircleComponent.h"
 #include "fif/gfx/components/renderableQuadComponent.h"
 #include "fif/gfx/components/transformComponent.h"
 #include "fif/gfx/orthoCamera.h"
@@ -34,10 +35,21 @@ void EditorModule::onStart(fif::core::Application &app) {
 	for(std::uint32_t i=0; i<1000; ++i) {
 		fif::core::Entity *ent = app.createEntity();
 		ent->addComponent<fif::gfx::TransformComponent>();
-		fif::gfx::RenderableQuadComponent *quad = ent->addComponent<fif::gfx::RenderableQuadComponent>();
-		quad->m_Size = {100,100};
-		quad->m_Color = {rand() % 255, rand() % 255, rand() % 255, 200};
-		quad->mp_Transform->m_Position = {std::rand() % 10000 - 5000, std::rand() % 10000 - 5000};
+
+		fif::gfx::RenderableComponent *renderableComponent;
+		if(rand() % 2 == 0) {
+			fif::gfx::RenderableQuadComponent *quad = ent->addComponent<fif::gfx::RenderableQuadComponent>();
+			quad->m_Size = {100,100};
+			quad->m_Color = {rand() % 255, rand() % 255, rand() % 255, 200};
+			renderableComponent = quad;
+		} else {
+			fif::gfx::RenderableCircleComponent *circle = ent->addComponent<fif::gfx::RenderableCircleComponent>();
+			circle->m_Diameter = 100.0f;
+			circle->m_Color = {rand() % 255, rand() % 255, rand() % 255, 200};
+			renderableComponent = circle;
+		}
+
+		renderableComponent->mp_Transform->m_Position = {std::rand() % 10000 - 5000, std::rand() % 10000 - 5000};
 	}
 }
 
