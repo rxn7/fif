@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.26)
 project(fif)
 
-option(FIF_BUILD_EDITOR "Build the editor (fifed)" ON)
+option(FIF_BUILD_FIFED "Build fifed" ON)
 option(FIF_BUILD_CORE "Build the core module" ON)
 option(FIF_BUILD_GFX "Build the gfx module" ON)
 option(FIF_BUILD_INPUT "Build the input module" ON)
@@ -77,8 +77,8 @@ if(FIF_BUILD_IMGUI)
   build_module(fif-imgui imGui "fif-core;ImGui")
 endif()
 
-if(FIF_BUILD_EDITOR)
-  add_subdirectory(editor)
+if(FIF_BUILD_FIFED)
+  add_subdirectory(fifed)
 endif()
 
 set(GLFW_BUILD_EXAMPLES OFF CACHE INTERNAL "Build GLFW examples")
