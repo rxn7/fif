@@ -73,13 +73,13 @@ void EditorModule::onEvent(fif::core::Event &event) {
 	});
 
 	fif::core::EventDispatcher::dispatch<fif::core::MouseMovedEvent>(event, [&](fif::core::MouseMovedEvent &movedEvent) {
-		if(!fif::input::InputModule::getInstance()->isButtonHeld(GLFW_MOUSE_BUTTON_LEFT)) {
+		if(!fif::input::InputModule::getInstance()->isButtonHeld(GLFW_MOUSE_BUTTON_LEFT))
 			return false;
-		}
 
 		fif::gfx::OrthoCamera &cam = fif::gfx::Renderer2D::getCamera();
-		cam.m_Position.x -= movedEvent.getDelta().x;
-		cam.m_Position.y += movedEvent.getDelta().y;
+		const float zoomFactor = cam.m_Size * 0.0025f;
+		cam.m_Position.x -= movedEvent.getDelta().x * zoomFactor;
+		cam.m_Position.y += movedEvent.getDelta().y * zoomFactor;
 		return true;
 	});
 }

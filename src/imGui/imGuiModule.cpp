@@ -31,7 +31,6 @@ namespace fif::imgui {
 
 		ImGuiIO &io = ImGui::GetIO();
 		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-		io.IniFilename = (std::filesystem::current_path().string() + "/imgui.ini").c_str();
 
 		ImGui_ImplOpenGL3_Init("#version 300 es");
 		ImGui_ImplGlfw_InitForOpenGL(app.getWindow().getGlfwWindow(), true);
