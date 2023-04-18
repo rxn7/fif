@@ -18,7 +18,7 @@ namespace fif::core {
 
 		~ScopeTimer() {
 			using namespace std::chrono;
-			const float durationMs = duration_cast<nanoseconds>((Clock::now() - m_BeginTime)).count() * 0.0000001f;
+			const float durationMs = duration_cast<duration<float, std::milli>>((Clock::now() - m_BeginTime)).count();
 			m_Func(TimerResult{m_Name, durationMs});
 		}
 
