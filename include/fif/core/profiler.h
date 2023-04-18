@@ -13,7 +13,7 @@ namespace fif::core {
 	} // namespace Profiler
 } // namespace fif::core
 
-#ifdef FIF_PROFILING_EXPERIMENTAL
+#ifdef FIF_PROFILING_ENABLED
 #define FIF_PROFILE_FUNC() fif::core::ScopeTimer __timer##__LINE__ = fif::core::ScopeTimer(FIF_FUNCTION_NAME, [&](fif::core::TimerResult result) { fif::core::Profiler::addResult(result); })
 #else
 #define FIF_PROFILE_FUNC()
