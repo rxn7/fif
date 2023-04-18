@@ -21,9 +21,15 @@ namespace fif::gfx {
 			return m_Elements.size();
 		}
 		inline void addVertex(const Vertex &vertex) {
+			if(m_Vertices.size() == m_Vertices.capacity())
+				return;
+
 			m_Vertices.push_back(vertex);
 		}
 		inline void addElement(std::uint16_t element) {
+			if(m_Elements.size() == m_Elements.capacity())
+				return;
+
 			m_Elements.push_back(element);
 		}
 

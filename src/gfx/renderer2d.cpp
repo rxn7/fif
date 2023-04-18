@@ -15,7 +15,7 @@
 #include <ratio>
 
 namespace fif::gfx {
-	static constexpr std::uint32_t BATCH_SIZE = 100;
+	static constexpr std::uint32_t BATCH_SIZE = 1000;
 
 	static std::unique_ptr<Batch> s_SimpleBatch, s_CircleBatch;
 	static std::unique_ptr<OrthoCamera> s_Camera;

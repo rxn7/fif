@@ -18,7 +18,7 @@ namespace fif::core {
 		virtual void onRender() { }
 		virtual void onEvent([[maybe_unused]] Event &event) { }
 
-	private:
+	protected:
 		Entity *mp_Entity;
 	};
 }

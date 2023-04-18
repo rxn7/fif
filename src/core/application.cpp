@@ -75,6 +75,9 @@ namespace fif::core {
 
 		for(auto &mod : m_Modules)
 			mod->onRender();
+		
+		for(auto &ent : m_Entities)
+			ent.render();
 
 		mp_Window->endFrame();
 	}

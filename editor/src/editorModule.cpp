@@ -8,6 +8,8 @@
 #include "fif/core/performanceStats.h"
 #include "fif/core/profiler.h"
 #include "fif/core/scopeTimer.h"
+#include "fif/gfx/components/renderableQuadComponent.h"
+#include "fif/gfx/components/transformComponent.h"
 #include "fif/gfx/orthoCamera.h"
 #include "fif/gfx/renderer2d.h"
 #include "fif/imGui/imGuiModule.h"
@@ -28,20 +30,15 @@ void EditorModule::onStart(fif::core::Application &app) {
 
 	fif::core::Entity *cameraController = app.createEntity();
 	cameraController->addComponent<CameraControllerComponent>();
-}
 
-void EditorModule::onRender() {
-	FIF_PROFILE_FUNC();
-	float time = std::chrono::duration<float>(fif::core::Clock::now().time_since_epoch()).count();
-	float cos = (std::cos(time) + 1.0f) * 0.5f;
-	float sin = (std::sin(time) + 1.0f) * 0.5f;
-
-	fif::gfx::Renderer2D::renderQuad({0.0f, 0.0f}, {100, 100}, 0.0f, {cos * 255, sin*255, 0, 255});
-	fif::gfx::Renderer2D::renderQuad({0.0f, 120.0f}, {100,100}, time, {sin*255, 0, cos*255, 255});
-	fif::gfx::Renderer2D::renderQuad({0.0f, -120.0f}, {100,100}, -time, {cos*255, 0, sin*255, 255});
-
-	fif::gfx::Renderer2D::renderCircleFrag({-100.0f, 0.0f}, 100, {sin*255, cos*255, cos*255, 255});
-	fif::gfx::Renderer2D::renderCircleTriangle({100.0f, 0.0f}, 100, 16, {sin*255, cos*255, sin, 255});
+	for(std::uint32_t i=0; i<1000; ++i) {
+		fif::core::Entity *ent = app.createEntity();
+		ent->addComponent<fif::gfx::TransformComponent>();
+		fif::gfx::RenderableQuadComponent *quad = ent->addComponent<fif::gfx::RenderableQuadComponent>();
+		quad->m_Size = {100,100};
+		quad->m_Color = {rand() % 255, rand() % 255, rand() % 255, 200};
+		quad->mp_Transform->m_Position = {std::rand() % 10000 - 5000, std::rand() % 10000 - 5000};
+	}
 }
 
 void EditorModule::onRenderImGui() {

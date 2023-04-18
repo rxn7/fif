@@ -9,7 +9,6 @@ public:
 
 	constexpr std::string_view getName() const override { return "Editor"; }
 	void onStart(fif::core::Application &app) override;
-	void onRender() override;
 
 private:
 	void onRenderImGui();
