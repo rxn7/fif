@@ -18,7 +18,16 @@ void CameraControllerComponent::onEvent(fif::core::Event &event) {
 		if (scrollEvent.isHanlded() || scrollEvent.getValue().y == 0)
 			return false;
 
+		glm::vec2 mousePosition = fif::input::InputModule::getInstance()->getMousePosition();
+
+		glm::vec2 mouseWorldPositionBeforeZoom = m_Camera.screenToWorld(mousePosition);
+
 		m_Camera.m_Zoom *= scrollEvent.getValue().y > 0 ? 0.9f : 1.1f;
+		m_Camera.update();
+
+		glm::vec2 mouseWorldPositionAfterZoom = m_Camera.screenToWorld(mousePosition);
+
+		m_Camera.m_Position += mouseWorldPositionBeforeZoom - mouseWorldPositionAfterZoom;
 
 		return true;
 	});
