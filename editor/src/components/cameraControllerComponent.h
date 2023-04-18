@@ -7,5 +7,6 @@
 
 class CameraControllerComponent final : public fif::core::Component {
 public:
+	COMPONENT_NAME(CameraControllerComponent);
 	void onEvent(fif::core::Event &event) override;
 };

@@ -1,6 +1,7 @@
 #include "editorModule.h"
 #include "components/cameraControllerComponent.h"
 #include "fif/core/application.h"
+#include "fif/core/ecs/entity.h"
 #include "fif/core/event/event.h"
 #include "fif/core/event/eventDispatcher.h"
 #include "fif/core/event/mouseEvent.h"
@@ -59,6 +60,22 @@ void EditorModule::onRenderImGui() {
 				ImGui::Text("%s: %f ms", result.name.c_str(), result.durationMs);
 
 			ImGui::TreePop();
+		}
+	}
+	ImGui::End();
+
+	if(ImGui::Begin("Entities")) {
+		const std::vector<fif::core::Entity> &entities = fif::core::Application::getInstance().getEntities();
+
+		ImGui::Text("Count: %lu", entities.size());
+		std::uint32_t i=1;
+		for(const fif::core::Entity &ent : entities) {
+			if(ImGui::TreeNode(std::to_string(i++).c_str())) {
+				for(const auto &comp : ent.getComponents())
+					ImGui::Text("%s", comp->getName());
+
+				ImGui::TreePop();
+			}
 		}
 	}
 	ImGui::End();

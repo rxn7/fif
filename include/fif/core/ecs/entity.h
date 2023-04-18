@@ -34,6 +34,8 @@ namespace fif::core {
 			return nullptr;
 		}
 
+		inline const std::vector<std::unique_ptr<Component>> &getComponents() const { return m_Components; }
+
 		void update(float dt);
 		void render();
 		void onEvent(Event &event);
