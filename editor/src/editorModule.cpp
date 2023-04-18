@@ -68,6 +68,10 @@ void EditorModule::onRenderImGui() {
 			ImGui::TreePop();
 		}
 #endif
+
+		const fif::gfx::Renderer2D::Stats &rendererStats = fif::gfx::Renderer2D::getStats();
+		ImGui::Text("Circles rendered: %i", rendererStats.circlesRendered);
+		ImGui::Text("Quads rendered: %i", rendererStats.quadsRendered);
 	}
 	ImGui::End();
 
