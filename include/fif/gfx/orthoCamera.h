@@ -1,6 +1,7 @@
 #pragma once 
 
 #include "fif/gfx/camera.h"
+#include "glm/vec2.hpp"
 
 namespace fif::gfx {
 	class OrthoCamera : public Camera {
@@ -8,9 +9,15 @@ namespace fif::gfx {
 		~OrthoCamera();
 
 		void update() override;
+		glm::vec2 screenToWorld(const glm::vec2 &position) const;
 
 	public:
-		float m_Size = 500.0f;
+		static constexpr float SIZE = 500.0f;
+		float m_Zoom = 1.0f;
 		glm::vec2 m_Position;
+
+	private:
+		glm::mat4 m_CameraMatrixInverse;
+		float m_Aspect;
 	};
 }

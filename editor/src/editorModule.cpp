@@ -1,4 +1,5 @@
 #include "editorModule.h"
+#include "components/cameraControllerComponent.h"
 #include "fif/core/application.h"
 #include "fif/core/event/event.h"
 #include "fif/core/event/eventDispatcher.h"
@@ -23,6 +24,9 @@ EditorModule::~EditorModule() {
 
 void EditorModule::onStart(fif::core::Application &app) {
 	fif::imgui::ImGuiModule::getInstance()->addRenderFunc(std::bind(&EditorModule::onRenderImGui, this));
+
+	fif::core::Entity *cameraController = app.createEntity();
+	cameraController->addComponent<CameraControllerComponent>();
 }
 
 void EditorModule::onRender() {
@@ -58,28 +62,4 @@ void EditorModule::onRenderImGui() {
 		}
 	}
 	ImGui::End();
-}
-
-void EditorModule::onEvent(fif::core::Event &event) {
-	FIF_PROFILE_FUNC();
-
-	fif::core::EventDispatcher::dispatch<fif::core::MouseScrolledEvent>(event, [&](fif::core::MouseScrolledEvent &scrollEvent) {
-		if(scrollEvent.isHanlded() || scrollEvent.getValue().y == 0)
-			return false;
-
-		fif::gfx::OrthoCamera &cam = fif::gfx::Renderer2D::getCamera();
-		cam.m_Size *= scrollEvent.getValue().y > 0 ? 0.9f : 1.1f;
-		return true;
-	});
-
-	fif::core::EventDispatcher::dispatch<fif::core::MouseMovedEvent>(event, [&](fif::core::MouseMovedEvent &movedEvent) {
-		if(!fif::input::InputModule::getInstance()->isButtonHeld(GLFW_MOUSE_BUTTON_LEFT))
-			return false;
-
-		fif::gfx::OrthoCamera &cam = fif::gfx::Renderer2D::getCamera();
-		const float zoomFactor = cam.m_Size * 0.0025f;
-		cam.m_Position.x -= movedEvent.getDelta().x * zoomFactor;
-		cam.m_Position.y += movedEvent.getDelta().y * zoomFactor;
-		return true;
-	});
 }

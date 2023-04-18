@@ -12,7 +12,8 @@
 
 const fif::core::WindowProperties WINDOW_PROPS = {
 	.title = "fifed",
-	.size = glm::i16vec2(1280, 720)
+	.size = glm::i16vec2(1280, 720),
+	.vsync = false,
 };
 
 Fifed::Fifed() : fif::core::Application(WINDOW_PROPS) {

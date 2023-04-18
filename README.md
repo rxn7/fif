@@ -15,7 +15,6 @@ Fif is using OpenGL ES 3.0 as the rendering backend, which is why it is so easy 
 # Dependencies
 ## Submodules (no need to install them manually)   
 - glm  
-- entt  
 - glfw  
 - glad
 - ImGui    

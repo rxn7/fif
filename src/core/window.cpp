@@ -6,10 +6,13 @@
 #include "fif/core/event/windowEvent.h"
 #include "fif/core/event/keyEvent.h"
 #include "fif/core/opengl.h"
+#include "fif/core/profiler.h"
 #include <GLFW/glfw3.h>
 
 namespace fif::core {
-	Window::Window(Application &app, const WindowProperties &props) : m_App(app) {
+	Window::Window(Application &app, const WindowProperties &props) : m_Size(props.size), m_App(app) {
+		FIF_PROFILE_FUNC();
+
 		glfwSetErrorCallback([]([[maybe_unused]] int error, const char *msg) {
 			FIF_LOG_ERROR("GLFW Error: " << msg);
 		});
@@ -27,6 +30,7 @@ namespace fif::core {
 		glfwSetWindowSizeCallback(mp_GlfwWindow, []([[maybe_unused]] GLFWwindow *glfwWindow, int width, int height) {
 			Window *window = FIF_GET_WINDOW_FROM_GLFW_WINDOW(glfwWindow);
 			WindowResizeEvent event({width, height});
+			window->m_Size = glm::i32vec2(width, height);
 			window->m_App.onEvent(event);
 		});
 
@@ -45,6 +49,7 @@ namespace fif::core {
 	}
 
 	void Window::endFrame() {
+		FIF_PROFILE_FUNC();
 		glfwSwapBuffers(mp_GlfwWindow);
 		glfwPollEvents();
 	}

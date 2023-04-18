@@ -1,4 +1,3 @@
-#include "entt/signal/fwd.hpp"
 #include "fif/core/application.h"
 #include "fif/core/assertion.h"
 #include "fif/core/event/event.h"

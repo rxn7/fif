@@ -2,7 +2,6 @@
 
 #include "fif/core/event/event.h"
 
-#include <functional>
 #include <string>
 
 namespace fif::core {

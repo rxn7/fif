@@ -1,13 +1,12 @@
 #pragma once
 
-#include "entt/signal/fwd.hpp"
 #include "fif/core/clock.h"
+#include "fif/core/ecs/entity.h"
 #include "fif/core/module.h"
 #include "fif/core/performanceStats.h"
 #include "fif/core/profiler.h"
 #include "fif/core/window.h"
 #include "fif/core/event/event.h"
-#include "entt/signal/dispatcher.hpp"
 
 #include <chrono>
 #include <vector>
@@ -27,10 +26,11 @@ namespace fif::core {
 		inline static Application &getInstance() { return *s_Instance; } 
 		inline const Window &getWindow() const { return *mp_Window; }
 		inline const PerformanceStats &getLastFramePerformanceStats() const { return m_LastFramePerformanceStats; }
+		inline Entity *createEntity() { return &m_Entities.emplace_back(); }
 
 	protected:
 		template<class T, class ...Args>
-		void attachModule(Args&&... args) {
+		void attachModule(Args &&...args) {
 			static_assert(std::is_base_of<Module, T>().value, "T doesn't derive from Module!");
 
 			FIF_PROFILE_FUNC();
@@ -48,8 +48,10 @@ namespace fif::core {
 		std::unique_ptr<Window> mp_Window;
 
 	private:
-		Clock::time_point m_LastFrameTime;
+		std::vector<Entity> m_Entities;
 		std::vector<std::unique_ptr<Module>> m_Modules;
+
+		Clock::time_point m_LastFrameTime;
 		PerformanceStats m_LastFramePerformanceStats;
 		static Application *s_Instance;
 	};

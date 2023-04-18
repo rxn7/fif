@@ -57,13 +57,14 @@ namespace fif::core {
 		m_LastFramePerformanceStats.fps = 1.0f / dt;
 		m_LastFramePerformanceStats.frameTimeMs = dt * 1000.0f;
 
+		fif::core::Profiler::beginFrame();
+
 		update(dt);
 		render();
 	}
 
 	void Application::update(float dt) {
 		FIF_PROFILE_FUNC();
-		fif::core::Profiler::clear();
 
 		for(auto &mod : m_Modules)
 			mod->onUpdate(dt);
@@ -86,8 +87,10 @@ namespace fif::core {
 			return true;
 		});
 
-
 		for(auto &mod : m_Modules)
 			mod->onEvent(event);
+
+		for(auto &ent : m_Entities)
+			ent.onEvent(event);
 	}
 }

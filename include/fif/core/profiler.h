@@ -7,9 +7,9 @@
 
 namespace fif::core {
 	namespace Profiler {
+		void beginFrame();
 		void addResult(const fif::core::TimerResult &result);
 		const std::vector<fif::core::TimerResult> &getResults();
-		void clear();
 	}
 }
 

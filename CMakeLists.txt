@@ -47,7 +47,7 @@ endfunction()
 
 if(FIF_BUILD_CORE)
   set(LIBS "")
-  list(APPEND LIBS PUBLIC EnTT glfw glm)
+  list(APPEND LIBS PUBLIC glfw glm)
 
   if(NOT EMSCRIPTEN)
     list(APPEND LIBS glad)
@@ -82,7 +82,6 @@ if(NOT EMSCRIPTEN)
   add_subdirectory(${LIB_DIR}/glad)
 endif()
 
-add_subdirectory(${LIB_DIR}/entt)
 add_subdirectory(${LIB_DIR}/glm)
 
 set(IMGUI_PATH "vendor/imgui")

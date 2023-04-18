@@ -1,6 +1,7 @@
 #pragma once
 
 #include "fif/core/module.h"
+#include <functional>
 
 namespace fif::imgui {
 	class ImGuiModule final : public core::Module {
