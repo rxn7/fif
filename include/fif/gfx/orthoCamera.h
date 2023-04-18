@@ -17,7 +17,7 @@ namespace fif::gfx {
 		glm::vec2 m_Position;
 
 	  private:
-		glm::mat4 m_CameraMatrixInverse;
+		glm::vec2 m_Size;
 		float m_Aspect;
 	};
 } // namespace fif::gfx
