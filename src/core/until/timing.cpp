@@ -1,4 +1,5 @@
-#include "fif/core/timing.h"
+#include "fif/core/util/timing.h"
+#include "fif/core/util/clock.h"
 
 using namespace std::chrono;
 

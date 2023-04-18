@@ -1,7 +1,7 @@
 #include "fif/imGui/imGuiModule.h"
 #include "backends/imgui_impl_glfw.h"
 #include "fif/core/application.h"
-#include "fif/core/assertion.h"
+#include "fif/core/util/assertion.h"
 
 #include "backends/imgui_impl_opengl3.h"
 #include "fif/core/event/event.h"

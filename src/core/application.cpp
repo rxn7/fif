@@ -1,13 +1,13 @@
 #include "fif/core/application.h"
-#include "fif/core/assertion.h"
-#include "fif/core/clock.h"
 #include "fif/core/event/eventDispatcher.h"
 #include "fif/core/event/windowEvent.h"
+#include "fif/core/opengl.h"
 #include "fif/core/performanceStats.h"
 #include "fif/core/profiler.h"
-
-#include "fif/core/opengl.h"
-#include "fif/core/timing.h"
+#include "fif/core/util/assertion.h"
+#include "fif/core/util/clock.h"
+#include "fif/core/util/rng.h"
+#include "fif/core/util/timing.h"
 
 #include <algorithm>
 #include <chrono>
@@ -22,6 +22,8 @@ namespace fif::core {
 
 		FIF_ASSERT(s_Instance == nullptr, "Only 1 instance of fif::core::Application can exist!");
 		s_Instance = this;
+
+		Rng::init();
 
 		mp_Window = std::make_unique<Window>(*this, windowProperties);
 

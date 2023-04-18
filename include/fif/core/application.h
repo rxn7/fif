@@ -1,11 +1,11 @@
 #pragma once
 
-#include "fif/core/clock.h"
 #include "fif/core/ecs/entity.h"
 #include "fif/core/event/event.h"
 #include "fif/core/module.h"
 #include "fif/core/performanceStats.h"
 #include "fif/core/profiler.h"
+#include "fif/core/util/clock.h"
 #include "fif/core/window.h"
 
 #include <chrono>

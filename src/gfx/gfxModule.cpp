@@ -1,8 +1,8 @@
 #include "fif/gfx/gfxModule.h"
 #include "fif/core/application.h"
-#include "fif/core/assertion.h"
 #include "fif/core/event/event.h"
 #include "fif/core/module.h"
+#include "fif/core/util/assertion.h"
 #include "fif/gfx/renderer2d.h"
 #include "fif/gfx/shaderLibrary.h"
 

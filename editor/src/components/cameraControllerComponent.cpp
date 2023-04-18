@@ -3,7 +3,6 @@
 #include "fif/core/event/eventDispatcher.h"
 #include "fif/core/event/mouseEvent.h"
 #include "fif/core/profiler.h"
-#include "fif/core/timing.h"
 #include "fif/gfx/orthoCamera.h"
 #include "fif/gfx/renderer2d.h"
 #include "fif/input/inputModule.h"

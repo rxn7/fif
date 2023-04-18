@@ -1,7 +1,7 @@
 #pragma once
 
-#include "functionName.h"
-#include "scopeTimer.h"
+#include "fif/core/util/functionName.h"
+#include "fif/core/util/scopeTimer.h"
 
 #include <vector>
 

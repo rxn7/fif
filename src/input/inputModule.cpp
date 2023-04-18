@@ -1,8 +1,8 @@
 #include "fif/input/inputModule.h"
 #include "fif/core/application.h"
-#include "fif/core/assertion.h"
 #include "fif/core/event/keyEvent.h"
 #include "fif/core/event/mouseEvent.h"
+#include "fif/core/util/assertion.h"
 
 #include "fif/core/module.h"
 #include "fif/core/window.h"

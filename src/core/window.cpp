@@ -1,6 +1,6 @@
 #include "fif/core/window.h"
 #include "fif/core/application.h"
-#include "fif/core/assertion.h"
+#include "fif/core/util/assertion.h"
 
 #include "fif/core/event/keyEvent.h"
 #include "fif/core/event/mouseEvent.h"

@@ -7,7 +7,8 @@
 #include "fif/core/event/mouseEvent.h"
 #include "fif/core/performanceStats.h"
 #include "fif/core/profiler.h"
-#include "fif/core/scopeTimer.h"
+#include "fif/core/util/rng.h"
+#include "fif/core/util/scopeTimer.h"
 #include "fif/gfx/components/renderableCircleComponent.h"
 #include "fif/gfx/components/renderableQuadComponent.h"
 #include "fif/gfx/components/transformComponent.h"
@@ -21,7 +22,6 @@
 #include <cmath>
 
 EditorModule::EditorModule() {}
-
 EditorModule::~EditorModule() {}
 
 void EditorModule::onStart(fif::core::Application &app) {
@@ -35,19 +35,18 @@ void EditorModule::onStart(fif::core::Application &app) {
 		ent->addComponent<fif::gfx::TransformComponent>();
 
 		fif::gfx::RenderableComponent *renderableComponent;
-		if (rand() % 2 == 0) {
+		if (fif::core::Rng::getBool()) {
 			fif::gfx::RenderableQuadComponent *quad = ent->addComponent<fif::gfx::RenderableQuadComponent>();
-			quad->m_Size = {100, 100};
-			quad->m_Color = {rand() % 255, rand() % 255, rand() % 255, 200};
+			quad->m_Size = {fif::core::Rng::getFloat(50, 100), fif::core::Rng::getFloat(50, 100)};
 			renderableComponent = quad;
 		} else {
 			fif::gfx::RenderableCircleComponent *circle = ent->addComponent<fif::gfx::RenderableCircleComponent>();
-			circle->m_Diameter = 100.0f;
-			circle->m_Color = {rand() % 255, rand() % 255, rand() % 255, 200};
+			circle->m_Radius = fif::core::Rng::getFloat(50, 100);
 			renderableComponent = circle;
 		}
 
-		renderableComponent->mp_Transform->m_Position = {std::rand() % 10000 - 5000, std::rand() % 10000 - 5000};
+		renderableComponent->m_Color = {fif::core::Rng::getU8(0, 255), fif::core::Rng::getU8(0, 255), fif::core::Rng::getU8(0, 255), 200};
+		renderableComponent->mp_Transform->m_Position = {fif::core::Rng::getFloat(-5000, 5000), fif::core::Rng::getFloat(-5000, 5000)};
 	}
 }
 

@@ -1,7 +1,5 @@
 #pragma once
 
-#include "fif/core/clock.h"
-
 namespace fif::core {
 	class Time {
 	  public:
