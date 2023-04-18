@@ -17,7 +17,5 @@ Fif is using OpenGL ES 3.0 as the rendering backend, which is why it is so easy 
 - glm  
 - glfw  
 - glad
-- ImGui    
-
-## Need to be manually installed   
-- emscripten (emsdk) (optional)
+- ImGui      
+- emscripten optional)
