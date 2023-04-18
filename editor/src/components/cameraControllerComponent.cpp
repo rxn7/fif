@@ -18,7 +18,7 @@ void CameraControllerComponent::onEvent(fif::core::Event &event) {
 		if (scrollEvent.isHanlded() || scrollEvent.getValue().y == 0)
 			return false;
 
-		m_Camera.m_Zoom = std::clamp(m_Camera.m_Zoom - scrollEvent.getValue().y * 0.1f, 0.1f, 10.0f);
+		m_Camera.m_Zoom *= scrollEvent.getValue().y > 0 ? 0.9f : 1.1f;
 
 		return true;
 	});
