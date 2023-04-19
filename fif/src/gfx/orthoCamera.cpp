@@ -14,12 +14,16 @@ namespace fif::gfx {
 	void OrthoCamera::update() {
 		FIF_PROFILE_FUNC();
 
+		updateSize();
+
+		m_CameraMatrix = glm::ortho(-m_Size.x + m_Position.x, m_Size.x + m_Position.x, -m_Size.y + m_Position.y, m_Size.y + m_Position.y);
+	}
+
+	void OrthoCamera::updateSize() {
 		const glm::i32vec2 windowSize = core::Application::getInstance().getWindow().getSize();
 		const float aspect = static_cast<float>(windowSize.y) / static_cast<float>(windowSize.x);
 
 		m_Size = glm::vec2(SIZE, SIZE * aspect) * m_Zoom;
-
-		m_CameraMatrix = glm::ortho(-m_Size.x + m_Position.x, m_Size.x + m_Position.x, -m_Size.y + m_Position.y, m_Size.y + m_Position.y);
 	}
 
 	glm::vec2 OrthoCamera::screenToWorld(const glm::vec2 &position) const {

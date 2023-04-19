@@ -12,6 +12,7 @@ namespace fif::gfx {
 		bool containsCircle(const glm::vec2 &position, float radius);
 		bool containsQuad(const glm::vec2 &position, const glm::vec2 &size);
 		glm::vec2 screenToWorld(const glm::vec2 &position) const;
+		void updateSize();
 
 	  public:
 		static constexpr float SIZE = 500.0f;

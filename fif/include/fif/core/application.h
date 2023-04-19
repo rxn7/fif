@@ -29,8 +29,8 @@ namespace fif::core {
 		inline const Window &getWindow() const {
 			return *mp_Window;
 		}
-		inline const PerformanceStats &getLastFramePerformanceStats() const {
-			return m_LastFramePerformanceStats;
+		inline const PerformanceStats &getPerformanceStats() const {
+			return m_PerformanceStats;
 		}
 		inline const std::vector<Entity> &getEntities() const {
 			return m_Entities;
@@ -61,8 +61,7 @@ namespace fif::core {
 		std::vector<Entity> m_Entities;
 		std::vector<std::unique_ptr<Module>> m_Modules;
 
-		Clock::time_point m_LastFrameTime;
-		PerformanceStats m_LastFramePerformanceStats;
+		PerformanceStats m_PerformanceStats;
 		static Application *s_Instance;
 	};
 } // namespace fif::core

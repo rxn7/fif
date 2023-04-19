@@ -30,7 +30,7 @@ void EditorModule::onStart(fif::core::Application &app) {
 	fif::core::Entity *cameraController = app.createEntity();
 	cameraController->addComponent<CameraControllerComponent>(fif::gfx::Renderer2D::getCamera());
 
-	for (std::uint32_t i = 0; i < 1000; ++i) {
+	for (std::uint32_t i = 0; i < 10000; ++i) {
 		fif::core::Entity *ent = app.createEntity();
 		ent->addComponent<fif::gfx::TransformComponent>();
 
@@ -46,14 +46,14 @@ void EditorModule::onStart(fif::core::Application &app) {
 		}
 
 		renderableComponent->m_Color = {fif::core::Rng::getU8(0, 255), fif::core::Rng::getU8(0, 255), fif::core::Rng::getU8(0, 255), 200};
-		renderableComponent->mp_Transform->m_Position = {fif::core::Rng::getFloat(-5000, 5000), fif::core::Rng::getFloat(-5000, 5000)};
+		renderableComponent->mp_Transform->m_Position = {fif::core::Rng::getFloat(-10000, 10000), fif::core::Rng::getFloat(-10000, 10000)};
 	}
 }
 
 void EditorModule::onRenderImGui() {
 	FIF_PROFILE_FUNC();
 	if (ImGui::Begin("Performance")) {
-		const PerformanceStats &stats = fif::core::Application::getInstance().getLastFramePerformanceStats();
+		const PerformanceStats &stats = fif::core::Application::getInstance().getPerformanceStats();
 		ImGui::Text("Frame time: %f ms", stats.frameTimeMs);
 		ImGui::Text("FPS: %f", stats.fps);
 

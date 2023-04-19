@@ -55,8 +55,8 @@ namespace fif::core {
 
 		Time::update();
 
-		m_LastFramePerformanceStats.fps = 1.0f / Time::getDeltaTime();
-		m_LastFramePerformanceStats.frameTimeMs = Time::getDeltaTime() * 1000.0f;
+		m_PerformanceStats.fps = 1.0f / Time::getDeltaTime();
+		m_PerformanceStats.frameTimeMs = Time::getDeltaTime() * 1000.0f;
 
 		fif::core::Profiler::beginFrame();
 
