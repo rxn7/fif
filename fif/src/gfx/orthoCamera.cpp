@@ -6,6 +6,7 @@
 
 #include "glm/ext/matrix_clip_space.hpp"
 #include "glm/vec2.hpp"
+#include <algorithm>
 
 namespace fif::gfx {
 	OrthoCamera::~OrthoCamera() {}
@@ -31,12 +32,8 @@ namespace fif::gfx {
 	}
 
 	bool OrthoCamera::containsCircle(const glm::vec2 &position, float radius) {
-		// clang-format off
-		return position.x + radius > m_Position.x - m_Size.x && 
-			   position.x - radius < m_Position.x + m_Size.x && 
-			   position.y + radius > m_Position.y - m_Size.y &&
-			   position.y - radius < m_Position.y + m_Size.y;
-		// clang-format on
+		const glm::vec2 delta = glm::abs(m_Position - position);
+		return delta.x <= m_Size.x + radius && delta.y <= m_Size.y + radius;
 	}
 
 	bool OrthoCamera::containsQuad(const glm::vec2 &position, const glm::vec2 &size) {
