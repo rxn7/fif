@@ -20,6 +20,9 @@ namespace fif::imgui {
 		void onRender() override;
 
 	  private:
+		void applyDefaultTheme() const;
+
+	  private:
 		std::vector<std::function<void()>> m_RenderFunctions;
 	};
 } // namespace fif::imgui
