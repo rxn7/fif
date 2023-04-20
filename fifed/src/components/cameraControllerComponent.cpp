@@ -26,6 +26,7 @@ void CameraControllerComponent::onEvent(fif::core::Event &event) {
 			const glm::vec2 mouseWorldPositionBeforeZoom = m_Camera.screenToWorld(mousePosition);
 
 			m_Camera.m_Zoom *= scrollEvent.getValue().y > 0 ? 0.9F : 1.1F;
+			m_Camera.m_Zoom = std::clamp(m_Camera.m_Zoom, 0.05F, 100.0F);
 			m_Camera.updateSize();
 
 			const glm::vec2 mouseWorldPositionAfterZoom = m_Camera.screenToWorld(mousePosition);
