@@ -16,7 +16,8 @@ namespace fif::gfx {
 
 		updateSize();
 
-		m_CameraMatrix = glm::ortho(-m_Size.x + m_Position.x, m_Size.x + m_Position.x, -m_Size.y + m_Position.y, m_Size.y + m_Position.y);
+		m_CameraMatrix = glm::ortho(-m_Size.x + m_Position.x, m_Size.x + m_Position.x,
+									-m_Size.y + m_Position.y, m_Size.y + m_Position.y);
 	}
 
 	void OrthoCamera::updateSize() {
@@ -30,7 +31,8 @@ namespace fif::gfx {
 		FIF_PROFILE_FUNC();
 
 		const glm::i16vec2 windowSize = core::Application::getInstance().getWindow().getSize();
-		const glm::vec2 normalizedPosition((position.x * 2.0f) / windowSize.x - 1.0f, 1.0f - (2.0f * position.y) / windowSize.y);
+		const glm::vec2 normalizedPosition((position.x * 2.0f) / windowSize.x - 1.0f,
+										   1.0f - (2.0f * position.y) / windowSize.y);
 
 		return normalizedPosition * m_Size + m_Position;
 	}

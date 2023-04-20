@@ -11,4 +11,5 @@
 
 #define FIF_LOG(msg) std::cout << FIF_ANSI_BLUE << "[LOG] " << msg << FIF_ANSI_RESET << "\n"
 #define FIF_LOG_ERROR(msg) std::cout << FIF_ANSI_RED << "[ERROR] " << msg << FIF_ANSI_RESET << "\n"
-#define FIF_LOG_WARNING(msg) std::cout << FIF_ANSI_YELLOW << "[WARNING] " << msg << FIF_ANSI_RESET << "\n"
+#define FIF_LOG_WARNING(msg)                                                                       \
+	std::cout << FIF_ANSI_YELLOW << "[WARNING] " << msg << FIF_ANSI_RESET << "\n"

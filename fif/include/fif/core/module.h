@@ -23,17 +23,17 @@ namespace fif::core {
 	};
 } // namespace fif::core
 
-#define FIF_MODULE_NAME(x)                                                                                                                                                                             \
+#define FIF_MODULE_NAME(x)                                                                         \
 	constexpr std::string_view getName() const override { return #x; }
 
-#define FIF_MODULE_INIT_INSTANCE()                                                                                                                                                                     \
-	FIF_ASSERT(s_Instance == nullptr, "There can only one instance of this module");                                                                                                                   \
+#define FIF_MODULE_INIT_INSTANCE()                                                                 \
+	FIF_ASSERT(s_Instance == nullptr, "There can only one instance of this module");               \
 	s_Instance = this;
 
 #define FIF_MODULE_INSTANCE_FUNC_DECL(c) static c *getInstance();
-#define FIF_MODULE_INSTANCE_IMPL(c)                                                                                                                                                                    \
-	c *s_Instance = nullptr;                                                                                                                                                                           \
-	c *c::getInstance() {                                                                                                                                                                              \
-		FIF_ASSERT(s_Instance != nullptr, "There is no instance of " #c);                                                                                                                              \
-		return s_Instance;                                                                                                                                                                             \
+#define FIF_MODULE_INSTANCE_IMPL(c)                                                                \
+	c *s_Instance = nullptr;                                                                       \
+	c *c::getInstance() {                                                                          \
+		FIF_ASSERT(s_Instance != nullptr, "There is no instance of " #c);                          \
+		return s_Instance;                                                                         \
 	}

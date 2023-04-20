@@ -26,7 +26,8 @@ EditorModule::EditorModule() {}
 EditorModule::~EditorModule() {}
 
 void EditorModule::onStart(fif::core::Application &app) {
-	fif::imgui::ImGuiModule::getInstance()->addRenderFunc(std::bind(&EditorModule::onRenderImGui, this));
+	fif::imgui::ImGuiModule::getInstance()->addRenderFunc(
+		std::bind(&EditorModule::onRenderImGui, this));
 
 	fif::core::Entity *cameraController = app.createEntity();
 	cameraController->addComponent<CameraControllerComponent>(fif::gfx::Renderer2D::getCamera());
@@ -37,17 +38,22 @@ void EditorModule::onStart(fif::core::Application &app) {
 
 		fif::gfx::RenderableComponent *renderableComponent;
 		if (fif::core::Rng::getBool()) {
-			fif::gfx::RenderableQuadComponent *quad = ent->addComponent<fif::gfx::RenderableQuadComponent>();
+			fif::gfx::RenderableQuadComponent *quad =
+				ent->addComponent<fif::gfx::RenderableQuadComponent>();
 			quad->m_Size = {fif::core::Rng::getFloat(50, 100), fif::core::Rng::getFloat(50, 100)};
 			renderableComponent = quad;
 		} else {
-			fif::gfx::RenderableCircleComponent *circle = ent->addComponent<fif::gfx::RenderableCircleComponent>();
+			fif::gfx::RenderableCircleComponent *circle =
+				ent->addComponent<fif::gfx::RenderableCircleComponent>();
 			circle->m_Radius = fif::core::Rng::getFloat(50, 100);
 			renderableComponent = circle;
 		}
 
-		renderableComponent->m_Color = {fif::core::Rng::getU8(0, 255), fif::core::Rng::getU8(0, 255), fif::core::Rng::getU8(0, 255), 200};
-		renderableComponent->mp_Transform->m_Position = {fif::core::Rng::getFloat(-10000, 10000), fif::core::Rng::getFloat(-10000, 10000)};
+		renderableComponent->m_Color = {fif::core::Rng::getU8(0, 255),
+										fif::core::Rng::getU8(0, 255),
+										fif::core::Rng::getU8(0, 255), 200};
+		renderableComponent->mp_Transform->m_Position = {fif::core::Rng::getFloat(-10000, 10000),
+														 fif::core::Rng::getFloat(-10000, 10000)};
 	}
 }
 
@@ -60,7 +66,8 @@ void EditorModule::onRenderImGui() {
 
 #ifdef FIF_PROFILING_ENABLED
 		if (ImGui::TreeNode("Profiler")) {
-			const std::vector<fif::core::TimerResult> profilerResults = fif::core::Profiler::getResults();
+			const std::vector<fif::core::TimerResult> profilerResults =
+				fif::core::Profiler::getResults();
 
 			for (const fif::core::TimerResult &result : profilerResults)
 				ImGui::Text("%s: %f ms", result.name.c_str(), result.durationMs);
@@ -78,7 +85,8 @@ void EditorModule::onRenderImGui() {
 	ImGui::End();
 
 	if (ImGui::Begin("Entities")) {
-		const std::vector<fif::core::Entity> &entities = fif::core::Application::getInstance().getEntities();
+		const std::vector<fif::core::Entity> &entities =
+			fif::core::Application::getInstance().getEntities();
 
 		ImGui::Text("Count: %lu", entities.size());
 		if (ImGui::BeginChild("EntityList")) {

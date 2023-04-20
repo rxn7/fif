@@ -14,11 +14,13 @@ namespace fif::core {
 
 	template <typename Func> class ScopeTimer {
 	  public:
-		ScopeTimer(const std::string &name, Func &&func) : m_Name(name), m_BeginTime(Clock::now()), m_Func(func) {}
+		ScopeTimer(const std::string &name, Func &&func)
+			: m_Name(name), m_BeginTime(Clock::now()), m_Func(func) {}
 
 		~ScopeTimer() {
 			using namespace std::chrono;
-			const float durationMs = duration_cast<duration<float, std::milli>>((Clock::now() - m_BeginTime)).count();
+			const float durationMs =
+				duration_cast<duration<float, std::milli>>((Clock::now() - m_BeginTime)).count();
 			m_Func(TimerResult{m_Name, durationMs});
 		}
 

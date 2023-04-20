@@ -9,18 +9,21 @@
 #include "GLFW/glfw3.h"
 
 namespace fif::gfx {
-    PerspectiveCamera::~PerspectiveCamera() {}
+	PerspectiveCamera::~PerspectiveCamera() {}
 
-    void PerspectiveCamera::update() {
-        std::int32_t width, height;
-        glfwGetWindowSize(core::Application::getInstance().getWindow().getGlfwWindow(), &width, &height);
+	void PerspectiveCamera::update() {
+		std::int32_t width, height;
+		glfwGetWindowSize(core::Application::getInstance().getWindow().getGlfwWindow(), &width,
+						  &height);
 
-        m_ProjectionMatrix = glm::perspective(glm::radians(m_Fov), static_cast<float>(width) / static_cast<float>(height), m_ZNear, m_ZFar);
-        m_Direction = glm::normalize(m_Direction);
+		m_ProjectionMatrix = glm::perspective(
+			glm::radians(m_Fov), static_cast<float>(width) / static_cast<float>(height), m_ZNear,
+			m_ZFar);
+		m_Direction = glm::normalize(m_Direction);
 
-        const glm::vec3 up(0.0f, 0.0f, 1.0f);
-        m_ViewMatrix = glm::lookAt(m_Position, m_Position + m_Direction, up);
+		const glm::vec3 up(0.0f, 0.0f, 1.0f);
+		m_ViewMatrix = glm::lookAt(m_Position, m_Position + m_Direction, up);
 
-        m_CameraMatrix = m_ProjectionMatrix * m_ViewMatrix;
-    }
+		m_CameraMatrix = m_ProjectionMatrix * m_ViewMatrix;
+	}
 } // namespace fif::gfx

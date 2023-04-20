@@ -24,5 +24,5 @@ namespace fif::core {
 	};
 } // namespace fif::core
 
-#define COMPONENT_NAME(x)                                                                                                                                                                              \
+#define COMPONENT_NAME(x)                                                                          \
 	constexpr const char *getName() const override { return #x; }

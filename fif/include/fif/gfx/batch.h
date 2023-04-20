@@ -12,7 +12,8 @@
 namespace fif::gfx {
 	class Batch {
 	  public:
-		Batch(std::uint32_t verticesPerInstance, std::uint32_t elementsPerInstance, std::uint32_t size);
+		Batch(std::uint32_t verticesPerInstance, std::uint32_t elementsPerInstance,
+			  std::uint32_t size);
 		void render();
 
 		inline std::uint32_t getVertexCount() const {
@@ -24,12 +25,14 @@ namespace fif::gfx {
 		}
 
 		inline void addVertex(const Vertex &vertex) {
-			FIF_ASSERT(m_Vertices.size() != m_Vertices.capacity(), "Cannot add vertex, the buffer is full");
+			FIF_ASSERT(m_Vertices.size() != m_Vertices.capacity(),
+					   "Cannot add vertex, the buffer is full");
 			m_Vertices.push_back(vertex);
 		}
 
 		inline void addElement(std::uint16_t element) {
-			FIF_ASSERT(m_Elements.size() != m_Elements.capacity(), "Cannot add element, the buffer is full");
+			FIF_ASSERT(m_Elements.size() != m_Elements.capacity(),
+					   "Cannot add element, the buffer is full");
 			m_Elements.push_back(element);
 		}
 

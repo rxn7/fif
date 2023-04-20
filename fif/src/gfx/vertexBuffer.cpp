@@ -6,7 +6,8 @@
 #include <memory>
 
 namespace fif::gfx {
-	VertexBuffer::VertexBuffer(std::uint32_t vertexCount, std::uint32_t elementCount) : m_VertexCount(vertexCount), m_ElementCount(elementCount) {
+	VertexBuffer::VertexBuffer(std::uint32_t vertexCount, std::uint32_t elementCount)
+		: m_VertexCount(vertexCount), m_ElementCount(elementCount) {
 		FIF_PROFILE_FUNC();
 
 		glGenVertexArrays(1, &m_Vao);
@@ -20,12 +21,14 @@ namespace fif::gfx {
 
 		glGenBuffers(1, &m_Ebo);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_Ebo);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, elementCount * sizeof(std::uint16_t), nullptr, GL_DYNAMIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, elementCount * sizeof(std::uint16_t), nullptr,
+					 GL_DYNAMIC_DRAW);
 
 		glBindVertexArray(0);
 	}
 
-	VertexBuffer::VertexBuffer(const Vertex *vertices, std::uint32_t vertexCount, const std::uint16_t *elements, std::uint32_t elementCount)
+	VertexBuffer::VertexBuffer(const Vertex *vertices, std::uint32_t vertexCount,
+							   const std::uint16_t *elements, std::uint32_t elementCount)
 		: m_VertexCount(vertexCount), m_ElementCount(elementCount) {
 		FIF_PROFILE_FUNC();
 
@@ -40,7 +43,8 @@ namespace fif::gfx {
 
 		glGenBuffers(1, &m_Ebo);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_Ebo);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, elementCount * sizeof(std::uint16_t), elements, GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, elementCount * sizeof(std::uint16_t), elements,
+					 GL_STATIC_DRAW);
 
 		glBindVertexArray(0);
 	}
@@ -59,13 +63,16 @@ namespace fif::gfx {
 		FIF_PROFILE_FUNC();
 
 		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 3, GL_FLOAT, false, sizeof(Vertex), reinterpret_cast<const void *>(offsetof(Vertex, position)));
+		glVertexAttribPointer(0, 3, GL_FLOAT, false, sizeof(Vertex),
+							  reinterpret_cast<const void *>(offsetof(Vertex, position)));
 
 		glEnableVertexAttribArray(1);
-		glVertexAttribPointer(1, 2, GL_FLOAT, false, sizeof(Vertex), reinterpret_cast<const void *>(offsetof(Vertex, uv)));
+		glVertexAttribPointer(1, 2, GL_FLOAT, false, sizeof(Vertex),
+							  reinterpret_cast<const void *>(offsetof(Vertex, uv)));
 
 		glEnableVertexAttribArray(2);
-		glVertexAttribPointer(2, 4, GL_UNSIGNED_BYTE, true, sizeof(Vertex), reinterpret_cast<const void *>(offsetof(Vertex, color)));
+		glVertexAttribPointer(2, 4, GL_UNSIGNED_BYTE, true, sizeof(Vertex),
+							  reinterpret_cast<const void *>(offsetof(Vertex, color)));
 	}
 
 	void VertexBuffer::setVertices(const Vertex *vertices, std::uint32_t count) {
@@ -84,7 +91,8 @@ namespace fif::gfx {
 		m_ElementCount = count;
 		glBindVertexArray(m_Vao);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_Ebo);
-		glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, m_ElementCount * sizeof(std::uint16_t), elements);
+		glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, m_ElementCount * sizeof(std::uint16_t),
+						elements);
 		glBindVertexArray(0);
 	}
 } // namespace fif::gfx
