@@ -63,23 +63,14 @@ void EditorModule::onRenderImGui() {
 		ImGui::Text("Frame time: %f ms", stats.frameTimeMs);
 		ImGui::Text("FPS: %f", stats.fps);
 
-#ifdef FIF_PROFILING_ENABLED
-		if (ImGui::TreeNode("Profiler")) {
-			const std::vector<fif::core::TimerResult> profilerResults =
-				fif::core::Profiler::getResults();
-
-			for (const fif::core::TimerResult &result : profilerResults)
-				ImGui::Text("%s: %f ms", result.name.c_str(), result.durationMs);
-
+		if (ImGui::TreeNode("Renderer2D")) {
+			const fif::gfx::Renderer2D::Stats &rendererStats = fif::gfx::Renderer2D::getStats();
+			ImGui::Text("Circles: %i", rendererStats.circles);
+			ImGui::Text("Quads: %i", rendererStats.quads);
+			ImGui::Text("Vertices: %i", rendererStats.vertices);
+			ImGui::Text("Elements: %i", rendererStats.elements);
 			ImGui::TreePop();
 		}
-#endif
-
-		const fif::gfx::Renderer2D::Stats &rendererStats = fif::gfx::Renderer2D::getStats();
-		ImGui::Text("Circles: %i", rendererStats.circles);
-		ImGui::Text("Quads: %i", rendererStats.quads);
-		ImGui::Text("Vertices: %i", rendererStats.vertices);
-		ImGui::Text("Elements: %i", rendererStats.elements);
 	}
 	ImGui::End();
 
