@@ -1,24 +1,23 @@
 #pragma once
 
+#include "fif/core/types.hpp"
 #include "fif/core/util/assertion.hpp"
 #include "fif/gfx/camera.hpp"
 #include "fif/gfx/shader.hpp"
 #include "fif/gfx/vertex.hpp"
 #include "fif/gfx/vertexBuffer.hpp"
 
-#include <cinttypes>
 #include <vector>
 
 namespace fif::gfx {
 	class Batch {
 	  public:
-		Batch(std::uint32_t verticesPerInstance, std::uint32_t elementsPerInstance,
-			  std::uint32_t size);
+		Batch(u32 verticesPerInstance, u32 elementsPerInstance, u32 size);
 		void render();
 
-		inline std::uint32_t getVertexCount() const { return m_Vertices.size(); }
+		inline u32 getVertexCount() const { return m_Vertices.size(); }
 
-		inline std::uint32_t getElementCount() const { return m_Elements.size(); }
+		inline u32 getElementCount() const { return m_Elements.size(); }
 
 		inline void addVertex(const Vertex &vertex) {
 			FIF_ASSERT(m_Vertices.size() != m_Vertices.capacity(),
@@ -26,7 +25,7 @@ namespace fif::gfx {
 			m_Vertices.push_back(vertex);
 		}
 
-		inline void addElement(std::uint16_t element) {
+		inline void addElement(u16 element) {
 			FIF_ASSERT(m_Elements.size() != m_Elements.capacity(),
 					   "Cannot add element, the buffer is full");
 			m_Elements.push_back(element);
@@ -35,6 +34,6 @@ namespace fif::gfx {
 	  private:
 		VertexBuffer m_Buffer;
 		std::vector<Vertex> m_Vertices;
-		std::vector<std::uint16_t> m_Elements;
+		std::vector<u16> m_Elements;
 	};
 } // namespace fif::gfx

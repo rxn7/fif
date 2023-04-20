@@ -1,6 +1,6 @@
 #pragma once
 
-#include <cinttypes>
+#include "fif/core/types.hpp"
 #include <random>
 
 namespace fif::core {
@@ -12,32 +12,32 @@ namespace fif::core {
 			return static_cast<bool>(std::uniform_int_distribution<>(0, 1)(s_Generator));
 		}
 
-		static inline float getFloat(float min, float max) {
-			return std::uniform_real_distribution<float>(min, max)(s_Generator);
+		static inline f32 getF32(f32 min, f32 max) {
+			return std::uniform_real_distribution<f32>(min, max)(s_Generator);
 		}
 
-		static inline std::int32_t getI32(std::int32_t min, std::int32_t max) {
-			return std::uniform_int_distribution<std::int32_t>(min, max)(s_Generator);
+		static inline i32 getI32(i32 min, i32 max) {
+			return std::uniform_int_distribution<i32>(min, max)(s_Generator);
 		}
 
-		static inline std::uint32_t getU32(std::uint32_t min, std::uint32_t max) {
-			return std::uniform_int_distribution<std::uint32_t>(min, max)(s_Generator);
+		static inline u32 getU32(u32 min, u32 max) {
+			return std::uniform_int_distribution<u32>(min, max)(s_Generator);
 		}
 
-		static inline std::int16_t getI16(std::int16_t min, std::int16_t max) {
-			return std::uniform_int_distribution<std::int16_t>(min, max)(s_Generator);
+		static inline i16 getI16(i16 min, i16 max) {
+			return std::uniform_int_distribution<i16>(min, max)(s_Generator);
 		}
 
-		static inline std::uint16_t getU16(std::uint16_t min, std::uint16_t max) {
-			return std::uniform_int_distribution<std::uint16_t>(min, max)(s_Generator);
+		static inline u16 getU16(u16 min, u16 max) {
+			return std::uniform_int_distribution<u16>(min, max)(s_Generator);
 		}
 
-		static inline std::int8_t getI8(std::int8_t min, std::int8_t max) {
-			return std::uniform_int_distribution<std::int8_t>(min, max)(s_Generator);
+		static inline i8 getI8(i8 min, i8 max) {
+			return std::uniform_int_distribution<i8>(min, max)(s_Generator);
 		}
 
-		static inline std::uint8_t getU8(std::uint8_t min, std::uint8_t max) {
-			return std::uniform_int_distribution<std::uint8_t>(min, max)(s_Generator);
+		static inline u8 getU8(i8 min, i8 max) {
+			return std::uniform_int_distribution<u8>(min, max)(s_Generator);
 		}
 
 	  private:

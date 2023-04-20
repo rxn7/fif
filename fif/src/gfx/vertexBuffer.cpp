@@ -6,7 +6,7 @@
 #include <memory>
 
 namespace fif::gfx {
-	VertexBuffer::VertexBuffer(std::uint32_t vertexCount, std::uint32_t elementCount)
+	VertexBuffer::VertexBuffer(u32 vertexCount, u32 elementCount)
 		: m_VertexCount(vertexCount), m_ElementCount(elementCount) {
 		FIF_PROFILE_FUNC();
 
@@ -21,14 +21,13 @@ namespace fif::gfx {
 
 		glGenBuffers(1, &m_Ebo);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_Ebo);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, elementCount * sizeof(std::uint16_t), nullptr,
-					 GL_DYNAMIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, elementCount * sizeof(u16), nullptr, GL_DYNAMIC_DRAW);
 
 		glBindVertexArray(0);
 	}
 
-	VertexBuffer::VertexBuffer(const Vertex *vertices, std::uint32_t vertexCount,
-							   const std::uint16_t *elements, std::uint32_t elementCount)
+	VertexBuffer::VertexBuffer(const Vertex *vertices, u32 vertexCount, const u16 *elements,
+							   u32 elementCount)
 		: m_VertexCount(vertexCount), m_ElementCount(elementCount) {
 		FIF_PROFILE_FUNC();
 
@@ -43,8 +42,7 @@ namespace fif::gfx {
 
 		glGenBuffers(1, &m_Ebo);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_Ebo);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, elementCount * sizeof(std::uint16_t), elements,
-					 GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, elementCount * sizeof(u16), elements, GL_STATIC_DRAW);
 
 		glBindVertexArray(0);
 	}
@@ -75,7 +73,7 @@ namespace fif::gfx {
 							  reinterpret_cast<const void *>(offsetof(Vertex, color)));
 	}
 
-	void VertexBuffer::setVertices(const Vertex *vertices, std::uint32_t count) {
+	void VertexBuffer::setVertices(const Vertex *vertices, u32 count) {
 		FIF_PROFILE_FUNC();
 
 		m_VertexCount = count;
@@ -85,14 +83,13 @@ namespace fif::gfx {
 		glBindVertexArray(0);
 	}
 
-	void VertexBuffer::setElements(const uint16_t *elements, std::uint32_t count) {
+	void VertexBuffer::setElements(const u16 *elements, u32 count) {
 		FIF_PROFILE_FUNC();
 
 		m_ElementCount = count;
 		glBindVertexArray(m_Vao);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_Ebo);
-		glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, m_ElementCount * sizeof(std::uint16_t),
-						elements);
+		glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, m_ElementCount * sizeof(u16), elements);
 		glBindVertexArray(0);
 	}
 } // namespace fif::gfx

@@ -1,9 +1,9 @@
 #pragma once
 
-#include <cstdint>
+#include "fif/core/types.hpp"
 
 namespace fif::core {
-	enum class EventType : std::uint8_t {
+	enum class EventType : u8 {
 		None,
 		WindowResized,
 		WindowClosed,
@@ -15,7 +15,7 @@ namespace fif::core {
 		MouseScrolled,
 	};
 
-	enum class EventCategory : std::uint8_t {
+	enum class EventCategory : u8 {
 		Window = 1 << 0,
 		Input = 1 << 1,
 		Keyboard = (1 << 2) | Input,

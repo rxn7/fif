@@ -8,22 +8,22 @@
 namespace fif::gfx {
 	class VertexBuffer {
 	  public:
-		VertexBuffer(const Vertex *vertices, std::uint32_t vertexCount,
-					 const std::uint16_t *elements, std::uint32_t elementCount);
-		VertexBuffer(std::uint32_t vertexCount, std::uint32_t elementCount);
+		VertexBuffer(const Vertex *vertices, u32 vertexCount, const u16 *elements,
+					 u32 elementCount);
+		VertexBuffer(u32 vertexCount, u32 elementCount);
 
 		void render() const;
-		void setVertices(const Vertex *vertices, std::uint32_t count);
-		void setElements(const std::uint16_t *elements, std::uint32_t count);
+		void setVertices(const Vertex *vertices, u32 count);
+		void setElements(const u16 *elements, u32 count);
 
 	  private:
 		static void setupVertexAttributes();
 
 	  protected:
-		std::uint32_t m_VertexCount;
-		std::uint32_t m_ElementCount;
-		std::uint32_t m_Vao;
-		std::uint32_t m_Vbo;
-		std::uint32_t m_Ebo;
+		u32 m_VertexCount;
+		u32 m_ElementCount;
+		u32 m_Vao;
+		u32 m_Vbo;
+		u32 m_Ebo;
 	};
 } // namespace fif::gfx

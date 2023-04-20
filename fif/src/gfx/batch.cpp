@@ -2,8 +2,7 @@
 #include "fif/core/profiler.hpp"
 
 namespace fif::gfx {
-	Batch::Batch(std::uint32_t verticesPerInstance, std::uint32_t elementsPerInstance,
-				 std::uint32_t size)
+	Batch::Batch(u32 verticesPerInstance, u32 elementsPerInstance, u32 size)
 		: m_Buffer(verticesPerInstance * size, elementsPerInstance * size),
 		  m_Vertices(verticesPerInstance * size), m_Elements(elementsPerInstance * size) {}
 

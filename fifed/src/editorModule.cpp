@@ -31,7 +31,7 @@ void EditorModule::onStart(fif::core::Application &app) {
 	fif::core::Entity *cameraController = app.createEntity("CameraController");
 	cameraController->addComponent<CameraControllerComponent>(fif::gfx::Renderer2D::getCamera());
 
-	for (std::uint32_t i = 0; i < 1000; ++i) {
+	for (u32 i = 0; i < 1000; ++i) {
 		fif::core::Entity *ent = app.createEntity("Test " + std::to_string(i));
 		ent->addComponent<fif::gfx::TransformComponent>();
 
@@ -39,20 +39,20 @@ void EditorModule::onStart(fif::core::Application &app) {
 		if (fif::core::Rng::getBool()) {
 			fif::gfx::RenderableQuadComponent *quad =
 				ent->addComponent<fif::gfx::RenderableQuadComponent>();
-			quad->m_Size = {fif::core::Rng::getFloat(50, 100), fif::core::Rng::getFloat(50, 100)};
+			quad->m_Size = {fif::core::Rng::getF32(50, 100), fif::core::Rng::getF32(50, 100)};
 			renderableComponent = quad;
 		} else {
 			fif::gfx::RenderableCircleComponent *circle =
 				ent->addComponent<fif::gfx::RenderableCircleComponent>();
-			circle->m_Radius = fif::core::Rng::getFloat(50, 100);
+			circle->m_Radius = fif::core::Rng::getF32(50, 100);
 			renderableComponent = circle;
 		}
 
-		renderableComponent->m_Color = {fif::core::Rng::getU8(0, 255),
-										fif::core::Rng::getU8(0, 255),
-										fif::core::Rng::getU8(0, 255), 200};
-		renderableComponent->mp_Transform->m_Position = {fif::core::Rng::getFloat(-10000, 10000),
-														 fif::core::Rng::getFloat(-10000, 10000)};
+		renderableComponent->m_Color = {fif::core::Rng::getU8(0, 255u),
+										fif::core::Rng::getU8(0, 255u),
+										fif::core::Rng::getU8(0, 255u), 200};
+		renderableComponent->mp_Transform->m_Position = {fif::core::Rng::getF32(-10000, 10000),
+														 fif::core::Rng::getF32(-10000, 10000)};
 	}
 }
 

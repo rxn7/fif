@@ -11,15 +11,15 @@ namespace fif::gfx {
 	Shader::Shader(const std::string &vertexSrc, const std::string &fragmentSrc) {
 		m_ID = glCreateProgram();
 
-		const std::uint32_t fragID = compile(GL_FRAGMENT_SHADER, fragmentSrc.c_str());
-		const std::uint32_t vertID = compile(GL_VERTEX_SHADER, vertexSrc.c_str());
+		const u32 fragID = compile(GL_FRAGMENT_SHADER, fragmentSrc.c_str());
+		const u32 vertID = compile(GL_VERTEX_SHADER, vertexSrc.c_str());
 
 		glAttachShader(m_ID, fragID);
 		glAttachShader(m_ID, vertID);
 
 		glLinkProgram(m_ID);
 
-		const auto printInfoLog = [](std::uint32_t id) {
+		const auto printInfoLog = [](u32 id) {
 			int logLength;
 			glGetProgramiv(id, GL_INFO_LOG_LENGTH, &logLength);
 
@@ -58,10 +58,10 @@ namespace fif::gfx {
 		glUseProgram(0);
 	}
 
-	std::uint32_t Shader::compile(int type, const char *src) {
+	u32 Shader::compile(int type, const char *src) {
 		FIF_ASSERT(type == GL_FRAGMENT_SHADER || type == GL_VERTEX_SHADER,
 				   "Only fragment and vertex shaders are supported");
-		const std::uint32_t id = glCreateShader(type);
+		const u32 id = glCreateShader(type);
 
 		glShaderSource(id, 1, &src, NULL);
 		glCompileShader(id);
@@ -90,11 +90,11 @@ namespace fif::gfx {
 			return;
 		}
 
-		const std::uint32_t id = glGetUniformLocation(m_ID, name.c_str());
+		const u32 id = glGetUniformLocation(m_ID, name.c_str());
 		m_UniformIDs.insert({name, id});
 	}
 
-	std::uint32_t Shader::getUniformLocation(const std::string &name) const {
+	u32 Shader::getUniformLocation(const std::string &name) const {
 		const auto it = m_UniformIDs.find(name);
 		if (it == m_UniformIDs.end()) {
 			FIF_LOG_ERROR("Uniform " << name << " not found");
