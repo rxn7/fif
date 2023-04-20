@@ -33,6 +33,7 @@ function(build_module target dir libs)
   add_library(${target} STATIC ${SOURCES})
 
   set_target_properties(${target} PROPERTIES PUBLIC_HEADER ${INC_DIR}/fif/${dir})
+  set_target_properties(${target} PROPERTIES CMAKE_CXX_CLANG_TIDY clang-tidy --fix-errors --checks=-*,readability-*)
   target_include_directories(${target} PUBLIC ${INC_DIR} ${INC_DIR}/fif/${dir} PRIVATE ${SRC_DIR}/${dir})
   target_link_libraries(${target} ${libs})
 

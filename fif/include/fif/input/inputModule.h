@@ -14,8 +14,8 @@ namespace fif::input {
 
 		InputModule();
 
-		glm::vec2 getMousePosition() const;
-		glm::vec2 getLastMousePosition() const;
+		static glm::vec2 getMousePosition() ;
+		static glm::vec2 getLastMousePosition() ;
 
 		inline bool isKeyHeld(int key) const {
 			return m_Keys[key];

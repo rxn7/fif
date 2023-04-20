@@ -32,13 +32,15 @@ namespace fif::gfx {
 
 		int status;
 		glGetProgramiv(m_ID, GL_LINK_STATUS, &status);
-		if (!status)
+		if (status == 0) {
 			printInfoLog(m_ID);
+}
 
 		glValidateProgram(m_ID);
 		glGetProgramiv(m_ID, GL_VALIDATE_STATUS, &status);
-		if (!status)
+		if (status == 0) {
 			printInfoLog(m_ID);
+}
 
 		glDeleteShader(fragID);
 		glDeleteShader(vertID);
@@ -66,7 +68,7 @@ namespace fif::gfx {
 
 		int status;
 		glGetShaderiv(id, GL_COMPILE_STATUS, &status);
-		if (!status) {
+		if (status == 0) {
 			int logLength;
 			glGetShaderiv(id, GL_INFO_LOG_LENGTH, &logLength);
 
@@ -122,10 +124,10 @@ namespace fif::gfx {
 	}
 
 	void Shader::setUniform(const std::string &name, const glm::mat3 &value) const {
-		glUniformMatrix3fv(getUniformLocation(name), 1, false, glm::value_ptr(value));
+		glUniformMatrix3fv(getUniformLocation(name), 1, 0u, glm::value_ptr(value));
 	}
 
 	void Shader::setUniform(const std::string &name, const glm::mat4 &value) const {
-		glUniformMatrix4fv(getUniformLocation(name), 1, false, glm::value_ptr(value));
+		glUniformMatrix4fv(getUniformLocation(name), 1, 0u, glm::value_ptr(value));
 	}
 } // namespace fif::gfx

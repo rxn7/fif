@@ -21,13 +21,13 @@
 #include "imgui.h"
 
 #include <cmath>
+#include <functional>
 
 EditorModule::EditorModule() {}
 EditorModule::~EditorModule() {}
 
 void EditorModule::onStart(fif::core::Application &app) {
-	fif::imgui::ImGuiModule::getInstance()->addRenderFunc(
-		std::bind(&EditorModule::onRenderImGui, this));
+	fif::imgui::ImGuiModule::getInstance()->addRenderFunc(&onRenderImGui);
 
 	fif::core::Entity *cameraController = app.createEntity();
 	cameraController->addComponent<CameraControllerComponent>(fif::gfx::Renderer2D::getCamera());
@@ -93,8 +93,9 @@ void EditorModule::onRenderImGui() {
 			std::uint32_t i = 1;
 			for (const fif::core::Entity &ent : entities) {
 				if (ImGui::TreeNode(std::to_string(i++).c_str())) {
-					for (const auto &comp : ent.getComponents())
+					for (const auto &comp : ent.getComponents()) {
 						ImGui::Text("%s", comp->getName());
+					}
 
 					ImGui::TreePop();
 				}

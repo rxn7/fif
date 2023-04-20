@@ -17,7 +17,7 @@ namespace fif::gfx {
 		void setElements(const std::uint16_t *elements, std::uint32_t count);
 
 	  private:
-		void setupVertexAttributes();
+		static void setupVertexAttributes();
 
 	  protected:
 		std::uint32_t m_VertexCount;

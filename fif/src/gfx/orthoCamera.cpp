@@ -31,19 +31,19 @@ namespace fif::gfx {
 		FIF_PROFILE_FUNC();
 
 		const glm::i16vec2 windowSize = core::Application::getInstance().getWindow().getSize();
-		const glm::vec2 normalizedPosition((position.x * 2.0f) / windowSize.x - 1.0f,
-										   1.0f - (2.0f * position.y) / windowSize.y);
+		const glm::vec2 normalizedPosition((position.x * 2.0F) / windowSize.x - 1.0F,
+										   1.0F - (2.0F * position.y) / windowSize.y);
 
 		return normalizedPosition * m_Size + m_Position;
 	}
 
-	bool OrthoCamera::containsCircle(const glm::vec2 &position, float radius) {
+	bool OrthoCamera::containsCircle(const glm::vec2 &position, float radius) const {
 		const glm::vec2 delta = glm::abs(m_Position - position);
 		return delta.x <= m_Size.x + radius && delta.y <= m_Size.y + radius;
 	}
 
-	bool OrthoCamera::containsQuad(const glm::vec2 &position, const glm::vec2 &size) {
-		const glm::vec2 halfSize = size * 0.5f;
+	bool OrthoCamera::containsQuad(const glm::vec2 &position, const glm::vec2 &size) const {
+		const glm::vec2 halfSize = size * 0.5F;
 
 		// clang-format off
 		return position.x + halfSize.x > m_Position.x - m_Size.x && 

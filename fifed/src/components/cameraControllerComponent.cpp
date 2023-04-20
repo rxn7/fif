@@ -16,14 +16,15 @@ void CameraControllerComponent::onEvent(fif::core::Event &event) {
 
 	fif::core::EventDispatcher::dispatch<fif::core::MouseScrolledEvent>(
 		event, [&](fif::core::MouseScrolledEvent &scrollEvent) {
-			if (scrollEvent.isHanlded() || scrollEvent.getValue().y == 0)
+			if (scrollEvent.isHanlded() || scrollEvent.getValue().y == 0) {
 				return false;
+}
 
 			const glm::vec2 mousePosition =
 				fif::input::InputModule::getInstance()->getMousePosition();
 			const glm::vec2 mouseWorldPositionBeforeZoom = m_Camera.screenToWorld(mousePosition);
 
-			m_Camera.m_Zoom *= scrollEvent.getValue().y > 0 ? 0.9f : 1.1f;
+			m_Camera.m_Zoom *= scrollEvent.getValue().y > 0 ? 0.9F : 1.1F;
 			m_Camera.updateSize();
 
 			const glm::vec2 mouseWorldPositionAfterZoom = m_Camera.screenToWorld(mousePosition);
@@ -35,8 +36,9 @@ void CameraControllerComponent::onEvent(fif::core::Event &event) {
 
 	fif::core::EventDispatcher::dispatch<fif::core::MouseMovedEvent>(
 		event, [&](fif::core::MouseMovedEvent &movedEvent) {
-			if (!fif::input::InputModule::getInstance()->isButtonHeld(GLFW_MOUSE_BUTTON_RIGHT))
+			if (!fif::input::InputModule::getInstance()->isButtonHeld(GLFW_MOUSE_BUTTON_RIGHT)) {
 				return false;
+}
 
 			const glm::vec2 mouseWorldPosition = m_Camera.screenToWorld(movedEvent.getPosition());
 			const glm::vec2 lastMouseWorldPosition = m_Camera.screenToWorld(

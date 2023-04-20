@@ -12,5 +12,5 @@ class EditorModule final : public fif::core::Module {
 	void onStart(fif::core::Application &app) override;
 
   private:
-	void onRenderImGui();
+	static void onRenderImGui();
 };

@@ -63,15 +63,15 @@ namespace fif::gfx {
 		FIF_PROFILE_FUNC();
 
 		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 3, GL_FLOAT, false, sizeof(Vertex),
+		glVertexAttribPointer(0, 3, GL_FLOAT, 0u, sizeof(Vertex),
 							  reinterpret_cast<const void *>(offsetof(Vertex, position)));
 
 		glEnableVertexAttribArray(1);
-		glVertexAttribPointer(1, 2, GL_FLOAT, false, sizeof(Vertex),
+		glVertexAttribPointer(1, 2, GL_FLOAT, 0u, sizeof(Vertex),
 							  reinterpret_cast<const void *>(offsetof(Vertex, uv)));
 
 		glEnableVertexAttribArray(2);
-		glVertexAttribPointer(2, 4, GL_UNSIGNED_BYTE, true, sizeof(Vertex),
+		glVertexAttribPointer(2, 4, GL_UNSIGNED_BYTE, 1u, sizeof(Vertex),
 							  reinterpret_cast<const void *>(offsetof(Vertex, color)));
 	}
 

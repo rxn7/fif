@@ -10,8 +10,9 @@ namespace fif::gfx {
 	void Batch::render() {
 		FIF_PROFILE_FUNC();
 
-		if (m_Vertices.size() == 0 || m_Elements.size() == 0)
+		if (m_Vertices.empty() || m_Elements.empty()) {
 			return;
+}
 
 		m_Buffer.setVertices(m_Vertices.data(), m_Vertices.size());
 		m_Buffer.setElements(m_Elements.data(), m_Elements.size());

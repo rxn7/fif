@@ -74,11 +74,11 @@ namespace fif::input {
 			});
 	}
 
-	glm::vec2 InputModule::getMousePosition() const {
+	glm::vec2 InputModule::getMousePosition() {
 		return s_MousePosition;
 	}
 
-	glm::vec2 InputModule::getLastMousePosition() const {
+	glm::vec2 InputModule::getLastMousePosition() {
 		return s_LastMousePosition;
 	}
 } // namespace fif::input

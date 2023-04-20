@@ -39,14 +39,16 @@ namespace fif::core {
 	void Application::start() {
 		FIF_PROFILE_FUNC();
 
-		for (const auto &mod : m_Modules)
+		for (const auto &mod : m_Modules) {
 			mod->onStart(*this);
+}
 
 #ifdef __EMSCRIPTEN__
 		emscripten_set_main_loop([]() { Application::getInstance().gameLoop(); }, -1, true);
 #else
-		while (!mp_Window->getShouldClose())
+		while (!mp_Window->getShouldClose()) {
 			gameLoop();
+}
 #endif
 	}
 
@@ -55,8 +57,8 @@ namespace fif::core {
 
 		Time::update();
 
-		m_PerformanceStats.fps = 1.0f / Time::getDeltaTime();
-		m_PerformanceStats.frameTimeMs = Time::getDeltaTime() * 1000.0f;
+		m_PerformanceStats.fps = 1.0F / Time::getDeltaTime();
+		m_PerformanceStats.frameTimeMs = Time::getDeltaTime() * 1000.0F;
 
 		fif::core::Profiler::beginFrame();
 
@@ -67,18 +69,21 @@ namespace fif::core {
 	void Application::update() {
 		FIF_PROFILE_FUNC();
 
-		for (auto &mod : m_Modules)
+		for (auto &mod : m_Modules) {
 			mod->onUpdate();
+}
 	}
 
 	void Application::render() {
 		FIF_PROFILE_FUNC();
 
-		for (auto &mod : m_Modules)
+		for (auto &mod : m_Modules) {
 			mod->onRender();
+}
 
-		for (auto &ent : m_Entities)
+		for (auto &ent : m_Entities) {
 			ent.render();
+}
 
 		mp_Window->endFrame();
 	}
@@ -91,10 +96,12 @@ namespace fif::core {
 			return true;
 		});
 
-		for (auto &mod : m_Modules)
+		for (auto &mod : m_Modules) {
 			mod->onEvent(event);
+}
 
-		for (auto &ent : m_Entities)
+		for (auto &ent : m_Entities) {
 			ent.onEvent(event);
+}
 	}
 } // namespace fif::core

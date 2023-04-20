@@ -12,7 +12,8 @@ namespace fif::gfx {
 	PerspectiveCamera::~PerspectiveCamera() {}
 
 	void PerspectiveCamera::update() {
-		std::int32_t width, height;
+		std::int32_t width;
+		std::int32_t height;
 		glfwGetWindowSize(core::Application::getInstance().getWindow().getGlfwWindow(), &width,
 						  &height);
 
@@ -21,7 +22,7 @@ namespace fif::gfx {
 			m_ZFar);
 		m_Direction = glm::normalize(m_Direction);
 
-		const glm::vec3 up(0.0f, 0.0f, 1.0f);
+		const glm::vec3 up(0.0F, 0.0F, 1.0F);
 		m_ViewMatrix = glm::lookAt(m_Position, m_Position + m_Direction, up);
 
 		m_CameraMatrix = m_ProjectionMatrix * m_ViewMatrix;

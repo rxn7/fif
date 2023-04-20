@@ -43,7 +43,7 @@ namespace fif::core {
 			window->m_App.onEvent(event);
 		});
 
-		glfwSwapInterval(props.vsync);
+		glfwSwapInterval(static_cast<int>(props.vsync));
 	}
 
 	Window::~Window() {
@@ -58,10 +58,10 @@ namespace fif::core {
 	}
 
 	bool Window::getShouldClose() const {
-		return glfwWindowShouldClose(mp_GlfwWindow);
+		return glfwWindowShouldClose(mp_GlfwWindow) != 0;
 	}
 
 	void Window::setShouldClose(bool value) {
-		glfwSetWindowShouldClose(mp_GlfwWindow, value);
+		glfwSetWindowShouldClose(mp_GlfwWindow, static_cast<int>(value));
 	}
 } // namespace fif::core
