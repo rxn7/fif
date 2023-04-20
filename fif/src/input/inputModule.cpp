@@ -1,12 +1,10 @@
-#include "fif/input/inputModule.h"
-#include "fif/core/application.h"
-#include "fif/core/event/keyEvent.h"
-#include "fif/core/event/mouseEvent.h"
-#include "fif/core/util/assertion.h"
-
-#include "fif/core/module.h"
-#include "fif/core/window.h"
-#include "GLFW/glfw3.h"
+#include "fif/input/inputModule.hpp"
+#include "fif/core/application.hpp"
+#include "fif/core/event/keyEvent.hpp"
+#include "fif/core/event/mouseEvent.hpp"
+#include "fif/core/module.hpp"
+#include "fif/core/util/assertion.hpp"
+#include "fif/core/window.hpp"
 
 namespace fif::input {
 	static glm::vec2 s_LastMousePosition;

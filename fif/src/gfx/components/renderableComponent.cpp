@@ -1,7 +1,6 @@
-#include "fif/gfx/components/renderableComponent.h"
-
-#include "fif/core/ecs/entity.h"
-#include "fif/core/util/assertion.h"
+#include "fif/gfx/components/renderableComponent.hpp"
+#include "fif/core/ecs/entity.hpp"
+#include "fif/core/util/assertion.hpp"
 
 namespace fif::gfx {
 	void RenderableComponent::onCreate() {

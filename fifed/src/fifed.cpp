@@ -1,10 +1,10 @@
-#include "fifed.h"
-#include "editorModule.h"
+#include "fifed.hpp"
+#include "editorModule.hpp"
 
-#include "fif/fif.h"
-#include "fif/gfx/gfxModule.h"
-#include "fif/imGui/imGuiModule.h"
-#include "fif/input/inputModule.h"
+#include "fif/fif.hpp"
+#include "fif/gfx/gfxModule.hpp"
+#include "fif/imGui/imGuiModule.hpp"
+#include "fif/input/inputModule.hpp"
 
 const fif::core::WindowProperties WINDOW_PROPS = {
 	.title = "fifed",

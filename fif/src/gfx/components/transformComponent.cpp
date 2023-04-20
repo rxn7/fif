@@ -1,4 +1,4 @@
-#include "fif/gfx/components/transformComponent.h"
+#include "fif/gfx/components/transformComponent.hpp"
 
 namespace fif::gfx {
 	TransformComponent::TransformComponent(const glm::vec2 &position, float angle)

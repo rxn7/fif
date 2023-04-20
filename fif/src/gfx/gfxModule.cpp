@@ -1,12 +1,11 @@
-#include "fif/gfx/gfxModule.h"
-#include "fif/core/application.h"
-#include "fif/core/event/event.h"
-#include "fif/core/module.h"
-#include "fif/core/util/assertion.h"
-#include "fif/gfx/renderer2d.h"
-#include "fif/gfx/shaderLibrary.h"
-
-#include "fif/core/opengl.h"
+#include "fif/gfx/gfxModule.hpp"
+#include "fif/core/application.hpp"
+#include "fif/core/event/event.hpp"
+#include "fif/core/module.hpp"
+#include "fif/core/opengl.hpp"
+#include "fif/core/util/assertion.hpp"
+#include "fif/gfx/renderer2d.hpp"
+#include "fif/gfx/shaderLibrary.hpp"
 
 #include <memory>
 

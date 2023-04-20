@@ -1,4 +1,4 @@
-#include "fif/core/profiler.h"
+#include "fif/core/profiler.hpp"
 
 static std::vector<fif::core::TimerResult> s_Results;
 static std::vector<fif::core::TimerResult> s_TempResults;

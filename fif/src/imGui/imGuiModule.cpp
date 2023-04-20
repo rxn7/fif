@@ -1,11 +1,11 @@
-#include "fif/imGui/imGuiModule.h"
-#include "backends/imgui_impl_glfw.h"
-#include "fif/core/application.h"
-#include "fif/core/util/assertion.h"
+#include "fif/imGui/imGuiModule.hpp"
+#include "fif/core/application.hpp"
+#include "fif/core/event/event.hpp"
+#include "fif/core/profiler.hpp"
+#include "fif/core/util/assertion.hpp"
 
+#include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
-#include "fif/core/event/event.h"
-#include "fif/core/profiler.h"
 #include "imgui.h"
 
 #include <filesystem>

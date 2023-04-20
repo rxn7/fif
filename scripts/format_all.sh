@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env bas
 
 shopt -s globstar
 

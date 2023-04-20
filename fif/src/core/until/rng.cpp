@@ -1,4 +1,4 @@
-#include "fif/core/util/rng.h"
+#include "fif/core/util/rng.hpp"
 
 #include <random>
 

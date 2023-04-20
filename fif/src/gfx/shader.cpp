@@ -1,7 +1,7 @@
-#include "fif/gfx/shader.h"
-#include "fif/core/opengl.h"
-#include "fif/core/util/assertion.h"
-#include "fif/core/util/log.h"
+#include "fif/gfx/shader.hpp"
+#include "fif/core/opengl.hpp"
+#include "fif/core/util/assertion.hpp"
+#include "fif/core/util/log.hpp"
 
 #include "glm/gtc/type_ptr.hpp"
 

@@ -1,5 +1,5 @@
-#include "fif/gfx/components/renderableQuadComponent.h"
-#include "fif/gfx/renderer2d.h"
+#include "fif/gfx/components/renderableQuadComponent.hpp"
+#include "fif/gfx/renderer2d.hpp"
 
 namespace fif::gfx {
 	void RenderableQuadComponent::onRender() {

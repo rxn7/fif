@@ -1,7 +1,7 @@
-#include "fif/gfx/vertexBuffer.h"
-#include "fif/core/opengl.h"
-#include "fif/core/profiler.h"
-#include "fif/core/util/assertion.h"
+#include "fif/gfx/vertexBuffer.hpp"
+#include "fif/core/opengl.hpp"
+#include "fif/core/profiler.hpp"
+#include "fif/core/util/assertion.hpp"
 
 #include <memory>
 

@@ -1,8 +1,8 @@
-#include "fif/gfx/shaderLibrary.h"
-#include "fif/core/util/assertion.h"
+#include "fif/gfx/shaderLibrary.hpp"
+#include "fif/core/util/assertion.hpp"
+#include "fif/gfx/shaders/circle.hpp"
+#include "fif/gfx/shaders/simple.hpp"
 
-#include "shaders/circle.h"
-#include "shaders/simple.h"
 #include <memory>
 
 namespace fif::gfx {

@@ -1,13 +1,12 @@
-#include "fif/core/application.h"
-#include "fif/core/event/eventDispatcher.h"
-#include "fif/core/event/windowEvent.h"
-#include "fif/core/opengl.h"
-#include "fif/core/performanceStats.h"
-#include "fif/core/profiler.h"
-#include "fif/core/util/assertion.h"
-#include "fif/core/util/clock.h"
-#include "fif/core/util/rng.h"
-#include "fif/core/util/timing.h"
+#include "fif/core/application.hpp"
+#include "fif/core/event/eventDispatcher.hpp"
+#include "fif/core/event/windowEvent.hpp"
+#include "fif/core/opengl.hpp"
+#include "fif/core/profiler.hpp"
+#include "fif/core/util/assertion.hpp"
+#include "fif/core/util/clock.hpp"
+#include "fif/core/util/rng.hpp"
+#include "fif/core/util/timing.hpp"
 
 #include <algorithm>
 #include <chrono>

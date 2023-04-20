@@ -1,11 +1,12 @@
-#include "cameraControllerComponent.h"
+#include "cameraControllerComponent.hpp"
 
-#include "fif/core/event/eventDispatcher.h"
-#include "fif/core/event/mouseEvent.h"
-#include "fif/core/profiler.h"
-#include "fif/gfx/orthoCamera.h"
-#include "fif/gfx/renderer2d.h"
-#include "fif/input/inputModule.h"
+#include "fif/core/event/eventDispatcher.hpp"
+#include "fif/core/event/mouseEvent.hpp"
+#include "fif/core/profiler.hpp"
+#include "fif/gfx/orthoCamera.hpp"
+#include "fif/gfx/renderer2d.hpp"
+#include "fif/input/inputModule.hpp"
+
 #include "glm/gtx/compatibility.hpp"
 
 CameraControllerComponent::CameraControllerComponent(fif::gfx::OrthoCamera &camera)

@@ -1,4 +1,4 @@
-#include "fif/core/ecs/entity.h"
+#include "fif/core/ecs/entity.hpp"
 
 namespace fif::core {
 	void Entity::update() {

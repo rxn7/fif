@@ -1,13 +1,11 @@
-#include "fif/core/window.h"
-#include "fif/core/application.h"
-#include "fif/core/util/assertion.h"
-
-#include "fif/core/event/keyEvent.h"
-#include "fif/core/event/mouseEvent.h"
-#include "fif/core/event/windowEvent.h"
-#include "fif/core/opengl.h"
-#include "fif/core/profiler.h"
-#include <GLFW/glfw3.h>
+#include "fif/core/window.hpp"
+#include "fif/core/application.hpp"
+#include "fif/core/event/keyEvent.hpp"
+#include "fif/core/event/mouseEvent.hpp"
+#include "fif/core/event/windowEvent.hpp"
+#include "fif/core/opengl.hpp"
+#include "fif/core/profiler.hpp"
+#include "fif/core/util/assertion.hpp"
 
 namespace fif::core {
 	Window::Window(Application &app, const WindowProperties &props)

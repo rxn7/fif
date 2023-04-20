@@ -1,5 +1,5 @@
-#include "fif/gfx/batch.h"
-#include "fif/core/profiler.h"
+#include "fif/gfx/batch.hpp"
+#include "fif/core/profiler.hpp"
 
 namespace fif::gfx {
 	Batch::Batch(std::uint32_t verticesPerInstance, std::uint32_t elementsPerInstance,

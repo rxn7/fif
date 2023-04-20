@@ -1,11 +1,11 @@
-#include "fif/gfx/orthoCamera.h"
-
-#include "fif/core/application.h"
-#include "fif/core/opengl.h"
-#include "fif/core/profiler.h"
+#include "fif/gfx/orthoCamera.hpp"
+#include "fif/core/application.hpp"
+#include "fif/core/opengl.hpp"
+#include "fif/core/profiler.hpp"
 
 #include "glm/ext/matrix_clip_space.hpp"
 #include "glm/vec2.hpp"
+
 #include <algorithm>
 
 namespace fif::gfx {

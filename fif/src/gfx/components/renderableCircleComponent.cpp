@@ -1,5 +1,5 @@
-#include "fif/gfx/components/renderableCircleComponent.h"
-#include "fif/gfx/renderer2d.h"
+#include "fif/gfx/components/renderableCircleComponent.hpp"
+#include "fif/gfx/renderer2d.hpp"
 
 namespace fif::gfx {
 	void RenderableCircleComponent::onRender() {
