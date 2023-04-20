@@ -1,6 +1,8 @@
 #include "fif/core/ecs/entity.hpp"
 
 namespace fif::core {
+	Entity::Entity(const std::string &name) : m_Name(name) {}
+
 	void Entity::update() {
 		FIF_PROFILE_FUNC();
 		for (std::unique_ptr<Component> &comp : m_Components) {

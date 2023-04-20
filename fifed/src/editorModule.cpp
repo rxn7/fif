@@ -28,11 +28,11 @@ EditorModule::~EditorModule() {}
 void EditorModule::onStart(fif::core::Application &app) {
 	fif::imgui::ImGuiModule::getInstance()->addRenderFunc(&onRenderImGui);
 
-	fif::core::Entity *cameraController = app.createEntity();
+	fif::core::Entity *cameraController = app.createEntity("CameraController");
 	cameraController->addComponent<CameraControllerComponent>(fif::gfx::Renderer2D::getCamera());
 
 	for (std::uint32_t i = 0; i < 1000; ++i) {
-		fif::core::Entity *ent = app.createEntity();
+		fif::core::Entity *ent = app.createEntity("Test " + std::to_string(i));
 		ent->addComponent<fif::gfx::TransformComponent>();
 
 		fif::gfx::RenderableComponent *renderableComponent;
@@ -89,9 +89,8 @@ void EditorModule::onRenderImGui() {
 
 		ImGui::Text("Count: %lu", entities.size());
 		if (ImGui::BeginChild("EntityList")) {
-			std::uint32_t i = 1;
 			for (fif::core::Entity &ent : entities) {
-				if (ImGui::TreeNode(std::to_string(i++).c_str())) {
+				if (ImGui::TreeNode(ent.getName().c_str())) {
 					if (ImGui::TreeNode("Components")) {
 						for (const auto &comp : ent.getComponents())
 							ImGui::Text("%s", comp->getName());

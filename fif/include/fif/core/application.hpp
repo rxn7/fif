@@ -32,7 +32,9 @@ namespace fif::core {
 
 		inline std::vector<Entity> &getEntities() { return m_Entities; }
 
-		inline Entity *createEntity() { return &m_Entities.emplace_back(); }
+		inline Entity *createEntity(const std::string &name) {
+			return &m_Entities.emplace_back(name);
+		}
 
 	  protected:
 		template <class T, class... Args> void attachModule(Args &&...args) {

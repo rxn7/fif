@@ -10,6 +10,8 @@
 namespace fif::core {
 	class Entity final {
 	  public:
+		Entity(const std::string &name);
+
 		template <class T, class... Args> T *addComponent(Args &&...args) {
 			FIF_PROFILE_FUNC();
 			static_assert(std::is_base_of<Component, T>().value, "T is not a Component");
@@ -40,6 +42,8 @@ namespace fif::core {
 
 		inline bool isDeleteQueued() const { return m_DeleteQueued; }
 
+		inline const std::string &getName() const { return m_Name; }
+
 		inline void queueDelete() { m_DeleteQueued = true; }
 
 		void update();
@@ -48,6 +52,7 @@ namespace fif::core {
 
 	  private:
 		bool m_DeleteQueued = false;
+		std::string m_Name;
 		std::vector<std::unique_ptr<Component>> m_Components;
 	};
 } // namespace fif::core
