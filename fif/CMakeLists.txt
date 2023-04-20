@@ -11,23 +11,15 @@ set(LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vendor)
 set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 set(INC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-set(EMSCRIPTEN_LFLAGS "-sUSE_GLFW=3 -sMIN_WEBGL_VERSION=2 -sMAX_WEBGL_VERSION=2 -sASSERTIONS=1 -sWASM=1 -sASYNCIFY -sALLOW_MEMORY_GROWTH")
-
 add_compile_options(-fPIC -fno-exceptions)
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
   add_compile_options(-O2)
   add_compile_definitions(FIF_DEBUG)
-  if(NOT EMSCRIPTEN)
-    add_compile_definitions(FIF_PROFILING_ENABLED)
-  endif()
+  add_compile_definitions(FIF_PROFILING_ENABLED)
 elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
   add_compile_definitions(FIF_RELEASE)
-  if(EMSCRIPTEN)
-    add_compile_options(-Os)
-  else()
-    add_compile_options(-O3)
-  endif()
+  add_compile_options(-O3)
 endif()
 
 function(build_module target dir libs) 
@@ -40,21 +32,10 @@ function(build_module target dir libs)
   target_link_libraries(${target} ${libs})
 
   target_compile_options(${target} PUBLIC -Wall -Wextra)
-
-  if(EMSCRIPTEN)
-    set_target_properties(${target} PROPERTIES LINK_FLAGS "${EMSCRIPTEN_LFLAGS}")
-  endif()
 endfunction()
 
 if(FIF_BUILD_CORE)
-  set(LIBS "")
-  list(APPEND LIBS PUBLIC glfw glm)
-
-  if(NOT EMSCRIPTEN)
-    list(APPEND LIBS glad)
-  endif()
-
-  build_module(fif-core core "${LIBS}")
+  build_module(fif-core core "glfw;glm;glad")
 endif()
 
 if(FIF_BUILD_GFX)
@@ -74,11 +55,8 @@ set(GLFW_BUILD_TESTS OFF CACHE INTERNAL "Build GLFW tests")
 set(GLFW_BUILD_DOCS OFF CACHE INTERNAL "Build GLFW docs")
 set(GLFW_INSTALL OFF CACHE INTERNAL "Install GLFW")
 
-if(NOT EMSCRIPTEN)
-  add_subdirectory(${LIB_DIR}/glfw)
-  add_subdirectory(${LIB_DIR}/glad)
-endif()
-
+add_subdirectory(${LIB_DIR}/glfw)
+add_subdirectory(${LIB_DIR}/glad)
 add_subdirectory(${LIB_DIR}/glm)
 
 set(IMGUI_PATH "vendor/imgui")

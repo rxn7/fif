@@ -26,9 +26,7 @@ namespace fif::core {
 
 		mp_Window = std::make_unique<Window>(*this, windowProperties);
 
-#ifndef __EMSCRIPTEN__
 		gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress));
-#endif
 	}
 
 	Application::~Application() {
@@ -42,13 +40,9 @@ namespace fif::core {
 			mod->onStart(*this);
 		}
 
-#ifdef __EMSCRIPTEN__
-		emscripten_set_main_loop([]() { Application::getInstance().gameLoop(); }, -1, true);
-#else
 		while (!mp_Window->getShouldClose()) {
 			gameLoop();
 		}
-#endif
 	}
 
 	void Application::gameLoop() {
