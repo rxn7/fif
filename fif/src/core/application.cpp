@@ -71,6 +71,16 @@ namespace fif::core {
 		for (auto &mod : m_Modules) {
 			mod->onUpdate();
 		}
+
+		auto entIter = m_Entities.begin();
+		while (entIter != m_Entities.end()) {
+			if (entIter->isDeleteQueued()) {
+				entIter = m_Entities.erase(entIter);
+				continue;
+			}
+
+			(entIter++)->update();
+		}
 	}
 
 	void Application::render() {

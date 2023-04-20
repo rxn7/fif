@@ -30,7 +30,7 @@ namespace fif::core {
 
 		inline const PerformanceStats &getPerformanceStats() const { return m_PerformanceStats; }
 
-		inline const std::vector<Entity> &getEntities() const { return m_Entities; }
+		inline std::vector<Entity> &getEntities() { return m_Entities; }
 
 		inline Entity *createEntity() { return &m_Entities.emplace_back(); }
 

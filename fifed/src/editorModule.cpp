@@ -84,17 +84,22 @@ void EditorModule::onRenderImGui() {
 	ImGui::End();
 
 	if (ImGui::Begin("Entities")) {
-		const std::vector<fif::core::Entity> &entities =
+		std::vector<fif::core::Entity> &entities =
 			fif::core::Application::getInstance().getEntities();
 
 		ImGui::Text("Count: %lu", entities.size());
 		if (ImGui::BeginChild("EntityList")) {
 			std::uint32_t i = 1;
-			for (const fif::core::Entity &ent : entities) {
+			for (fif::core::Entity &ent : entities) {
 				if (ImGui::TreeNode(std::to_string(i++).c_str())) {
-					for (const auto &comp : ent.getComponents()) {
-						ImGui::Text("%s", comp->getName());
+					if (ImGui::TreeNode("Components")) {
+						for (const auto &comp : ent.getComponents())
+							ImGui::Text("%s", comp->getName());
+						ImGui::TreePop();
 					}
+
+					if (ImGui::Button("Delete"))
+						ent.queueDelete();
 
 					ImGui::TreePop();
 				}

@@ -38,11 +38,16 @@ namespace fif::core {
 			return m_Components;
 		}
 
+		inline bool isDeleteQueued() const { return m_DeleteQueued; }
+
+		inline void queueDelete() { m_DeleteQueued = true; }
+
 		void update();
 		void render();
 		void onEvent(Event &event);
 
 	  private:
+		bool m_DeleteQueued = false;
 		std::vector<std::unique_ptr<Component>> m_Components;
 	};
 } // namespace fif::core
