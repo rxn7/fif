@@ -3,9 +3,7 @@
 namespace fif::core {
 	class Time {
 	  public:
-		static inline float getDeltaTime() {
-			return m_Dt;
-		}
+		static inline float getDeltaTime() { return m_Dt; }
 
 	  private:
 		friend class Application;

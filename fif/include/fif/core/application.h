@@ -24,25 +24,15 @@ namespace fif::core {
 
 		virtual void onEvent(Event &event);
 
-		inline static Application &getInstance() {
-			return *s_Instance;
-		}
+		inline static Application &getInstance() { return *s_Instance; }
 
-		inline const Window &getWindow() const {
-			return *mp_Window;
-		}
+		inline const Window &getWindow() const { return *mp_Window; }
 
-		inline const PerformanceStats &getPerformanceStats() const {
-			return m_PerformanceStats;
-		}
+		inline const PerformanceStats &getPerformanceStats() const { return m_PerformanceStats; }
 
-		inline const std::vector<Entity> &getEntities() const {
-			return m_Entities;
-		}
+		inline const std::vector<Entity> &getEntities() const { return m_Entities; }
 
-		inline Entity *createEntity() {
-			return &m_Entities.emplace_back();
-		}
+		inline Entity *createEntity() { return &m_Entities.emplace_back(); }
 
 	  protected:
 		template <class T, class... Args> void attachModule(Args &&...args) {

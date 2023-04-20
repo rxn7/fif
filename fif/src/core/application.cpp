@@ -41,14 +41,14 @@ namespace fif::core {
 
 		for (const auto &mod : m_Modules) {
 			mod->onStart(*this);
-}
+		}
 
 #ifdef __EMSCRIPTEN__
 		emscripten_set_main_loop([]() { Application::getInstance().gameLoop(); }, -1, true);
 #else
 		while (!mp_Window->getShouldClose()) {
 			gameLoop();
-}
+		}
 #endif
 	}
 
@@ -71,7 +71,7 @@ namespace fif::core {
 
 		for (auto &mod : m_Modules) {
 			mod->onUpdate();
-}
+		}
 	}
 
 	void Application::render() {
@@ -79,11 +79,11 @@ namespace fif::core {
 
 		for (auto &mod : m_Modules) {
 			mod->onRender();
-}
+		}
 
 		for (auto &ent : m_Entities) {
 			ent.render();
-}
+		}
 
 		mp_Window->endFrame();
 	}
@@ -98,10 +98,10 @@ namespace fif::core {
 
 		for (auto &mod : m_Modules) {
 			mod->onEvent(event);
-}
+		}
 
 		for (auto &ent : m_Entities) {
 			ent.onEvent(event);
-}
+		}
 	}
 } // namespace fif::core

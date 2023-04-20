@@ -14,16 +14,12 @@ namespace fif::input {
 
 		InputModule();
 
-		static glm::vec2 getMousePosition() ;
-		static glm::vec2 getLastMousePosition() ;
+		static glm::vec2 getMousePosition();
+		static glm::vec2 getLastMousePosition();
 
-		inline bool isKeyHeld(int key) const {
-			return m_Keys[key];
-		}
+		inline bool isKeyHeld(int key) const { return m_Keys[key]; }
 
-		inline bool isButtonHeld(int btn) const {
-			return m_Buttons[btn];
-		}
+		inline bool isButtonHeld(int btn) const { return m_Buttons[btn]; }
 
 	  private:
 		static constexpr std::int32_t BUTTON_COUNT = GLFW_MOUSE_BUTTON_LAST + 1;

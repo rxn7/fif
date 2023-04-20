@@ -18,7 +18,7 @@ void CameraControllerComponent::onEvent(fif::core::Event &event) {
 		event, [&](fif::core::MouseScrolledEvent &scrollEvent) {
 			if (scrollEvent.isHanlded() || scrollEvent.getValue().y == 0) {
 				return false;
-}
+			}
 
 			const glm::vec2 mousePosition =
 				fif::input::InputModule::getInstance()->getMousePosition();
@@ -38,7 +38,7 @@ void CameraControllerComponent::onEvent(fif::core::Event &event) {
 		event, [&](fif::core::MouseMovedEvent &movedEvent) {
 			if (!fif::input::InputModule::getInstance()->isButtonHeld(GLFW_MOUSE_BUTTON_RIGHT)) {
 				return false;
-}
+			}
 
 			const glm::vec2 mouseWorldPosition = m_Camera.screenToWorld(movedEvent.getPosition());
 			const glm::vec2 lastMouseWorldPosition = m_Camera.screenToWorld(

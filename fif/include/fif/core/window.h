@@ -24,18 +24,12 @@ namespace fif::core {
 		Window(Application &app, const WindowProperties &props);
 		~Window();
 
-		inline glm::i16vec2 getSize() const {
-			return m_Size;
-		}
+		inline glm::i16vec2 getSize() const { return m_Size; }
 		bool getShouldClose() const;
 		void setShouldClose(bool value);
 
-		inline GLFWwindow *getGlfwWindow() const {
-			return mp_GlfwWindow;
-		}
-		inline Application &getApplication() const {
-			return m_App;
-		}
+		inline GLFWwindow *getGlfwWindow() const { return mp_GlfwWindow; }
+		inline Application &getApplication() const { return m_App; }
 
 	  private:
 		void endFrame();

@@ -12,7 +12,7 @@ namespace fif::gfx {
 
 		if (m_Vertices.empty() || m_Elements.empty()) {
 			return;
-}
+		}
 
 		m_Buffer.setVertices(m_Vertices.data(), m_Vertices.size());
 		m_Buffer.setElements(m_Elements.data(), m_Elements.size());

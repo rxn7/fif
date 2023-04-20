@@ -61,7 +61,7 @@ namespace fif::gfx {
 
 		if (!s_Camera->containsQuad(position, size)) {
 			return;
-}
+		}
 
 		const uint32_t vertCount = s_SimpleBatch->getVertexCount();
 		glm::mat4 matrix(1.0F);
@@ -97,7 +97,7 @@ namespace fif::gfx {
 
 		if (!s_Camera->containsCircle(position, radius)) {
 			return;
-}
+		}
 
 		const uint32_t vertCount = s_SimpleBatch->getVertexCount();
 		const float segmentAngle = glm::two_pi<float>() / segmentCount;
@@ -129,7 +129,7 @@ namespace fif::gfx {
 
 		if (!s_Camera->containsCircle(position, radius)) {
 			return;
-}
+		}
 
 		const uint32_t vertCount = s_CircleBatch->getVertexCount();
 

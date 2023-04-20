@@ -16,13 +16,9 @@ namespace fif::gfx {
 			  std::uint32_t size);
 		void render();
 
-		inline std::uint32_t getVertexCount() const {
-			return m_Vertices.size();
-		}
+		inline std::uint32_t getVertexCount() const { return m_Vertices.size(); }
 
-		inline std::uint32_t getElementCount() const {
-			return m_Elements.size();
-		}
+		inline std::uint32_t getElementCount() const { return m_Elements.size(); }
 
 		inline void addVertex(const Vertex &vertex) {
 			FIF_ASSERT(m_Vertices.size() != m_Vertices.capacity(),

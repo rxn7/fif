@@ -45,7 +45,7 @@ namespace fif::imgui {
 
 		for (const auto &renderFunc : m_RenderFunctions) {
 			renderFunc();
-}
+		}
 
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

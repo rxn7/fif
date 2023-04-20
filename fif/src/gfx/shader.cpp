@@ -34,13 +34,13 @@ namespace fif::gfx {
 		glGetProgramiv(m_ID, GL_LINK_STATUS, &status);
 		if (status == 0) {
 			printInfoLog(m_ID);
-}
+		}
 
 		glValidateProgram(m_ID);
 		glGetProgramiv(m_ID, GL_VALIDATE_STATUS, &status);
 		if (status == 0) {
 			printInfoLog(m_ID);
-}
+		}
 
 		glDeleteShader(fragID);
 		glDeleteShader(vertID);

@@ -9,12 +9,8 @@ namespace fif::core {
 		WindowResizeEvent(const glm::i32vec2 size) : m_Size(size) {}
 
 		FIF_EVENT_TYPE_DECL(EventType::WindowResized);
-		EventCategory getCategory() const override {
-			return EventCategory::Window;
-		}
-		inline const glm::i32vec2 &getSize() const {
-			return m_Size;
-		}
+		EventCategory getCategory() const override { return EventCategory::Window; }
+		inline const glm::i32vec2 &getSize() const { return m_Size; }
 
 	  protected:
 		glm::i32vec2 m_Size;
@@ -23,12 +19,8 @@ namespace fif::core {
 	class WindowCloseEvent final : public Event {
 	  public:
 		FIF_EVENT_TYPE_DECL(EventType::WindowClosed);
-		EventCategory getCategory() const override {
-			return EventCategory::Window;
-		}
-		inline const glm::i32vec2 &getSize() const {
-			return m_Size;
-		}
+		EventCategory getCategory() const override { return EventCategory::Window; }
+		inline const glm::i32vec2 &getSize() const { return m_Size; }
 
 	  protected:
 		glm::i32vec2 m_Size;
