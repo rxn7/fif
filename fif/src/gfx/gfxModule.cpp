@@ -15,9 +15,7 @@ namespace fif::gfx {
 
 	GfxModule::GfxModule() {
 		FIF_MODULE_INIT_INSTANCE();
-	}
 
-	void GfxModule::onStart([[maybe_unused]] core::Application &app) {
 		FIF_LOG("OpenGL Renderer: " << glGetString(GL_RENDERER));
 		FIF_LOG("OpenGL Version: " << glGetString(GL_VERSION));
 		FIF_LOG("OpenGL Vendor: " << glGetString(GL_VENDOR));

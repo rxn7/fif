@@ -11,7 +11,6 @@ namespace fif::gfx {
 		GfxModule();
 		FIF_MODULE_INSTANCE_FUNC_DECL(GfxModule)
 
-		void onStart(core::Application &app) override;
 		void onUpdate() override;
 		void onRender() override;
 	};

@@ -17,8 +17,8 @@ const fif::core::WindowProperties WINDOW_PROPS = {
 };
 
 Fifed::Fifed() : fif::core::Application(WINDOW_PROPS) {
-	attachModule<fif::gfx::GfxModule>();
-	attachModule<fif::input::InputModule>();
-	attachModule<fif::imgui::ImGuiModule>();
 	attachModule<EditorModule>();
+	attachModule<fif::input::InputModule>();
+	attachModule<fif::gfx::GfxModule>();
+	attachModule<fif::imgui::ImGuiModule>();
 }

@@ -2,6 +2,7 @@
 
 #include "fif/gfx/orthoCamera.h"
 #include "fif/gfx/primitiveType.h"
+#include "shader.h"
 
 #include <memory>
 

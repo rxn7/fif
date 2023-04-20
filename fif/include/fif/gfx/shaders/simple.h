@@ -2,10 +2,10 @@
 
 #include <memory>
 
-namespace fif::gfx::priv::shaders {
-    namespace Simple {
-        const std::string VERTEX = FIF_GLSL_VERSION FIF_GLSL_PRECISION
-            R"(
+namespace fif::gfx::shaders {
+	namespace Simple {
+		const std::string VERTEX = FIF_GLSL_VERSION FIF_GLSL_PRECISION
+			R"(
 		uniform mat4 u_MVP;
 
 		layout(location = 0) in vec3 a_Position;
@@ -21,8 +21,8 @@ namespace fif::gfx::priv::shaders {
 			gl_Position = u_MVP * vec4(a_Position, 1.0);
 		})";
 
-        const std::string FRAGMENT = FIF_GLSL_VERSION FIF_GLSL_PRECISION
-            R"(
+		const std::string FRAGMENT = FIF_GLSL_VERSION FIF_GLSL_PRECISION
+			R"(
 
 		in vec4 v_Color;
 		out vec4 f_Color;
@@ -30,5 +30,5 @@ namespace fif::gfx::priv::shaders {
 		void main() {
 			f_Color = v_Color;
 		})";
-    } // namespace Simple
-} // namespace fif::gfx::priv::shaders
+	} // namespace Simple
+} // namespace fif::gfx::shaders

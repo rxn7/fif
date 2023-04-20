@@ -12,6 +12,7 @@ namespace fif::core {
 		virtual ~Module() {}
 
 		virtual constexpr std::string_view getName() const = 0;
+
 		virtual void onStart([[maybe_unused]] Application &app) {}
 		virtual void onEvent([[maybe_unused]] Event &event) {}
 		virtual void onUpdate() {}

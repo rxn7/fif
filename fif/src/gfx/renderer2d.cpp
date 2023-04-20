@@ -15,7 +15,7 @@
 #include <ratio>
 
 namespace fif::gfx {
-	static constexpr std::uint32_t BATCH_SIZE = 10000;
+	static constexpr std::uint32_t BATCH_SIZE = 100000;
 
 	static Renderer2D::Stats s_Stats, s_TempStats;
 	static std::unique_ptr<Batch> s_SimpleBatch, s_CircleBatch;

@@ -7,31 +7,29 @@
 #include "fif/core/opengl.h"
 
 namespace fif::input {
-    class InputModule final : public core::Module {
-      public:
-        FIF_MODULE_NAME(Input)
-        FIF_MODULE_INSTANCE_FUNC_DECL(InputModule);
+	class InputModule final : public core::Module {
+	  public:
+		FIF_MODULE_NAME(Input)
+		FIF_MODULE_INSTANCE_FUNC_DECL(InputModule);
 
-        InputModule();
+		InputModule();
 
-        void onStart(core::Application &app) override;
+		glm::vec2 getMousePosition() const;
+		glm::vec2 getLastMousePosition() const;
 
-        glm::vec2 getMousePosition() const;
-        glm::vec2 getLastMousePosition() const;
+		inline bool isKeyHeld(int key) const {
+			return m_Keys[key];
+		}
 
-        inline bool isKeyHeld(int key) const {
-            return m_Keys[key];
-        }
+		inline bool isButtonHeld(int btn) const {
+			return m_Buttons[btn];
+		}
 
-        inline bool isButtonHeld(int btn) const {
-            return m_Buttons[btn];
-        }
+	  private:
+		static constexpr std::int32_t BUTTON_COUNT = GLFW_MOUSE_BUTTON_LAST + 1;
+		static constexpr std::int32_t KEY_COUNT = GLFW_KEY_LAST + 1;
 
-      private:
-        static constexpr std::int32_t BUTTON_COUNT = GLFW_MOUSE_BUTTON_LAST + 1;
-        static constexpr std::int32_t KEY_COUNT = GLFW_KEY_LAST + 1;
-
-        bool m_Buttons[BUTTON_COUNT];
-        bool m_Keys[KEY_COUNT];
-    };
+		bool m_Buttons[BUTTON_COUNT];
+		bool m_Keys[KEY_COUNT];
+	};
 } // namespace fif::input

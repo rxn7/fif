@@ -10,11 +10,11 @@ namespace fif::gfx {
 
 	void ShaderLibrary::init() {
 		{
-			Shader &shader = add("circle", priv::shaders::Simple::VERTEX, priv::shaders::Circle::FRAGMENT);
+			Shader &shader = add("circle", shaders::Simple::VERTEX, shaders::Circle::FRAGMENT);
 			shader.registerUniform("u_MVP");
 		}
 		{
-			Shader &shader = add("simple", priv::shaders::Simple::VERTEX, priv::shaders::Simple::FRAGMENT);
+			Shader &shader = add("simple", shaders::Simple::VERTEX, shaders::Simple::FRAGMENT);
 			shader.registerUniform("u_MVP");
 		}
 	}

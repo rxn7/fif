@@ -14,6 +14,10 @@ namespace fif::gfx {
 		glm::vec2 screenToWorld(const glm::vec2 &position) const;
 		void updateSize();
 
+		inline glm::vec2 getSize() const {
+			return m_Size;
+		}
+
 	  public:
 		static constexpr float SIZE = 500.0f;
 		float m_Zoom = 1.0f;

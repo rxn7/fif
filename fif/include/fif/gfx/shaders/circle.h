@@ -2,7 +2,7 @@
 
 #include <memory>
 
-namespace fif::gfx::priv::shaders {
+namespace fif::gfx::shaders {
 	namespace Circle {
 		const std::string FRAGMENT = FIF_GLSL_VERSION FIF_GLSL_PRECISION
 			R"(
@@ -17,4 +17,4 @@ namespace fif::gfx::priv::shaders {
 			f_Color = vec4(v_Color.xyz, alpha * v_Color.a);
 		})";
 	}
-} // namespace fif::gfx::priv::shaders
+} // namespace fif::gfx::shaders

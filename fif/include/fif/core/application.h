@@ -8,6 +8,7 @@
 #include "fif/core/util/clock.h"
 #include "fif/core/window.h"
 
+#include <algorithm>
 #include <chrono>
 #include <memory>
 #include <set>

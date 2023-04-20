@@ -1,5 +1,6 @@
 #include "editorModule.h"
 #include "components/cameraControllerComponent.h"
+
 #include "fif/core/application.h"
 #include "fif/core/ecs/entity.h"
 #include "fif/core/event/event.h"
@@ -15,8 +16,8 @@
 #include "fif/gfx/orthoCamera.h"
 #include "fif/gfx/renderer2d.h"
 #include "fif/imGui/imGuiModule.h"
-
 #include "fif/input/inputModule.h"
+
 #include "imgui.h"
 
 #include <cmath>
@@ -30,7 +31,7 @@ void EditorModule::onStart(fif::core::Application &app) {
 	fif::core::Entity *cameraController = app.createEntity();
 	cameraController->addComponent<CameraControllerComponent>(fif::gfx::Renderer2D::getCamera());
 
-	for (std::uint32_t i = 0; i < 10000; ++i) {
+	for (std::uint32_t i = 0; i < 1000; ++i) {
 		fif::core::Entity *ent = app.createEntity();
 		ent->addComponent<fif::gfx::TransformComponent>();
 
