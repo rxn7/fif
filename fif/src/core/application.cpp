@@ -54,10 +54,10 @@ namespace fif::core {
 	void Application::gameLoop() {
 		FIF_PROFILE_FUNC();
 
-		Time::update();
+		Timing::update();
 
-		m_PerformanceStats.fps = 1.0F / Time::getDeltaTime();
-		m_PerformanceStats.frameTimeMs = Time::getDeltaTime() * 1000.0F;
+		m_PerformanceStats.fps = 1.0F / Timing::getDeltaTime();
+		m_PerformanceStats.frameTimeMs = Timing::getDeltaTime() * 1000.0F;
 
 		fif::core::Profiler::beginFrame();
 

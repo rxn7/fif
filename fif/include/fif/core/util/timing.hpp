@@ -1,7 +1,7 @@
 #pragma once
 
 namespace fif::core {
-	class Time {
+	class Timing {
 	  public:
 		static inline float getDeltaTime() { return m_Dt; }
 

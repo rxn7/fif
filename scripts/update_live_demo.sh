@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
-emcmake cmake . -Bbuild-emsc -GNinja
-cmake --build build-emsc
+scripts/configure.sh
+cmake --build build/emscripten
 mkdir -p dist
 
-cp build-emsc/fifed/fifed.js dist
-cp build-emsc/fifed/fifed.wasm dist
-cp build-emsc/fifed/fifed.html dist/index.html
+cp build/emscripten/fifed/fifed.js dist
+cp build/emscripten/fifed/fifed.wasm dist
+cp build/emscripten/fifed/fifed.html dist/index.html
 
 pushd dist
 npx gh-pages@3.0.0 --dist .
