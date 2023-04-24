@@ -25,8 +25,7 @@ namespace fif::gfx {
 		return *it->second;
 	}
 
-	Shader &ShaderLibrary::add(const std::string &name, const std::string &vertexSrc,
-							   const std::string &fragmentSrc) {
+	Shader &ShaderLibrary::add(const std::string &name, const std::string &vertexSrc, const std::string &fragmentSrc) {
 		auto result = s_Shaders.insert({name, std::make_unique<Shader>(vertexSrc, fragmentSrc)});
 		return *result.first->second;
 	}

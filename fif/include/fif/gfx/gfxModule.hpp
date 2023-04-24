@@ -1,5 +1,6 @@
 #pragma once
 
+#include "event/event.hpp"
 #include "fif/core/module.hpp"
 #include "fif/gfx/camera.hpp"
 
@@ -13,5 +14,6 @@ namespace fif::gfx {
 
 		void onUpdate() override;
 		void onRender() override;
+		void onEvent(core::Event &event) override;
 	};
 } // namespace fif::gfx

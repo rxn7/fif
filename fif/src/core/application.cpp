@@ -16,17 +16,20 @@ using namespace std::chrono;
 namespace fif::core {
 	Application *fif::core::Application::s_Instance = nullptr;
 
-	Application::Application(const WindowProperties &windowProperties) {
+	Application::Application(const WindowProperties &windowProperties, bool createDefaultScene) {
 		FIF_PROFILE_FUNC();
 
 		FIF_ASSERT(s_Instance == nullptr, "Only 1 instance of fif::core::Application can exist!");
 		s_Instance = this;
 
-		Rng::init();
-
 		mp_Window = std::make_unique<Window>(*this, windowProperties);
-
 		gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress));
+
+		if (createDefaultScene) {
+			mp_Scene = std::make_shared<Scene>();
+		}
+
+		Rng::init();
 	}
 
 	Application::~Application() {
@@ -66,14 +69,8 @@ namespace fif::core {
 			mod->onUpdate();
 		}
 
-		auto entIter = m_Entities.begin();
-		while (entIter != m_Entities.end()) {
-			if (entIter->isDeleteQueued()) {
-				entIter = m_Entities.erase(entIter);
-				continue;
-			}
-
-			(entIter++)->update();
+		if (mp_Scene) {
+			mp_Scene->forEach([&](Entity &ent) { ent.update(); });
 		}
 	}
 
@@ -84,8 +81,8 @@ namespace fif::core {
 			mod->onRender();
 		}
 
-		for (auto &ent : m_Entities) {
-			ent.render();
+		if (mp_Scene) {
+			mp_Scene->forEach([&](Entity &ent) { ent.render(); });
 		}
 
 		mp_Window->endFrame();
@@ -94,18 +91,12 @@ namespace fif::core {
 	void Application::onEvent(Event &event) {
 		FIF_PROFILE_FUNC();
 
-		// TODO: Should gfx module handle this or core?
-		EventDispatcher::dispatch<WindowResizeEvent>(event, [&](WindowResizeEvent &resizeEvent) {
-			glViewport(0, 0, resizeEvent.getSize().x, resizeEvent.getSize().y);
-			return true;
-		});
-
 		for (auto &mod : m_Modules) {
 			mod->onEvent(event);
 		}
 
-		for (auto &ent : m_Entities) {
-			ent.onEvent(event);
+		if (mp_Scene) {
+			mp_Scene->forEach([&](Entity &ent) { ent.onEvent(event); });
 		}
 	}
 } // namespace fif::core

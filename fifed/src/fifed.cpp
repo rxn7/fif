@@ -12,7 +12,7 @@ const fif::core::WindowProperties WINDOW_PROPS = {
 	.vsync = false,
 };
 
-Fifed::Fifed() : fif::core::Application(WINDOW_PROPS) {
+Fifed::Fifed() : fif::core::Application(WINDOW_PROPS, false) {
 	attachModule<EditorModule>();
 	attachModule<fif::input::InputModule>();
 	attachModule<fif::gfx::GfxModule>();

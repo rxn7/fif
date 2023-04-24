@@ -2,8 +2,8 @@
 
 #include "fif/core/event/eventType.hpp"
 
-#define FIF_EVENT_TYPE_DECL(type)                                                                  \
-	static EventType getTypeStatic() { return (type); }                                            \
+#define FIF_EVENT_TYPE_DECL(type)                                                                                                                    \
+	static EventType getTypeStatic() { return (type); }                                                                                              \
 	EventType getType() const override { return getTypeStatic(); }
 
 namespace fif::core {

@@ -12,9 +12,7 @@ namespace fif::imgui {
 		ImGuiModule();
 		virtual ~ImGuiModule();
 
-		inline void addRenderFunc(const std::function<void()> &renderFunc) {
-			m_RenderFunctions.push_back(renderFunc);
-		}
+		inline void addRenderFunc(const std::function<void()> &renderFunc) { m_RenderFunctions.push_back(renderFunc); }
 
 		void onStart(core::Application &app) override;
 		void onRender() override;

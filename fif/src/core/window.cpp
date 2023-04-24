@@ -8,13 +8,10 @@
 #include "fif/core/util/assertion.hpp"
 
 namespace fif::core {
-	Window::Window(Application &app, const WindowProperties &props)
-		: m_Size(props.size), m_App(app) {
+	Window::Window(Application &app, const WindowProperties &props) : m_Size(props.size), m_App(app) {
 		FIF_PROFILE_FUNC();
 
-		glfwSetErrorCallback([]([[maybe_unused]] int error, const char *msg) {
-			FIF_LOG_ERROR("GLFW Error: " << msg);
-		});
+		glfwSetErrorCallback([]([[maybe_unused]] int error, const char *msg) { FIF_LOG_ERROR("GLFW Error: " << msg); });
 
 		FIF_ASSERT(glfwInit(), "Failed to initialize GLFW");
 
@@ -22,18 +19,16 @@ namespace fif::core {
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 
-		mp_GlfwWindow =
-			glfwCreateWindow(props.size.x, props.size.y, props.title.c_str(), NULL, NULL);
+		mp_GlfwWindow = glfwCreateWindow(props.size.x, props.size.y, props.title.c_str(), NULL, NULL);
 		glfwMakeContextCurrent(mp_GlfwWindow);
 		glfwSetWindowUserPointer(mp_GlfwWindow, this);
 
-		glfwSetWindowSizeCallback(
-			mp_GlfwWindow, []([[maybe_unused]] GLFWwindow *glfwWindow, int width, int height) {
-				Window *window = FIF_GET_WINDOW_FROM_GLFW_WINDOW(glfwWindow);
-				WindowResizeEvent event({width, height});
-				window->m_Size = glm::i32vec2(width, height);
-				window->m_App.onEvent(event);
-			});
+		glfwSetWindowSizeCallback(mp_GlfwWindow, []([[maybe_unused]] GLFWwindow *glfwWindow, int width, int height) {
+			Window *window = FIF_GET_WINDOW_FROM_GLFW_WINDOW(glfwWindow);
+			WindowResizeEvent event({width, height});
+			window->m_Size = glm::i32vec2(width, height);
+			window->m_App.onEvent(event);
+		});
 
 		glfwSetWindowCloseCallback(mp_GlfwWindow, []([[maybe_unused]] GLFWwindow *glfwWindow) {
 			Window *window = FIF_GET_WINDOW_FROM_GLFW_WINDOW(glfwWindow);

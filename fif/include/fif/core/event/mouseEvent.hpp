@@ -8,8 +8,7 @@
 namespace fif::core {
 	class MouseMovedEvent final : public Event {
 	  public:
-		MouseMovedEvent(const glm::vec2 &position, const glm::vec2 &delta)
-			: m_Position(position), m_Delta(delta) {}
+		MouseMovedEvent(const glm::vec2 &position, const glm::vec2 &delta) : m_Position(position), m_Delta(delta) {}
 
 		FIF_EVENT_TYPE_DECL(EventType::MouseMoved);
 		EventCategory getCategory() const override { return EventCategory::Mouse; }

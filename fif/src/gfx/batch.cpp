@@ -3,8 +3,8 @@
 
 namespace fif::gfx {
 	Batch::Batch(u32 verticesPerInstance, u32 elementsPerInstance, u32 size)
-		: m_Buffer(verticesPerInstance * size, elementsPerInstance * size),
-		  m_Vertices(verticesPerInstance * size), m_Elements(elementsPerInstance * size) {}
+		: m_Buffer(verticesPerInstance * size, elementsPerInstance * size), m_Vertices(verticesPerInstance * size),
+		  m_Elements(elementsPerInstance * size) {}
 
 	void Batch::render() {
 		FIF_PROFILE_FUNC();

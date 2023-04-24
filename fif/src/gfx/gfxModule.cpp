@@ -1,6 +1,8 @@
 #include "fif/gfx/gfxModule.hpp"
 #include "fif/core/application.hpp"
 #include "fif/core/event/event.hpp"
+#include "fif/core/event/eventDispatcher.hpp"
+#include "fif/core/event/windowEvent.hpp"
 #include "fif/core/module.hpp"
 #include "fif/core/opengl.hpp"
 #include "fif/core/util/assertion.hpp"
@@ -33,5 +35,12 @@ namespace fif::gfx {
 
 	void GfxModule::onRender() {
 		Renderer2D::end();
+	}
+
+	void GfxModule::onEvent(fif::core::Event &event) {
+		fif::core::EventDispatcher::dispatch<fif::core::WindowResizeEvent>(event, [&](fif::core::WindowResizeEvent &resizeEvent) {
+			glViewport(0, 0, resizeEvent.getSize().x, resizeEvent.getSize().y);
+			return true;
+		});
 	}
 } // namespace fif::gfx

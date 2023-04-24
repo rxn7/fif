@@ -1,6 +1,7 @@
 #pragma once
 
 #include "fif/core/ecs/entity.hpp"
+#include "fif/core/ecs/scene.hpp"
 #include "fif/core/event/event.hpp"
 #include "fif/core/module.hpp"
 #include "fif/core/performanceStats.hpp"
@@ -17,7 +18,7 @@
 namespace fif::core {
 	class Application {
 	  public:
-		Application(const WindowProperties &windowProperties);
+		Application(const WindowProperties &windowProperties, bool createDefaultScene = true);
 		virtual ~Application();
 
 		void start();
@@ -30,12 +31,6 @@ namespace fif::core {
 
 		inline const PerformanceStats &getPerformanceStats() const { return m_PerformanceStats; }
 
-		inline std::vector<Entity> &getEntities() { return m_Entities; }
-
-		inline Entity *createEntity(const std::string &name) {
-			return &m_Entities.emplace_back(name);
-		}
-
 	  protected:
 		template <class T, class... Args> void attachModule(Args &&...args) {
 			static_assert(std::is_base_of<Module, T>().value, "T doesn't derive from Module!");
@@ -46,6 +41,9 @@ namespace fif::core {
 			FIF_LOG("Module " << mod->getName() << " attached");
 		}
 
+	  public:
+		std::shared_ptr<Scene> mp_Scene;
+
 	  private:
 		void gameLoop();
 		void update();
@@ -55,7 +53,6 @@ namespace fif::core {
 		std::unique_ptr<Window> mp_Window;
 
 	  private:
-		std::vector<Entity> m_Entities;
 		std::vector<std::unique_ptr<Module>> m_Modules;
 
 		PerformanceStats m_PerformanceStats;

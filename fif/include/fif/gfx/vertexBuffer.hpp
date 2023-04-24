@@ -8,8 +8,7 @@
 namespace fif::gfx {
 	class VertexBuffer {
 	  public:
-		VertexBuffer(const Vertex *vertices, u32 vertexCount, const u16 *elements,
-					 u32 elementCount);
+		VertexBuffer(const Vertex *vertices, u32 vertexCount, const u16 *elements, u32 elementCount);
 		VertexBuffer(u32 vertexCount, u32 elementCount);
 
 		void render() const;

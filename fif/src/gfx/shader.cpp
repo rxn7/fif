@@ -59,8 +59,7 @@ namespace fif::gfx {
 	}
 
 	u32 Shader::compile(int type, const char *src) {
-		FIF_ASSERT(type == GL_FRAGMENT_SHADER || type == GL_VERTEX_SHADER,
-				   "Only fragment and vertex shaders are supported");
+		FIF_ASSERT(type == GL_FRAGMENT_SHADER || type == GL_VERTEX_SHADER, "Only fragment and vertex shaders are supported");
 		const u32 id = glCreateShader(type);
 
 		glShaderSource(id, 1, &src, NULL);

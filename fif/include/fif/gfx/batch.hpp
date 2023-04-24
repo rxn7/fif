@@ -20,14 +20,12 @@ namespace fif::gfx {
 		inline u32 getElementCount() const { return m_Elements.size(); }
 
 		inline void addVertex(const Vertex &vertex) {
-			FIF_ASSERT(m_Vertices.size() != m_Vertices.capacity(),
-					   "Cannot add vertex, the buffer is full");
+			FIF_ASSERT(m_Vertices.size() != m_Vertices.capacity(), "Cannot add vertex, the buffer is full");
 			m_Vertices.push_back(vertex);
 		}
 
 		inline void addElement(u16 element) {
-			FIF_ASSERT(m_Elements.size() != m_Elements.capacity(),
-					   "Cannot add element, the buffer is full");
+			FIF_ASSERT(m_Elements.size() != m_Elements.capacity(), "Cannot add element, the buffer is full");
 			m_Elements.push_back(element);
 		}
 

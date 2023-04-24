@@ -19,40 +19,34 @@
 
 #include "imgui.h"
 
-#include <cmath>
-#include <functional>
-
 EditorModule::EditorModule() {}
 EditorModule::~EditorModule() {}
 
 void EditorModule::onStart(fif::core::Application &app) {
-	fif::imgui::ImGuiModule::getInstance()->addRenderFunc(&onRenderImGui);
+	app.mp_Scene = mp_Scene = std::make_shared<EditorScene>();
 
-	fif::core::Entity *cameraController = app.createEntity("CameraController");
+	fif::imgui::ImGuiModule::getInstance()->addRenderFunc(std::bind(&EditorModule::onRenderImGui, this));
+
+	fif::core::Entity *cameraController = mp_Scene->createEditorEntity("CameraController");
 	cameraController->addComponent<CameraControllerComponent>(fif::gfx::Renderer2D::getCamera());
 
 	for (u32 i = 0; i < 1000; ++i) {
-		fif::core::Entity *ent = app.createEntity("Test " + std::to_string(i));
+		fif::core::Entity *ent = app.mp_Scene->createEntity("Test " + std::to_string(i));
 		ent->addComponent<fif::gfx::TransformComponent>();
 
 		fif::gfx::RenderableComponent *renderableComponent;
 		if (fif::core::Rng::getBool()) {
-			fif::gfx::RenderableQuadComponent *quad =
-				ent->addComponent<fif::gfx::RenderableQuadComponent>();
+			fif::gfx::RenderableQuadComponent *quad = ent->addComponent<fif::gfx::RenderableQuadComponent>();
 			quad->m_Size = {fif::core::Rng::getF32(50, 100), fif::core::Rng::getF32(50, 100)};
 			renderableComponent = quad;
 		} else {
-			fif::gfx::RenderableCircleComponent *circle =
-				ent->addComponent<fif::gfx::RenderableCircleComponent>();
+			fif::gfx::RenderableCircleComponent *circle = ent->addComponent<fif::gfx::RenderableCircleComponent>();
 			circle->m_Radius = fif::core::Rng::getF32(50, 100);
 			renderableComponent = circle;
 		}
 
-		renderableComponent->m_Color = {fif::core::Rng::getU8(0, 255u),
-										fif::core::Rng::getU8(0, 255u),
-										fif::core::Rng::getU8(0, 255u), 200};
-		renderableComponent->mp_Transform->m_Position = {fif::core::Rng::getF32(-10000, 10000),
-														 fif::core::Rng::getF32(-10000, 10000)};
+		renderableComponent->m_Color = {fif::core::Rng::getU8(0, 255u), fif::core::Rng::getU8(0, 255u), fif::core::Rng::getU8(0, 255u), 200};
+		renderableComponent->mp_Transform->m_Position = {fif::core::Rng::getF32(-10000, 10000), fif::core::Rng::getF32(-10000, 10000)};
 	}
 }
 
@@ -75,25 +69,24 @@ void EditorModule::onRenderImGui() {
 	ImGui::End();
 
 	if (ImGui::Begin("Entities")) {
-		std::vector<fif::core::Entity> &entities =
-			fif::core::Application::getInstance().getEntities();
-
-		ImGui::Text("Count: %lu", entities.size());
+		ImGui::Text("Count: %lu", mp_Scene->getEntityCount());
 		if (ImGui::BeginChild("EntityList")) {
-			for (fif::core::Entity &ent : entities) {
-				if (ImGui::TreeNode(ent.getName().c_str())) {
-					if (ImGui::TreeNode("Components")) {
-						for (const auto &comp : ent.getComponents())
-							ImGui::Text("%s", comp->getName());
+			mp_Scene->forEach(
+				[&](fif::core::Entity &ent) {
+					if (ImGui::TreeNode(ent.getName().c_str())) {
+						if (ImGui::TreeNode("Components")) {
+							for (const auto &comp : ent.getComponents())
+								ImGui::Text("%s", comp->getName());
+							ImGui::TreePop();
+						}
+
+						if (ImGui::Button("Delete"))
+							ent.queueDelete();
+
 						ImGui::TreePop();
 					}
-
-					if (ImGui::Button("Delete"))
-						ent.queueDelete();
-
-					ImGui::TreePop();
-				}
-			}
+				},
+				true);
 			ImGui::EndChild();
 		}
 	}

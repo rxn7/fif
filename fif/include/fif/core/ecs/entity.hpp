@@ -36,9 +36,7 @@ namespace fif::core {
 			return nullptr;
 		}
 
-		inline const std::vector<std::unique_ptr<Component>> &getComponents() const {
-			return m_Components;
-		}
+		inline const std::vector<std::unique_ptr<Component>> &getComponents() const { return m_Components; }
 
 		inline bool isDeleteQueued() const { return m_DeleteQueued; }
 

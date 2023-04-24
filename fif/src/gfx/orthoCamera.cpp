@@ -16,8 +16,7 @@ namespace fif::gfx {
 
 		updateSize();
 
-		m_CameraMatrix = glm::ortho(-m_Size.x + m_Position.x, m_Size.x + m_Position.x,
-									-m_Size.y + m_Position.y, m_Size.y + m_Position.y);
+		m_CameraMatrix = glm::ortho(-m_Size.x + m_Position.x, m_Size.x + m_Position.x, -m_Size.y + m_Position.y, m_Size.y + m_Position.y);
 	}
 
 	void OrthoCamera::updateSize() {
@@ -31,8 +30,7 @@ namespace fif::gfx {
 		FIF_PROFILE_FUNC();
 
 		const glm::i16vec2 windowSize = core::Application::getInstance().getWindow().getSize();
-		const glm::vec2 normalizedPosition((position.x * 2.0F) / windowSize.x - 1.0F,
-										   1.0F - (2.0F * position.y) / windowSize.y);
+		const glm::vec2 normalizedPosition((position.x * 2.0F) / windowSize.x - 1.0F, 1.0F - (2.0F * position.y) / windowSize.y);
 
 		return normalizedPosition * m_Size + m_Position;
 	}
@@ -44,6 +42,8 @@ namespace fif::gfx {
 
 	bool OrthoCamera::containsQuad(const glm::vec2 &position, const glm::vec2 &size) const {
 		const glm::vec2 halfSize = size * 0.5F;
+
+		// TODO: What about rotation?
 
 		// clang-format off
 		return position.x + halfSize.x > m_Position.x - m_Size.x && 
