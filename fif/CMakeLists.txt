@@ -27,12 +27,10 @@ function(build_module target dir libs)
   add_library(${target} STATIC ${SOURCES})
 
   set_target_properties(${target} PROPERTIES PUBLIC_HEADER ${INC_DIR}/fif/${dir})
-  set_target_properties(${target} PROPERTIES CMAKE_CXX_CLANG_TIDY clang-tidy --fix-errors --checks=-*,readability-*)
   target_include_directories(${target} PUBLIC ${INC_DIR} ${INC_DIR}/fif/${dir} PRIVATE ${SRC_DIR}/${dir})
   target_link_libraries(${target} ${libs})
 
   target_compile_options(${target} PUBLIC -Wall -Wextra)
-  set_target_properties(${target} PROPERTIES CMAKE_CXX_CLANG_TIDY clang-tidy --fix --checks=-*,readability-* -format-style="file" -header-filter=${CMAKE_CURRENT_SOURCE_DIR})
 endfunction()
 
 if(FIF_BUILD_CORE)
