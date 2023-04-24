@@ -57,4 +57,4 @@ namespace fif::core {
 	void Window::setShouldClose(bool value) {
 		glfwSetWindowShouldClose(mp_GlfwWindow, static_cast<int>(value));
 	}
-} // namespace fif::core
+}// namespace fif::core

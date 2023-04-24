@@ -15,7 +15,7 @@ void CameraControllerComponent::onEvent(fif::core::Event &event) {
 	FIF_PROFILE_FUNC();
 
 	fif::core::EventDispatcher::dispatch<fif::core::MouseScrolledEvent>(event, [&](fif::core::MouseScrolledEvent &scrollEvent) {
-		if (scrollEvent.isHanlded() || scrollEvent.getValue().y == 0) {
+		if(scrollEvent.isHanlded() || scrollEvent.getValue().y == 0) {
 			return false;
 		}
 
@@ -34,7 +34,7 @@ void CameraControllerComponent::onEvent(fif::core::Event &event) {
 	});
 
 	fif::core::EventDispatcher::dispatch<fif::core::MouseMovedEvent>(event, [&](fif::core::MouseMovedEvent &movedEvent) {
-		if (movedEvent.isHanlded() || !fif::input::InputModule::getInstance()->isButtonHeld(GLFW_MOUSE_BUTTON_RIGHT)) {
+		if(movedEvent.isHanlded() || !fif::input::InputModule::getInstance()->isButtonHeld(GLFW_MOUSE_BUTTON_RIGHT)) {
 			return false;
 		}
 

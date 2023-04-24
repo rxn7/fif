@@ -30,5 +30,5 @@ namespace fif::gfx::shaders {
 		void main() {
 			f_Color = v_Color;
 		})";
-	} // namespace Simple
-} // namespace fif::gfx::shaders
+	}// namespace Simple
+}// namespace fif::gfx::shaders

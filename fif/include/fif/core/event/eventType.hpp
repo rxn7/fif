@@ -21,4 +21,4 @@ namespace fif::core {
 		Keyboard = (1 << 2) | Input,
 		Mouse = (1 << 3) | Input,
 	};
-} // namespace fif::core
+}// namespace fif::core

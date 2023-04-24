@@ -10,5 +10,5 @@ namespace fif::gfx {
 		void init();
 		Shader &add(const std::string &name, const std::string &vertexSrc, const std::string &fragmentSrc);
 		Shader &get(const std::string &name);
-	}; // namespace ShaderLibrary
-} // namespace fif::gfx
+	};// namespace ShaderLibrary
+}// namespace fif::gfx

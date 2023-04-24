@@ -8,7 +8,7 @@ namespace fif::core {
 	class Application;
 
 	class Module {
-	  public:
+	public:
 		virtual ~Module() {}
 
 		virtual constexpr std::string_view getName() const = 0;
@@ -18,10 +18,10 @@ namespace fif::core {
 		virtual void onUpdate() {}
 		virtual void onRender() {}
 
-	  protected:
+	protected:
 		Module() {}
 	};
-} // namespace fif::core
+}// namespace fif::core
 
 #define FIF_MODULE_NAME(x)                                                                                                                           \
 	constexpr std::string_view getName() const override { return #x; }

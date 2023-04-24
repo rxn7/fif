@@ -6,7 +6,7 @@
 
 namespace fif::imgui {
 	class ImGuiModule final : public core::Module {
-	  public:
+	public:
 		FIF_MODULE_NAME(ImGui)
 		FIF_MODULE_INSTANCE_FUNC_DECL(ImGuiModule);
 
@@ -19,10 +19,10 @@ namespace fif::imgui {
 		void onRender() override final;
 		void onEvent(core::Event &event) override final;
 
-	  private:
+	private:
 		void applyDefaultTheme() const;
 
-	  private:
+	private:
 		std::vector<std::function<void()>> m_RenderFunctions;
 	};
-} // namespace fif::imgui
+}// namespace fif::imgui

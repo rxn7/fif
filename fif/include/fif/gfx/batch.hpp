@@ -11,7 +11,7 @@
 
 namespace fif::gfx {
 	class Batch {
-	  public:
+	public:
 		Batch(u32 verticesPerInstance, u32 elementsPerInstance, u32 size);
 		void render();
 
@@ -29,9 +29,9 @@ namespace fif::gfx {
 			m_Elements.push_back(element);
 		}
 
-	  private:
+	private:
 		VertexBuffer m_Buffer;
 		std::vector<Vertex> m_Vertices;
 		std::vector<u16> m_Elements;
 	};
-} // namespace fif::gfx
+}// namespace fif::gfx

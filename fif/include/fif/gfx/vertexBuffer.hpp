@@ -7,7 +7,7 @@
 
 namespace fif::gfx {
 	class VertexBuffer {
-	  public:
+	public:
 		VertexBuffer(const Vertex *vertices, u32 vertexCount, const u16 *elements, u32 elementCount);
 		VertexBuffer(u32 vertexCount, u32 elementCount);
 
@@ -15,14 +15,14 @@ namespace fif::gfx {
 		void setVertices(const Vertex *vertices, u32 count);
 		void setElements(const u16 *elements, u32 count);
 
-	  private:
+	private:
 		static void setupVertexAttributes();
 
-	  protected:
+	protected:
 		u32 m_VertexCount;
 		u32 m_ElementCount;
 		u32 m_Vao;
 		u32 m_Vbo;
 		u32 m_Ebo;
 	};
-} // namespace fif::gfx
+}// namespace fif::gfx

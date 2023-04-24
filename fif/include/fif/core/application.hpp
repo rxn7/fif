@@ -17,7 +17,7 @@
 
 namespace fif::core {
 	class Application {
-	  public:
+	public:
 		Application(const WindowProperties &windowProperties, bool createDefaultScene = true);
 		virtual ~Application();
 
@@ -31,8 +31,8 @@ namespace fif::core {
 
 		inline const PerformanceStats &getPerformanceStats() const { return m_PerformanceStats; }
 
-	  protected:
-		template <class T, class... Args> void attachModule(Args &&...args) {
+	protected:
+		template<class T, class... Args> void attachModule(Args &&...args) {
 			static_assert(std::is_base_of<Module, T>().value, "T doesn't derive from Module!");
 
 			FIF_PROFILE_FUNC();
@@ -41,21 +41,21 @@ namespace fif::core {
 			FIF_LOG("Module " << mod->getName() << " attached");
 		}
 
-	  public:
+	public:
 		std::shared_ptr<Scene> mp_Scene;
 
-	  private:
+	private:
 		void gameLoop();
 		void update();
 		void render();
 
-	  protected:
+	protected:
 		std::unique_ptr<Window> mp_Window;
 
-	  private:
+	private:
 		std::vector<std::unique_ptr<Module>> m_Modules;
 
 		PerformanceStats m_PerformanceStats;
 		static Application *s_Instance;
 	};
-} // namespace fif::core
+}// namespace fif::core

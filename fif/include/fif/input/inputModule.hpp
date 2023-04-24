@@ -7,7 +7,7 @@
 
 namespace fif::input {
 	class InputModule final : public core::Module {
-	  public:
+	public:
 		FIF_MODULE_NAME(Input)
 		FIF_MODULE_INSTANCE_FUNC_DECL(InputModule);
 
@@ -19,11 +19,11 @@ namespace fif::input {
 		inline bool isKeyHeld(i32 key) const { return m_Keys[key]; }
 		inline bool isButtonHeld(i32 btn) const { return m_Buttons[btn]; }
 
-	  private:
+	private:
 		static constexpr i32 BUTTON_COUNT = GLFW_MOUSE_BUTTON_LAST + 1;
 		static constexpr i32 KEY_COUNT = GLFW_KEY_LAST + 1;
 
 		bool m_Buttons[BUTTON_COUNT];
 		bool m_Keys[KEY_COUNT];
 	};
-} // namespace fif::input
+}// namespace fif::input

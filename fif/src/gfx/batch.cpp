@@ -3,13 +3,12 @@
 
 namespace fif::gfx {
 	Batch::Batch(u32 verticesPerInstance, u32 elementsPerInstance, u32 size)
-		: m_Buffer(verticesPerInstance * size, elementsPerInstance * size), m_Vertices(verticesPerInstance * size),
-		  m_Elements(elementsPerInstance * size) {}
+		: m_Buffer(verticesPerInstance * size, elementsPerInstance * size), m_Vertices(verticesPerInstance * size), m_Elements(elementsPerInstance * size) {}
 
 	void Batch::render() {
 		FIF_PROFILE_FUNC();
 
-		if (m_Vertices.empty() || m_Elements.empty()) {
+		if(m_Vertices.empty() || m_Elements.empty()) {
 			return;
 		}
 
@@ -21,4 +20,4 @@ namespace fif::gfx {
 		m_Vertices.clear();
 		m_Elements.clear();
 	}
-} // namespace fif::gfx
+}// namespace fif::gfx

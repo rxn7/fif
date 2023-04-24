@@ -4,12 +4,12 @@
 
 namespace fif::gfx {
 	class RenderableCircleComponent final : public RenderableComponent {
-	  public:
+	public:
 		COMPONENT_NAME(RenderableCircleComponent);
 
 		void onRender() override;
 
-	  public:
+	public:
 		float m_Radius = 50.0f;
 	};
-} // namespace fif::gfx
+}// namespace fif::gfx

@@ -10,4 +10,4 @@ namespace fif::gfx {
 		glm::vec2 uv = {0, 0};
 		glm::u8vec4 color = {255, 255, 255, 255};
 	};
-} // namespace fif::gfx
+}// namespace fif::gfx

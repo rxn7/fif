@@ -30,12 +30,12 @@ void EditorModule::onStart(fif::core::Application &app) {
 	fif::core::Entity *cameraController = mp_Scene->createEditorEntity("CameraController");
 	cameraController->addComponent<CameraControllerComponent>(fif::gfx::Renderer2D::getCamera());
 
-	for (u32 i = 0; i < 1000; ++i) {
+	for(u32 i = 0; i < 1000; ++i) {
 		fif::core::Entity *ent = app.mp_Scene->createEntity("Test " + std::to_string(i));
 		ent->addComponent<fif::gfx::TransformComponent>();
 
 		fif::gfx::RenderableComponent *renderableComponent;
-		if (fif::core::Rng::getBool()) {
+		if(fif::core::Rng::getBool()) {
 			fif::gfx::RenderableQuadComponent *quad = ent->addComponent<fif::gfx::RenderableQuadComponent>();
 			quad->m_Size = {fif::core::Rng::getF32(50, 100), fif::core::Rng::getF32(50, 100)};
 			renderableComponent = quad;
@@ -52,12 +52,12 @@ void EditorModule::onStart(fif::core::Application &app) {
 
 void EditorModule::onRenderImGui() {
 	FIF_PROFILE_FUNC();
-	if (ImGui::Begin("Performance")) {
+	if(ImGui::Begin("Performance")) {
 		const PerformanceStats &stats = fif::core::Application::getInstance().getPerformanceStats();
 		ImGui::Text("Frame time: %f ms", stats.frameTimeMs);
 		ImGui::Text("FPS: %f", stats.fps);
 
-		if (ImGui::TreeNode("Renderer2D")) {
+		if(ImGui::TreeNode("Renderer2D")) {
 			const fif::gfx::Renderer2D::Stats &rendererStats = fif::gfx::Renderer2D::getStats();
 			ImGui::Text("Circles: %i", rendererStats.circles);
 			ImGui::Text("Quads: %i", rendererStats.quads);
@@ -68,19 +68,19 @@ void EditorModule::onRenderImGui() {
 	}
 	ImGui::End();
 
-	if (ImGui::Begin("Entities")) {
+	if(ImGui::Begin("Entities")) {
 		ImGui::Text("Count: %lu", mp_Scene->getEntityCount());
-		if (ImGui::BeginChild("EntityList")) {
+		if(ImGui::BeginChild("EntityList")) {
 			mp_Scene->forEach(
 				[&](fif::core::Entity &ent) {
-					if (ImGui::TreeNode(ent.getName().c_str())) {
-						if (ImGui::TreeNode("Components")) {
-							for (const auto &comp : ent.getComponents())
+					if(ImGui::TreeNode(ent.getName().c_str())) {
+						if(ImGui::TreeNode("Components")) {
+							for(const auto &comp : ent.getComponents())
 								ImGui::Text("%s", comp->getName());
 							ImGui::TreePop();
 						}
 
-						if (ImGui::Button("Delete"))
+						if(ImGui::Button("Delete"))
 							ent.queueDelete();
 
 						ImGui::TreePop();

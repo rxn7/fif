@@ -58,7 +58,7 @@ namespace fif::gfx {
 	void Renderer2D::renderQuadRotated(const glm::vec2 &position, const glm::vec2 &size, float angle, const glm::u8vec4 &color) {
 		FIF_PROFILE_FUNC();
 
-		if (!s_Camera->containsQuad(position, size)) {
+		if(!s_Camera->containsQuad(position, size)) {
 			return;
 		}
 
@@ -88,7 +88,7 @@ namespace fif::gfx {
 	void Renderer2D::renderQuad(const glm::vec2 &position, const glm::vec2 &size, const glm::u8vec4 &color) {
 		FIF_PROFILE_FUNC();
 
-		if (!s_Camera->containsQuad(position, size)) {
+		if(!s_Camera->containsQuad(position, size)) {
 			return;
 		}
 
@@ -119,7 +119,7 @@ namespace fif::gfx {
 		FIF_PROFILE_FUNC();
 		FIF_ASSERT(segmentCount > 2u, "Circle must have at least 3 segments!");
 
-		if (!s_Camera->containsCircle(position, radius)) {
+		if(!s_Camera->containsCircle(position, radius)) {
 			return;
 		}
 
@@ -127,7 +127,7 @@ namespace fif::gfx {
 		const float segmentAngle = glm::two_pi<float>() / segmentCount;
 		float angle = 0.0F;
 
-		for (u16 i = 0; i < segmentCount; ++i) {
+		for(u16 i = 0; i < segmentCount; ++i) {
 			s_SimpleBatch->addVertex({
 				.position = position + glm::vec2(radius * glm::cos(angle), radius * glm::sin(angle)),
 				.color = color,
@@ -135,7 +135,7 @@ namespace fif::gfx {
 			angle += segmentAngle;
 		}
 
-		for (u16 i = 1u; i < segmentCount - 1u; ++i) {
+		for(u16 i = 1u; i < segmentCount - 1u; ++i) {
 			s_SimpleBatch->addElement(vertCount);
 			s_SimpleBatch->addElement(vertCount + i);
 			s_SimpleBatch->addElement(vertCount + i + 1u);
@@ -149,7 +149,7 @@ namespace fif::gfx {
 	void Renderer2D::renderCircleFrag(const glm::vec2 &position, float radius, const glm::u8vec4 &color) {
 		FIF_PROFILE_FUNC();
 
-		if (!s_Camera->containsCircle(position, radius)) {
+		if(!s_Camera->containsCircle(position, radius)) {
 			return;
 		}
 
@@ -179,4 +179,4 @@ namespace fif::gfx {
 	OrthoCamera &Renderer2D::getCamera() {
 		return *s_Camera;
 	}
-} // namespace fif::gfx
+}// namespace fif::gfx

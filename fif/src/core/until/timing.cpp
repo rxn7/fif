@@ -15,4 +15,4 @@ namespace fif::core {
 		m_Dt = duration_cast<duration<float>>(Clock::now() - m_LastFrameTime).count();
 		m_LastFrameTime = now;
 	}
-} // namespace fif::core
+}// namespace fif::core

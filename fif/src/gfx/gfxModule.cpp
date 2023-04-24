@@ -43,4 +43,4 @@ namespace fif::gfx {
 			return true;
 		});
 	}
-} // namespace fif::gfx
+}// namespace fif::gfx

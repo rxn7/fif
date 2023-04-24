@@ -87,4 +87,4 @@ namespace fif::gfx {
 		glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, m_ElementCount * sizeof(u16), elements);
 		glBindVertexArray(0);
 	}
-} // namespace fif::gfx
+}// namespace fif::gfx

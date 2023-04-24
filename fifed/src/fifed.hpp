@@ -4,6 +4,6 @@
 #include "fif/core/event/event.hpp"
 
 class Fifed : public fif::core::Application {
-  public:
+public:
 	Fifed();
 };

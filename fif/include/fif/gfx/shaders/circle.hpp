@@ -17,4 +17,4 @@ namespace fif::gfx::shaders {
 			f_Color = vec4(v_Color.xyz, alpha * v_Color.a);
 		})";
 	}
-} // namespace fif::gfx::shaders
+}// namespace fif::gfx::shaders

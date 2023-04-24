@@ -5,7 +5,7 @@
 
 namespace fif::core {
 	class Scene {
-	  public:
+	public:
 		virtual ~Scene();
 
 		virtual void forEach(const std::function<void(Entity &ent)> &func);
@@ -15,7 +15,7 @@ namespace fif::core {
 
 		virtual inline Entity *createEntity(const std::string &name) { return &m_Entities.emplace_back(name); }
 
-	  protected:
+	protected:
 		std::vector<Entity> m_Entities;
 	};
-} // namespace fif::core
+}// namespace fif::core

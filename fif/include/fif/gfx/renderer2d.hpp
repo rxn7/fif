@@ -28,5 +28,5 @@ namespace fif::gfx {
 		void renderCircle(const glm::vec2 &position, float radius, u16 segmentCount = 0, const glm::u8vec4 &color = {255, 255, 255, 255});
 
 		void renderCircleFrag(const glm::vec2 &position, float radius, const glm::u8vec4 &color = {255, 255, 255, 255});
-	} // namespace Renderer2D
-} // namespace fif::gfx
+	}// namespace Renderer2D
+}// namespace fif::gfx

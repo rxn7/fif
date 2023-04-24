@@ -52,4 +52,4 @@ namespace fif::gfx {
 			   position.y - halfSize.y < m_Position.y + m_Size.y;
 		// clang-format on
 	}
-} // namespace fif::gfx
+}// namespace fif::gfx

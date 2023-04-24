@@ -32,13 +32,13 @@ namespace fif::gfx {
 
 		int status;
 		glGetProgramiv(m_ID, GL_LINK_STATUS, &status);
-		if (status == 0) {
+		if(status == 0) {
 			printInfoLog(m_ID);
 		}
 
 		glValidateProgram(m_ID);
 		glGetProgramiv(m_ID, GL_VALIDATE_STATUS, &status);
-		if (status == 0) {
+		if(status == 0) {
 			printInfoLog(m_ID);
 		}
 
@@ -67,7 +67,7 @@ namespace fif::gfx {
 
 		int status;
 		glGetShaderiv(id, GL_COMPILE_STATUS, &status);
-		if (status == 0) {
+		if(status == 0) {
 			int logLength;
 			glGetShaderiv(id, GL_INFO_LOG_LENGTH, &logLength);
 
@@ -84,7 +84,7 @@ namespace fif::gfx {
 
 	void Shader::registerUniform(const std::string &name) {
 		const auto it = m_UniformIDs.find(name);
-		if (it != m_UniformIDs.end()) {
+		if(it != m_UniformIDs.end()) {
 			FIF_LOG_ERROR("Uniform " << name << " already registered");
 			return;
 		}
@@ -95,7 +95,7 @@ namespace fif::gfx {
 
 	u32 Shader::getUniformLocation(const std::string &name) const {
 		const auto it = m_UniformIDs.find(name);
-		if (it == m_UniformIDs.end()) {
+		if(it == m_UniformIDs.end()) {
 			FIF_LOG_ERROR("Uniform " << name << " not found");
 			return 0;
 		}
@@ -129,4 +129,4 @@ namespace fif::gfx {
 	void Shader::setUniform(const std::string &name, const glm::mat4 &value) const {
 		glUniformMatrix4fv(getUniformLocation(name), 1, 0u, glm::value_ptr(value));
 	}
-} // namespace fif::gfx
+}// namespace fif::gfx

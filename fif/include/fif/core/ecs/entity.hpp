@@ -9,10 +9,10 @@
 
 namespace fif::core {
 	class Entity final {
-	  public:
+	public:
 		Entity(const std::string &name);
 
-		template <class T, class... Args> T *addComponent(Args &&...args) {
+		template<class T, class... Args> T *addComponent(Args &&...args) {
 			FIF_PROFILE_FUNC();
 			static_assert(std::is_base_of<Component, T>().value, "T is not a Component");
 
@@ -23,13 +23,13 @@ namespace fif::core {
 			return static_cast<T *>(comp.get());
 		}
 
-		template <class T> T *getComponent() {
+		template<class T> T *getComponent() {
 			FIF_PROFILE_FUNC();
 			static_assert(std::is_base_of<Component, T>().value, "T is not a Component");
 
-			for (std::unique_ptr<Component> &comp : m_Components) {
+			for(std::unique_ptr<Component> &comp : m_Components) {
 				T *c = dynamic_cast<T *>(comp.get());
-				if (c != nullptr)
+				if(c != nullptr)
 					return c;
 			}
 
@@ -48,9 +48,9 @@ namespace fif::core {
 		void render();
 		void onEvent(Event &event);
 
-	  private:
+	private:
 		bool m_DeleteQueued = false;
 		std::string m_Name;
 		std::vector<std::unique_ptr<Component>> m_Components;
 	};
-} // namespace fif::core
+}// namespace fif::core

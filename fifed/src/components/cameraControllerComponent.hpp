@@ -7,11 +7,11 @@
 #include "glm/vec2.hpp"
 
 class CameraControllerComponent final : public fif::core::Component {
-  public:
+public:
 	CameraControllerComponent(fif::gfx::OrthoCamera &camera);
 	COMPONENT_NAME(CameraControllerComponent);
 	void onEvent(fif::core::Event &event) override;
 
-  private:
+private:
 	fif::gfx::OrthoCamera &m_Camera;
 };

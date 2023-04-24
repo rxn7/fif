@@ -5,7 +5,7 @@
 
 namespace fif::gfx {
 	class OrthoCamera : public Camera {
-	  public:
+	public:
 		~OrthoCamera();
 
 		void update() override;
@@ -16,13 +16,13 @@ namespace fif::gfx {
 
 		inline glm::vec2 getSize() const { return m_Size; }
 
-	  public:
+	public:
 		static constexpr float SIZE = 500.0f;
 		float m_Zoom = 1.0f;
 		glm::vec2 m_Position;
 
-	  private:
+	private:
 		glm::vec2 m_Size;
 		float m_Aspect;
 	};
-} // namespace fif::gfx
+}// namespace fif::gfx

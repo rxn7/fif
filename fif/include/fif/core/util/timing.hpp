@@ -2,14 +2,14 @@
 
 namespace fif::core {
 	class Timing {
-	  public:
+	public:
 		static inline float getDeltaTime() { return m_Dt; }
 
-	  private:
+	private:
 		friend class Application;
 		static void update();
 
-	  private:
+	private:
 		static float m_Dt;
 	};
-} // namespace fif::core
+}// namespace fif::core

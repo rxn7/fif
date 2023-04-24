@@ -12,8 +12,8 @@ namespace fif::core {
 		float durationMs;
 	};
 
-	template <typename Func> class ScopeTimer {
-	  public:
+	template<typename Func> class ScopeTimer {
+	public:
 		ScopeTimer(const std::string &name, Func &&func) : m_Name(name), m_BeginTime(Clock::now()), m_Func(func) {}
 
 		~ScopeTimer() {
@@ -22,9 +22,9 @@ namespace fif::core {
 			m_Func(TimerResult{m_Name, durationMs});
 		}
 
-	  private:
+	private:
 		std::string m_Name;
 		Clock::time_point m_BeginTime;
 		Func m_Func;
 	};
-} // namespace fif::core
+}// namespace fif::core

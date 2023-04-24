@@ -5,7 +5,7 @@
 
 namespace fif::core {
 	class Rng {
-	  public:
+	public:
 		static void init();
 
 		static inline bool getBool() { return static_cast<bool>(std::uniform_int_distribution<>(0, 1)(s_Generator)); }
@@ -24,8 +24,8 @@ namespace fif::core {
 
 		static inline u8 getU8(i8 min, i8 max) { return std::uniform_int_distribution<u8>(min, max)(s_Generator); }
 
-	  private:
+	private:
 		static std::mt19937 s_Generator;
 		static std::random_device s_Device;
-	}; // namespace Rng
-} // namespace fif::core
+	};// namespace Rng
+}// namespace fif::core

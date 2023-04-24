@@ -10,8 +10,8 @@ namespace fif::core {
 		void beginFrame();
 		void addResult(const fif::core::TimerResult &result);
 		const std::vector<fif::core::TimerResult> &getResults();
-	} // namespace Profiler
-} // namespace fif::core
+	}// namespace Profiler
+}// namespace fif::core
 
 #ifdef FIF_PROFILING_ENABLED
 #define FIF_PROFILE_FUNC()                                                                                                                           \

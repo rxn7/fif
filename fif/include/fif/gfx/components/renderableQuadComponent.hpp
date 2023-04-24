@@ -4,12 +4,12 @@
 
 namespace fif::gfx {
 	class RenderableQuadComponent final : public RenderableComponent {
-	  public:
+	public:
 		COMPONENT_NAME(RenderableQuadComponent);
 
 		void onRender() override;
 
-	  public:
+	public:
 		glm::vec2 m_Size{50.0f, 50.0f};
 	};
-} // namespace fif::gfx
+}// namespace fif::gfx

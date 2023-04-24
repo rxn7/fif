@@ -4,9 +4,9 @@
 #define FIF_FUNCTION_NAME __PRETTY_FUNCTION__
 #elif defined(__DMC__) && (__DMC__ >= 0x810)
 #define FIF_FUNCTION_NAME __PRETTY_FUNCTION__
-#elif (defined(__FUNCSIG__) || (_MSC_VER))
+#elif(defined(__FUNCSIG__) || (_MSC_VER))
 #define FIF_FUNCTION_NAME __FUNCSIG__
-#elif (defined(__INTEL_COMPILER) && (__INTEL_COMPILER >= 600)) || (defined(__IBMCPP__) && (__IBMCPP__ >= 500))
+#elif(defined(__INTEL_COMPILER) && (__INTEL_COMPILER >= 600)) || (defined(__IBMCPP__) && (__IBMCPP__ >= 500))
 #define FIF_FUNCTION_NAME __FUNCTION__
 #elif defined(__BORLANDC__) && (__BORLANDC__ >= 0x550)
 #define FIF_FUNCTION_NAME __FUNC__

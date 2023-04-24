@@ -8,4 +8,4 @@ namespace fif::gfx {
 		FIF_ASSERT(mp_Transform != nullptr, "Entity with RenderableComponent must add "
 											"TransformComponent first");
 	}
-} // namespace fif::gfx
+}// namespace fif::gfx

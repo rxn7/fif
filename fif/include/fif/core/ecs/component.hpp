@@ -10,7 +10,7 @@ namespace fif::core {
 	class Component {
 		friend Entity;
 
-	  public:
+	public:
 		virtual ~Component() {}
 
 		virtual constexpr const char *getName() const = 0;
@@ -19,10 +19,10 @@ namespace fif::core {
 		virtual void onRender() {}
 		virtual void onEvent([[maybe_unused]] Event &event) {}
 
-	  protected:
+	protected:
 		Entity *mp_Entity;
 	};
-} // namespace fif::core
+}// namespace fif::core
 
 #define COMPONENT_NAME(x)                                                                                                                            \
 	constexpr const char *getName() const override { return #x; }

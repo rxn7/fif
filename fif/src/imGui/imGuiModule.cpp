@@ -47,7 +47,7 @@ namespace fif::imgui {
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 
-		for (const auto &renderFunc : m_RenderFunctions) {
+		for(const auto &renderFunc : m_RenderFunctions) {
 			renderFunc();
 		}
 
@@ -58,10 +58,10 @@ namespace fif::imgui {
 	void ImGuiModule::onEvent(core::Event &event) {
 		ImGuiIO &io = ImGui::GetIO();
 
-		if (event.isInCategory(core::EventCategory::Mouse))
+		if(event.isInCategory(core::EventCategory::Mouse))
 			event.m_Handled |= io.WantCaptureMouse;
 
-		else if (event.isInCategory(core::EventCategory::Keyboard))
+		else if(event.isInCategory(core::EventCategory::Keyboard))
 			event.m_Handled |= io.WantCaptureKeyboard;
 	}
 
@@ -142,4 +142,4 @@ namespace fif::imgui {
 		style.PopupRounding = 4;
 		style.ChildRounding = 4;
 	}
-} // namespace fif::imgui
+}// namespace fif::imgui

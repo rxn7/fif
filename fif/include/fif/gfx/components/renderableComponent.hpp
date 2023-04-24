@@ -5,15 +5,15 @@
 
 namespace fif::gfx {
 	class RenderableComponent : public core::Component {
-	  public:
+	public:
 		virtual void onCreate() override;
 		virtual void onRender() override = 0;
 
-	  public:
+	public:
 		glm::u8vec4 m_Color;
 		TransformComponent *mp_Transform;
 
-	  protected:
+	protected:
 		RenderableComponent() {}
 	};
-} // namespace fif::gfx
+}// namespace fif::gfx

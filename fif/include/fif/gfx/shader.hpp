@@ -17,7 +17,7 @@
 
 namespace fif::gfx {
 	class Shader final {
-	  public:
+	public:
 		Shader(const std::string &vertexSrc, const std::string &fragmentSrc);
 		~Shader();
 
@@ -32,13 +32,13 @@ namespace fif::gfx {
 		void setUniform(const std::string &name, const glm::mat4 &value) const;
 		static void unbind();
 
-	  public:
-	  private:
+	public:
+	private:
 		u32 getUniformLocation(const std::string &name) const;
 		static u32 compile(int type, const char *src);
 
-	  private:
+	private:
 		std::unordered_map<std::string, u32> m_UniformIDs;
 		u32 m_ID;
 	};
-} // namespace fif::gfx
+}// namespace fif::gfx

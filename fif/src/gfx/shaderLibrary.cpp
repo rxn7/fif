@@ -29,4 +29,4 @@ namespace fif::gfx {
 		auto result = s_Shaders.insert({name, std::make_unique<Shader>(vertexSrc, fragmentSrc)});
 		return *result.first->second;
 	}
-} // namespace fif::gfx
+}// namespace fif::gfx

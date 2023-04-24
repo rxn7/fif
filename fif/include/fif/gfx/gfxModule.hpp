@@ -6,7 +6,7 @@
 
 namespace fif::gfx {
 	class GfxModule final : public core::Module {
-	  public:
+	public:
 		FIF_MODULE_NAME(GFX)
 
 		GfxModule();
@@ -16,4 +16,4 @@ namespace fif::gfx {
 		void onRender() override;
 		void onEvent(core::Event &event) override;
 	};
-} // namespace fif::gfx
+}// namespace fif::gfx

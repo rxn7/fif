@@ -20,7 +20,7 @@ namespace fif::core {
 		mp_Window = std::make_unique<Window>(*this, windowProperties);
 		gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress));
 
-		if (createDefaultScene) {
+		if(createDefaultScene) {
 			mp_Scene = std::make_shared<Scene>();
 		}
 
@@ -34,11 +34,11 @@ namespace fif::core {
 	void Application::start() {
 		FIF_PROFILE_FUNC();
 
-		for (const auto &mod : m_Modules) {
+		for(const auto &mod : m_Modules) {
 			mod->onStart(*this);
 		}
 
-		while (!mp_Window->getShouldClose()) {
+		while(!mp_Window->getShouldClose()) {
 			gameLoop();
 		}
 	}
@@ -60,11 +60,11 @@ namespace fif::core {
 	void Application::update() {
 		FIF_PROFILE_FUNC();
 
-		for (auto &mod : m_Modules) {
+		for(auto &mod : m_Modules) {
 			mod->onUpdate();
 		}
 
-		if (mp_Scene) {
+		if(mp_Scene) {
 			mp_Scene->forEach([&](Entity &ent) { ent.update(); });
 		}
 	}
@@ -72,11 +72,11 @@ namespace fif::core {
 	void Application::render() {
 		FIF_PROFILE_FUNC();
 
-		for (auto &mod : m_Modules) {
+		for(auto &mod : m_Modules) {
 			mod->onRender();
 		}
 
-		if (mp_Scene) {
+		if(mp_Scene) {
 			mp_Scene->forEach([&](Entity &ent) { ent.render(); });
 		}
 
@@ -86,12 +86,12 @@ namespace fif::core {
 	void Application::onEvent(Event &event) {
 		FIF_PROFILE_FUNC();
 
-		for (auto &mod : m_Modules) {
+		for(auto &mod : m_Modules) {
 			mod->onEvent(event);
 		}
 
-		if (mp_Scene) {
+		if(mp_Scene) {
 			mp_Scene->forEach([&](Entity &ent) { ent.onEvent(event); });
 		}
 	}
-} // namespace fif::core
+}// namespace fif::core
