@@ -1,6 +1,6 @@
 #pragma once
 
-#include "editorScene.hpp"
+#include "editor_scene.hpp"
 #include "fif/core/module.hpp"
 
 class EditorModule final : public fif::core::Module {
@@ -10,9 +10,9 @@ public:
 	EditorModule();
 	virtual ~EditorModule();
 
-	void onStart(fif::core::Application &app) override;
+	void on_start(fif::core::Application &app) override;
 
 private:
-	void onRenderImGui();
+	void on_render_im_gui();
 	std::shared_ptr<EditorScene> mp_Scene;
 };

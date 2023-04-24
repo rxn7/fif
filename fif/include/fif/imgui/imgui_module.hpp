@@ -13,14 +13,14 @@ namespace fif::imgui {
 		ImGuiModule();
 		virtual ~ImGuiModule();
 
-		inline void addRenderFunc(const std::function<void()> &renderFunc) { m_RenderFunctions.push_back(renderFunc); }
+		inline void add_render_func(const std::function<void()> &renderFunc) { m_RenderFunctions.push_back(renderFunc); }
 
-		void onStart(core::Application &app) override final;
-		void onRender() override final;
-		void onEvent(core::Event &event) override final;
+		void on_start(core::Application &app) override final;
+		void on_render() override final;
+		void on_event(core::Event &event) override final;
 
 	private:
-		void applyDefaultTheme() const;
+		void apply_default_theme() const;
 
 	private:
 		std::vector<std::function<void()>> m_RenderFunctions;

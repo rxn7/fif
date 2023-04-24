@@ -6,21 +6,21 @@ namespace fif::core {
 	void Entity::update() {
 		FIF_PROFILE_FUNC();
 		for(std::unique_ptr<Component> &comp : m_Components) {
-			comp->onUpdate();
+			comp->on_update();
 		}
 	}
 
 	void Entity::render() {
 		FIF_PROFILE_FUNC();
 		for(std::unique_ptr<Component> &comp : m_Components) {
-			comp->onRender();
+			comp->on_render();
 		}
 	}
 
-	void Entity::onEvent(Event &event) {
+	void Entity::on_event(Event &event) {
 		FIF_PROFILE_FUNC();
 		for(std::unique_ptr<Component> &comp : m_Components) {
-			comp->onEvent(event);
+			comp->on_event(event);
 		}
 	}
 }// namespace fif::core

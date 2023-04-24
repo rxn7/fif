@@ -12,11 +12,11 @@ namespace fif::gfx {
 		VertexBuffer(u32 vertexCount, u32 elementCount);
 
 		void render() const;
-		void setVertices(const Vertex *vertices, u32 count);
-		void setElements(const u16 *elements, u32 count);
+		void set_vertices(const Vertex *vertices, u32 count);
+		void set_elements(const u16 *elements, u32 count);
 
 	private:
-		static void setupVertexAttributes();
+		static void setup_vertex_attributes();
 
 	protected:
 		u32 m_VertexCount;

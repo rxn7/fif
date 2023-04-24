@@ -6,8 +6,8 @@
 namespace fif::core {
 	class KeyEvent : public Event {
 	public:
-		EventCategory getCategory() const override { return EventCategory::Keyboard; }
-		inline u32 getKeyCode() const { return m_KeyCode; }
+		EventCategory get_category() const override { return EventCategory::Keyboard; }
+		inline u32 get_key_code() const { return m_KeyCode; }
 
 	protected:
 		KeyEvent(u32 keyCode) : m_KeyCode(keyCode) {}

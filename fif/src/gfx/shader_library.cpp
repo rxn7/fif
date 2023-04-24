@@ -1,4 +1,4 @@
-#include "fif/gfx/shaderLibrary.hpp"
+#include "fif/gfx/shader_library.hpp"
 #include "fif/core/util/assertion.hpp"
 #include "fif/gfx/shaders/circle.hpp"
 #include "fif/gfx/shaders/simple.hpp"
@@ -11,11 +11,11 @@ namespace fif::gfx {
 	void ShaderLibrary::init() {
 		{
 			Shader &shader = add("circle", shaders::Simple::VERTEX, shaders::Circle::FRAGMENT);
-			shader.registerUniform("u_MVP");
+			shader.register_uniform("u_MVP");
 		}
 		{
 			Shader &shader = add("simple", shaders::Simple::VERTEX, shaders::Simple::FRAGMENT);
-			shader.registerUniform("u_MVP");
+			shader.register_uniform("u_MVP");
 		}
 	}
 

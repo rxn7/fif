@@ -1,8 +1,8 @@
 #include "fif/core/window.hpp"
 #include "fif/core/application.hpp"
-#include "fif/core/event/keyEvent.hpp"
-#include "fif/core/event/mouseEvent.hpp"
-#include "fif/core/event/windowEvent.hpp"
+#include "fif/core/event/key_event.hpp"
+#include "fif/core/event/mouse_event.hpp"
+#include "fif/core/event/window_event.hpp"
 #include "fif/core/opengl.hpp"
 #include "fif/core/profiler.hpp"
 #include "fif/core/util/assertion.hpp"
@@ -27,13 +27,13 @@ namespace fif::core {
 			Window *window = FIF_GET_WINDOW_FROM_GLFW_WINDOW(glfwWindow);
 			WindowResizeEvent event({width, height});
 			window->m_Size = glm::i32vec2(width, height);
-			window->m_App.onEvent(event);
+			window->m_App.on_event(event);
 		});
 
 		glfwSetWindowCloseCallback(mp_GlfwWindow, []([[maybe_unused]] GLFWwindow *glfwWindow) {
 			Window *window = FIF_GET_WINDOW_FROM_GLFW_WINDOW(glfwWindow);
 			WindowCloseEvent event;
-			window->m_App.onEvent(event);
+			window->m_App.on_event(event);
 		});
 
 		glfwSwapInterval(static_cast<int>(props.vsync));
@@ -44,17 +44,17 @@ namespace fif::core {
 		glfwDestroyWindow(mp_GlfwWindow);
 	}
 
-	void Window::endFrame() {
+	void Window::end_frame() {
 		FIF_PROFILE_FUNC();
 		glfwSwapBuffers(mp_GlfwWindow);
 		glfwPollEvents();
 	}
 
-	bool Window::getShouldClose() const {
+	bool Window::get_should_close() const {
 		return glfwWindowShouldClose(mp_GlfwWindow) != 0;
 	}
 
-	void Window::setShouldClose(bool value) {
+	void Window::set_should_close(bool value) {
 		glfwSetWindowShouldClose(mp_GlfwWindow, static_cast<int>(value));
 	}
 }// namespace fif::core

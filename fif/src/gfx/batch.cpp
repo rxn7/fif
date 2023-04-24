@@ -12,8 +12,8 @@ namespace fif::gfx {
 			return;
 		}
 
-		m_Buffer.setVertices(m_Vertices.data(), m_Vertices.size());
-		m_Buffer.setElements(m_Elements.data(), m_Elements.size());
+		m_Buffer.set_vertices(m_Vertices.data(), m_Vertices.size());
+		m_Buffer.set_elements(m_Elements.data(), m_Elements.size());
 
 		m_Buffer.render();
 

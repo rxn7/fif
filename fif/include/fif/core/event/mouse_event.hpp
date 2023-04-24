@@ -11,9 +11,9 @@ namespace fif::core {
 		MouseMovedEvent(const glm::vec2 &position, const glm::vec2 &delta) : m_Position(position), m_Delta(delta) {}
 
 		FIF_EVENT_TYPE_DECL(EventType::MouseMoved);
-		EventCategory getCategory() const override { return EventCategory::Mouse; }
-		inline const glm::vec2 &getPosition() const { return m_Position; }
-		inline const glm::vec2 &getDelta() const { return m_Delta; }
+		EventCategory get_category() const override { return EventCategory::Mouse; }
+		inline const glm::vec2 &get_position() const { return m_Position; }
+		inline const glm::vec2 &get_delta() const { return m_Delta; }
 
 	protected:
 		glm::vec2 m_Position;
@@ -25,8 +25,8 @@ namespace fif::core {
 		MouseScrolledEvent(const glm::vec2 &value) : m_Value(value) {}
 
 		FIF_EVENT_TYPE_DECL(EventType::MouseScrolled);
-		EventCategory getCategory() const override { return EventCategory::Mouse; }
-		inline const glm::vec2 &getValue() const { return m_Value; }
+		EventCategory get_category() const override { return EventCategory::Mouse; }
+		inline const glm::vec2 &get_value() const { return m_Value; }
 
 	protected:
 		glm::vec2 m_Value;
@@ -34,8 +34,8 @@ namespace fif::core {
 
 	class MouseButtonEvent : public Event {
 	public:
-		inline u32 getButton() const { return m_Button; }
-		EventCategory getCategory() const override { return EventCategory::Mouse; }
+		inline u32 get_button() const { return m_Button; }
+		EventCategory get_category() const override { return EventCategory::Mouse; }
 
 	protected:
 		MouseButtonEvent(u32 btn) : m_Button(btn) {}

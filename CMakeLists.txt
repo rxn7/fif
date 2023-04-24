@@ -5,11 +5,8 @@ if(NOT CMAKE_BUILD_TYPE)
    set(CMAKE_BUILD_TYPE Release)
 endif()
 
-if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-   add_compile_options(-fdiagnostics-color=always)
-elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-   add_compile_options(-fcolor-diagnostics)
-endif()
+add_compile_options(-fdiagnostics-color=always)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 add_subdirectory(fif)
 add_subdirectory(fifed)

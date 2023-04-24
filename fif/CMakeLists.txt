@@ -32,6 +32,7 @@ function(build_module target dir libs)
   target_link_libraries(${target} ${libs})
 
   target_compile_options(${target} PUBLIC -Wall -Wextra)
+  set_target_properties(${target} PROPERTIES CMAKE_CXX_CLANG_TIDY clang-tidy --fix --checks=-*,readability-* -format-style="file" -header-filter=${CMAKE_CURRENT_SOURCE_DIR})
 endfunction()
 
 if(FIF_BUILD_CORE)
@@ -47,7 +48,7 @@ if(FIF_BUILD_INPUT)
 endif()
 
 if(FIF_BUILD_IMGUI)
-  build_module(fif-imgui imGui "fif-core;ImGui")
+  build_module(fif-imgui imgui "fif-core;ImGui")
 endif()
 
 set(GLFW_BUILD_EXAMPLES OFF CACHE INTERNAL "Build GLFW examples")

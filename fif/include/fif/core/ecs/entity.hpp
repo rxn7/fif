@@ -12,18 +12,18 @@ namespace fif::core {
 	public:
 		Entity(const std::string &name);
 
-		template<class T, class... Args> T *addComponent(Args &&...args) {
+		template<class T, class... Args> T *add_component(Args &&...args) {
 			FIF_PROFILE_FUNC();
 			static_assert(std::is_base_of<Component, T>().value, "T is not a Component");
 
 			std::unique_ptr<Component> &comp = m_Components.emplace_back(new T(args...));
 			comp->mp_Entity = this;
-			comp->onCreate();
+			comp->on_create();
 
 			return static_cast<T *>(comp.get());
 		}
 
-		template<class T> T *getComponent() {
+		template<class T> T *get_component() {
 			FIF_PROFILE_FUNC();
 			static_assert(std::is_base_of<Component, T>().value, "T is not a Component");
 
@@ -36,17 +36,17 @@ namespace fif::core {
 			return nullptr;
 		}
 
-		inline const std::vector<std::unique_ptr<Component>> &getComponents() const { return m_Components; }
+		inline const std::vector<std::unique_ptr<Component>> &get_components() const { return m_Components; }
 
-		inline bool isDeleteQueued() const { return m_DeleteQueued; }
+		inline bool is_delete_queued() const { return m_DeleteQueued; }
 
-		inline const std::string &getName() const { return m_Name; }
+		inline const std::string &get_name() const { return m_Name; }
 
-		inline void queueDelete() { m_DeleteQueued = true; }
+		inline void queue_delete() { m_DeleteQueued = true; }
 
 		void update();
 		void render();
-		void onEvent(Event &event);
+		void on_event(Event &event);
 
 	private:
 		bool m_DeleteQueued = false;

@@ -9,7 +9,7 @@ namespace fif::gfx {
 
 		virtual void update() {}
 
-		inline const glm::mat4 &getMatrix() const { return m_CameraMatrix; }
+		inline const glm::mat4 &get_matrix() const { return m_CameraMatrix; }
 
 	protected:
 		glm::mat4 m_CameraMatrix;

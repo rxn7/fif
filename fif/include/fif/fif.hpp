@@ -1,3 +1,3 @@
 #pragma once
 
-#include "fif/core/entryPoint.hpp"
+#include "fif/core/entry_point.hpp"

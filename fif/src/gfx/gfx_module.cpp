@@ -1,13 +1,13 @@
-#include "fif/gfx/gfxModule.hpp"
+#include "fif/gfx/gfx_module.hpp"
 #include "fif/core/application.hpp"
 #include "fif/core/event/event.hpp"
-#include "fif/core/event/eventDispatcher.hpp"
-#include "fif/core/event/windowEvent.hpp"
+#include "fif/core/event/event_dispatcher.hpp"
+#include "fif/core/event/window_event.hpp"
 #include "fif/core/module.hpp"
 #include "fif/core/opengl.hpp"
 #include "fif/core/util/assertion.hpp"
 #include "fif/gfx/renderer2d.hpp"
-#include "fif/gfx/shaderLibrary.hpp"
+#include "fif/gfx/shader_library.hpp"
 
 #include <memory>
 
@@ -28,18 +28,18 @@ namespace fif::gfx {
 		Renderer2D::init();
 	}
 
-	void GfxModule::onUpdate() {
+	void GfxModule::on_update() {
 		glClear(GL_COLOR_BUFFER_BIT);
 		Renderer2D::begin();
 	}
 
-	void GfxModule::onRender() {
+	void GfxModule::on_render() {
 		Renderer2D::end();
 	}
 
-	void GfxModule::onEvent(fif::core::Event &event) {
+	void GfxModule::on_event(fif::core::Event &event) {
 		fif::core::EventDispatcher::dispatch<fif::core::WindowResizeEvent>(event, [&](fif::core::WindowResizeEvent &resizeEvent) {
-			glViewport(0, 0, resizeEvent.getSize().x, resizeEvent.getSize().y);
+			glViewport(0, 0, resizeEvent.get_size().x, resizeEvent.get_size().y);
 			return true;
 		});
 	}

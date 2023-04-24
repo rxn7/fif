@@ -22,19 +22,19 @@ namespace fif::gfx {
 		~Shader();
 
 		void bind() const;
-		void registerUniform(const std::string &name);
-		void setUniform(const std::string &name, i32 value) const;
-		void setUniform(const std::string &name, f32 value) const;
-		void setUniform(const std::string &name, const glm::vec2 &value) const;
-		void setUniform(const std::string &name, const glm::vec3 &value) const;
-		void setUniform(const std::string &name, const glm::vec4 &value) const;
-		void setUniform(const std::string &name, const glm::mat3 &value) const;
-		void setUniform(const std::string &name, const glm::mat4 &value) const;
+		void register_uniform(const std::string &name);
+		void set_uniform(const std::string &name, i32 value) const;
+		void set_uniform(const std::string &name, f32 value) const;
+		void set_uniform(const std::string &name, const glm::vec2 &value) const;
+		void set_uniform(const std::string &name, const glm::vec3 &value) const;
+		void set_uniform(const std::string &name, const glm::vec4 &value) const;
+		void set_uniform(const std::string &name, const glm::mat3 &value) const;
+		void set_uniform(const std::string &name, const glm::mat4 &value) const;
 		static void unbind();
 
 	public:
 	private:
-		u32 getUniformLocation(const std::string &name) const;
+		u32 get_uniform_location(const std::string &name) const;
 		static u32 compile(int type, const char *src);
 
 	private:

@@ -1,10 +1,10 @@
 #include "fifed.hpp"
-#include "editorModule.hpp"
+#include "editor_module.hpp"
 
 #include "fif/fif.hpp"
-#include "fif/gfx/gfxModule.hpp"
-#include "fif/imGui/imGuiModule.hpp"
-#include "fif/input/inputModule.hpp"
+#include "fif/gfx/gfx_module.hpp"
+#include "fif/imgui/imgui_module.hpp"
+#include "fif/input/input_module.hpp"
 
 const fif::core::WindowProperties WINDOW_PROPS = {
 	.title = "fifed",
@@ -13,12 +13,12 @@ const fif::core::WindowProperties WINDOW_PROPS = {
 };
 
 Fifed::Fifed() : fif::core::Application(WINDOW_PROPS, false) {
-	attachModule<EditorModule>();
-	attachModule<fif::input::InputModule>();
-	attachModule<fif::gfx::GfxModule>();
-	attachModule<fif::imgui::ImGuiModule>();
+	attach_module<EditorModule>();
+	attach_module<fif::input::InputModule>();
+	attach_module<fif::gfx::GfxModule>();
+	attach_module<fif::imgui::ImGuiModule>();
 }
 
-fif::core::Application *getApplication() {
+fif::core::Application *get_application() {
 	return new Fifed();
 }

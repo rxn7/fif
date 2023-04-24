@@ -1,7 +1,7 @@
-#include "fif/imGui/imGuiModule.hpp"
-#include "event/eventType.hpp"
+#include "fif/imgui/imgui_module.hpp"
 #include "fif/core/application.hpp"
 #include "fif/core/event/event.hpp"
+#include "fif/core/event/event_type.hpp"
 #include "fif/core/profiler.hpp"
 #include "fif/core/util/assertion.hpp"
 
@@ -25,7 +25,7 @@ namespace fif::imgui {
 		ImGui::DestroyContext();
 	}
 
-	void ImGuiModule::onStart(core::Application &app) {
+	void ImGuiModule::on_start(core::Application &app) {
 		FIF_PROFILE_FUNC();
 		IMGUI_CHECKVERSION();
 
@@ -35,12 +35,12 @@ namespace fif::imgui {
 		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
 		ImGui_ImplOpenGL3_Init("#version 300 es");
-		ImGui_ImplGlfw_InitForOpenGL(app.getWindow().getGlfwWindow(), true);
+		ImGui_ImplGlfw_InitForOpenGL(app.get_window().get_glfw_window(), true);
 
-		applyDefaultTheme();
+		apply_default_theme();
 	}
 
-	void ImGuiModule::onRender() {
+	void ImGuiModule::on_render() {
 		FIF_PROFILE_FUNC();
 
 		ImGui_ImplOpenGL3_NewFrame();
@@ -55,17 +55,17 @@ namespace fif::imgui {
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	}
 
-	void ImGuiModule::onEvent(core::Event &event) {
+	void ImGuiModule::on_event(core::Event &event) {
 		ImGuiIO &io = ImGui::GetIO();
 
-		if(event.isInCategory(core::EventCategory::Mouse))
+		if(event.is_in_category(core::EventCategory::Mouse))
 			event.m_Handled |= io.WantCaptureMouse;
 
-		else if(event.isInCategory(core::EventCategory::Keyboard))
+		else if(event.is_in_category(core::EventCategory::Keyboard))
 			event.m_Handled |= io.WantCaptureKeyboard;
 	}
 
-	void ImGuiModule::applyDefaultTheme() const {
+	void ImGuiModule::apply_default_theme() const {
 		ImGuiStyle &style = ImGui::GetStyle();
 		ImVec4(&colors)[] = style.Colors;
 
