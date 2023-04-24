@@ -15,6 +15,7 @@ add_compile_options(-fPIC -fno-exceptions)
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
   add_compile_options(-O2)
+  add_compile_options(-g3)
   add_compile_definitions(FIF_DEBUG)
   add_compile_definitions(FIF_PROFILING_ENABLED)
 elseif(CMAKE_BUILD_TYPE STREQUAL "Release")

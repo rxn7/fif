@@ -5,22 +5,19 @@ namespace fif::core {
 
 	void Entity::update() {
 		FIF_PROFILE_FUNC();
-		for(std::unique_ptr<Component> &comp : m_Components) {
+		for(std::unique_ptr<Component> &comp : m_Components)
 			comp->on_update();
-		}
 	}
 
 	void Entity::render() {
 		FIF_PROFILE_FUNC();
-		for(std::unique_ptr<Component> &comp : m_Components) {
+		for(std::unique_ptr<Component> &comp : m_Components)
 			comp->on_render();
-		}
 	}
 
 	void Entity::on_event(Event &event) {
 		FIF_PROFILE_FUNC();
-		for(std::unique_ptr<Component> &comp : m_Components) {
+		for(std::unique_ptr<Component> &comp : m_Components)
 			comp->on_event(event);
-		}
 	}
 }// namespace fif::core

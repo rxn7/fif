@@ -66,6 +66,7 @@ namespace fif::core {
 
 		if(mp_Scene) {
 			mp_Scene->for_each([&](Entity &ent) { ent.update(); });
+			mp_Scene->erase_deleted_entities();
 		}
 	}
 
