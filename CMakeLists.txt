@@ -6,7 +6,6 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 add_compile_options(-fdiagnostics-color=always)
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 add_subdirectory(fif)
 add_subdirectory(fifed)
