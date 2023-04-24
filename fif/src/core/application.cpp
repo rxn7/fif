@@ -8,11 +8,6 @@
 #include "fif/core/util/rng.hpp"
 #include "fif/core/util/timing.hpp"
 
-#include <algorithm>
-#include <chrono>
-
-using namespace std::chrono;
-
 namespace fif::core {
 	Application *fif::core::Application::s_Instance = nullptr;
 
