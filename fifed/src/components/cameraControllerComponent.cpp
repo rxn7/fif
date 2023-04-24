@@ -34,7 +34,7 @@ void CameraControllerComponent::onEvent(fif::core::Event &event) {
 	});
 
 	fif::core::EventDispatcher::dispatch<fif::core::MouseMovedEvent>(event, [&](fif::core::MouseMovedEvent &movedEvent) {
-		if (!fif::input::InputModule::getInstance()->isButtonHeld(GLFW_MOUSE_BUTTON_RIGHT)) {
+		if (movedEvent.isHanlded() || !fif::input::InputModule::getInstance()->isButtonHeld(GLFW_MOUSE_BUTTON_RIGHT)) {
 			return false;
 		}
 

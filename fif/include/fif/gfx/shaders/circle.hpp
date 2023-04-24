@@ -13,7 +13,7 @@ namespace fif::gfx::shaders {
 
 		void main() {
 			float dist = distance(vec2(0.5, 0.5), v_UV) * 2.0;
-			float alpha = 1.0 - smoothstep(0.99, 1.0, clamp(dist, 0.0, 1.0));
+			float alpha = 1.0 - smoothstep(0.995, 1.0, clamp(dist, 0.0, 1.0));
 			f_Color = vec4(v_Color.xyz, alpha * v_Color.a);
 		})";
 	}

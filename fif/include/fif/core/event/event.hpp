@@ -8,14 +8,13 @@
 
 namespace fif::core {
 	class Event {
-		friend class EventDispatcher;
-
 	  public:
 		virtual EventType getType() const = 0;
 		virtual EventCategory getCategory() const = 0;
 		inline bool isHanlded() const { return m_Handled; }
+		inline bool isInCategory(EventCategory category) const { return static_cast<int>(getCategory()) & static_cast<int>(category); }
 
-	  protected:
+	  public:
 		bool m_Handled = false;
 	};
 } // namespace fif::core

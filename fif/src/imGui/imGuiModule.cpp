@@ -1,4 +1,5 @@
 #include "fif/imGui/imGuiModule.hpp"
+#include "event/eventType.hpp"
 #include "fif/core/application.hpp"
 #include "fif/core/event/event.hpp"
 #include "fif/core/profiler.hpp"
@@ -21,6 +22,7 @@ namespace fif::imgui {
 		FIF_PROFILE_FUNC();
 		ImGui_ImplOpenGL3_Shutdown();
 		ImGui_ImplGlfw_Shutdown();
+		ImGui::DestroyContext();
 	}
 
 	void ImGuiModule::onStart(core::Application &app) {
@@ -51,6 +53,16 @@ namespace fif::imgui {
 
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+	}
+
+	void ImGuiModule::onEvent(core::Event &event) {
+		ImGuiIO &io = ImGui::GetIO();
+
+		if (event.isInCategory(core::EventCategory::Mouse))
+			event.m_Handled |= io.WantCaptureMouse;
+
+		else if (event.isInCategory(core::EventCategory::Keyboard))
+			event.m_Handled |= io.WantCaptureKeyboard;
 	}
 
 	void ImGuiModule::applyDefaultTheme() const {

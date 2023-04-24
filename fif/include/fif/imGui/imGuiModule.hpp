@@ -1,6 +1,7 @@
 #pragma once
 
 #include "fif/core/module.hpp"
+
 #include <functional>
 
 namespace fif::imgui {
@@ -14,8 +15,9 @@ namespace fif::imgui {
 
 		inline void addRenderFunc(const std::function<void()> &renderFunc) { m_RenderFunctions.push_back(renderFunc); }
 
-		void onStart(core::Application &app) override;
-		void onRender() override;
+		void onStart(core::Application &app) override final;
+		void onRender() override final;
+		void onEvent(core::Event &event) override final;
 
 	  private:
 		void applyDefaultTheme() const;
