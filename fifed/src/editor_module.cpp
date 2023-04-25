@@ -1,5 +1,7 @@
 #include "editor_module.hpp"
+#include "color.hpp"
 #include "components/camera_controller_component.hpp"
+#include "components/grid_renderer_component.hpp"
 
 #include "fif/core/application.hpp"
 #include "fif/core/ecs/entity.hpp"
@@ -17,6 +19,7 @@
 #include "fif/imgui/imgui_module.hpp"
 #include "fif/input/input_module.hpp"
 
+#include "glm/gtc/type_ptr.hpp"
 #include "imgui.h"
 
 EditorModule::EditorModule() {}
@@ -27,8 +30,9 @@ void EditorModule::on_start(fif::core::Application &app) {
 
 	fif::imgui::ImGuiModule::get_instance()->add_render_func(std::bind(&EditorModule::on_render_im_gui, this));
 
-	fif::core::Entity *cameraController = mp_Scene->create_editor_entity("CameraController");
-	cameraController->add_component<CameraControllerComponent>(fif::gfx::Renderer2D::get_camera());
+	mp_EditorEntity = mp_Scene->create_editor_entity("CameraController");
+	mp_EditorEntity->add_component<CameraControllerComponent>();
+	mp_GridComponent = mp_EditorEntity->add_component<GridRendererComponent>();
 }
 
 void EditorModule::on_render_im_gui() {
@@ -44,6 +48,18 @@ void EditorModule::on_render_im_gui() {
 			ImGui::Text("Quads: %i", rendererStats.quads);
 			ImGui::Text("Vertices: %i", rendererStats.vertices);
 			ImGui::Text("Elements: %i", rendererStats.elements);
+			ImGui::TreePop();
+		}
+
+		if(ImGui::TreeNode("Grid")) {
+			ImGui::Checkbox("Enabled", &mp_GridComponent->m_Enabled);
+			ImGui::SliderFloat("Line tickness", &mp_GridComponent->m_LineThickness, 0.0f, 1.0f);
+			ImGui::SliderFloat("Cell size", &mp_GridComponent->m_CellSize, 0.1f, 100.0f);
+
+			glm::vec4 colorNormalized = fif::gfx::get_normalized_color(mp_GridComponent->m_LineColor);
+			ImGui::ColorEdit4("Line color", glm::value_ptr(colorNormalized));
+			mp_GridComponent->m_LineColor = fif::gfx::get_color_from_normalized(colorNormalized);
+
 			ImGui::TreePop();
 		}
 	}

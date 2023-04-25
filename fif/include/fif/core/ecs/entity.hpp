@@ -44,8 +44,8 @@ namespace fif::core {
 
 		inline void queue_delete() { m_DeleteQueued = true; }
 
-		void update();
-		void render();
+		void on_update();
+		void on_render();
 		void on_event(Event &event);
 
 	private:

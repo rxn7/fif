@@ -4,9 +4,8 @@ namespace fif::core {
 	Scene::~Scene() {}
 
 	void Scene::for_each(const std::function<void(Entity &ent)> &func) {
-		for(Entity &ent : m_Entities) {
+		for(Entity &ent : m_Entities)
 			func(ent);
-		}
 	}
 
 	void Scene::erase_deleted_entities() {
@@ -17,7 +16,7 @@ namespace fif::core {
 				continue;
 			}
 
-			(entIter++)->update();
+			(entIter++)->on_update();
 		}
 	}
 }// namespace fif::core

@@ -1,6 +1,6 @@
-#include "fif/gfx/shader.hpp"
+#pragma once
 
-#include <memory>
+#include "fif/gfx/shader.hpp"
 
 namespace fif::gfx::shaders {
 	namespace Simple {
@@ -23,7 +23,6 @@ namespace fif::gfx::shaders {
 
 		const std::string FRAGMENT = FIF_GLSL_VERSION FIF_GLSL_PRECISION
 			R"(
-
 		in vec4 v_Color;
 		out vec4 f_Color;
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "fif/core/types.hpp"
+#include "fif/gfx/color.hpp"
 
 #include "glm/mat3x3.hpp"
 #include "glm/mat4x4.hpp"
@@ -22,19 +23,20 @@ namespace fif::gfx {
 		~Shader();
 
 		void bind() const;
-		void register_uniform(const std::string &name);
-		void set_uniform(const std::string &name, i32 value) const;
-		void set_uniform(const std::string &name, f32 value) const;
-		void set_uniform(const std::string &name, const glm::vec2 &value) const;
-		void set_uniform(const std::string &name, const glm::vec3 &value) const;
-		void set_uniform(const std::string &name, const glm::vec4 &value) const;
-		void set_uniform(const std::string &name, const glm::mat3 &value) const;
-		void set_uniform(const std::string &name, const glm::mat4 &value) const;
+		u32 register_uniform(const std::string &name);
+		void set_uniform(const std::string &name, i32 value);
+		void set_uniform(const std::string &name, f32 value);
+		void set_uniform(const std::string &name, const Color &value);
+		void set_uniform(const std::string &name, const glm::vec2 &value);
+		void set_uniform(const std::string &name, const glm::vec3 &value);
+		void set_uniform(const std::string &name, const glm::vec4 &value);
+		void set_uniform(const std::string &name, const glm::mat3 &value);
+		void set_uniform(const std::string &name, const glm::mat4 &value);
 		static void unbind();
 
 	public:
 	private:
-		u32 get_uniform_location(const std::string &name) const;
+		u32 get_uniform_location(const std::string &name);
 		static u32 compile(int type, const char *src);
 
 	private:

@@ -20,9 +20,8 @@ namespace fif::core {
 		mp_Window = std::make_unique<Window>(*this, windowProperties);
 		gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress));
 
-		if(createDefaultScene) {
+		if(createDefaultScene)
 			mp_Scene = std::make_shared<Scene>();
-		}
 
 		Rng::init();
 	}
@@ -34,13 +33,11 @@ namespace fif::core {
 	void Application::start() {
 		FIF_PROFILE_FUNC();
 
-		for(const auto &mod : m_Modules) {
+		for(const auto &mod : m_Modules)
 			mod->on_start(*this);
-		}
 
-		while(!mp_Window->get_should_close()) {
+		while(!mp_Window->get_should_close())
 			game_loop();
-		}
 	}
 
 	void Application::game_loop() {
@@ -60,26 +57,23 @@ namespace fif::core {
 	void Application::update() {
 		FIF_PROFILE_FUNC();
 
-		for(auto &mod : m_Modules) {
-			mod->on_update();
-		}
-
 		if(mp_Scene) {
-			mp_Scene->for_each([&](Entity &ent) { ent.update(); });
+			mp_Scene->for_each([&](Entity &ent) { ent.on_update(); });
 			mp_Scene->erase_deleted_entities();
 		}
+
+		for(auto &mod : m_Modules)
+			mod->on_update();
 	}
 
 	void Application::render() {
 		FIF_PROFILE_FUNC();
 
-		for(auto &mod : m_Modules) {
-			mod->on_render();
-		}
+		if(mp_Scene)
+			mp_Scene->for_each([&](Entity &ent) { ent.on_render(); });
 
-		if(mp_Scene) {
-			mp_Scene->for_each([&](Entity &ent) { ent.render(); });
-		}
+		for(auto &mod : m_Modules)
+			mod->on_render();
 
 		mp_Window->end_frame();
 	}
@@ -87,12 +81,10 @@ namespace fif::core {
 	void Application::on_event(Event &event) {
 		FIF_PROFILE_FUNC();
 
-		for(auto &mod : m_Modules) {
-			mod->on_event(event);
-		}
-
-		if(mp_Scene) {
+		if(mp_Scene)
 			mp_Scene->for_each([&](Entity &ent) { ent.on_event(event); });
-		}
+
+		for(auto &mod : m_Modules)
+			mod->on_event(event);
 	}
 }// namespace fif::core

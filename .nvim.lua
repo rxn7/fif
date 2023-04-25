@@ -9,3 +9,5 @@ vim.api.nvim_set_keymap('n', '<f16>', ':te cmake --build build/release<cr>', { n
 vim.api.nvim_set_keymap('n', '<f29>', ':te cmake --build build/release --clean-first<cr>',
 	{ noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<f17>', ':te build/release/fifed/fifed<cr>', { noremap = true, silent = true })
+
+vim.cmd [[autocmd BufWritePre * lua vim.lsp.buf.format()]]

@@ -1,6 +1,6 @@
-#include "fif/gfx/shader.hpp"
+#pragma once
 
-#include <memory>
+#include "fif/gfx/shader.hpp"
 
 namespace fif::gfx::shaders {
 	namespace Circle {
