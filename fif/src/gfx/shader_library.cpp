@@ -9,14 +9,8 @@ namespace fif::gfx {
 	static std::unordered_map<std::string, std::unique_ptr<Shader>> s_Shaders;
 
 	void ShaderLibrary::init() {
-		{
-			Shader &shader = add("circle", shaders::Simple::VERTEX, shaders::Circle::FRAGMENT);
-			shader.register_uniform("u_MVP");
-		}
-		{
-			Shader &shader = add("simple", shaders::Simple::VERTEX, shaders::Simple::FRAGMENT);
-			shader.register_uniform("u_MVP");
-		}
+		add("circle", shaders::Simple::VERTEX, shaders::Circle::FRAGMENT);
+		add("simple", shaders::Simple::VERTEX, shaders::Simple::FRAGMENT);
 	}
 
 	Shader &ShaderLibrary::get(const std::string &name) {

@@ -21,7 +21,7 @@ namespace fif::gfx {
 
 	void OrthoCamera::update_size() {
 		const glm::i32vec2 windowSize = core::Application::get_instance().get_window().get_size();
-		const float aspect = static_cast<float>(windowSize.y) / static_cast<float>(windowSize.x);
+		const f32 aspect = static_cast<f32>(windowSize.y) / static_cast<f32>(windowSize.x);
 
 		m_Size = glm::vec2(SIZE, SIZE * aspect) * m_Zoom;
 	}
@@ -35,7 +35,7 @@ namespace fif::gfx {
 		return normalizedPosition * m_Size + m_Position;
 	}
 
-	bool OrthoCamera::contains_circle(const glm::vec2 &position, float radius) const {
+	bool OrthoCamera::contains_circle(const glm::vec2 &position, f32 radius) const {
 		const glm::vec2 delta = glm::abs(m_Position - position);
 		return delta.x <= m_Size.x + radius && delta.y <= m_Size.y + radius;
 	}

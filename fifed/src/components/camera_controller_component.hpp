@@ -8,10 +8,7 @@
 
 class CameraControllerComponent final : public fif::core::Component {
 public:
-	CameraControllerComponent(fif::gfx::OrthoCamera &camera);
+	CameraControllerComponent();
 	COMPONENT_NAME(CameraControllerComponent);
 	void on_event(fif::core::Event &event) override;
-
-private:
-	fif::gfx::OrthoCamera &m_Camera;
 };

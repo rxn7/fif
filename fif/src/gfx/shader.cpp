@@ -28,6 +28,7 @@ namespace fif::gfx {
 			FIF_LOG_ERROR("Failed to link shader program: " << buffer);
 
 			delete[] buffer;
+			std::abort();
 		};
 
 		int status;
@@ -77,56 +78,65 @@ namespace fif::gfx {
 			FIF_LOG_ERROR("Failed to compile shader: " << buffer);
 
 			delete[] buffer;
+
+			std::abort();
 		}
 
 		return id;
 	}
 
-	void Shader::register_uniform(const std::string &name) {
+	u32 Shader::register_uniform(const std::string &name) {
 		const auto it = m_UniformIDs.find(name);
 		if(it != m_UniformIDs.end()) {
 			FIF_LOG_ERROR("Uniform " << name << " already registered");
-			return;
+			return it->second;
 		}
 
+		// TODO: Check for -1
 		const u32 id = glGetUniformLocation(m_ID, name.c_str());
 		m_UniformIDs.insert({name, id});
+
+		return id;
 	}
 
-	u32 Shader::get_uniform_location(const std::string &name) const {
+	u32 Shader::get_uniform_location(const std::string &name) {
 		const auto it = m_UniformIDs.find(name);
-		if(it == m_UniformIDs.end()) {
-			FIF_LOG_ERROR("Uniform " << name << " not found");
-			return 0;
-		}
+
+		if(it == m_UniformIDs.end())
+			return register_uniform(name);
+
 		return it->second;
 	}
 
-	void Shader::set_uniform(const std::string &name, int value) const {
+	void Shader::set_uniform(const std::string &name, int value) {
 		glUniform1i(get_uniform_location(name), value);
 	}
 
-	void Shader::set_uniform(const std::string &name, float value) const {
+	void Shader::set_uniform(const std::string &name, f32 value) {
 		glUniform1f(get_uniform_location(name), value);
 	}
 
-	void Shader::set_uniform(const std::string &name, const glm::vec2 &value) const {
+	void Shader::set_uniform(const std::string &name, const Color &value) {
+		set_uniform(name, fif::gfx::get_normalized_color(value));
+	}
+
+	void Shader::set_uniform(const std::string &name, const glm::vec2 &value) {
 		glUniform2f(get_uniform_location(name), value.x, value.y);
 	}
 
-	void Shader::set_uniform(const std::string &name, const glm::vec3 &value) const {
+	void Shader::set_uniform(const std::string &name, const glm::vec3 &value) {
 		glUniform3f(get_uniform_location(name), value.x, value.y, value.z);
 	}
 
-	void Shader::set_uniform(const std::string &name, const glm::vec4 &value) const {
+	void Shader::set_uniform(const std::string &name, const glm::vec4 &value) {
 		glUniform4f(get_uniform_location(name), value.x, value.y, value.z, value.w);
 	}
 
-	void Shader::set_uniform(const std::string &name, const glm::mat3 &value) const {
+	void Shader::set_uniform(const std::string &name, const glm::mat3 &value) {
 		glUniformMatrix3fv(get_uniform_location(name), 1, 0u, glm::value_ptr(value));
 	}
 
-	void Shader::set_uniform(const std::string &name, const glm::mat4 &value) const {
+	void Shader::set_uniform(const std::string &name, const glm::mat4 &value) {
 		glUniformMatrix4fv(get_uniform_location(name), 1, 0u, glm::value_ptr(value));
 	}
 }// namespace fif::gfx

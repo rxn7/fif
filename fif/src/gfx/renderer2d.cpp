@@ -55,7 +55,7 @@ namespace fif::gfx {
 		s_TempStats = {};
 	}
 
-	void Renderer2D::render_quad_rotated(const glm::vec2 &position, const glm::vec2 &size, float angle, const glm::u8vec4 &color) {
+	void Renderer2D::render_quad_rotated(const glm::vec2 &position, const glm::vec2 &size, f32 angle, const glm::u8vec4 &color) {
 		FIF_PROFILE_FUNC();
 
 		if(!s_Camera->contains_quad(position, size)) {
@@ -115,7 +115,7 @@ namespace fif::gfx {
 		s_TempStats.elements += 6u;
 	}
 
-	void Renderer2D::render_circle(const glm::vec2 &position, float radius, u16 segmentCount, const glm::u8vec4 &color) {
+	void Renderer2D::render_circle(const glm::vec2 &position, f32 radius, u16 segmentCount, const glm::u8vec4 &color) {
 		FIF_PROFILE_FUNC();
 		FIF_ASSERT(segmentCount > 2u, "Circle must have at least 3 segments!");
 
@@ -124,8 +124,8 @@ namespace fif::gfx {
 		}
 
 		const u32 vertCount = s_SimpleBatch->get_vertex_count();
-		const float segmentAngle = glm::two_pi<float>() / segmentCount;
-		float angle = 0.0F;
+		const f32 segmentAngle = glm::two_pi<f32>() / segmentCount;
+		f32 angle = 0.0F;
 
 		for(u16 i = 0; i < segmentCount; ++i) {
 			s_SimpleBatch->add_vertex({
@@ -146,7 +146,7 @@ namespace fif::gfx {
 		s_TempStats.elements += (segmentCount - 2u) * 3u;
 	}
 
-	void Renderer2D::render_circle_frag(const glm::vec2 &position, float radius, const glm::u8vec4 &color) {
+	void Renderer2D::render_circle_frag(const glm::vec2 &position, f32 radius, const glm::u8vec4 &color) {
 		FIF_PROFILE_FUNC();
 
 		if(!s_Camera->contains_circle(position, radius)) {
