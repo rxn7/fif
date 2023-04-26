@@ -18,6 +18,7 @@ namespace fif::imgui {
 		void on_start(core::Application &app) override final;
 		void on_render() override final;
 		void on_event(core::Event &event) override final;
+		bool begin_dockspace() const;
 
 	private:
 		void apply_default_theme() const;

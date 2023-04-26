@@ -9,8 +9,6 @@
 #include "fif/gfx/renderer2d.hpp"
 #include "fif/gfx/shader_library.hpp"
 
-#include <memory>
-
 namespace fif::gfx {
 	FIF_MODULE_INSTANCE_IMPL(GfxModule);
 

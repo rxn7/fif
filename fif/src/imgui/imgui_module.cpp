@@ -65,6 +65,31 @@ namespace fif::imgui {
 			event.m_Handled |= io.WantCaptureKeyboard;
 	}
 
+	bool ImGuiModule::begin_dockspace() const {
+		static ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_NoBackground;
+
+		const ImGuiViewport *viewport = ImGui::GetMainViewport();
+		ImGui::SetNextWindowPos(viewport->WorkPos);
+		ImGui::SetNextWindowSize(viewport->WorkSize);
+		ImGui::SetNextWindowViewport(viewport->ID);
+
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+
+		static bool open = true;
+
+		if(ImGui::Begin("Dockspace", &open, windowFlags)) {
+			ImGui::PopStyleVar(3);
+			const u32 &dockspaceId = ImGui::GetID("DockSpace");
+			ImGui::DockSpace(dockspaceId, ImVec2(0.0f, 0.0f));
+			return true;
+		}
+
+		ImGui::PopStyleVar(3);
+		return false;
+	}
+
 	void ImGuiModule::apply_default_theme() const {
 		ImGuiStyle &style = ImGui::GetStyle();
 		ImVec4(&colors)[] = style.Colors;

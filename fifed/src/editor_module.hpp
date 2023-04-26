@@ -4,6 +4,7 @@
 #include "components/grid_renderer_component.hpp"
 #include "editor_scene.hpp"
 #include "fif/core/module.hpp"
+#include "fif/gfx/frame_buffer.hpp"
 
 class EditorModule final : public fif::core::Module {
 public:
@@ -13,11 +14,14 @@ public:
 	virtual ~EditorModule();
 
 	void on_start(fif::core::Application &app) override;
+	void on_render() override;
+	void on_update() override;
 
 private:
 	void on_render_im_gui();
 
 private:
+	std::unique_ptr<fif::gfx::FrameBuffer> mp_FrameBuffer;
 	std::shared_ptr<EditorScene> mp_Scene;
 	GridRendererComponent *mp_GridComponent;
 	CameraControllerComponent *mp_CameraControllerComponent;

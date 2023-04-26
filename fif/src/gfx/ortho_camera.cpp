@@ -15,22 +15,19 @@ namespace fif::gfx {
 		FIF_PROFILE_FUNC();
 
 		update_size();
-
 		m_CameraMatrix = glm::ortho(-m_Size.x + m_Position.x, m_Size.x + m_Position.x, -m_Size.y + m_Position.y, m_Size.y + m_Position.y);
 	}
 
 	void OrthoCamera::update_size() {
-		const glm::i32vec2 windowSize = core::Application::get_instance().get_window().get_size();
-		const f32 aspect = static_cast<f32>(windowSize.y) / static_cast<f32>(windowSize.x);
-
-		m_Size = glm::vec2(SIZE, SIZE * aspect) * m_Zoom;
+		const f32 aspect = static_cast<f32>(m_ViewportSize.y) / static_cast<f32>(m_ViewportSize.x);
+		m_Size = glm::vec2(BASE_SIZE, BASE_SIZE * aspect) * m_Zoom;
 	}
 
 	glm::vec2 OrthoCamera::screen_to_world(const glm::vec2 &position) const {
 		FIF_PROFILE_FUNC();
 
-		const glm::i16vec2 windowSize = core::Application::get_instance().get_window().get_size();
-		const glm::vec2 normalizedPosition((position.x * 2.0F) / windowSize.x - 1.0F, 1.0F - (2.0F * position.y) / windowSize.y);
+		const glm::vec2 relativePosition = position - m_ViewportPosition;
+		const glm::vec2 normalizedPosition((relativePosition.x * 2.0f) / m_ViewportSize.x - 1.0f, 1.0f - (2.0f * relativePosition.y) / m_ViewportSize.y);
 
 		return normalizedPosition * m_Size + m_Position;
 	}
@@ -41,7 +38,7 @@ namespace fif::gfx {
 	}
 
 	bool OrthoCamera::contains_quad(const glm::vec2 &position, const glm::vec2 &size) const {
-		const glm::vec2 halfSize = size * 0.5F;
+		const glm::vec2 halfSize = size * 0.5f;
 
 		// TODO: What about rotation?
 

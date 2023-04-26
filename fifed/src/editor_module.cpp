@@ -19,6 +19,7 @@
 #include "fif/imgui/imgui_module.hpp"
 #include "fif/input/input_module.hpp"
 
+#include "gfx_module.hpp"
 #include "glm/gtc/type_ptr.hpp"
 #include "imgui.h"
 
@@ -26,6 +27,7 @@ EditorModule::EditorModule() {}
 EditorModule::~EditorModule() {}
 
 void EditorModule::on_start(fif::core::Application &app) {
+	mp_FrameBuffer = std::make_unique<fif::gfx::FrameBuffer>(app.get_window().get_size());
 	app.mp_Scene = mp_Scene = std::make_shared<EditorScene>();
 
 	fif::imgui::ImGuiModule::get_instance()->add_render_func(std::bind(&EditorModule::on_render_im_gui, this));
@@ -37,64 +39,92 @@ void EditorModule::on_start(fif::core::Application &app) {
 
 void EditorModule::on_render_im_gui() {
 	FIF_PROFILE_FUNC();
-	if(ImGui::Begin("Performance")) {
-		const PerformanceStats &stats = fif::core::Application::get_instance().get_performance_stats();
-		ImGui::Text("Frame time: %f ms", stats.frameTimeMs);
-		ImGui::Text("FPS: %f", stats.fps);
 
-		if(ImGui::TreeNode("Renderer2D")) {
-			const fif::gfx::Renderer2D::Stats &rendererStats = fif::gfx::Renderer2D::get_stats();
-			ImGui::Text("Circles: %i", rendererStats.circles);
-			ImGui::Text("Quads: %i", rendererStats.quads);
-			ImGui::Text("Vertices: %i", rendererStats.vertices);
-			ImGui::Text("Elements: %i", rendererStats.elements);
-			ImGui::TreePop();
+	if(fif::imgui::ImGuiModule::get_instance()->begin_dockspace()) {
+		if(ImGui::Begin("Performance")) {
+			const PerformanceStats &stats = fif::core::Application::get_instance().get_performance_stats();
+			ImGui::Text("Frame time: %f ms", stats.frameTimeMs);
+			ImGui::Text("FPS: %f", stats.fps);
+
+			if(ImGui::TreeNode("Renderer2D")) {
+				const fif::gfx::Renderer2D::Stats &rendererStats = fif::gfx::Renderer2D::get_stats();
+				ImGui::Text("Circles: %i", rendererStats.circles);
+				ImGui::Text("Quads: %i", rendererStats.quads);
+				ImGui::Text("Vertices: %i", rendererStats.vertices);
+				ImGui::Text("Elements: %i", rendererStats.elements);
+				ImGui::TreePop();
+			}
 		}
-	}
-	ImGui::End();
+		ImGui::End();
 
-	if(ImGui::Begin("Settings")) {
-		if(ImGui::TreeNode("Grid")) {
-			ImGui::Checkbox("Enabled", &mp_GridComponent->m_Enabled);
-			ImGui::SliderFloat("Line tickness", &mp_GridComponent->m_LineThickness, 0.0f, 1.0f);
-			ImGui::SliderFloat("Cell size", &mp_GridComponent->m_CellSize, 0.1f, 100.0f);
+		if(ImGui::Begin("Settings")) {
+			if(ImGui::TreeNode("Grid")) {
+				ImGui::Checkbox("Enabled", &mp_GridComponent->m_Enabled);
+				ImGui::SliderFloat("Line tickness", &mp_GridComponent->m_LineThickness, 0.0f, 1.0f);
+				ImGui::SliderFloat("Cell size", &mp_GridComponent->m_CellSize, 0.1f, 100.0f);
 
-			glm::vec4 colorNormalized = fif::gfx::get_normalized_color(mp_GridComponent->m_LineColor);
-			ImGui::ColorEdit4("Line color", glm::value_ptr(colorNormalized));
-			mp_GridComponent->m_LineColor = fif::gfx::get_color_from_normalized(colorNormalized);
+				glm::vec4 colorNormalized = fif::gfx::get_normalized_color(mp_GridComponent->m_LineColor);
+				ImGui::ColorEdit4("Line color", glm::value_ptr(colorNormalized));
+				mp_GridComponent->m_LineColor = fif::gfx::get_color_from_normalized(colorNormalized);
 
-			ImGui::TreePop();
+				ImGui::TreePop();
+			}
+			if(ImGui::TreeNode("Camera controller")) {
+				ImGui::SliderFloat("Zoom lerp speed", &mp_CameraControllerComponent->m_ZoomLerpSpeed, 0.1f, 100.0f);
+				ImGui::SliderFloat("Min zoom", &mp_CameraControllerComponent->m_MinZoom, 0.001f, 0.1f);
+				ImGui::SliderFloat("Max zoom", &mp_CameraControllerComponent->m_MaxZoom, 1.0f, 1000.0f);
+
+				ImGui::TreePop();
+			}
 		}
-		if(ImGui::TreeNode("Camera controller")) {
-			ImGui::SliderFloat("Zoom lerp speed", &mp_CameraControllerComponent->m_ZoomLerpSpeed, 0.1f, 100.0f);
-			ImGui::SliderFloat("Min zoom", &mp_CameraControllerComponent->m_MinZoom, 0.001f, 0.1f);
-			ImGui::SliderFloat("Max zoom", &mp_CameraControllerComponent->m_MaxZoom, 1.0f, 1000.0f);
-			ImGui::TreePop();
-		}
-	}
-	ImGui::End();
+		ImGui::End();
 
-	if(ImGui::Begin("Entities")) {
-		ImGui::Text("Count: %lu", mp_Scene->get_entity_count());
-		if(ImGui::BeginChild("EntityList")) {
-			mp_Scene->for_each(
-				[&](fif::core::Entity &ent) {
-					if(ImGui::TreeNode(ent.get_name().c_str())) {
-						if(ImGui::TreeNode("Components")) {
-							for(const auto &comp : ent.get_components())
-								ImGui::Text("%s", comp->get_name());
+		if(ImGui::Begin("Entities")) {
+			ImGui::Text("Count: %lu", mp_Scene->get_entity_count());
+			if(ImGui::BeginChild("EntityList")) {
+				mp_Scene->for_each(
+					[&](fif::core::Entity &ent) {
+						if(ImGui::TreeNode(ent.get_name().c_str())) {
+							if(ImGui::TreeNode("Components")) {
+								for(const auto &comp : ent.get_components())
+									ImGui::Text("%s", comp->get_name());
+								ImGui::TreePop();
+							}
+
+							if(ImGui::Button("Delete"))
+								ent.queue_delete();
+
 							ImGui::TreePop();
 						}
+					},
+					true);
+				ImGui::EndChild();
+			}
+		}
+		ImGui::End();
 
-						if(ImGui::Button("Delete"))
-							ent.queue_delete();
+		if(ImGui::Begin("Viewport")) {
+			ImGui::BeginChild("FrameBuffer");
 
-						ImGui::TreePop();
-					}
-				},
-				true);
+			const ImVec2 pos = ImGui::GetWindowPos();
+			const ImVec2 size = ImGui::GetWindowSize();
+
+			fif::gfx::Renderer2D::get_camera().set_viewport(glm::vec2(size.x, size.y), glm::vec2(pos.x, pos.y));
+			mp_FrameBuffer->set_size(glm::vec2(size.x, size.y));
+
+			ImGui::Image(reinterpret_cast<ImTextureID>(mp_FrameBuffer->getTextureID()), size, ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f));
 			ImGui::EndChild();
 		}
+		ImGui::End();
 	}
 	ImGui::End();
+}
+
+void EditorModule::on_update() {
+	mp_FrameBuffer->bind();
+	glClear(GL_COLOR_BUFFER_BIT);
+}
+
+void EditorModule::on_render() {
+	mp_FrameBuffer->unbind();
 }

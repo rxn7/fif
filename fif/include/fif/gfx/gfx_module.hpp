@@ -1,8 +1,9 @@
 #pragma once
 
-#include "event/event.hpp"
+#include "application.hpp"
 #include "fif/core/module.hpp"
 #include "fif/gfx/camera.hpp"
+#include "fif/gfx/frame_buffer.hpp"
 
 namespace fif::gfx {
 	class GfxModule final : public core::Module {
