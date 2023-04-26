@@ -19,7 +19,13 @@ public:
 	float m_ZoomLerpSpeed = 20.0f;
 
 private:
-	glm::vec2 m_TargetPosition = {0,0};
+	friend class EditorModule;
+	glm::vec2 m_ViewportPosition;
+
+	friend class EditorModule;
+	glm::vec2 m_ViewportSize;
+
+	glm::vec2 m_TargetPosition = {0, 0};
 	float m_TargetZoom = 1.0f;
 
 	bool m_IsZooming = false;

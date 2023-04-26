@@ -12,6 +12,9 @@
 namespace fif::gfx {
 	FIF_MODULE_INSTANCE_IMPL(GfxModule);
 
+	glm::vec2 GfxModule::s_ViewportPosition;
+	glm::vec2 GfxModule::s_ViewportSize;
+
 	GfxModule::GfxModule() {
 		FIF_MODULE_INIT_INSTANCE();
 

@@ -109,7 +109,7 @@ void EditorModule::on_render_im_gui() {
 			const ImVec2 pos = ImGui::GetWindowPos();
 			const ImVec2 size = ImGui::GetWindowSize();
 
-			fif::gfx::Renderer2D::get_camera().set_viewport(glm::vec2(size.x, size.y), glm::vec2(pos.x, pos.y));
+			fif::gfx::GfxModule::set_viewport(glm::vec2(size.x, size.y), glm::vec2(pos.x, pos.y));
 			mp_FrameBuffer->set_size(glm::vec2(size.x, size.y));
 
 			ImGui::Image(reinterpret_cast<ImTextureID>(mp_FrameBuffer->getTextureID()), size, ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f));

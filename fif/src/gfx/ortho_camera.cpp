@@ -3,6 +3,7 @@
 #include "fif/core/opengl.hpp"
 #include "fif/core/profiler.hpp"
 
+#include "gfx_module.hpp"
 #include "glm/ext/matrix_clip_space.hpp"
 #include "glm/vec2.hpp"
 
@@ -19,15 +20,16 @@ namespace fif::gfx {
 	}
 
 	void OrthoCamera::update_size() {
-		const f32 aspect = static_cast<f32>(m_ViewportSize.y) / static_cast<f32>(m_ViewportSize.x);
+		const f32 aspect = static_cast<f32>(GfxModule::get_viewport_size().y) / static_cast<f32>(GfxModule::get_viewport_size().x);
 		m_Size = glm::vec2(BASE_SIZE, BASE_SIZE * aspect) * m_Zoom;
 	}
 
 	glm::vec2 OrthoCamera::screen_to_world(const glm::vec2 &position) const {
 		FIF_PROFILE_FUNC();
 
-		const glm::vec2 relativePosition = position - m_ViewportPosition;
-		const glm::vec2 normalizedPosition((relativePosition.x * 2.0f) / m_ViewportSize.x - 1.0f, 1.0f - (2.0f * relativePosition.y) / m_ViewportSize.y);
+		const glm::vec2 relativePosition = position - GfxModule::get_viewport_position();
+		const glm::vec2 normalizedPosition(
+			(relativePosition.x * 2.0f) / GfxModule::get_viewport_size().x - 1.0f, 1.0f - (2.0f * relativePosition.y) / GfxModule::get_viewport_size().y);
 
 		return normalizedPosition * m_Size + m_Position;
 	}
