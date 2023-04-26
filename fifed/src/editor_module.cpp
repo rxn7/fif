@@ -22,6 +22,7 @@
 #include "gfx_module.hpp"
 #include "glm/gtc/type_ptr.hpp"
 #include "imgui.h"
+#include <limits>
 
 EditorModule::EditorModule() {}
 EditorModule::~EditorModule() {}
@@ -39,6 +40,8 @@ void EditorModule::on_start(fif::core::Application &app) {
 
 void EditorModule::on_render_im_gui() {
 	FIF_PROFILE_FUNC();
+
+	// TODO: abstract EditorPanel class
 
 	if(fif::imgui::ImGuiModule::get_instance()->begin_dockspace()) {
 		if(ImGui::Begin("Performance")) {
@@ -66,6 +69,7 @@ void EditorModule::on_render_im_gui() {
 				glm::vec4 colorNormalized = fif::gfx::get_normalized_color(mp_GridComponent->m_LineColor);
 				ImGui::ColorEdit4("Line color", glm::value_ptr(colorNormalized));
 				mp_GridComponent->m_LineColor = fif::gfx::get_color_from_normalized(colorNormalized);
+				ImGui::SliderFloat("Wrap Value", &mp_GridComponent->m_WrapValue, 1.0f, 1000.0f);
 
 				ImGui::TreePop();
 			}
@@ -81,6 +85,18 @@ void EditorModule::on_render_im_gui() {
 
 		if(ImGui::Begin("Entities")) {
 			ImGui::Text("Count: %lu", mp_Scene->get_entity_count());
+			if(ImGui::Button("Create new")) {
+				// TODO: UUID system
+				fif::core::Entity *ent = mp_Scene->create_entity(std::to_string(fif::core::Rng::get_u32(0, std::numeric_limits<u32>::max())));
+
+				fif::gfx::TransformComponent *trans = ent->add_component<fif::gfx::TransformComponent>();
+				trans->m_Position = fif::core::Rng::get_vec2(-1000, 1000);
+
+				fif::gfx::RenderableCircleComponent *circle = ent->add_component<fif::gfx::RenderableCircleComponent>();
+				circle->m_Radius = fif::core::Rng::get_f32(20, 100);
+				circle->m_Color = fif::gfx::Color(fif::core::Rng::get_u8(0u, 255u), fif::core::Rng::get_u8(0u, 255u), fif::core::Rng::get_u8(0u, 255u), fif::core::Rng::get_u8(100u, 255u));
+			}
+
 			if(ImGui::BeginChild("EntityList")) {
 				mp_Scene->for_each(
 					[&](fif::core::Entity &ent) {

@@ -4,6 +4,7 @@
 #include "fif/core/event/event_dispatcher.hpp"
 #include "fif/core/profiler.hpp"
 #include "fif/gfx/renderer2d.hpp"
+#include "gfx_module.hpp"
 
 constexpr std::array<fif::gfx::Vertex, 4> VERTICES = {
 	fif::gfx::Vertex{

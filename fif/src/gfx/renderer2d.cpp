@@ -119,9 +119,10 @@ namespace fif::gfx {
 		FIF_PROFILE_FUNC();
 		FIF_ASSERT(segmentCount > 2u, "Circle must have at least 3 segments!");
 
-		if(!s_Camera->contains_circle(position, radius)) {
+		/*
+		if(!s_Camera->contains_circle(position, radius))
 			return;
-		}
+		*/
 
 		const u32 vertCount = s_SimpleBatch->get_vertex_count();
 		const f32 segmentAngle = glm::two_pi<f32>() / segmentCount;

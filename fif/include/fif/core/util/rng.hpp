@@ -1,6 +1,10 @@
 #pragma once
 
 #include "fif/core/types.hpp"
+#include "fif/gfx/color.hpp"
+
+#include "glm/ext/vector_float2.hpp"
+
 #include <random>
 
 namespace fif::core {
@@ -9,6 +13,8 @@ namespace fif::core {
 		static void init();
 
 		static inline bool get_bool() { return static_cast<bool>(std::uniform_int_distribution<>(0, 1)(s_Generator)); }
+
+		static inline glm::vec2 get_vec2(f32 min, f32 max) { return glm::vec2(get_f32(min, max), get_f32(min, max)); }
 
 		static inline f32 get_f32(f32 min, f32 max) { return std::uniform_real_distribution<f32>(min, max)(s_Generator); }
 

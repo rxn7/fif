@@ -19,6 +19,7 @@ public:
 	fif::gfx::Color m_LineColor = fif::gfx::Color(20, 20, 20, 255);
 	f32 m_LineThickness = 0.7f;
 	f32 m_CellSize = 10.0f;
+	f32 m_WrapValue = 1000.0f;
 
 private:
 	fif::gfx::VertexBuffer m_VertexBuffer;
