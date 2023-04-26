@@ -7,9 +7,8 @@
 
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
+#include "imconfig.h"
 #include "imgui.h"
-
-#include <filesystem>
 
 namespace fif::imgui {
 	FIF_MODULE_INSTANCE_IMPL(ImGuiModule);
@@ -81,8 +80,10 @@ namespace fif::imgui {
 
 		if(ImGui::Begin("Dockspace", &open, windowFlags)) {
 			ImGui::PopStyleVar(3);
+
 			const u32 &dockspaceId = ImGui::GetID("DockSpace");
 			ImGui::DockSpace(dockspaceId, ImVec2(0.0f, 0.0f));
+
 			return true;
 		}
 

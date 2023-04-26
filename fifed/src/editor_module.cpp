@@ -98,8 +98,8 @@ void EditorModule::on_render_im_gui() {
 						}
 					},
 					true);
-				ImGui::EndChild();
 			}
+			ImGui::EndChild();
 		}
 		ImGui::End();
 
