@@ -31,7 +31,7 @@ void EditorModule::on_start(fif::core::Application &app) {
 	fif::imgui::ImGuiModule::get_instance()->add_render_func(std::bind(&EditorModule::on_render_im_gui, this));
 
 	mp_EditorEntity = mp_Scene->create_editor_entity("CameraController");
-	mp_EditorEntity->add_component<CameraControllerComponent>();
+	mp_CameraControllerComponent = mp_EditorEntity->add_component<CameraControllerComponent>();
 	mp_GridComponent = mp_EditorEntity->add_component<GridRendererComponent>();
 }
 
@@ -50,7 +50,10 @@ void EditorModule::on_render_im_gui() {
 			ImGui::Text("Elements: %i", rendererStats.elements);
 			ImGui::TreePop();
 		}
+	}
+	ImGui::End();
 
+	if(ImGui::Begin("Settings")) {
 		if(ImGui::TreeNode("Grid")) {
 			ImGui::Checkbox("Enabled", &mp_GridComponent->m_Enabled);
 			ImGui::SliderFloat("Line tickness", &mp_GridComponent->m_LineThickness, 0.0f, 1.0f);
@@ -60,6 +63,12 @@ void EditorModule::on_render_im_gui() {
 			ImGui::ColorEdit4("Line color", glm::value_ptr(colorNormalized));
 			mp_GridComponent->m_LineColor = fif::gfx::get_color_from_normalized(colorNormalized);
 
+			ImGui::TreePop();
+		}
+		if(ImGui::TreeNode("Camera controller")) {
+			ImGui::SliderFloat("Zoom lerp speed", &mp_CameraControllerComponent->m_ZoomLerpSpeed, 0.1f, 100.0f);
+			ImGui::SliderFloat("Min zoom", &mp_CameraControllerComponent->m_MinZoom, 0.001f, 0.1f);
+			ImGui::SliderFloat("Max zoom", &mp_CameraControllerComponent->m_MaxZoom, 1.0f, 1000.0f);
 			ImGui::TreePop();
 		}
 	}
