@@ -58,13 +58,6 @@ void EditorModule::on_render_im_gui() {
 		}
 		ImGui::End();
 
-		if(ImGui::Begin("Lua")) {
-			if(ImGui::Button("Log test")) {
-				LuaScriptingModule::get_instance()->run_script("assets/scripts/log_test.lua");
-			}
-		}
-		ImGui::End();
-
 		if(ImGui::Begin("Settings")) {
 			if(ImGui::TreeNode("Grid")) {
 				ImGui::Checkbox("Enabled", &Grid::enabled);
@@ -149,10 +142,10 @@ void EditorModule::on_update() {
 
 	mp_FrameBuffer->bind();
 	glClear(GL_COLOR_BUFFER_BIT);
+	Grid::render();
 }
 
 void EditorModule::on_render() {
-	Grid::render();
 	mp_FrameBuffer->unbind();
 }
 
