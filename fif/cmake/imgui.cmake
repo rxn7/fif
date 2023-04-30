@@ -1,5 +1,7 @@
 set(IMGUI_PATH "vendor/imgui")
 
+set(GLFW_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vendor/glfw)
+
 file(GLOB IMGUI_SOURCES
     ${IMGUI_PATH}/imgui.h
     ${IMGUI_PATH}/imgui.cpp
@@ -20,5 +22,5 @@ file(GLOB IMGUI_SOURCES
 )
 
 add_library("ImGui" STATIC ${IMGUI_SOURCES})
-target_include_directories("ImGui" PUBLIC ${IMGUI_PATH})
+target_include_directories("ImGui" PUBLIC ${IMGUI_PATH} PRIVATE ${GLFW_DIR}/include)
 set_target_properties("ImGui" PROPERTIES LINK_FLAGS "${LFLAGS}")
