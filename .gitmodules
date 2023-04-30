@@ -14,3 +14,6 @@
 [submodule "fif/vendor/LuaJIT"]
 	path = fif/vendor/LuaJIT
 	url = https://github.com/LuaJIT/LuaJIT
+[submodule "fif/vendor/entt"]
+	path = fif/vendor/entt
+	url = https://github.com/skypjack/entt

@@ -15,3 +15,5 @@ Fif is split into core module and other independent modules:
 - glfw  
 - glad
 - ImGui      
+- entt    
+- LuaJIT   
