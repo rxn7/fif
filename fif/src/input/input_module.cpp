@@ -6,7 +6,7 @@
 #include "fif/core/util/assertion.hpp"
 #include "fif/core/window.hpp"
 
-namespace fif {
+namespace fif::input {
 	static glm::vec2 s_LastMousePosition;
 	static glm::vec2 s_MousePosition;
 
@@ -72,4 +72,4 @@ namespace fif {
 	glm::vec2 InputModule::get_last_mouse_position() {
 		return s_LastMousePosition;
 	}
-}// namespace fif
+}// namespace fif::input

@@ -1,24 +1,22 @@
 #include "fifed.hpp"
 #include "editor_module.hpp"
+#include "common.hpp"
 
 #include "fif/fif.hpp"
-#include "fif/gfx/gfx_module.hpp"
-#include "fif/imgui/imgui_module.hpp"
-#include "fif/input/input_module.hpp"
 
-const fif::core::WindowProperties WINDOW_PROPS = {
+const WindowProperties WINDOW_PROPS = {
 	.title = "fifed",
 	.size = glm::i16vec2(1280, 720),
 	.vsync = false,
 };
 
-Fifed::Fifed() : fif::core::Application(WINDOW_PROPS) {
-	attach_module<fif::InputModule>();
-	attach_module<fif::gfx::GfxModule>();
+Fifed::Fifed() : Application(WINDOW_PROPS) {
+	attach_module<InputModule>();
+	attach_module<GfxModule>();
 	attach_module<EditorModule>();
-	attach_module<fif::imgui::ImGuiModule>();
+	attach_module<ImGuiModule>();
 }
 
-fif::core::Application *get_application() {
+Application *get_application() {
 	return new Fifed();
 }

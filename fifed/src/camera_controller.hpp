@@ -1,12 +1,15 @@
 #pragma once
 
-#include "event/event.hpp"
+#include "common.hpp"
+
+#include "fif/core/event/event.hpp"
 #include "fif/gfx/color.hpp"
+
 #include "glm/vec2.hpp"
 
 namespace CameraController {
 	void update();
-	void on_event(fif::core::Event &event);
+	void on_event(Event &event);
 
 	inline float maxZoom = 100.0f;
 	inline float minZoom = 0.005f;

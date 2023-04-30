@@ -5,7 +5,7 @@
 #include "fif/core/types.hpp"
 #include "fif/core/window.hpp"
 
-namespace fif {
+namespace fif::input {
 	class InputModule final : public core::Module {
 	public:
 		FIF_MODULE_NAME(Input)
@@ -26,4 +26,4 @@ namespace fif {
 		bool m_Buttons[BUTTON_COUNT];
 		bool m_Keys[KEY_COUNT];
 	};
-}// namespace fif
+}// namespace fif::input

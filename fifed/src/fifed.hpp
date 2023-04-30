@@ -1,9 +1,8 @@
 #pragma once
 
-#include "fif/core/application.hpp"
-#include "fif/core/event/event.hpp"
+#include "common.hpp"
 
-class Fifed : public fif::core::Application {
+class Fifed : public Application {
 public:
 	Fifed();
 };
