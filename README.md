@@ -33,4 +33,5 @@ Fif is open to contributions, make sure to format your code with clang-format be
 - glad ([UNLICENSE](https://github.com/nitrix/glad/blob/master/UNLICENSE))   
 - ImGui ([MIT license](https://github.com/ocornut/imgui/blob/master/LICENSE.txt))   
 - entt ([MIT license](https://github.com/skypjack/entt/blob/master/LICENSE))    
-- LuaJIT ([MIT license](https://github.com/LuaJIT/LuaJIT/blob/v2.1/COPYRIGHT))    
+- lua-cmake ([MIT license](https://github.com/lubgr/lua-cmake/blob/master/LICENSE))    
+- sol2 ([MIT license](https://github.com/ThePhD/sol2/blob/develop/LICENSE.txt))    
