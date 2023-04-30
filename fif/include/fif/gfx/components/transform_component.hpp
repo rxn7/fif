@@ -1,6 +1,5 @@
 #pragma once
 
-#include "fif/core/ecs/component.hpp"
 #include "glm/vec2.hpp"
 
 namespace fif::gfx {
