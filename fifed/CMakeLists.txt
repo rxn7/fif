@@ -8,8 +8,10 @@ set(INC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
 file(GLOB_RECURSE FIFED_SOURCES ${SRC_DIR}/*.cpp)
 add_executable(${PROJECT_NAME} ${FIFED_SOURCES})
 
-# TOOD: Correct dependency
-file(REMOVE ${PROJECT_BINARY_DIR}/assets)
-file(COPY ${PROJECT_SOURCE_DIR}/assets DESTINATION .)
+add_custom_target(copy_assets
+  COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/assets ${CMAKE_CURRENT_BINARY_DIR}/assets
+)
+
+add_dependencies(${PROJECT_NAME} copy_assets)
 
 target_link_libraries(${PROJECT_NAME} fif-core fif-gfx fif-input fif-imgui fif-lua_scripting)

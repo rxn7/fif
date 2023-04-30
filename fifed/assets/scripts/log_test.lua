@@ -1,3 +1,3 @@
-log("normal log")
-log_warn("warn log")
-log_error("error log")
+local a = math.sin(2137)
+local b = math.pi * (6 ^ 9)
+log(tostring(a + b))

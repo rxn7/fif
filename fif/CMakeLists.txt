@@ -52,6 +52,7 @@ if(FIF_BUILD_IMGUI)
 endif()
 
 if(FIF_BUILD_LUA_SCRIPTING)
+  add_compile_definitions(SOL_NO_EXCEPTIONS)
   add_subdirectory(${LIB_DIR}/lua)
   add_subdirectory(${LIB_DIR}/sol2)
   build_module(fif-lua_scripting lua_scripting "fif-core;lua::lib;sol2")

@@ -1,15 +1,16 @@
 #include "fif/lua_scripting/lua_scripting_module.hpp"
+#include "systems/lua_script_system.hpp"
 
 #include "fif/core/application.hpp"
 #include "fif/core/util/log.hpp"
-#include "systems/lua_script_system.hpp"
+#include <sol/protected_function_result.hpp>
 
 namespace fif::lua_scripting {
 	FIF_MODULE_INSTANCE_IMPL(LuaScriptingModule);
 
 	LuaScriptingModule::LuaScriptingModule() {
 		FIF_MODULE_INIT_INSTANCE();
-		m_Lua.open_libraries(sol::lib::base, sol::lib::math);
+		m_Lua.open_libraries(sol::lib::base, sol::lib::math, sol::lib::string);
 
 		const auto log = [](const std::string &msg) { FIF_LOG("[LUA] " << msg); };
 		m_Lua.set_function("log", log);
@@ -35,7 +36,11 @@ namespace fif::lua_scripting {
 	}
 
 	void LuaScriptingModule::run_script(const std::string &path) {
-		FIF_ASSERT(m_Lua.safe_script_file(path).valid(), "Failed to load lua script");
+		sol::protected_function_result result = m_Lua.safe_script_file(path);
+		if(!result.valid()) {
+			const sol::error error = result;
+			FIF_LOG_ERROR("Failed to load lua script: " << error.what());
+		}
 	}
 
 }// namespace fif::lua_scripting
