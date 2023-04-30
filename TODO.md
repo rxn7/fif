@@ -1,2 +1,3 @@
+- Component inspector
 - Lua scripting
 - Precompiled headers
