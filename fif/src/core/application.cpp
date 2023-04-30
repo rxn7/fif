@@ -17,10 +17,10 @@ namespace fif::core {
 		mp_Window = std::make_unique<Window>(*this, windowProperties);
 		gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress));
 
+		Rng::init();
+
 		if(createDefaultScene)
 			mp_Scene = std::make_unique<Scene>();
-
-		Rng::init();
 	}
 
 	Application::~Application() {}

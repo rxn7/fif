@@ -1,8 +1,10 @@
 #include "editor_module.hpp"
 #include "camera_controller.hpp"
 #include "color.hpp"
-#include "grid.hpp"
 #include "common.hpp"
+#include "components/lua_script_component.hpp"
+#include "fif/lua_scripting/lua_scripting_module.hpp"
+#include "grid.hpp"
 
 #include "components/quad_component.hpp"
 #include "components/renderable_component.hpp"
@@ -56,6 +58,13 @@ void EditorModule::on_render_im_gui() {
 		}
 		ImGui::End();
 
+		if(ImGui::Begin("Lua")) {
+			if(ImGui::Button("Log test")) {
+				LuaScriptingModule::get_instance()->run_script("assets/scripts/log_test.lua");
+			}
+		}
+		ImGui::End();
+
 		if(ImGui::Begin("Settings")) {
 			if(ImGui::TreeNode("Grid")) {
 				ImGui::Checkbox("Enabled", &Grid::enabled);
@@ -94,6 +103,9 @@ void EditorModule::on_render_im_gui() {
 
 				RenderableComponent &renderable = scene.add_component<RenderableComponent>(ent);
 				renderable.color = Color(Rng::get_u8(0u, 255u), Rng::get_u8(0u, 255u), Rng::get_u8(0u, 255u), Rng::get_u8(100u, 255u));
+
+				LuaScriptComponent &script = scene.add_component<LuaScriptComponent>(ent);
+				LuaScriptingModule::get_instance()->attach_script(script, "assets/scripts/test.lua");
 			}
 
 			if(ImGui::BeginChild("EntityList")) {

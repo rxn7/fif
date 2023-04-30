@@ -5,6 +5,7 @@ option(FIF_BUILD_CORE "Build the core module" ON)
 option(FIF_BUILD_GFX "Build the gfx module" ON)
 option(FIF_BUILD_INPUT "Build the input module" ON)
 option(FIF_BUILD_IMGUI "Build the imgui module" ON)
+option(FIF_BUILD_LUA_SCRIPTING "Build the lua_scripting module" ON)
 
 set(CMAKE_CXX_STANDARD 20)
 set(LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vendor)
@@ -24,7 +25,7 @@ elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
 endif()
 
 function(build_module target dir libs) 
-  FILE(GLOB_RECURSE SOURCES ${SRC_DIR}/${dir}/*.cpp)
+  file(GLOB_RECURSE SOURCES ${SRC_DIR}/${dir}/*.cpp)
   add_library(${target} STATIC ${SOURCES})
 
   set_target_properties(${target} PROPERTIES PUBLIC_HEADER ${INC_DIR}/fif/${dir})
@@ -48,6 +49,12 @@ endif()
 
 if(FIF_BUILD_IMGUI)
   build_module(fif-imgui imgui "fif-core;ImGui")
+endif()
+
+if(FIF_BUILD_LUA_SCRIPTING)
+  add_subdirectory(${LIB_DIR}/lua)
+  add_subdirectory(${LIB_DIR}/sol2)
+  build_module(fif-lua_scripting lua_scripting "fif-core;lua::lib;sol2")
 endif()
 
 set(GLFW_BUILD_EXAMPLES OFF CACHE INTERNAL "Build GLFW examples")

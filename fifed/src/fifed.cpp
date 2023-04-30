@@ -1,6 +1,6 @@
 #include "fifed.hpp"
-#include "editor_module.hpp"
 #include "common.hpp"
+#include "editor_module.hpp"
 
 #include "fif/fif.hpp"
 
@@ -15,6 +15,7 @@ Fifed::Fifed() : Application(WINDOW_PROPS) {
 	attach_module<GfxModule>();
 	attach_module<EditorModule>();
 	attach_module<ImGuiModule>();
+	attach_module<LuaScriptingModule>();
 }
 
 Application *get_application() {

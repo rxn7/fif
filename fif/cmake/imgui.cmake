@@ -1,4 +1,4 @@
-set(IMGUI_PATH "vendor/imgui")
+set(IMGUI_PATH ${CMAKE_CURRENT_SOURCE_DIR}/vendor/imgui)
 
 set(GLFW_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vendor/glfw)
 

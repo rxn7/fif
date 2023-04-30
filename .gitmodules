@@ -11,9 +11,12 @@
 	path = fif/vendor/imgui
 	url = https://github.com/ocornut/imgui
 	branch = docking
-[submodule "fif/vendor/LuaJIT"]
-	path = fif/vendor/LuaJIT
-	url = https://github.com/LuaJIT/LuaJIT
 [submodule "fif/vendor/entt"]
 	path = fif/vendor/entt
 	url = https://github.com/skypjack/entt
+[submodule "fif/vendor/lua"]
+	path = fif/vendor/lua
+	url = https://github.com/lubgr/lua-cmake
+[submodule "fif/vendor/sol2"]
+	path = fif/vendor/sol2
+	url = https://github.com/ThePhD/sol2
