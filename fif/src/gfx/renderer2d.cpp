@@ -53,7 +53,7 @@ namespace fif::gfx {
 		s_TempStats = {};
 	}
 
-	void Renderer2D::render_quad_rotated(const glm::vec2 &position, const glm::vec2 &size, f32 angle, const glm::u8vec4 &color) {
+	void Renderer2D::render_quad(const glm::vec2 &position, const glm::vec2 &size, f32 angle, const glm::u8vec4 &color) {
 		if(!s_Camera->contains_quad(position, size))
 			return;
 
@@ -78,33 +78,6 @@ namespace fif::gfx {
 		s_TempStats.quads++;
 		s_TempStats.vertices += 4;
 		s_TempStats.elements += 6;
-	}
-
-	void Renderer2D::render_quad(const glm::vec2 &position, const glm::vec2 &size, const glm::u8vec4 &color) {
-		if(!s_Camera->contains_quad(position, size))
-			return;
-
-		const u32 vertCount = s_SimpleBatch->get_vertex_count();
-		glm::mat4 matrix(1.0F);
-
-		matrix = glm::translate(glm::mat4(1.0F), glm::vec3(position, 0.0F));
-		matrix = glm::scale(matrix, glm::vec3(size, 1.0f));
-
-		s_SimpleBatch->add_vertex({glm::vec3(matrix * glm::vec4(-0.5F, -0.5F, 0.0F, 1.0F)), glm::vec2(0.0F, 0.0F), color});
-		s_SimpleBatch->add_vertex({glm::vec3(matrix * glm::vec4(-0.5F, 0.5F, 0.0F, 1.0F)), glm::vec2(0.0F, 1.0F), color});
-		s_SimpleBatch->add_vertex({glm::vec3(matrix * glm::vec4(0.5F, 0.5F, 0.0F, 1.0F)), glm::vec2(1.0F, 1.0F), color});
-		s_SimpleBatch->add_vertex({glm::vec3(matrix * glm::vec4(0.5F, -0.5F, 0.0F, 1.0F)), glm::vec2(1.0F, 0.0F), color});
-
-		s_SimpleBatch->add_element(vertCount);
-		s_SimpleBatch->add_element(vertCount + 1u);
-		s_SimpleBatch->add_element(vertCount + 2u);
-		s_SimpleBatch->add_element(vertCount + 2u);
-		s_SimpleBatch->add_element(vertCount + 3u);
-		s_SimpleBatch->add_element(vertCount);
-
-		s_TempStats.circles++;
-		s_TempStats.vertices += 4u;
-		s_TempStats.elements += 6u;
 	}
 
 	void Renderer2D::render_circle(const glm::vec2 &position, f32 radius, u16 segmentCount, const glm::u8vec4 &color) {
