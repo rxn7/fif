@@ -33,7 +33,7 @@ void EditorModule::on_start(fif::core::Application &app) {
 
 	fif::imgui::ImGuiModule::get_instance()->add_render_func(std::bind(&EditorModule::on_render_im_gui, this));
 
-	mp_EditorEntity = mp_Scene->create_editor_entity("CameraController");
+	mp_EditorEntity = mp_Scene->create_editor_entity();
 	mp_CameraControllerComponent = mp_EditorEntity->add_component<CameraControllerComponent>();
 	mp_GridComponent = mp_EditorEntity->add_component<GridRendererComponent>();
 }
@@ -86,8 +86,7 @@ void EditorModule::on_render_im_gui() {
 		if(ImGui::Begin("Entities")) {
 			ImGui::Text("Count: %lu", mp_Scene->get_entity_count());
 			if(ImGui::Button("Create new")) {
-				// TODO: UUID system
-				fif::core::Entity *ent = mp_Scene->create_entity(std::to_string(fif::core::Rng::get_u32(0, std::numeric_limits<u32>::max())));
+				fif::core::Entity *ent = mp_Scene->create_entity();
 
 				fif::gfx::TransformComponent *trans = ent->add_component<fif::gfx::TransformComponent>();
 				trans->m_Position = fif::core::Rng::get_vec2(-1000, 1000);
@@ -100,7 +99,7 @@ void EditorModule::on_render_im_gui() {
 			if(ImGui::BeginChild("EntityList")) {
 				mp_Scene->for_each(
 					[&](fif::core::Entity &ent) {
-						if(ImGui::TreeNode(ent.get_name().c_str())) {
+						if(ImGui::TreeNode(std::to_string(ent.get_uuid()).c_str())) {
 							if(ImGui::TreeNode("Components")) {
 								for(const auto &comp : ent.get_components())
 									ImGui::Text("%s", comp->get_name());

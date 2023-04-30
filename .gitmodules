@@ -11,3 +11,6 @@
 	path = fif/vendor/imgui
 	url = https://github.com/ocornut/imgui
 	branch = docking
+[submodule "fif/vendor/LuaJIT"]
+	path = fif/vendor/LuaJIT
+	url = https://github.com/LuaJIT/LuaJIT

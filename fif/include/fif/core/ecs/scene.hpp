@@ -13,7 +13,7 @@ namespace fif::core {
 
 		virtual inline u64 get_entity_count() const { return m_Entities.size(); }
 
-		virtual inline Entity *create_entity(const std::string &name) { return &m_Entities.emplace_back(name); }
+		virtual inline Entity *create_entity() { return &m_Entities.emplace_back(); }
 
 	protected:
 		std::vector<Entity> m_Entities;

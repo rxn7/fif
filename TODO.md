@@ -1,1 +1,2 @@
+- Lua scripting
 - Precompiled headers

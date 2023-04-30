@@ -1,5 +1,6 @@
 #pragma once
 
+#include "ecs/uuid.hpp"
 #include "fif/core/ecs/component.hpp"
 #include "fif/core/event/event.hpp"
 #include "fif/core/profiler.hpp"
@@ -10,7 +11,7 @@
 namespace fif::core {
 	class Entity final {
 	public:
-		Entity(const std::string &name);
+		Entity();
 
 		template<class T, class... Args> T *add_component(Args &&...args) {
 			FIF_PROFILE_FUNC();
@@ -36,13 +37,13 @@ namespace fif::core {
 			return nullptr;
 		}
 
-		inline const std::vector<std::unique_ptr<Component>> &get_components() const { return m_Components; }
+		inline void queue_delete() { m_DeleteQueued = true; }
 
 		inline bool is_delete_queued() const { return m_DeleteQueued; }
 
-		inline const std::string &get_name() const { return m_Name; }
+		inline const std::vector<std::unique_ptr<Component>> &get_components() const { return m_Components; }
 
-		inline void queue_delete() { m_DeleteQueued = true; }
+		inline UUID get_uuid() const { return m_UUID; }
 
 		void on_update();
 		void on_render();
@@ -50,7 +51,7 @@ namespace fif::core {
 
 	private:
 		bool m_DeleteQueued = false;
-		std::string m_Name;
+		UUID m_UUID;
 		std::vector<std::unique_ptr<Component>> m_Components;
 	};
 }// namespace fif::core
