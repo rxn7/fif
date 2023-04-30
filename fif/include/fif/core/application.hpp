@@ -1,11 +1,10 @@
 #pragma once
 
-#include "fif/core/ecs/entity.hpp"
 #include "fif/core/ecs/scene.hpp"
+#include "fif/core/ecs/system.hpp"
 #include "fif/core/event/event.hpp"
 #include "fif/core/module.hpp"
 #include "fif/core/performance_stats.hpp"
-#include "fif/core/profiler.hpp"
 #include "fif/core/util/clock.hpp"
 #include "fif/core/window.hpp"
 
@@ -22,27 +21,24 @@ namespace fif::core {
 		virtual ~Application();
 
 		void start();
-
 		virtual void on_event(Event &event);
 
+		inline void add_render_system(RenderSystem system) { m_RenderSystems.push_back(system); }
+		inline void add_update_system(UpdateSystem system) { m_UpdateSystems.push_back(system); }
+		inline void add_event_system(EventSystem system) { m_EventSystems.push_back(system); }
+
 		inline static Application &get_instance() { return *s_Instance; }
-
 		inline const Window &get_window() const { return *mp_Window; }
-
 		inline const PerformanceStats &get_performance_stats() const { return m_PerformanceStats; }
+		inline Scene &get_scene() { return *mp_Scene; }
 
 	protected:
 		template<class T, class... Args> void attach_module(Args &&...args) {
 			static_assert(std::is_base_of<Module, T>().value, "T doesn't derive from Module!");
 
-			FIF_PROFILE_FUNC();
-
 			std::unique_ptr<Module> &mod = m_Modules.emplace_back(std::make_unique<T>(args...));
 			FIF_LOG("Module " << mod->get_name() << " attached");
 		}
-
-	public:
-		std::shared_ptr<Scene> mp_Scene;
 
 	private:
 		void game_loop();
@@ -54,6 +50,10 @@ namespace fif::core {
 
 	private:
 		std::vector<std::unique_ptr<Module>> m_Modules;
+		std::unique_ptr<Scene> mp_Scene;
+		std::vector<RenderSystem> m_RenderSystems;
+		std::vector<UpdateSystem> m_UpdateSystems;
+		std::vector<EventSystem> m_EventSystems;
 
 		PerformanceStats m_PerformanceStats;
 		static Application *s_Instance;

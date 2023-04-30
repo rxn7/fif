@@ -2,7 +2,6 @@
 #include "fif/core/application.hpp"
 #include "fif/core/event/event.hpp"
 #include "fif/core/event/event_type.hpp"
-#include "fif/core/profiler.hpp"
 #include "fif/core/util/assertion.hpp"
 
 #include "backends/imgui_impl_glfw.h"
@@ -18,14 +17,12 @@ namespace fif::imgui {
 	}
 
 	ImGuiModule::~ImGuiModule() {
-		FIF_PROFILE_FUNC();
 		ImGui_ImplOpenGL3_Shutdown();
 		ImGui_ImplGlfw_Shutdown();
 		ImGui::DestroyContext();
 	}
 
 	void ImGuiModule::on_start(core::Application &app) {
-		FIF_PROFILE_FUNC();
 		IMGUI_CHECKVERSION();
 
 		ImGui::CreateContext();
@@ -40,8 +37,6 @@ namespace fif::imgui {
 	}
 
 	void ImGuiModule::on_render() {
-		FIF_PROFILE_FUNC();
-
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();

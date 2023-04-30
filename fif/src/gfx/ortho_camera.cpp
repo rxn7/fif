@@ -1,7 +1,6 @@
 #include "fif/gfx/ortho_camera.hpp"
 #include "fif/core/application.hpp"
 #include "fif/core/opengl.hpp"
-#include "fif/core/profiler.hpp"
 
 #include "gfx_module.hpp"
 #include "glm/ext/matrix_clip_space.hpp"
@@ -13,8 +12,6 @@ namespace fif::gfx {
 	OrthoCamera::~OrthoCamera() {}
 
 	void OrthoCamera::update() {
-		FIF_PROFILE_FUNC();
-
 		update_size();
 		m_CameraMatrix = glm::ortho(-m_Size.x + m_Position.x, m_Size.x + m_Position.x, -m_Size.y + m_Position.y, m_Size.y + m_Position.y);
 	}
@@ -25,8 +22,6 @@ namespace fif::gfx {
 	}
 
 	glm::vec2 OrthoCamera::screen_to_world(const glm::vec2 &position) const {
-		FIF_PROFILE_FUNC();
-
 		const glm::vec2 relativePosition = position - GfxModule::get_viewport_position();
 		const glm::vec2 normalizedPosition(
 			(relativePosition.x * 2.0f) / GfxModule::get_viewport_size().x - 1.0f, 1.0f - (2.0f * relativePosition.y) / GfxModule::get_viewport_size().y);

@@ -8,6 +8,7 @@
 #include "fif/core/util/assertion.hpp"
 #include "fif/gfx/renderer2d.hpp"
 #include "fif/gfx/shader_library.hpp"
+#include "systems/renderer_system.hpp"
 
 namespace fif::gfx {
 	FIF_MODULE_INSTANCE_IMPL(GfxModule);
@@ -27,6 +28,10 @@ namespace fif::gfx {
 
 		ShaderLibrary::init();
 		Renderer2D::init();
+	}
+
+	void GfxModule::on_start(core::Application &app) {
+		app.add_render_system(&fif::gfx::renderer_system);
 	}
 
 	void GfxModule::on_update() {

@@ -2,7 +2,6 @@
 #include "fif/core/event/event_dispatcher.hpp"
 #include "fif/core/event/window_event.hpp"
 #include "fif/core/opengl.hpp"
-#include "fif/core/profiler.hpp"
 #include "fif/core/util/assertion.hpp"
 #include "fif/core/util/clock.hpp"
 #include "fif/core/util/rng.hpp"
@@ -12,8 +11,6 @@ namespace fif::core {
 	Application *fif::core::Application::s_Instance = nullptr;
 
 	Application::Application(const WindowProperties &windowProperties, bool createDefaultScene) {
-		FIF_PROFILE_FUNC();
-
 		FIF_ASSERT(s_Instance == nullptr, "Only 1 instance of fif::core::Application can exist!");
 		s_Instance = this;
 
@@ -21,18 +18,14 @@ namespace fif::core {
 		gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress));
 
 		if(createDefaultScene)
-			mp_Scene = std::make_shared<Scene>();
+			mp_Scene = std::make_unique<Scene>();
 
 		Rng::init();
 	}
 
-	Application::~Application() {
-		FIF_PROFILE_FUNC();
-	}
+	Application::~Application() {}
 
 	void Application::start() {
-		FIF_PROFILE_FUNC();
-
 		for(const auto &mod : m_Modules)
 			mod->on_start(*this);
 
@@ -41,50 +34,38 @@ namespace fif::core {
 	}
 
 	void Application::game_loop() {
-		FIF_PROFILE_FUNC();
-
 		Timing::update();
 
 		m_PerformanceStats.fps = 1.0F / Timing::get_delta_time();
 		m_PerformanceStats.frameTimeMs = Timing::get_delta_time() * 1000.0F;
-
-		fif::core::Profiler::begin_frame();
 
 		update();
 		render();
 	}
 
 	void Application::update() {
-		FIF_PROFILE_FUNC();
-
-		if(mp_Scene) {
-			mp_Scene->for_each([&](Entity &ent) { ent.on_update(); });
-			mp_Scene->erase_deleted_entities();
-		}
-
 		for(auto &mod : m_Modules)
 			mod->on_update();
+
+		for(auto &system : m_UpdateSystems)
+			system(mp_Scene->get_registry(), Timing::get_delta_time());
 	}
 
 	void Application::render() {
-		FIF_PROFILE_FUNC();
-
-		if(mp_Scene)
-			mp_Scene->for_each([&](Entity &ent) { ent.on_render(); });
-
 		for(auto &mod : m_Modules)
 			mod->on_render();
+
+		for(auto &system : m_RenderSystems)
+			system(mp_Scene->get_registry());
 
 		mp_Window->end_frame();
 	}
 
 	void Application::on_event(Event &event) {
-		FIF_PROFILE_FUNC();
-
-		if(mp_Scene)
-			mp_Scene->for_each([&](Entity &ent) { ent.on_event(event); });
-
 		for(auto &mod : m_Modules)
 			mod->on_event(event);
+
+		for(auto &system : m_EventSystems)
+			system(mp_Scene->get_registry(), event);
 	}
 }// namespace fif::core

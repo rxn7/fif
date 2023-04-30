@@ -1,27 +1,27 @@
 #include "editor_module.hpp"
+#include "camera_controller.hpp"
 #include "color.hpp"
-#include "components/camera_controller_component.hpp"
-#include "components/grid_renderer_component.hpp"
+#include "grid.hpp"
 
+#include "components/quad_component.hpp"
+#include "components/renderable_component.hpp"
+#include "ecs/scene.hpp"
 #include "fif/core/application.hpp"
-#include "fif/core/ecs/entity.hpp"
 #include "fif/core/event/event.hpp"
 #include "fif/core/event/event_dispatcher.hpp"
 #include "fif/core/event/mouse_event.hpp"
 #include "fif/core/performance_stats.hpp"
-#include "fif/core/profiler.hpp"
 #include "fif/core/util/rng.hpp"
-#include "fif/gfx/components/renderable_circle_component.hpp"
-#include "fif/gfx/components/renderable_quad_component.hpp"
 #include "fif/gfx/components/transform_component.hpp"
+#include "fif/gfx/gfx_module.hpp"
 #include "fif/gfx/ortho_camera.hpp"
 #include "fif/gfx/renderer2d.hpp"
 #include "fif/imgui/imgui_module.hpp"
 #include "fif/input/input_module.hpp"
 
-#include "gfx_module.hpp"
 #include "glm/gtc/type_ptr.hpp"
 #include "imgui.h"
+
 #include <limits>
 
 EditorModule::EditorModule() {}
@@ -29,18 +29,13 @@ EditorModule::~EditorModule() {}
 
 void EditorModule::on_start(fif::core::Application &app) {
 	mp_FrameBuffer = std::make_unique<fif::gfx::FrameBuffer>(app.get_window().get_size());
-	app.mp_Scene = mp_Scene = std::make_shared<EditorScene>();
 
 	fif::imgui::ImGuiModule::get_instance()->add_render_func(std::bind(&EditorModule::on_render_im_gui, this));
 
-	mp_EditorEntity = mp_Scene->create_editor_entity();
-	mp_CameraControllerComponent = mp_EditorEntity->add_component<CameraControllerComponent>();
-	mp_GridComponent = mp_EditorEntity->add_component<GridRendererComponent>();
+	Grid::init();
 }
 
 void EditorModule::on_render_im_gui() {
-	FIF_PROFILE_FUNC();
-
 	// TODO: abstract EditorPanel class
 
 	if(fif::imgui::ImGuiModule::get_instance()->begin_dockspace()) {
@@ -62,21 +57,21 @@ void EditorModule::on_render_im_gui() {
 
 		if(ImGui::Begin("Settings")) {
 			if(ImGui::TreeNode("Grid")) {
-				ImGui::Checkbox("Enabled", &mp_GridComponent->m_Enabled);
-				ImGui::SliderFloat("Line tickness", &mp_GridComponent->m_LineThickness, 0.0f, 1.0f);
-				ImGui::SliderFloat("Cell size", &mp_GridComponent->m_CellSize, 0.1f, 100.0f);
+				ImGui::Checkbox("Enabled", &Grid::enabled);
+				ImGui::SliderFloat("Line tickness", &Grid::lineThickness, 0.0f, 1.0f);
+				ImGui::SliderFloat("Cell size", &Grid::cellSize, 0.1f, 100.0f);
 
-				glm::vec4 colorNormalized = fif::gfx::get_normalized_color(mp_GridComponent->m_LineColor);
+				glm::vec4 colorNormalized = fif::gfx::get_normalized_color(Grid::lineColor);
 				ImGui::ColorEdit4("Line color", glm::value_ptr(colorNormalized));
-				mp_GridComponent->m_LineColor = fif::gfx::get_color_from_normalized(colorNormalized);
-				ImGui::SliderFloat("Wrap Value", &mp_GridComponent->m_WrapValue, 1.0f, 1000.0f);
+				Grid::lineColor = fif::gfx::get_color_from_normalized(colorNormalized);
+				ImGui::SliderFloat("Wrap Value", &Grid::wrapValue, 1.0f, 1000.0f);
 
 				ImGui::TreePop();
 			}
 			if(ImGui::TreeNode("Camera controller")) {
-				ImGui::SliderFloat("Zoom lerp speed", &mp_CameraControllerComponent->m_ZoomLerpSpeed, 0.1f, 100.0f);
-				ImGui::SliderFloat("Min zoom", &mp_CameraControllerComponent->m_MinZoom, 0.001f, 0.1f);
-				ImGui::SliderFloat("Max zoom", &mp_CameraControllerComponent->m_MaxZoom, 1.0f, 1000.0f);
+				ImGui::SliderFloat("Zoom lerp speed", &CameraController::zoomLerpSpeed, 0.1f, 100.0f);
+				ImGui::SliderFloat("Min zoom", &CameraController::minZoom, 0.001f, 0.1f);
+				ImGui::SliderFloat("Max zoom", &CameraController::maxZoom, 1.0f, 1000.0f);
 
 				ImGui::TreePop();
 			}
@@ -84,35 +79,36 @@ void EditorModule::on_render_im_gui() {
 		ImGui::End();
 
 		if(ImGui::Begin("Entities")) {
-			ImGui::Text("Count: %lu", mp_Scene->get_entity_count());
+			fif::core::Scene &scene = fif::core::Application::get_instance().get_scene();
+
+			ImGui::Text("Count: %lu", scene.get_entity_count());
 			if(ImGui::Button("Create new")) {
-				fif::core::Entity *ent = mp_Scene->create_entity();
+				fif::core::EntityID ent = scene.create_entity();
 
-				fif::gfx::TransformComponent *trans = ent->add_component<fif::gfx::TransformComponent>();
-				trans->m_Position = fif::core::Rng::get_vec2(-1000, 1000);
+				fif::gfx::TransformComponent &trans = scene.add_component<fif::gfx::TransformComponent>(ent);
+				trans.position = fif::core::Rng::get_vec2(-1000, 1000);
 
-				fif::gfx::RenderableCircleComponent *circle = ent->add_component<fif::gfx::RenderableCircleComponent>();
-				circle->m_Radius = fif::core::Rng::get_f32(20, 100);
-				circle->m_Color = fif::gfx::Color(fif::core::Rng::get_u8(0u, 255u), fif::core::Rng::get_u8(0u, 255u), fif::core::Rng::get_u8(0u, 255u), fif::core::Rng::get_u8(100u, 255u));
+				fif::gfx::QuadComponent &quad = scene.add_component<fif::gfx::QuadComponent>(ent);
+				quad.size = glm::vec2(fif::core::Rng::get_f32(20, 100), fif::core::Rng::get_f32(20, 100));
+
+				fif::gfx::RenderableComponent &renderable = scene.add_component<fif::gfx::RenderableComponent>(ent);
+				renderable.color = fif::gfx::Color(fif::core::Rng::get_u8(0u, 255u), fif::core::Rng::get_u8(0u, 255u), fif::core::Rng::get_u8(0u, 255u), fif::core::Rng::get_u8(100u, 255u));
 			}
 
 			if(ImGui::BeginChild("EntityList")) {
-				mp_Scene->for_each(
-					[&](fif::core::Entity &ent) {
-						if(ImGui::TreeNode(std::to_string(ent.get_uuid()).c_str())) {
-							if(ImGui::TreeNode("Components")) {
-								for(const auto &comp : ent.get_components())
-									ImGui::Text("%s", comp->get_name());
-								ImGui::TreePop();
-							}
-
-							if(ImGui::Button("Delete"))
-								ent.queue_delete();
-
+				scene.for_each([&](fif::core::EntityID &ent) {
+					if(ImGui::TreeNode(std::to_string(static_cast<u32>(ent)).c_str())) {
+						if(ImGui::TreeNode("Components")) {
+							// TODO:
 							ImGui::TreePop();
 						}
-					},
-					true);
+
+						if(ImGui::Button("Delete"))
+							scene.delete_entity(ent);
+
+						ImGui::TreePop();
+					}
+				});
 			}
 			ImGui::EndChild();
 		}
@@ -136,10 +132,17 @@ void EditorModule::on_render_im_gui() {
 }
 
 void EditorModule::on_update() {
+	CameraController::update();
+
 	mp_FrameBuffer->bind();
 	glClear(GL_COLOR_BUFFER_BIT);
 }
 
 void EditorModule::on_render() {
+	Grid::render();
 	mp_FrameBuffer->unbind();
+}
+
+void EditorModule::on_event(fif::core::Event &event) {
+	CameraController::on_event(event);
 }

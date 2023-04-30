@@ -1,14 +1,11 @@
 #include "fif/gfx/vertex_buffer.hpp"
 #include "fif/core/opengl.hpp"
-#include "fif/core/profiler.hpp"
 #include "fif/core/util/assertion.hpp"
 
 #include <memory>
 
 namespace fif::gfx {
 	VertexBuffer::VertexBuffer(u32 vertexCount, u32 elementCount) : m_VertexCount(vertexCount), m_ElementCount(elementCount) {
-		FIF_PROFILE_FUNC();
-
 		glGenVertexArrays(1, &m_Vao);
 		glBindVertexArray(m_Vao);
 
@@ -27,8 +24,6 @@ namespace fif::gfx {
 
 	VertexBuffer::VertexBuffer(const Vertex *vertices, u32 vertexCount, const u16 *elements, u32 elementCount)
 		: m_VertexCount(vertexCount), m_ElementCount(elementCount) {
-		FIF_PROFILE_FUNC();
-
 		glGenVertexArrays(1, &m_Vao);
 		glBindVertexArray(m_Vao);
 
@@ -46,8 +41,6 @@ namespace fif::gfx {
 	}
 
 	void VertexBuffer::render() const {
-		FIF_PROFILE_FUNC();
-
 		glBindVertexArray(m_Vao);
 
 		glDrawElements(GL_TRIANGLES, m_ElementCount, GL_UNSIGNED_SHORT, 0);
@@ -56,8 +49,6 @@ namespace fif::gfx {
 	}
 
 	void VertexBuffer::setup_vertex_attributes() {
-		FIF_PROFILE_FUNC();
-
 		glEnableVertexAttribArray(0);
 		glVertexAttribPointer(0, 3, GL_FLOAT, 0u, sizeof(Vertex), reinterpret_cast<const void *>(offsetof(Vertex, position)));
 
@@ -69,8 +60,6 @@ namespace fif::gfx {
 	}
 
 	void VertexBuffer::set_vertices(const Vertex *vertices, u32 count) {
-		FIF_PROFILE_FUNC();
-
 		m_VertexCount = count;
 		glBindVertexArray(m_Vao);
 		glBindBuffer(GL_ARRAY_BUFFER, m_Vbo);
@@ -79,8 +68,6 @@ namespace fif::gfx {
 	}
 
 	void VertexBuffer::set_elements(const u16 *elements, u32 count) {
-		FIF_PROFILE_FUNC();
-
 		m_ElementCount = count;
 		glBindVertexArray(m_Vao);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_Ebo);

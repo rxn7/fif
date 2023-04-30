@@ -1,16 +1,14 @@
 #include "fif/core/window.hpp"
 #include "fif/core/application.hpp"
+
 #include "fif/core/event/key_event.hpp"
 #include "fif/core/event/mouse_event.hpp"
 #include "fif/core/event/window_event.hpp"
 #include "fif/core/opengl.hpp"
-#include "fif/core/profiler.hpp"
 #include "fif/core/util/assertion.hpp"
 
 namespace fif::core {
 	Window::Window(Application &app, const WindowProperties &props) : m_Size(props.size), m_App(app) {
-		FIF_PROFILE_FUNC();
-
 		glfwSetErrorCallback([]([[maybe_unused]] int error, const char *msg) { FIF_LOG_ERROR("GLFW Error: " << msg); });
 
 		FIF_ASSERT(glfwInit(), "Failed to initialize GLFW");
@@ -45,7 +43,6 @@ namespace fif::core {
 	}
 
 	void Window::end_frame() {
-		FIF_PROFILE_FUNC();
 		glfwSwapBuffers(mp_GlfwWindow);
 		glfwPollEvents();
 	}

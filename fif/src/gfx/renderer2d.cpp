@@ -1,5 +1,4 @@
 #include "fif/gfx/renderer2d.hpp"
-#include "fif/core/profiler.hpp"
 #include "fif/core/util/assertion.hpp"
 #include "fif/core/util/log.hpp"
 #include "fif/gfx/batch.hpp"
@@ -9,6 +8,7 @@
 
 #include "glm/ext/matrix_float4x4.hpp"
 #include "glm/ext/matrix_transform.hpp"
+#include "util/clock.hpp"
 
 #include <chrono>
 #include <memory>
@@ -20,7 +20,7 @@ namespace fif::gfx {
 	static Renderer2D::Stats s_Stats, s_TempStats;
 	static std::unique_ptr<Batch> s_SimpleBatch, s_CircleBatch;
 	static std::unique_ptr<OrthoCamera> s_Camera;
-	static std::chrono::time_point<std::chrono::high_resolution_clock> s_BeginTime;
+	static core::Clock::time_point s_BeginTime;
 
 	void Renderer2D::init() {
 		s_Camera = std::make_unique<OrthoCamera>();
@@ -29,12 +29,10 @@ namespace fif::gfx {
 	}
 
 	void Renderer2D::begin() {
-		FIF_PROFILE_FUNC();
-		s_BeginTime = std::chrono::high_resolution_clock::now();
+		s_BeginTime = core::Clock::now();
 	}
 
 	void Renderer2D::end() {
-		FIF_PROFILE_FUNC();
 		s_Camera->update();
 
 		{
@@ -56,11 +54,8 @@ namespace fif::gfx {
 	}
 
 	void Renderer2D::render_quad_rotated(const glm::vec2 &position, const glm::vec2 &size, f32 angle, const glm::u8vec4 &color) {
-		FIF_PROFILE_FUNC();
-
-		if(!s_Camera->contains_quad(position, size)) {
+		if(!s_Camera->contains_quad(position, size))
 			return;
-		}
 
 		const u32 vertCount = s_SimpleBatch->get_vertex_count();
 		glm::mat4 matrix(1.0F);
@@ -86,11 +81,8 @@ namespace fif::gfx {
 	}
 
 	void Renderer2D::render_quad(const glm::vec2 &position, const glm::vec2 &size, const glm::u8vec4 &color) {
-		FIF_PROFILE_FUNC();
-
-		if(!s_Camera->contains_quad(position, size)) {
+		if(!s_Camera->contains_quad(position, size))
 			return;
-		}
 
 		const u32 vertCount = s_SimpleBatch->get_vertex_count();
 		glm::mat4 matrix(1.0F);
@@ -116,13 +108,10 @@ namespace fif::gfx {
 	}
 
 	void Renderer2D::render_circle(const glm::vec2 &position, f32 radius, u16 segmentCount, const glm::u8vec4 &color) {
-		FIF_PROFILE_FUNC();
 		FIF_ASSERT(segmentCount > 2u, "Circle must have at least 3 segments!");
 
-		/*
 		if(!s_Camera->contains_circle(position, radius))
 			return;
-		*/
 
 		const u32 vertCount = s_SimpleBatch->get_vertex_count();
 		const f32 segmentAngle = glm::two_pi<f32>() / segmentCount;
@@ -148,11 +137,8 @@ namespace fif::gfx {
 	}
 
 	void Renderer2D::render_circle_frag(const glm::vec2 &position, f32 radius, const glm::u8vec4 &color) {
-		FIF_PROFILE_FUNC();
-
-		if(!s_Camera->contains_circle(position, radius)) {
+		if(!s_Camera->contains_circle(position, radius))
 			return;
-		}
 
 		const u32 vertCount = s_CircleBatch->get_vertex_count();
 
