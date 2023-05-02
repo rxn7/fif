@@ -3,6 +3,7 @@
 #include "color.hpp"
 #include "common.hpp"
 #include "components/lua_script_component.hpp"
+#include "ecs/components/tag_component.hpp"
 #include "fif/lua_scripting/lua_scripting_module.hpp"
 #include "grid.hpp"
 
@@ -36,6 +37,13 @@ void EditorModule::on_start(Application &app) {
 	ImGuiModule::get_instance()->add_render_func(std::bind(&EditorModule::on_render_im_gui, this));
 
 	Grid::init();
+
+	{
+		EntityID fpsEntity = app.get_scene().create_entity();
+		LuaScriptComponent &script = app.get_scene().add_component<LuaScriptComponent>(fpsEntity);
+		app.get_scene().add_component<TagComponent>(fpsEntity, "FPS Counter");
+		LuaScriptingModule::get_instance()->attach_script(script, "assets/scripts/fps_component.lua");
+	}
 }
 
 void EditorModule::on_render_im_gui() {
@@ -96,14 +104,18 @@ void EditorModule::on_render_im_gui() {
 
 				RenderableComponent &renderable = scene.add_component<RenderableComponent>(ent);
 				renderable.color = Color(Rng::get_u8(0u, 255u), Rng::get_u8(0u, 255u), Rng::get_u8(0u, 255u), Rng::get_u8(100u, 255u));
-
-				LuaScriptComponent &script = scene.add_component<LuaScriptComponent>(ent);
-				LuaScriptingModule::get_instance()->attach_script(script, "assets/scripts/test.lua");
 			}
 
 			if(ImGui::BeginChild("EntityList")) {
 				scene.for_each([&](EntityID &ent) {
-					if(ImGui::TreeNode(std::to_string(static_cast<u32>(ent)).c_str())) {
+					const char *name;
+
+					if(scene.has_component<TagComponent>(ent))
+						name = scene.get_component<TagComponent>(ent).tag;
+					else
+						name = std::to_string(static_cast<u32>(ent)).c_str();
+
+					if(ImGui::TreeNode(name)) {
 						if(ImGui::TreeNode("Components")) {
 							// TODO:
 							ImGui::TreePop();

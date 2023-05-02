@@ -12,7 +12,7 @@ namespace fif::lua_scripting {
 	}
 	void lua_script_render_system(entt::registry &registry) {
 		registry.view<LuaScriptComponent>().each([&]([[maybe_unused]] core::EntityID entity, LuaScriptComponent &luaScript) {
-			if(luaScript.updateFunc.valid())
+			if(luaScript.renderFunc.valid())
 				luaScript.renderFunc();
 		});
 	}
