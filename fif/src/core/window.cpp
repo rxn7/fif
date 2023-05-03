@@ -36,6 +36,10 @@ namespace fif::core {
 		});
 
 		glfwSwapInterval(static_cast<int>(props.vsync));
+
+		if(!props.iconPath.empty()) {
+			set_icon(props.iconPath);
+		}
 	}
 
 	Window::~Window() {

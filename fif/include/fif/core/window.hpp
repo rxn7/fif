@@ -11,8 +11,9 @@ namespace fif::core {
 	class Application;
 
 	struct WindowProperties final {
-		const std::string title;
-		const glm::i16vec2 size;
+		const std::string title = "untitled application";
+		const glm::i16vec2 size = {1280, 720};
+		const std::string iconPath = "";
 		bool vsync = true;
 	};
 

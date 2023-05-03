@@ -30,8 +30,6 @@ EditorModule::EditorModule() {}
 EditorModule::~EditorModule() {}
 
 void EditorModule::on_start(Application &app) {
-	app.get_window().set_icon("assets/logo.png");
-
 	mp_FrameBuffer = std::make_unique<FrameBuffer>(app.get_window().get_size());
 	mp_LogoTexture = std::make_unique<Texture>("assets/logo.png", GL_NEAREST);
 
