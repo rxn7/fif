@@ -153,6 +153,8 @@ void EditorModule::on_render_im_gui() {
 			mp_FrameBuffer->set_size(glm::vec2(size.x, size.y));
 
 			ImGui::Image(reinterpret_cast<ImTextureID>(mp_FrameBuffer->getTextureID()), size, ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f));
+			m_ViewportHovered = ImGui::IsItemHovered();
+
 			ImGui::EndChild();
 		}
 		ImGui::End();
@@ -173,5 +175,5 @@ void EditorModule::on_render() {
 }
 
 void EditorModule::on_event(Event &event) {
-	CameraController::on_event(event);
+	CameraController::on_event(event, m_ViewportHovered);
 }

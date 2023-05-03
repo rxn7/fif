@@ -9,7 +9,7 @@
 
 namespace CameraController {
 	void update();
-	void on_event(Event &event);
+	void on_event(Event &event, bool viewportHovered);
 
 	inline float maxZoom = 100.0f;
 	inline float minZoom = 0.005f;

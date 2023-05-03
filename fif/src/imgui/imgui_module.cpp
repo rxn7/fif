@@ -50,13 +50,16 @@ namespace fif::imgui {
 	}
 
 	void ImGuiModule::on_event(core::Event &event) {
+		if(event.m_Handled)
+			return;
+
 		ImGuiIO &io = ImGui::GetIO();
 
-		if(event.is_in_category(core::EventCategory::Mouse))
-			event.m_Handled |= io.WantCaptureMouse;
+		if(event.get_category() == core::EventCategory::Mouse)
+			event.m_Handled = io.WantCaptureMouse;
 
-		else if(event.is_in_category(core::EventCategory::Keyboard))
-			event.m_Handled |= io.WantCaptureKeyboard;
+		else if(event.get_category() == core::EventCategory::Keyboard)
+			event.m_Handled = io.WantCaptureKeyboard;
 	}
 
 	bool ImGuiModule::begin_dockspace() const {

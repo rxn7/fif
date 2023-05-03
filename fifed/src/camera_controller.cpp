@@ -33,7 +33,10 @@ void CameraController::update() {
 	}
 }
 
-void CameraController::on_event(Event &event) {
+void CameraController::on_event(Event &event, bool viewportHovered) {
+	if(event.m_Handled || !viewportHovered)
+		return;
+
 	OrthoCamera &cam = Renderer2D::get_camera();
 
 	const glm::vec2 mousePosition = GfxModule::get_point_relative_to_viewport(::InputModule::get_mouse_position());
@@ -42,7 +45,7 @@ void CameraController::on_event(Event &event) {
 		return;
 
 	::EventDispatcher::dispatch<MouseScrolledEvent>(event, [&](MouseScrolledEvent &scrollEvent) {
-		if(scrollEvent.is_hanlded() || scrollEvent.get_value().y == 0)
+		if(scrollEvent.get_value().y == 0)
 			return false;
 
 		targetZoom *= scrollEvent.get_value().y > 0 ? 0.9f : 1.1f;
@@ -54,7 +57,7 @@ void CameraController::on_event(Event &event) {
 	});
 
 	EventDispatcher::dispatch<MouseMovedEvent>(event, [&](MouseMovedEvent &movedEvent) {
-		if(movedEvent.is_hanlded() || !InputModule::get_instance()->is_button_held(GLFW_MOUSE_BUTTON_RIGHT))
+		if(!InputModule::get_instance()->is_button_held(GLFW_MOUSE_BUTTON_RIGHT))
 			return false;
 
 		const glm::vec2 mouseWorldPosition = cam.screen_to_world(movedEvent.get_position());

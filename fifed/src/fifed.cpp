@@ -20,5 +20,5 @@ Fifed::Fifed() : Application(WINDOW_PROPS) {
 }
 
 Application *get_application() {
-	return new Fifed();
+	return reinterpret_cast<Application *>(new Fifed());
 }

@@ -12,7 +12,6 @@ namespace fif::core {
 		virtual EventType get_type() const = 0;
 		virtual EventCategory get_category() const = 0;
 		inline bool is_hanlded() const { return m_Handled; }
-		inline bool is_in_category(EventCategory category) const { return static_cast<int>(get_category()) & static_cast<int>(category); }
 
 	public:
 		bool m_Handled = false;

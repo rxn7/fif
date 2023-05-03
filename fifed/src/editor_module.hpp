@@ -25,6 +25,7 @@ private:
 	void on_render_im_gui();
 
 private:
+	bool m_ViewportHovered = false;
 	std::unique_ptr<FrameBuffer> mp_FrameBuffer;
 	std::unique_ptr<Texture> mp_LogoTexture;
 };
