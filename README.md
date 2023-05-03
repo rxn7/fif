@@ -28,7 +28,7 @@ Fif is split into core module and other independent modules:
 Fif is open to contributions, make sure to format your code with clang-format before submitting a pull request though
 
 # Dependencies
-The dependencies are used as submodules, so to get them:  
+The dependencies are used as submodules:  
 * If you already cloned the repo, run ```git submodule update --init --recursive```  
 * To clone the repo with submodules ```git clone https://github.com/rxn7/fif --recurse-submodules -j8```  
 
