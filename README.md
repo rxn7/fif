@@ -28,10 +28,15 @@ Fif is split into core module and other independent modules:
 Fif is open to contributions, make sure to format your code with clang-format before submitting a pull request though
 
 # Dependencies
-- glm ([MIT license](https://github.com/g-truc/glm/blob/master/copying.txt))   
-- glfw ([zlib license](https://github.com/glfw/glfw/blob/master/LICENSE.md))     
-- glad ([UNLICENSE](https://github.com/nitrix/glad/blob/master/UNLICENSE))   
-- ImGui ([MIT license](https://github.com/ocornut/imgui/blob/master/LICENSE.txt))   
-- entt ([MIT license](https://github.com/skypjack/entt/blob/master/LICENSE))    
-- lua-cmake ([MIT license](https://github.com/lubgr/lua-cmake/blob/master/LICENSE))    
-- sol2 ([MIT license](https://github.com/ThePhD/sol2/blob/develop/LICENSE.txt))    
+The dependencies are used as submodules, so to get them:  
+* If you already cloned the repo, run ```git submodule update --init --recursive```  
+* To clone the repo with submodules ```git clone https://github.com/rxn7/fif --recurse-submodules -j8```  
+
+- [glm](https://github.com/g-truc/glm) ([MIT license](https://github.com/g-truc/glm/blob/master/copying.txt))   
+- [glfw](https://github.com/glfw/glfw) ([zlib license](https://github.com/glfw/glfw/blob/master/LICENSE.md))     
+- [glad](https://github.com/nitrix/glad/) ([UNLICENSE](https://github.com/nitrix/glad/blob/master/UNLICENSE))   
+- [ImGui](https://github.com/ocornut/imgui) ([MIT license](https://github.com/ocornut/imgui/blob/master/LICENSE.txt))   
+- [entt](https://github.com/skypjack/entt) ([MIT license](https://github.com/skypjack/entt/blob/master/LICENSE))    
+- [lua-cmake](https://github.com/lubgr/lua-cmake) ([MIT license](https://github.com/lubgr/lua-cmake/blob/master/LICENSE))    
+- [sol2](https://github.com/ThePhD/sol2) ([MIT license](https://github.com/ThePhD/sol2/blob/develop/LICENSE.txt))    
+- [stb_image](https://github.com/nothings/stb/blob/master/stb_image.h) ([MIT license](https://github.com/nothings/stb/blob/master/stb_image.h)
