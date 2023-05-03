@@ -28,8 +28,8 @@ namespace fif::core {
 		inline void add_event_system(EventSystem system) { m_EventSystems.push_back(system); }
 
 		inline static Application &get_instance() { return *s_Instance; }
-		inline const Window &get_window() const { return *mp_Window; }
 		inline const PerformanceStats &get_performance_stats() const { return m_PerformanceStats; }
+		inline Window &get_window() { return *mp_Window; }
 		inline Scene &get_scene() { return *mp_Scene; }
 
 	protected:

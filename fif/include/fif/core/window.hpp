@@ -26,6 +26,7 @@ namespace fif::core {
 		inline glm::i16vec2 get_size() const { return m_Size; }
 		bool get_should_close() const;
 		void set_should_close(bool value);
+		void set_icon(const std::string &path);
 
 		inline GLFWwindow *get_glfw_window() const { return mp_GlfwWindow; }
 		inline Application &get_application() const { return m_App; }

@@ -6,6 +6,7 @@
 #include "fif/core/event/window_event.hpp"
 #include "fif/core/opengl.hpp"
 #include "fif/core/util/assertion.hpp"
+#include "stb_image.h"
 
 namespace fif::core {
 	Window::Window(Application &app, const WindowProperties &props) : m_Size(props.size), m_App(app) {
@@ -53,5 +54,12 @@ namespace fif::core {
 
 	void Window::set_should_close(bool value) {
 		glfwSetWindowShouldClose(mp_GlfwWindow, static_cast<int>(value));
+	}
+
+	void Window::set_icon(const std::string &path) {
+		GLFWimage icon;
+		icon.pixels = stbi_load(path.c_str(), &icon.width, &icon.height, nullptr, 4);
+		glfwSetWindowIcon(mp_GlfwWindow, 1, &icon);
+		stbi_image_free(icon.pixels);
 	}
 }// namespace fif::core

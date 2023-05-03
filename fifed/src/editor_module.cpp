@@ -1,38 +1,39 @@
 #include "editor_module.hpp"
 #include "camera_controller.hpp"
-#include "color.hpp"
 #include "common.hpp"
 #include "components/lua_script_component.hpp"
-#include "ecs/components/tag_component.hpp"
-#include "fif/lua_scripting/lua_scripting_module.hpp"
-#include "grid.hpp"
-
 #include "components/quad_component.hpp"
 #include "components/renderable_component.hpp"
-#include "ecs/scene.hpp"
+#include "grid.hpp"
+
 #include "fif/core/application.hpp"
+#include "fif/core/ecs/components/tag_component.hpp"
+#include "fif/core/ecs/scene.hpp"
 #include "fif/core/event/event.hpp"
 #include "fif/core/event/event_dispatcher.hpp"
 #include "fif/core/event/mouse_event.hpp"
 #include "fif/core/performance_stats.hpp"
 #include "fif/core/util/rng.hpp"
+#include "fif/gfx/color.hpp"
 #include "fif/gfx/components/transform_component.hpp"
 #include "fif/gfx/gfx_module.hpp"
 #include "fif/gfx/ortho_camera.hpp"
 #include "fif/gfx/renderer2d.hpp"
 #include "fif/imgui/imgui_module.hpp"
 #include "fif/input/input_module.hpp"
+#include "fif/lua_scripting/lua_scripting_module.hpp"
 
 #include "glm/gtc/type_ptr.hpp"
 #include "imgui.h"
-
-#include <limits>
 
 EditorModule::EditorModule() {}
 EditorModule::~EditorModule() {}
 
 void EditorModule::on_start(Application &app) {
+	app.get_window().set_icon("assets/logo.png");
+
 	mp_FrameBuffer = std::make_unique<FrameBuffer>(app.get_window().get_size());
+	mp_LogoTexture = std::make_unique<Texture>("assets/logo.png", GL_NEAREST);
 
 	ImGuiModule::get_instance()->add_render_func(std::bind(&EditorModule::on_render_im_gui, this));
 
@@ -50,6 +51,18 @@ void EditorModule::on_render_im_gui() {
 	// TODO: abstract EditorPanel class
 
 	if(ImGuiModule::get_instance()->begin_dockspace()) {
+		if(ImGui::Begin("Logo")) {
+			const ImVec2 contentRegion = ImGui::GetContentRegionAvail();
+			const float contentRegionMin = std::min(contentRegion.x, contentRegion.y);
+			const ImVec2 windowSize = ImGui::GetWindowSize();
+
+			ImGui::SetCursorPosX((windowSize.x - contentRegionMin) * 0.5f);
+			ImGui::SetCursorPosY((windowSize.y - contentRegionMin) * 0.5f);
+
+			ImGui::Image(reinterpret_cast<void *>(mp_LogoTexture->getID()), ImVec2(contentRegionMin, contentRegionMin), ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f));
+		}
+		ImGui::End();
+
 		if(ImGui::Begin("Performance")) {
 			const PerformanceStats &stats = Application::get_instance().get_performance_stats();
 			ImGui::Text("Frame time: %f ms", stats.frameTimeMs);

@@ -5,6 +5,7 @@
 #include "fif/core/event/event.hpp"
 #include "fif/core/module.hpp"
 #include "fif/gfx/frame_buffer.hpp"
+#include "fif/gfx/texture.hpp"
 
 #include <memory>
 
@@ -25,4 +26,5 @@ private:
 
 private:
 	std::unique_ptr<FrameBuffer> mp_FrameBuffer;
+	std::unique_ptr<Texture> mp_LogoTexture;
 };

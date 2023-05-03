@@ -15,7 +15,6 @@ set(INC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
 add_compile_options(-fPIC -fno-exceptions)
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-  add_compile_options(-O2)
   add_compile_options(-g3)
   add_compile_definitions(FIF_DEBUG)
   add_compile_definitions(FIF_PROFILING_ENABLED)
@@ -29,7 +28,7 @@ function(build_module target dir libs)
   add_library(${target} STATIC ${SOURCES})
 
   set_target_properties(${target} PROPERTIES PUBLIC_HEADER ${INC_DIR}/fif/${dir})
-  target_include_directories(${target} PUBLIC ${INC_DIR} ${INC_DIR}/fif/${dir} PRIVATE ${SRC_DIR}/${dir})
+  target_include_directories(${target} PUBLIC ${INC_DIR} ${INC_DIR}/fif/${dir} PRIVATE ${SRC_DIR}/${dir} ${LIB_DIR}/stb)
   target_link_libraries(${target} ${libs})
 
   target_compile_options(${target} PUBLIC -Wall -Wextra)
