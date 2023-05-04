@@ -4,8 +4,9 @@
 # Todo
 ## Important
 - Component reflection/inspection
-- Textures
 - Default dock layout
+- Asset management
 
 ## Not Important
 - Precompiled headers
+- Demo inspired by [driftr](https://kindanice.itch.io/driftr)
