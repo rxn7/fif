@@ -18,8 +18,9 @@ namespace fif::gfx {
 		inline u16 getWidth() const { return m_Width; }
 		inline u16 getHeight() const { return m_Height; }
 		inline glm::u16vec2 getSize() const { return glm::u16vec2(m_Width, m_Height); }
+		inline void bind() const { glBindTexture(GL_TEXTURE_2D, m_ID); }
+		inline static void unbind() { glBindTexture(GL_TEXTURE_2D, 0); }
 
-	private:
 		void create(u16 width, u16 height, GLenum internalFormat, GLenum dataFormat, GLenum filter, GLenum wrap, void *data);
 
 	public:

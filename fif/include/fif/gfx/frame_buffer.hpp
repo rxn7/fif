@@ -1,6 +1,8 @@
 #pragma once
 
 #include "fif/core/types.hpp"
+#include "fif/gfx/texture.hpp"
+
 #include "glm/vec2.hpp"
 
 namespace fif::gfx {
@@ -10,7 +12,7 @@ namespace fif::gfx {
 		virtual ~FrameBuffer();
 
 		inline u32 getFboID() const { return m_FboID; }
-		inline u32 getTextureID() const { return m_TextureID; }
+		inline const Texture &getTexture() const { return m_Texture; }
 		void bind();
 		void unbind();
 		void invalidate();
@@ -18,8 +20,8 @@ namespace fif::gfx {
 		void set_size(const glm::vec2 &size);
 
 	private:
+		Texture m_Texture;
 		glm::vec2 m_Size;
 		u32 m_FboID = 0;
-		u32 m_TextureID = 0;
 	};
 }// namespace fif::gfx

@@ -152,7 +152,7 @@ void EditorModule::on_render_im_gui() {
 			GfxModule::set_viewport(glm::vec2(size.x, size.y), glm::vec2(pos.x, pos.y));
 			mp_FrameBuffer->set_size(glm::vec2(size.x, size.y));
 
-			ImGui::Image(reinterpret_cast<ImTextureID>(mp_FrameBuffer->getTextureID()), size, ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f));
+			ImGui::Image(reinterpret_cast<ImTextureID>(mp_FrameBuffer->getTexture().getID()), size, ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f));
 			m_ViewportHovered = ImGui::IsItemHovered();
 
 			ImGui::EndChild();
