@@ -36,7 +36,7 @@ namespace fif::core {
 		template<class T, class... Args> void attach_module(Args &&...args) {
 			static_assert(std::is_base_of<Module, T>().value, "T doesn't derive from Module!");
 
-			std::unique_ptr<Module> &mod = m_Modules.emplace_back(std::make_unique<T>(args...));
+			std::unique_ptr<Module> &mod = m_Modules.emplace_back(std::make_unique<T>(std::forward<Args>(args)...));
 			FIF_LOG("Module " << mod->get_name() << " attached");
 		}
 
