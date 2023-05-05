@@ -3,13 +3,15 @@
 #include "event/mouse_event.hpp"
 #include "fif/gfx/ortho_camera.hpp"
 #include "fif/gfx/renderer2d.hpp"
+#include "gfx_module.hpp"
 
 namespace fifed {
 	void CameraController::update() {
-		OrthoCamera &cam = Renderer2D::get_camera();
+		Renderer2D &renderer2D = GfxModule::get_instance()->get_renderer2D();
+		OrthoCamera &cam = renderer2D.get_camera();
 
 		if(isZooming) {
-			const glm::vec2 mousePosition = InputModule::get_mouse_position();
+			const glm::vec2 mousePosition = InputModule::get_instance()->get_mouse_position();
 			const glm::vec2 mouseWorldPositionBeforeZoom = cam.screen_to_world(mousePosition);
 
 			cam.m_Zoom = glm::lerp(cam.m_Zoom, targetZoom, zoomLerpSpeed * Timing::get_delta_time());
@@ -32,14 +34,16 @@ namespace fifed {
 		if(event.m_Handled || !viewportHovered)
 			return;
 
-		OrthoCamera &cam = Renderer2D::get_camera();
+		GfxModule *gfx = GfxModule::get_instance();
+		InputModule *input = InputModule::get_instance();
+		Renderer2D &renderer2D = gfx->get_renderer2D();
+		OrthoCamera &cam = renderer2D.get_camera();
 
-		const glm::vec2 mousePosition = GfxModule::get_point_relative_to_viewport(::InputModule::get_mouse_position());
-		if(mousePosition.x < 0 || mousePosition.y < 0 || mousePosition.x > GfxModule::get_viewport_size().x ||
-		   mousePosition.y > GfxModule::get_viewport_size().y)
+		const glm::vec2 mousePosition = gfx->get_point_relative_to_viewport(input->get_mouse_position());
+		if(mousePosition.x < 0 || mousePosition.y < 0 || mousePosition.x > gfx->get_viewport_size().x || mousePosition.y > gfx->get_viewport_size().y)
 			return;
 
-		::EventDispatcher::dispatch<MouseScrolledEvent>(event, [&](MouseScrolledEvent &scrollEvent) {
+		EventDispatcher::dispatch<MouseScrolledEvent>(event, [&](MouseScrolledEvent &scrollEvent) {
 			if(scrollEvent.get_value().y == 0)
 				return false;
 
@@ -52,11 +56,11 @@ namespace fifed {
 		});
 
 		EventDispatcher::dispatch<MouseMovedEvent>(event, [&](MouseMovedEvent &movedEvent) {
-			if(!InputModule::get_instance()->is_button_held(GLFW_MOUSE_BUTTON_RIGHT))
+			if(!input->is_button_held(GLFW_MOUSE_BUTTON_RIGHT))
 				return false;
 
 			const glm::vec2 mouseWorldPosition = cam.screen_to_world(movedEvent.get_position());
-			const glm::vec2 lastMouseWorldPosition = cam.screen_to_world(InputModule::get_instance()->get_last_mouse_position());
+			const glm::vec2 lastMouseWorldPosition = cam.screen_to_world(input->get_last_mouse_position());
 			const glm::vec2 delta = mouseWorldPosition - lastMouseWorldPosition;
 
 			cam.m_Position -= delta;

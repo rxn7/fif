@@ -2,6 +2,7 @@
 #include "../../common.hpp"
 
 #include "fif/gfx/renderer2d.hpp"
+#include "gfx_module.hpp"
 
 namespace fifed {
 	const char *PerformancePanel::get_title() const {
@@ -14,7 +15,7 @@ namespace fifed {
 		ImGui::Text("FPS: %f", stats.fps);
 
 		if(ImGui::TreeNode("Renderer2D")) {
-			const Renderer2D::Stats &rendererStats = Renderer2D::get_stats();
+			const Renderer2DStats &rendererStats = GfxModule::get_instance()->get_renderer2D().get_stats();
 			ImGui::Text("Circles: %i", rendererStats.circles);
 			ImGui::Text("Quads: %i", rendererStats.quads);
 			ImGui::Text("Vertices: %i", rendererStats.vertices);

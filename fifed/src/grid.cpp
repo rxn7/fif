@@ -42,7 +42,7 @@ namespace fifed {
 		if(!enabled)
 			return;
 
-		const OrthoCamera &cam = Renderer2D::get_camera();
+		const OrthoCamera &cam = GfxModule::get_instance()->get_renderer2D().get_camera();
 
 		sp_Shader->bind();
 		sp_Shader->set_uniform("u_CameraSize", cam.get_size());

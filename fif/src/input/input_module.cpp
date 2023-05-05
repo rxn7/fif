@@ -3,9 +3,6 @@
 #include "fif/core/event/mouse_event.hpp"
 
 namespace fif::input {
-	static glm::vec2 s_LastMousePosition;
-	static glm::vec2 s_MousePosition;
-
 	FIF_MODULE_INSTANCE_IMPL(InputModule);
 
 	InputModule::InputModule() {
@@ -50,22 +47,24 @@ namespace fif::input {
 		});
 
 		glfwSetCursorPosCallback(glfwWindow, []([[maybe_unused]] GLFWwindow *glfwWindow, double x, double y) {
-			core::Window *window = FIF_GET_WINDOW_FROM_GLFW_WINDOW(glfwWindow);
-			s_MousePosition = {x, y};
-			const glm::vec2 delta = s_MousePosition - s_LastMousePosition;
+			InputModule *input = InputModule::get_instance();
 
-			core::MouseMovedEvent event(s_MousePosition, delta);
+			core::Window *window = FIF_GET_WINDOW_FROM_GLFW_WINDOW(glfwWindow);
+			input->m_MousePosition = {x, y};
+			const glm::vec2 delta = input->m_MousePosition - input->m_LastMousePosition;
+
+			core::MouseMovedEvent event(input->m_MousePosition, delta);
 			window->get_application().on_event(event);
 
-			s_LastMousePosition = s_MousePosition;
+			input->m_LastMousePosition = input->m_MousePosition;
 		});
 	}
 
 	glm::vec2 InputModule::get_mouse_position() {
-		return s_MousePosition;
+		return m_MousePosition;
 	}
 
 	glm::vec2 InputModule::get_last_mouse_position() {
-		return s_LastMousePosition;
+		return m_LastMousePosition;
 	}
 }// namespace fif::input

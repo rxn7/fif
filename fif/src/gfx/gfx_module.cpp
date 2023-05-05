@@ -9,26 +9,9 @@
 namespace fif::gfx {
 	FIF_MODULE_INSTANCE_IMPL(GfxModule);
 
-	glm::vec2 GfxModule::s_ViewportPosition;
-	glm::vec2 GfxModule::s_ViewportSize;
-
 	GfxModule::GfxModule() {
 		FIF_MODULE_INIT_INSTANCE();
-
-		FIF_LOG("OpenGL Renderer: " << glGetString(GL_RENDERER));
-		FIF_LOG("OpenGL Version: " << glGetString(GL_VERSION));
-		FIF_LOG("OpenGL Vendor: " << glGetString(GL_VENDOR));
-
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-		i32 textureSlotCount = 0;
-		glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &textureSlotCount);
-
-		FIF_LOG("Max texture slots: " << textureSlotCount);
-
 		ShaderLibrary::init();
-		Renderer2D::init(textureSlotCount);
 	}
 
 	void GfxModule::on_start(core::Application &app) {
@@ -37,11 +20,11 @@ namespace fif::gfx {
 
 	void GfxModule::on_update() {
 		glClear(GL_COLOR_BUFFER_BIT);
-		Renderer2D::begin();
+		m_Renderer2D.start();
 	}
 
 	void GfxModule::on_render() {
-		Renderer2D::end();
+		m_Renderer2D.end();
 	}
 
 	void GfxModule::on_event(fif::core::Event &event) {

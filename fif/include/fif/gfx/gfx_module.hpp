@@ -3,6 +3,7 @@
 #include "fif/core/module.hpp"
 #include "fif/gfx/camera.hpp"
 #include "fif/gfx/frame_buffer.hpp"
+#include "fif/gfx/renderer2d.hpp"
 
 namespace fif::gfx {
 	class GfxModule final : public core::Module {
@@ -12,13 +13,15 @@ namespace fif::gfx {
 		GfxModule();
 		FIF_MODULE_INSTANCE_FUNC_DECL(GfxModule)
 
-		static inline glm::vec2 get_viewport_size() { return s_ViewportSize; }
-		static inline glm::vec2 get_viewport_position() { return s_ViewportPosition; }
-		static inline glm::vec2 get_point_relative_to_viewport(const glm::vec2 &point) { return point - s_ViewportPosition; }
+		inline glm::vec2 get_viewport_size() { return m_ViewportSize; }
+		inline glm::vec2 get_viewport_position() { return m_ViewportPosition; }
+		inline glm::vec2 get_point_relative_to_viewport(const glm::vec2 &point) { return point - m_ViewportPosition; }
 
-		static inline void set_viewport(const glm::vec2 &size, const glm::vec2 &pos = {0, 0}) {
-			s_ViewportSize = size;
-			s_ViewportPosition = pos;
+		inline Renderer2D &get_renderer2D() { return m_Renderer2D; }
+
+		inline void set_viewport(const glm::vec2 &size, const glm::vec2 &pos = {0, 0}) {
+			m_ViewportSize = size;
+			m_ViewportPosition = pos;
 		}
 
 		void on_start(core::Application &app) override;
@@ -27,7 +30,10 @@ namespace fif::gfx {
 		void on_event(core::Event &event) override;
 
 	public:
-		static glm::vec2 s_ViewportSize;
-		static glm::vec2 s_ViewportPosition;
+		glm::vec2 m_ViewportSize;
+		glm::vec2 m_ViewportPosition;
+
+	private:
+		Renderer2D m_Renderer2D;
 	};
 }// namespace fif::gfx

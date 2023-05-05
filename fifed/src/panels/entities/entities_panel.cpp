@@ -21,13 +21,8 @@ namespace fifed {
 			TransformComponent &trans = scene.add_component<TransformComponent>(ent);
 			trans.position = Rng::get_vec2(-1000, 1000);
 
-			if(Rng::get_bool()) {
-				QuadComponent &quad = scene.add_component<QuadComponent>(ent);
-				quad.size = glm::vec2(Rng::get_f32(20, 100), Rng::get_f32(20, 100));
-			} else {
-				CircleComponent &circle = scene.add_component<CircleComponent>(ent);
-				circle.radius = Rng::get_f32(40, 200);
-			}
+			QuadComponent &quad = scene.add_component<QuadComponent>(ent);
+			quad.size = glm::vec2(Rng::get_f32(20, 100), Rng::get_f32(20, 100));
 
 			RenderableComponent &renderable = scene.add_component<RenderableComponent>(ent);
 			renderable.color = Color(Rng::get_u8(0u, 255u), Rng::get_u8(0u, 255u), Rng::get_u8(0u, 255u), Rng::get_u8(100u, 255u));

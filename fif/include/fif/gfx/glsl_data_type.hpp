@@ -5,4 +5,5 @@ namespace fif::gfx {
 
 	u32 get_glsl_data_type_size(GlslDataType type);
 	u32 get_glsl_data_type_component_count(GlslDataType type);
+	GLenum glsl_data_type_to_opengl_enum(GlslDataType type);
 };// namespace fif::gfx

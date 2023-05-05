@@ -12,14 +12,15 @@ namespace fif::gfx {
 	}
 
 	void OrthoCamera::update_size() {
-		const f32 aspect = static_cast<f32>(GfxModule::get_viewport_size().y) / static_cast<f32>(GfxModule::get_viewport_size().x);
+		const glm::vec2 viewportSize = GfxModule::get_instance()->get_viewport_size();
+		const f32 aspect = static_cast<f32>(viewportSize.y) / static_cast<f32>(viewportSize.x);
 		m_Size = glm::vec2(BASE_SIZE, BASE_SIZE * aspect) * m_Zoom;
 	}
 
 	glm::vec2 OrthoCamera::screen_to_world(const glm::vec2 &position) const {
-		const glm::vec2 relativePosition = position - GfxModule::get_viewport_position();
-		const glm::vec2 normalizedPosition(
-			(relativePosition.x * 2.0f) / GfxModule::get_viewport_size().x - 1.0f, 1.0f - (2.0f * relativePosition.y) / GfxModule::get_viewport_size().y);
+		const glm::vec2 viewportSize = GfxModule::get_instance()->get_viewport_size();
+		const glm::vec2 relativePosition = position - GfxModule::get_instance()->get_viewport_position();
+		const glm::vec2 normalizedPosition((relativePosition.x * 2.0f) / viewportSize.x - 1.0f, 1.0f - (2.0f * relativePosition.y) / viewportSize.y);
 
 		return normalizedPosition * m_Size + m_Position;
 	}
