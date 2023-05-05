@@ -27,15 +27,20 @@ namespace fif::lua_scripting {
 		app.add_render_system(lua_script_render_system);
 	}
 
-	void LuaScriptingModule::attach_script(LuaScriptComponent &component, const std::string &path) {
+	void LuaScriptingModule::attach_script(LuaScriptComponent &script, const std::string &path) {
 		sol::protected_function_result result = m_Lua.safe_script_file(path);
 		if(!result.valid()) {
 			const sol::error error = result;
 			FIF_LOG_ERROR("Failed to load lua script: " << error.what());
+			script.loaded = false;
+			script.updateFunc = nullptr;
+			script.renderFunc = nullptr;
+			return;
 		}
 
-		component.updateFunc = m_Lua["Update"];
-		component.renderFunc = m_Lua["Render"];
+		script.loaded = true;
+		script.updateFunc = m_Lua["Update"];
+		script.renderFunc = m_Lua["Render"];
 	}
 
 	void LuaScriptingModule::run_script(const std::string &path) {

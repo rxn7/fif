@@ -48,6 +48,7 @@ endfunction()
 
 if(FIF_BUILD_CORE)
   build_module(fif-core core "glfw;glm;glad;EnTT")
+  target_compile_definitions(fif-core PUBLIC ENTT_DISABLE_ASSERT)
 endif()
 
 if(FIF_BUILD_GFX)
@@ -77,5 +78,6 @@ set(GLFW_INSTALL OFF CACHE INTERNAL "Install GLFW")
 add_subdirectory(${LIB_DIR}/glfw)
 add_subdirectory(${LIB_DIR}/glad)
 add_subdirectory(${LIB_DIR}/glm)
+
 add_subdirectory(${LIB_DIR}/entt)
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/imgui.cmake)

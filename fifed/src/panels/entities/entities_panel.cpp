@@ -7,6 +7,7 @@
 
 #include "fif/core/ecs/components/tag_component.hpp"
 #include "imgui.h"
+#include "lua_scripting_module.hpp"
 
 namespace fifed {
 	template<typename T> static void draw_component(const std::string &name, EntityID ent, Scene &scene, std::function<void(T &)> drawFunc);
@@ -30,6 +31,8 @@ namespace fifed {
 
 			RenderableComponent &renderable = scene.add_component<RenderableComponent>(ent);
 			renderable.color = Color(Rng::get_u8(0u, 255u), Rng::get_u8(0u, 255u), Rng::get_u8(0u, 255u), Rng::get_u8(100u, 255u));
+
+			scene.add_component<LuaScriptComponent>(ent);
 		}
 
 		if(ImGui::BeginChild("EntityList"))
@@ -38,7 +41,7 @@ namespace fifed {
 		ImGui::EndChild();
 	}
 
-	void draw_components(EntityID ent, Scene &scene) {
+	void EntitiesPanel::draw_components(EntityID ent, Scene &scene) {
 		draw_component<TransformComponent>("Transform", ent, scene, [](TransformComponent &transform) {
 			ImGui::DragFloat2("Position", glm::value_ptr(transform.position));
 
@@ -63,11 +66,21 @@ namespace fifed {
 		});
 
 		draw_component<LuaScriptComponent>("Lua Script", ent, scene, [](LuaScriptComponent &script) {
+			if(script.loaded)
+				ImGui::Text("Script: %s", script.path);
+			else
+				ImGui::Text("No script is attached to this component!");
+
 			if(ImGui::Button("Load Script"))
 				ImGui::OpenPopup("LoadScript");
 
 			if(ImGui::BeginPopup("LoadScript")) {
-				// TODO: File dialog
+				ImGui::InputText("File path", script.path, 1024);
+				if(ImGui::Button("Load")) {
+					LuaScriptingModule::get_instance()->attach_script(script, script.path);
+					ImGui::CloseCurrentPopup();
+				}
+				ImGui::EndPopup();
 			}
 		});
 	}
@@ -78,7 +91,7 @@ namespace fifed {
 		ImGui::PushID(static_cast<u32>(ent));
 
 		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_SpanAvailWidth;
-		bool open = ImGui::TreeNodeEx((void *)ent, flags, name);
+		bool open = ImGui::TreeNodeEx(name, flags);
 
 		if(ImGui::IsItemClicked(ImGuiMouseButton_Right))
 			ImGui::OpenPopup("EntitySettings");
@@ -104,10 +117,11 @@ namespace fifed {
 		if(!scene.has_component<T>(ent))
 			return;
 
+		ImGui::PushID(typeid(T).hash_code() + static_cast<u32>(ent));
 		T &component = scene.get_component<T>(ent);
 
 		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_SpanAvailWidth;
-		bool open = ImGui::TreeNodeEx((void *)typeid(T).hash_code(), flags, name.c_str());
+		bool open = ImGui::TreeNodeEx(name.c_str(), flags);
 
 		if(ImGui::IsItemClicked(ImGuiMouseButton_Right))
 			ImGui::OpenPopup("ComponentSettings");
@@ -126,6 +140,8 @@ namespace fifed {
 
 		if(removeComponent)
 			scene.remove_component<T>(ent);
+
+		ImGui::PopID();
 	}
 
 }// namespace fifed
