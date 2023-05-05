@@ -11,30 +11,10 @@ namespace fif::gfx {
 		glAttachShader(m_ID, vertID);
 
 		glLinkProgram(m_ID);
-
-		const auto printInfoLog = [](u32 id) {
-			int logLength;
-			glGetProgramiv(id, GL_INFO_LOG_LENGTH, &logLength);
-
-			char *buffer = new char[logLength];
-			glGetProgramInfoLog(id, logLength, NULL, buffer);
-			FIF_LOG_ERROR("Failed to link shader program: " << buffer);
-
-			delete[] buffer;
-			std::abort();
-		};
-
-		int status;
-		glGetProgramiv(m_ID, GL_LINK_STATUS, &status);
-		if(status == 0) {
-			printInfoLog(m_ID);
-		}
+		check_status(m_ID, GL_LINK_STATUS, true);
 
 		glValidateProgram(m_ID);
-		glGetProgramiv(m_ID, GL_VALIDATE_STATUS, &status);
-		if(status == 0) {
-			printInfoLog(m_ID);
-		}
+		check_status(m_ID, GL_VALIDATE_STATUS, true);
 
 		glDeleteShader(fragID);
 		glDeleteShader(vertID);
@@ -52,28 +32,13 @@ namespace fif::gfx {
 		glUseProgram(0);
 	}
 
-	u32 Shader::compile(int type, const char *src) {
+	u32 Shader::compile(GLenum type, const char *src) {
 		FIF_ASSERT(type == GL_FRAGMENT_SHADER || type == GL_VERTEX_SHADER, "Only fragment and vertex shaders are supported");
 		const u32 id = glCreateShader(type);
 
 		glShaderSource(id, 1, &src, NULL);
 		glCompileShader(id);
-
-		int status;
-		glGetShaderiv(id, GL_COMPILE_STATUS, &status);
-		if(status == 0) {
-			int logLength;
-			glGetShaderiv(id, GL_INFO_LOG_LENGTH, &logLength);
-
-			char *buffer = new char[logLength];
-			glGetShaderInfoLog(id, logLength, NULL, buffer);
-
-			FIF_LOG_ERROR("Failed to compile shader: " << buffer);
-
-			delete[] buffer;
-
-			std::abort();
-		}
+		check_status(id, GL_COMPILE_STATUS, false);
 
 		return id;
 	}
@@ -85,7 +50,6 @@ namespace fif::gfx {
 			return it->second;
 		}
 
-		// TODO: Check for -1
 		const u32 id = glGetUniformLocation(m_ID, name.c_str());
 		m_UniformIDs.insert({name, id});
 
@@ -101,35 +65,33 @@ namespace fif::gfx {
 		return it->second;
 	}
 
-	void Shader::set_uniform(const std::string &name, int value) {
-		glUniform1i(get_uniform_location(name), value);
+	void Shader::check_status(u32 id, GLenum type, bool program) {
+		i32 status;
+
+		if(program)
+			glGetProgramiv(id, type, &status);
+		else
+			glGetShaderiv(id, type, &status);
+
+		if(!status)
+			print_info_log(id, program);
 	}
 
-	void Shader::set_uniform(const std::string &name, f32 value) {
-		glUniform1f(get_uniform_location(name), value);
-	}
+	void Shader::print_info_log(u32 id, bool program) {
+		int logLength;
 
-	void Shader::set_uniform(const std::string &name, const Color &value) {
-		set_uniform(name, fif::gfx::get_normalized_color(value));
-	}
+		if(program)
+			glGetProgramiv(id, GL_INFO_LOG_LENGTH, &logLength);
+		else
+			glGetShaderiv(id, GL_INFO_LOG_LENGTH, &logLength);
 
-	void Shader::set_uniform(const std::string &name, const glm::vec2 &value) {
-		glUniform2f(get_uniform_location(name), value.x, value.y);
-	}
+		char buffer[logLength];
 
-	void Shader::set_uniform(const std::string &name, const glm::vec3 &value) {
-		glUniform3f(get_uniform_location(name), value.x, value.y, value.z);
-	}
+		if(program)
+			glGetProgramInfoLog(id, logLength, NULL, buffer);
+		else
+			glGetShaderInfoLog(id, logLength, NULL, buffer);
 
-	void Shader::set_uniform(const std::string &name, const glm::vec4 &value) {
-		glUniform4f(get_uniform_location(name), value.x, value.y, value.z, value.w);
-	}
-
-	void Shader::set_uniform(const std::string &name, const glm::mat3 &value) {
-		glUniformMatrix3fv(get_uniform_location(name), 1, 0u, glm::value_ptr(value));
-	}
-
-	void Shader::set_uniform(const std::string &name, const glm::mat4 &value) {
-		glUniformMatrix4fv(get_uniform_location(name), 1, 0u, glm::value_ptr(value));
+		FIF_LOG_ERROR(buffer);
 	}
 }// namespace fif::gfx
