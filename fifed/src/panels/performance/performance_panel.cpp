@@ -3,21 +3,23 @@
 
 #include "fif/gfx/renderer2d.hpp"
 
-const char *PerformancePanel::get_title() const {
-	return "Performance";
-}
-
-void PerformancePanel::on_render() {
-	const PerformanceStats &stats = Application::get_instance().get_performance_stats();
-	ImGui::Text("Frame time: %f ms", stats.frameTimeMs);
-	ImGui::Text("FPS: %f", stats.fps);
-
-	if(ImGui::TreeNode("Renderer2D")) {
-		const Renderer2D::Stats &rendererStats = Renderer2D::get_stats();
-		ImGui::Text("Circles: %i", rendererStats.circles);
-		ImGui::Text("Quads: %i", rendererStats.quads);
-		ImGui::Text("Vertices: %i", rendererStats.vertices);
-		ImGui::Text("Elements: %i", rendererStats.elements);
-		ImGui::TreePop();
+namespace fifed {
+	const char *PerformancePanel::get_title() const {
+		return "Performance";
 	}
-}
+
+	void PerformancePanel::on_render() {
+		const PerformanceStats &stats = Application::get_instance().get_performance_stats();
+		ImGui::Text("Frame time: %f ms", stats.frameTimeMs);
+		ImGui::Text("FPS: %f", stats.fps);
+
+		if(ImGui::TreeNode("Renderer2D")) {
+			const Renderer2D::Stats &rendererStats = Renderer2D::get_stats();
+			ImGui::Text("Circles: %i", rendererStats.circles);
+			ImGui::Text("Quads: %i", rendererStats.quads);
+			ImGui::Text("Vertices: %i", rendererStats.vertices);
+			ImGui::Text("Elements: %i", rendererStats.elements);
+			ImGui::TreePop();
+		}
+	}
+}// namespace fifed

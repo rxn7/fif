@@ -2,10 +2,9 @@
 
 #include "fif/gfx/shader.hpp"
 
-namespace shaders {
-	namespace Grid {
-		const std::string VERTEX = FIF_GLSL_VERSION FIF_GLSL_PRECISION
-			R"(
+namespace fifed::shaders::Grid {
+	const std::string VERTEX = FIF_GLSL_VERSION FIF_GLSL_PRECISION
+		R"(
 		layout(location = 0) in vec3 a_Position;
 		layout(location = 1) in vec2 a_UV;
 
@@ -16,10 +15,10 @@ namespace shaders {
 			gl_Position = vec4(a_Position, 1.0);
 		})";
 
-		// TODO: Fix aliasing
+	// TODO: Fix aliasing
 
-		const std::string FRAGMENT = FIF_GLSL_VERSION FIF_GLSL_PRECISION
-			R"(
+	const std::string FRAGMENT = FIF_GLSL_VERSION FIF_GLSL_PRECISION
+		R"(
 		uniform vec2 u_CameraSize;
 		uniform vec2 u_CameraPosition;
 		uniform vec4 u_LineColor;
@@ -39,5 +38,4 @@ namespace shaders {
 
 			f_Color = mix(u_LineColor, vec4(0.0), grid);
 		})";
-	}// namespace Grid
-}// namespace shaders
+}// namespace fifed::shaders::Grid

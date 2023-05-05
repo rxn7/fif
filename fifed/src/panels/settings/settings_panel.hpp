@@ -2,7 +2,9 @@
 
 #include "../editor_panel.hpp"
 
-class SettingsPanel final : public EditorPanel {
-	const char *get_title() const override;
-	void on_render() override;
-};
+namespace fifed {
+	class SettingsPanel final : public EditorPanel {
+		const char *get_title() const override;
+		void on_render() override;
+	};
+}// namespace fifed

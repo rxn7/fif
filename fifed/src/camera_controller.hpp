@@ -2,7 +2,7 @@
 
 #include "common.hpp"
 
-namespace CameraController {
+namespace fifed::CameraController {
 	void update();
 	void on_event(Event &event, bool viewportHovered);
 
@@ -18,4 +18,4 @@ namespace CameraController {
 	inline float targetZoom = 1.0f;
 
 	inline bool isZooming = false;
-};// namespace CameraController
+};// namespace fifed::CameraController

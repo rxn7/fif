@@ -11,14 +11,16 @@ const WindowProperties WINDOW_PROPS = {
 	.vsync = false,
 };
 
-Fifed::Fifed() : Application(WINDOW_PROPS) {
-	attach_module<InputModule>();
-	attach_module<GfxModule>();
-	attach_module<EditorModule>();
-	attach_module<ImGuiModule>();
-	attach_module<LuaScriptingModule>();
-}
+namespace fifed {
+	Fifed::Fifed() : Application(WINDOW_PROPS) {
+		attach_module<InputModule>();
+		attach_module<GfxModule>();
+		attach_module<EditorModule>();
+		attach_module<ImGuiModule>();
+		attach_module<LuaScriptingModule>();
+	}
+}// namespace fifed
 
 Application *get_application() {
-	return reinterpret_cast<Application *>(new Fifed());
+	return reinterpret_cast<Application *>(new fifed::Fifed());
 }

@@ -2,7 +2,9 @@
 
 #include "common.hpp"
 
-class Fifed : public Application {
-public:
-	Fifed();
-};
+namespace fifed {
+	class Fifed : public Application {
+	public:
+		Fifed();
+	};
+}// namespace fifed
