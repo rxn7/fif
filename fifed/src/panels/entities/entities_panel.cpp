@@ -114,11 +114,11 @@ namespace fifed {
 	}
 
 	template<typename T> static void draw_component(const std::string &name, EntityID ent, Scene &scene, std::function<void(T &)> drawFunc) {
-		if(!scene.has_component<T>(ent))
+		T *comp = scene.get_registry().try_get<T>(ent);
+		if(!comp)
 			return;
 
 		ImGui::PushID(typeid(T).hash_code() + static_cast<u32>(ent));
-		T &component = scene.get_component<T>(ent);
 
 		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_SpanAvailWidth;
 		bool open = ImGui::TreeNodeEx(name.c_str(), flags);
@@ -134,7 +134,7 @@ namespace fifed {
 		}
 
 		if(open) {
-			drawFunc(component);
+			drawFunc(*comp);
 			ImGui::TreePop();
 		}
 

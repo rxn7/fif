@@ -1,6 +1,7 @@
 #pragma once
 
 #include "entt/entt.hpp"
+#include <optional>
 
 namespace fif::core {
 	typedef entt::entity EntityID;
@@ -16,17 +17,17 @@ namespace fif::core {
 
 		template<typename T> inline bool has_component(EntityID entity) { return m_Registry.any_of<T>(entity); }
 
-		template<typename T> T &get_component(EntityID entity) {
+		template<typename T> inline T &get_component(EntityID entity) {
 			FIF_ASSERT(has_component<T>(entity), "This entity doesn't have a component of this type (" << typeid(T).name() << ")!");
 			return m_Registry.get<T>(entity);
 		}
 
-		template<typename T, typename... Args> T &add_component(EntityID entity, Args &&...args) {
+		template<typename T, typename... Args> inline T &add_component(EntityID entity, Args &&...args) {
 			FIF_ASSERT(!has_component<T>(entity), "This entity already has a component of this type (" << typeid(T).name() << ")!");
 			return m_Registry.emplace<T>(entity, std::forward<Args>(args)...);
 		}
 
-		template<typename T> void remove_component(EntityID entity) {
+		template<typename T> inline void remove_component(EntityID entity) {
 			FIF_ASSERT(has_component<T>(entity), "This entity doesn't have a component of this type (" << typeid(T).name() << ")!");
 			m_Registry.erase<T>(entity);
 		}
