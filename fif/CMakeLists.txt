@@ -13,7 +13,9 @@ set(LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vendor)
 set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 set(INC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-add_compile_options(-fPIC -fno-exceptions)
+if(CMAKE_COMPILER_IS_GNUCXX)
+  add_compile_options(-fPIC -fno-exceptions)
+endif()
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
   if(CMAKE_COMPILER_IS_GNUCXX)
@@ -33,8 +35,10 @@ function(build_module target dir libs)
   add_library(${target} STATIC ${SOURCES})
 
   set_target_properties(${target} PROPERTIES PUBLIC_HEADER ${INC_DIR}/fif/${dir})
+
   target_include_directories(${target} PUBLIC ${INC_DIR} ${INC_DIR}/fif/${dir} PRIVATE ${SRC_DIR}/${dir} ${LIB_DIR}/stb)
   target_link_libraries(${target} ${libs})
+
   target_precompile_headers(${target} PUBLIC ${INC_DIR}/fif/pch.hpp)
 
   if(CMAKE_COMPILER_IS_GNUCXX)

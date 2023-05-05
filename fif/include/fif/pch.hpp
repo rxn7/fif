@@ -12,9 +12,7 @@
 
 #include "fif/core/types.hpp"
 
-#include "entt/entt.hpp"
-
-#include "imgui.h"
+#include "entt/fwd.hpp"
 
 #include "glm/glm.hpp"
 #include "glm/gtc/type_ptr.hpp"
