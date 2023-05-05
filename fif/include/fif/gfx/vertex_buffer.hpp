@@ -1,24 +1,27 @@
 #pragma once
 
 #include "fif/gfx/shader.hpp"
-#include "fif/gfx/vertex.hpp"
+#include "vertex_buffer_layout.hpp"
 
 namespace fif::gfx {
 	class VertexBuffer {
 	public:
-		VertexBuffer(const Vertex *vertices, u32 vertexCount, const u16 *elements, u32 elementCount);
-		VertexBuffer(u32 vertexCount, u32 elementCount);
+		VertexBuffer(const void *vertices, u32 vertexCount, const u16 *elements, u32 elementCount, u32 m_VertexSize);
+		VertexBuffer(u32 vertexCount, u32 elementCount, u32 m_VertexSize);
 
 		void render() const;
-		void set_vertices(const Vertex *vertices, u32 count);
-		void set_elements(const u16 *elements, u32 count);
+		void set_vertices_and_elements(const void *vertices, u32 vertexCount, const u16 *elements, u32 elementCount);
+		void set_layout(const VertexBufferLayout &layout);
+		const VertexBufferLayout &get_layout() const { return m_Layout; }
 
 	private:
-		static void setup_vertex_attributes();
+		void setup_vertex_attributes();
 
 	protected:
+		VertexBufferLayout m_Layout;
 		u32 m_VertexCount;
 		u32 m_ElementCount;
+		u32 m_VertexSize;
 		u32 m_Vao;
 		u32 m_Vbo;
 		u32 m_Ebo;

@@ -1,14 +1,14 @@
 #include "fif/gfx/shader_library.hpp"
 #include "fif/core/util/assertion.hpp"
-#include "fif/gfx/shaders/circle.hpp"
-#include "fif/gfx/shaders/simple.hpp"
+#include "shaders/circle.hpp"
+#include "shaders/quad.hpp"
 
 namespace fif::gfx {
 	static std::unordered_map<std::string, std::unique_ptr<Shader>> s_Shaders;
 
 	void ShaderLibrary::init() {
 		add("circle", shaders::Simple::VERTEX, shaders::Circle::FRAGMENT);
-		add("simple", shaders::Simple::VERTEX, shaders::Simple::FRAGMENT);
+		add("quad", shaders::Simple::VERTEX, shaders::Simple::FRAGMENT);
 	}
 
 	Shader &ShaderLibrary::get(const std::string &name) {

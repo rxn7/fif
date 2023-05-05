@@ -22,8 +22,13 @@ namespace fif::gfx {
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+		i32 textureSlotCount = 0;
+		glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &textureSlotCount);
+
+		FIF_LOG("Max texture slots: " << textureSlotCount);
+
 		ShaderLibrary::init();
-		Renderer2D::init();
+		Renderer2D::init(textureSlotCount);
 	}
 
 	void GfxModule::on_start(core::Application &app) {

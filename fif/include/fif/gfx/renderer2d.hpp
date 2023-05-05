@@ -14,7 +14,7 @@ namespace fif::gfx {
 		OrthoCamera &get_camera();
 		Stats &get_stats();
 
-		void init();
+		void init(i32 textureSlotCount);
 		void begin();
 		void end();
 

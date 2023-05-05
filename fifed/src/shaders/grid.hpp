@@ -5,14 +5,14 @@
 namespace fifed::shaders::Grid {
 	const std::string VERTEX = FIF_GLSL_VERSION FIF_GLSL_PRECISION
 		R"(
-		layout(location = 0) in vec3 a_Position;
+		layout(location = 0) in vec2 a_Position;
 		layout(location = 1) in vec2 a_UV;
 
 		out vec2 v_UV;
 
 		void main() {
 			v_UV = a_UV;
-			gl_Position = vec4(a_Position, 1.0);
+			gl_Position = vec4(a_Position, 0.0, 1.0);
 		})";
 
 	// TODO: Fix aliasing

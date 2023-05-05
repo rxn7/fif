@@ -4,24 +4,23 @@
 
 #include "fif/gfx/renderer2d.hpp"
 #include "fif/gfx/shader.hpp"
-#include "fif/gfx/vertex.hpp"
 #include "fif/gfx/vertex_buffer.hpp"
 
 namespace fifed {
-	constexpr std::array<Vertex, 4> VERTICES = {
-		Vertex{
+	constexpr std::array<Grid::GridVertex, 4> VERTICES = {
+		Grid::GridVertex{
 			.position = {-1.0f, -1.0f},
 			.uv = {-1.0f, -1.0f},
 		},
-		Vertex{
+		Grid::GridVertex{
 			.position = {-1.0f, 1.0f},
 			.uv = {-1.0f, 1.0f},
 		},
-		Vertex{
+		Grid::GridVertex{
 			.position = {1.0f, 1.0f},
 			.uv = {1.0f, 1.0f},
 		},
-		Vertex{
+		Grid::GridVertex{
 			.position = {1.0f, -1.0f},
 			.uv = {1.0f, -1.0f},
 		},
@@ -34,7 +33,9 @@ namespace fifed {
 
 	void Grid::init() {
 		sp_Shader = std::make_unique<Shader>(shaders::Grid::VERTEX, shaders::Grid::FRAGMENT);
-		sp_VertexBuffer = std::make_unique<VertexBuffer>(VERTICES.data(), VERTICES.size(), ELEMENTS.data(), ELEMENTS.size());
+
+		sp_VertexBuffer = std::make_unique<VertexBuffer>(VERTICES.data(), VERTICES.size(), ELEMENTS.data(), ELEMENTS.size(), sizeof(Grid::GridVertex));
+		sp_VertexBuffer->set_layout(gridVertexBufferLayout);
 	}
 
 	void Grid::render() {
