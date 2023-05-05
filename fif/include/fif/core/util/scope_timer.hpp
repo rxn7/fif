@@ -6,19 +6,20 @@ namespace fif::core {
 		float durationMs;
 	};
 
-	template<typename Func> class ScopeTimer {
+	class ScopeTimer {
 	public:
-		ScopeTimer(const std::string &name, Func &&func) : m_Name(name), m_BeginTime(Clock::now()), m_Func(func) {}
+		typedef std::function<void(const TimerResult &result)> CallbackFunc;
+
+		ScopeTimer(const std::string &name, CallbackFunc callback) : m_Name(name), m_BeginTime(Clock::now()), m_Callback(callback) {}
 
 		~ScopeTimer() {
-			using namespace std::chrono;
-			const float durationMs = duration_cast<duration<float, std::milli>>((Clock::now() - m_BeginTime)).count();
-			m_Func(TimerResult{m_Name, durationMs});
+			const float durationMs = std::chrono::duration_cast<std::chrono::duration<float, std::milli>>((Clock::now() - m_BeginTime)).count();
+			m_Callback(TimerResult{m_Name, durationMs});
 		}
 
 	private:
 		std::string m_Name;
 		Clock::time_point m_BeginTime;
-		Func m_Func;
+		CallbackFunc m_Callback;
 	};
 }// namespace fif::core

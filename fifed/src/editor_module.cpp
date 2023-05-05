@@ -5,6 +5,7 @@
 #include "panels/entities/entities_panel.hpp"
 #include "panels/performance/performance_panel.hpp"
 #include "panels/settings/settings_panel.hpp"
+#include "util/scope_timer.hpp"
 
 namespace fifed {
 	EditorModule::EditorModule() {}
@@ -25,10 +26,10 @@ namespace fifed {
 	}
 
 	void EditorModule::on_render_im_gui() {
-		if(ImGuiModule::get_instance()->begin_dockspace()) {
+		if(ImGuiModule::get_instance()->begin_dockspace())
 			for(std::unique_ptr<EditorPanel> &panel : m_Panels)
 				panel->render();
-		}
+
 		ImGui::End();
 	}
 

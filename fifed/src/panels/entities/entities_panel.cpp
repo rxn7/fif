@@ -1,12 +1,16 @@
 #include "entities_panel.hpp"
 
 #include "components/circle_component.hpp"
+#include "components/lua_script_component.hpp"
 #include "fif/gfx/components/quad_component.hpp"
 #include "fif/gfx/components/transform_component.hpp"
 
 #include "fif/core/ecs/components/tag_component.hpp"
+#include "imgui.h"
 
 namespace fifed {
+	template<typename T> static void draw_component(const std::string &name, EntityID ent, Scene &scene, std::function<void(T &)> drawFunc);
+
 	const char *EntitiesPanel::get_title() const {
 		return "Entities";
 	}
@@ -28,28 +32,100 @@ namespace fifed {
 			renderable.color = Color(Rng::get_u8(0u, 255u), Rng::get_u8(0u, 255u), Rng::get_u8(0u, 255u), Rng::get_u8(100u, 255u));
 		}
 
-		if(ImGui::BeginChild("EntityList")) {
-			scene.for_each([&](EntityID &ent) {
-				const char *name;
+		if(ImGui::BeginChild("EntityList"))
+			scene.for_each([&](EntityID &ent) { draw_entity(ent, scene); });
 
-				if(scene.has_component<TagComponent>(ent))
-					name = scene.get_component<TagComponent>(ent).tag;
-				else
-					name = std::to_string(static_cast<u32>(ent)).c_str();
-
-				if(ImGui::TreeNode(name)) {
-					if(ImGui::TreeNode("Components")) {
-						// TODO: Render components properties
-						ImGui::TreePop();
-					}
-
-					if(ImGui::Button("Delete"))
-						scene.delete_entity(ent);
-
-					ImGui::TreePop();
-				}
-			});
-		}
 		ImGui::EndChild();
 	}
+
+	void draw_components(EntityID ent, Scene &scene) {
+		draw_component<TransformComponent>("Transform", ent, scene, [](TransformComponent &transform) {
+			ImGui::DragFloat2("Position", glm::value_ptr(transform.position));
+
+			float angleDegrees = glm::degrees(transform.angle);
+			ImGui::DragFloat("Angle", &angleDegrees, 1.0f, 0.0f, 360.0f);
+			transform.angle = glm::radians(angleDegrees);
+		});
+
+		draw_component<RenderableComponent>("Renderable", ent, scene, [](RenderableComponent &renderable) {
+			glm::vec4 color = glm::vec4(renderable.color) * (1.0f / 255.0f);
+			ImGui::ColorEdit4("Color", glm::value_ptr(color));
+			renderable.color = Color((color * 255.0f));
+		});
+
+		draw_component<QuadComponent>("Quad", ent, scene, [](QuadComponent &quad) { ImGui::DragFloat2("Size", glm::value_ptr(quad.size)); });
+
+		draw_component<CircleComponent>("Circle", ent, scene, [](CircleComponent &circle) {
+			ImGui::DragFloat("Radius", &circle.radius, 1.0f, 0.0f, 1000.0f);
+			constexpr u16 MIN_SEGMENTS = 5;
+			constexpr u16 MAX_SEGMENTS = 1000;
+			ImGui::DragScalar("Segments", ImGuiDataType_U16, &circle.segments, 1, &MIN_SEGMENTS, &MAX_SEGMENTS);
+		});
+
+		draw_component<LuaScriptComponent>("Lua Script", ent, scene, [](LuaScriptComponent &script) {
+			if(ImGui::Button("Load Script"))
+				ImGui::OpenPopup("LoadScript");
+
+			if(ImGui::BeginPopup("LoadScript")) {
+				// TODO: File dialog
+			}
+		});
+	}
+
+	void EntitiesPanel::draw_entity(EntityID ent, Scene &scene) {
+		const char *name = scene.has_component<TagComponent>(ent) ? scene.get_component<TagComponent>(ent).tag.c_str() : "Entity";
+
+		ImGui::PushID(static_cast<u32>(ent));
+
+		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_SpanAvailWidth;
+		bool open = ImGui::TreeNodeEx((void *)ent, flags, name);
+
+		if(ImGui::IsItemClicked(ImGuiMouseButton_Right))
+			ImGui::OpenPopup("EntitySettings");
+
+		bool deleteEntity = false;
+		if(ImGui::BeginPopup("EntitySettings")) {
+			deleteEntity = ImGui::MenuItem("Delete entity");
+			ImGui::EndPopup();
+		}
+
+		if(open) {
+			draw_components(ent, scene);
+			ImGui::TreePop();
+		}
+
+		ImGui::PopID();
+
+		if(deleteEntity)
+			scene.delete_entity(ent);
+	}
+
+	template<typename T> static void draw_component(const std::string &name, EntityID ent, Scene &scene, std::function<void(T &)> drawFunc) {
+		if(!scene.has_component<T>(ent))
+			return;
+
+		T &component = scene.get_component<T>(ent);
+
+		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_SpanAvailWidth;
+		bool open = ImGui::TreeNodeEx((void *)typeid(T).hash_code(), flags, name.c_str());
+
+		if(ImGui::IsItemClicked(ImGuiMouseButton_Right))
+			ImGui::OpenPopup("ComponentSettings");
+
+		bool removeComponent = false;
+		if(ImGui::BeginPopup("ComponentSettings")) {
+			removeComponent = ImGui::MenuItem("Remove component");
+
+			ImGui::EndPopup();
+		}
+
+		if(open) {
+			drawFunc(component);
+			ImGui::TreePop();
+		}
+
+		if(removeComponent)
+			scene.remove_component<T>(ent);
+	}
+
 }// namespace fifed

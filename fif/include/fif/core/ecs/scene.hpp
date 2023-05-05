@@ -7,11 +7,12 @@ namespace fif::core {
 
 	class Scene {
 	public:
+		EntityID create_entity(const std::string &name = "Entity");
+
 		inline void for_each(const std::function<void(EntityID &ent)> &func) { m_Registry.each(func); }
-
-		inline EntityID create_entity() { return m_Registry.create(); }
-
 		inline void delete_entity(EntityID entity) { m_Registry.destroy(entity); }
+		inline u64 get_entity_count() const { return m_Registry.storage<EntityID>().in_use(); }
+		inline entt::registry &get_registry() { return m_Registry; }
 
 		template<typename T> inline bool has_component(EntityID entity) { return m_Registry.any_of<T>(entity); }
 
@@ -29,9 +30,6 @@ namespace fif::core {
 			FIF_ASSERT(has_component<T>(entity), "This entity doesn't have a component of this type (" << typeid(T).name() << ")!");
 			m_Registry.remove<T>(entity);
 		}
-
-		inline u64 get_entity_count() const { return m_Registry.storage<EntityID>().in_use(); }
-		inline entt::registry &get_registry() { return m_Registry; }
 
 	protected:
 		entt::registry m_Registry;

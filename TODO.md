@@ -3,7 +3,6 @@
 
 # Todo
 ## Important
-- Component reflection/inspection
 - Default dock layout
 - Asset management
 
