@@ -20,7 +20,7 @@ namespace fif::gfx {
 		m_Size = size;
 
 		m_Texture.bind();
-		m_Texture.create(size.x, size.y, GL_RGB, GL_RGB, GL_NEAREST, GL_CLAMP_TO_EDGE, nullptr);
+		m_Texture.create(size.x, size.y, GL_RGB8, GL_RGB, GL_NEAREST, GL_CLAMP_TO_EDGE, nullptr);
 
 		glBindFramebuffer(GL_FRAMEBUFFER, m_FboID);
 		glViewport(0, 0, size.x, size.y);
