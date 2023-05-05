@@ -1,7 +1,6 @@
 #pragma once
 
 #include "fif/core/event/event.hpp"
-#include "fif/core/types.hpp"
 
 namespace fif::core {
 	class KeyEvent : public Event {

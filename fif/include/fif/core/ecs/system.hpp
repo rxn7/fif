@@ -1,10 +1,8 @@
 #pragma once
 
 #include "fif/core/event/event.hpp"
-#include "fif/core/types.hpp"
 
 #include "entt/entt.hpp"
-#include <functional>
 
 namespace fif::core {
 	typedef std::function<void(entt::registry &registry)> RenderSystem;

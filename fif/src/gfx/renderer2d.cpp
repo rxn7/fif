@@ -1,18 +1,8 @@
 #include "fif/gfx/renderer2d.hpp"
-#include "fif/core/util/assertion.hpp"
-#include "fif/core/util/log.hpp"
 #include "fif/gfx/batch.hpp"
 #include "fif/gfx/ortho_camera.hpp"
 #include "fif/gfx/shader_library.hpp"
 #include "fif/gfx/vertex_buffer.hpp"
-
-#include "glm/ext/matrix_float4x4.hpp"
-#include "glm/ext/matrix_transform.hpp"
-#include "util/clock.hpp"
-
-#include <chrono>
-#include <memory>
-#include <ratio>
 
 namespace fif::gfx {
 	static constexpr u32 BATCH_SIZE = 100000;

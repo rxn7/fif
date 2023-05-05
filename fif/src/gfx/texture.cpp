@@ -1,6 +1,4 @@
 #include "fif/gfx/texture.hpp"
-#include "fif/core/opengl.hpp"
-#include "fif/core/util/log.hpp"
 
 #define STB_IMAGE_IMPLEMENTATION
 #define STBI_ASSERT(x)

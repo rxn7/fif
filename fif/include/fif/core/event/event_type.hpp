@@ -1,7 +1,5 @@
 #pragma once
 
-#include "fif/core/types.hpp"
-
 namespace fif::core {
 	enum class EventType : u8 {
 		None,

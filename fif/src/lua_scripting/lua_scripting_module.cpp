@@ -1,8 +1,6 @@
 #include "fif/lua_scripting/lua_scripting_module.hpp"
 #include "systems/lua_script_system.hpp"
 
-#include "fif/core/application.hpp"
-#include "fif/core/util/log.hpp"
 #include <sol/protected_function_result.hpp>
 
 namespace fif::lua_scripting {

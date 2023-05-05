@@ -1,7 +1,3 @@
-#include "fif/core/util/timing.hpp"
-#include "fif/core/opengl.hpp"
-#include "fif/core/util/clock.hpp"
-#include "fif/core/util/log.hpp"
 #include <iomanip>
 
 using namespace std::chrono;

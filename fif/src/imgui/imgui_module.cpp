@@ -1,8 +1,4 @@
 #include "fif/imgui/imgui_module.hpp"
-#include "fif/core/application.hpp"
-#include "fif/core/event/event.hpp"
-#include "fif/core/event/event_type.hpp"
-#include "fif/core/util/assertion.hpp"
 
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"

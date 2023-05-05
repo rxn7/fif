@@ -1,7 +1,5 @@
 #pragma once
 
-#include "fif/core/util/log.hpp"
-
 #include "glm/mat4x4.hpp"
 
 namespace fif::gfx {

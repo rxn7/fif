@@ -3,8 +3,6 @@
 #include "fif/core/types.hpp"
 #include "fif/gfx/texture.hpp"
 
-#include "glm/vec2.hpp"
-
 namespace fif::gfx {
 	class FrameBuffer {
 	public:

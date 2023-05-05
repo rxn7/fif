@@ -1,11 +1,5 @@
 #pragma once
 
-#include <chrono>
-#include <string>
-
-#include "fif/core/util/clock.hpp"
-#include "fif/core/util/log.hpp"
-
 namespace fif::core {
 	struct TimerResult {
 		std::string name;

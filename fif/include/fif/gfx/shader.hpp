@@ -1,16 +1,7 @@
 #pragma once
 
-#include "fif/core/types.hpp"
 #include "fif/gfx/color.hpp"
 
-#include "glm/mat3x3.hpp"
-#include "glm/mat4x4.hpp"
-#include "glm/vec2.hpp"
-#include "glm/vec3.hpp"
-#include "glm/vec4.hpp"
-
-#include <memory>
-#include <string>
 #include <unordered_map>
 
 #define FIF_GLSL_VERSION "#version 300 es\n"

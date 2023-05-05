@@ -3,8 +3,6 @@
 #include "fif/gfx/shader.hpp"
 #include "fif/gfx/vertex.hpp"
 
-#include <memory>
-
 namespace fif::gfx {
 	class VertexBuffer {
 	public:

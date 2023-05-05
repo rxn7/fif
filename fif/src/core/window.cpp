@@ -1,11 +1,9 @@
 #include "fif/core/window.hpp"
 #include "fif/core/application.hpp"
-
 #include "fif/core/event/key_event.hpp"
 #include "fif/core/event/mouse_event.hpp"
 #include "fif/core/event/window_event.hpp"
-#include "fif/core/opengl.hpp"
-#include "fif/core/util/assertion.hpp"
+
 #include "stb_image.h"
 
 namespace fif::core {

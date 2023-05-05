@@ -2,9 +2,6 @@
 
 #include "fif/gfx/shader.hpp"
 
-#include <initializer_list>
-#include <memory>
-
 namespace fif::gfx {
 	namespace ShaderLibrary {
 		void init();

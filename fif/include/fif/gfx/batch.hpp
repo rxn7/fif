@@ -1,13 +1,9 @@
 #pragma once
 
-#include "fif/core/types.hpp"
-#include "fif/core/util/assertion.hpp"
 #include "fif/gfx/camera.hpp"
 #include "fif/gfx/shader.hpp"
 #include "fif/gfx/vertex.hpp"
 #include "fif/gfx/vertex_buffer.hpp"
-
-#include <vector>
 
 namespace fif::gfx {
 	class Batch {

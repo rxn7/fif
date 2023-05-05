@@ -5,14 +5,7 @@
 #include "fif/core/event/event.hpp"
 #include "fif/core/module.hpp"
 #include "fif/core/performance_stats.hpp"
-#include "fif/core/util/clock.hpp"
 #include "fif/core/window.hpp"
-
-#include <algorithm>
-#include <chrono>
-#include <memory>
-#include <set>
-#include <vector>
 
 namespace fif::core {
 	class Application {

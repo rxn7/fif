@@ -3,8 +3,6 @@
 #include "fif/gfx/shaders/circle.hpp"
 #include "fif/gfx/shaders/simple.hpp"
 
-#include <memory>
-
 namespace fif::gfx {
 	static std::unordered_map<std::string, std::unique_ptr<Shader>> s_Shaders;
 

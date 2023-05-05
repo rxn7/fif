@@ -1,9 +1,6 @@
 #pragma once
 
 #include "fif/core/event/event.hpp"
-#include "fif/core/util/assertion.hpp"
-
-#include <string>
 
 namespace fif::core {
 	class Application;

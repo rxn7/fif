@@ -2,8 +2,6 @@
 
 #include "fif/core/module.hpp"
 
-#include <functional>
-
 namespace fif::imgui {
 	class ImGuiModule final : public core::Module {
 	public:

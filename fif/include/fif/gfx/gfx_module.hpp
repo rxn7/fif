@@ -4,8 +4,6 @@
 #include "fif/gfx/camera.hpp"
 #include "fif/gfx/frame_buffer.hpp"
 
-#include "glm/vec2.hpp"
-
 namespace fif::gfx {
 	class GfxModule final : public core::Module {
 	public:

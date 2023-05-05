@@ -1,8 +1,5 @@
 #pragma once
 
-#include "glm/vec2.hpp"
-#include <string>
-
 struct GLFWwindow;
 
 #define FIF_GET_WINDOW_FROM_GLFW_WINDOW(glfwWindow) reinterpret_cast<fif::core::Window *>(glfwGetWindowUserPointer(glfwWindow))

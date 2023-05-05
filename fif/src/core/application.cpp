@@ -1,11 +1,6 @@
 #include "fif/core/application.hpp"
 #include "fif/core/event/event_dispatcher.hpp"
 #include "fif/core/event/window_event.hpp"
-#include "fif/core/opengl.hpp"
-#include "fif/core/util/assertion.hpp"
-#include "fif/core/util/clock.hpp"
-#include "fif/core/util/rng.hpp"
-#include "fif/core/util/timing.hpp"
 
 namespace fif::core {
 	Application *fif::core::Application::s_Instance = nullptr;

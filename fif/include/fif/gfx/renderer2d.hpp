@@ -1,9 +1,6 @@
 #pragma once
 
-#include "fif/core/types.hpp"
 #include "fif/gfx/ortho_camera.hpp"
-
-#include <memory>
 
 namespace fif::gfx {
 	namespace Renderer2D {

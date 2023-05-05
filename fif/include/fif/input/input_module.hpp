@@ -1,8 +1,6 @@
 #pragma once
 
 #include "fif/core/module.hpp"
-#include "fif/core/opengl.hpp"
-#include "fif/core/types.hpp"
 #include "fif/core/window.hpp"
 
 namespace fif::input {

@@ -1,6 +1,5 @@
 #pragma once
 
-#include "fif/core/types.hpp"
 #include "fif/gfx/color.hpp"
 
 #include "glm/ext/vector_float2.hpp"

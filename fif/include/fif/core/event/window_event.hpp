@@ -1,7 +1,6 @@
 #pragma once
 
-#include "event.hpp"
-#include "glm/vec2.hpp"
+#include "fif/core/event/event.hpp"
 
 namespace fif::core {
 	class WindowResizeEvent final : public Event {

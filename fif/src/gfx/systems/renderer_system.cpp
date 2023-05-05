@@ -5,8 +5,6 @@
 #include "fif/gfx/components/transform_component.hpp"
 #include "fif/gfx/renderer2d.hpp"
 
-#include "glm/gtc/constants.hpp"
-
 namespace fif::gfx {
 	void renderer_system(entt::registry &registry) {
 		registry.view<TransformComponent, RenderableComponent, CircleComponent>().each([]([[maybe_unused]] core::EntityID entity, auto &trans, auto &renderable, auto &circle) {

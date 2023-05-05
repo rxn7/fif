@@ -2,7 +2,6 @@
 
 #include "fif/core/types.hpp"
 #include "fif/gfx/camera.hpp"
-#include "glm/vec2.hpp"
 
 namespace fif::gfx {
 	class OrthoCamera : public Camera {

@@ -1,11 +1,6 @@
 #pragma once
 
 #include "fif/core/opengl.hpp"
-#include "fif/core/types.hpp"
-
-#include "glm/ext/vector_uint2_sized.hpp"
-
-#include <memory>
 
 namespace fif::gfx {
 	class Texture {

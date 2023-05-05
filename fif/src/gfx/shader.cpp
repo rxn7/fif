@@ -1,11 +1,4 @@
 #include "fif/gfx/shader.hpp"
-#include "fif/core/opengl.hpp"
-#include "fif/core/util/assertion.hpp"
-#include "fif/core/util/log.hpp"
-
-#include "glm/gtc/type_ptr.hpp"
-
-#include <array>
 
 namespace fif::gfx {
 	Shader::Shader(const std::string &vertexSrc, const std::string &fragmentSrc) {

@@ -1,12 +1,7 @@
 #include "fif/gfx/ortho_camera.hpp"
-#include "fif/core/application.hpp"
-#include "fif/core/opengl.hpp"
+#include "fif/gfx/gfx_module.hpp"
 
-#include "gfx_module.hpp"
 #include "glm/ext/matrix_clip_space.hpp"
-#include "glm/vec2.hpp"
-
-#include <algorithm>
 
 namespace fif::gfx {
 	OrthoCamera::~OrthoCamera() {}

@@ -1,10 +1,6 @@
 #pragma once
 
-#include "fif/core/types.hpp"
-#include "fif/core/util/assertion.hpp"
-
 #include "entt/entt.hpp"
-#include <functional>
 
 namespace fif::core {
 	typedef entt::entity EntityID;

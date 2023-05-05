@@ -1,8 +1,4 @@
 #include "fif/gfx/vertex_buffer.hpp"
-#include "fif/core/opengl.hpp"
-#include "fif/core/util/assertion.hpp"
-
-#include <memory>
 
 namespace fif::gfx {
 	VertexBuffer::VertexBuffer(u32 vertexCount, u32 elementCount) : m_VertexCount(vertexCount), m_ElementCount(elementCount) {
@@ -22,8 +18,8 @@ namespace fif::gfx {
 		glBindVertexArray(0);
 	}
 
-	VertexBuffer::VertexBuffer(const Vertex *vertices, u32 vertexCount, const u16 *elements, u32 elementCount)
-		: m_VertexCount(vertexCount), m_ElementCount(elementCount) {
+	VertexBuffer::VertexBuffer(const Vertex *vertices, u32 vertexCount, const u16 *elements, u32 elementCount) :
+		m_VertexCount(vertexCount), m_ElementCount(elementCount) {
 		glGenVertexArrays(1, &m_Vao);
 		glBindVertexArray(m_Vao);
 

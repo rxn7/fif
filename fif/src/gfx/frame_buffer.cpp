@@ -1,8 +1,5 @@
 #include "fif/gfx/frame_buffer.hpp"
 
-#include "fif/core/opengl.hpp"
-#include "fif/core/util/assertion.hpp"
-
 namespace fif::gfx {
 	FrameBuffer::FrameBuffer(const glm::vec2 &size) : m_Texture(size.x, size.y, GL_NEAREST) {
 		glGenFramebuffers(1, &m_FboID);

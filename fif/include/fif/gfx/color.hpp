@@ -1,6 +1,5 @@
 #pragma once
 
-#include "fif/core/types.hpp"
 #include "glm/vec4.hpp"
 
 namespace fif::gfx {
