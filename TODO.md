@@ -9,3 +9,4 @@
 
 ## Not Important
 - Demo inspired by [driftr](https://kindanice.itch.io/driftr)
+- Shader pre validation with cmake
