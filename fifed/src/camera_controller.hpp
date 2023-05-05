@@ -2,11 +2,6 @@
 
 #include "common.hpp"
 
-#include "fif/core/event/event.hpp"
-#include "fif/gfx/color.hpp"
-
-#include "glm/vec2.hpp"
-
 namespace CameraController {
 	void update();
 	void on_event(Event &event, bool viewportHovered);

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "fif/fif.hpp"
+#include "fif/gfx/color.hpp"
 #include "fif/gfx/gfx_module.hpp"
 #include "fif/imgui/imgui_module.hpp"
 #include "fif/input/input_module.hpp"

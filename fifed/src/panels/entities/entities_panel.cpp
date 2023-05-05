@@ -4,7 +4,6 @@
 #include "fif/gfx/components/transform_component.hpp"
 
 #include "fif/core/ecs/components/tag_component.hpp"
-#include "fif/core/util/rng.hpp"
 
 const char *EntitiesPanel::get_title() const {
 	return "Entities";

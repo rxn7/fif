@@ -2,8 +2,6 @@
 #include "../../camera_controller.hpp"
 #include "../../grid.hpp"
 
-#include "glm/gtc/type_ptr.hpp"
-
 const char *SettingsPanel::get_title() const {
 	return "Settings";
 }

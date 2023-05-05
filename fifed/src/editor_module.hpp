@@ -4,12 +4,8 @@
 #include "panels/editor_panel.hpp"
 #include "panels/viewport/viewport_panel.hpp"
 
-#include "fif/core/event/event.hpp"
-#include "fif/core/module.hpp"
 #include "fif/gfx/frame_buffer.hpp"
 #include "fif/gfx/texture.hpp"
-
-#include <memory>
 
 class EditorModule final : public Module {
 public:

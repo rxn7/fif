@@ -6,15 +6,6 @@
 #include "panels/performance/performance_panel.hpp"
 #include "panels/settings/settings_panel.hpp"
 
-#include "fif/core/ecs/scene.hpp"
-#include "fif/core/event/event.hpp"
-#include "fif/core/event/event_dispatcher.hpp"
-#include "fif/imgui/imgui_module.hpp"
-#include "fif/input/input_module.hpp"
-
-#include "glm/gtc/type_ptr.hpp"
-#include "imgui.h"
-
 EditorModule::EditorModule() {}
 EditorModule::~EditorModule() {}
 

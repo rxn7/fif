@@ -1,7 +1,7 @@
 #pragma once
 
-#include "fif/gfx/color.hpp"
 #include "common.hpp"
+#include "fif/gfx/color.hpp"
 
 namespace Grid {
 	void init();

@@ -1,14 +1,8 @@
 #include "camera_controller.hpp"
 
-#include "event/event_dispatcher.hpp"
 #include "event/mouse_event.hpp"
 #include "fif/gfx/ortho_camera.hpp"
 #include "fif/gfx/renderer2d.hpp"
-#include "fif/input/input_module.hpp"
-
-#include "gfx_module.hpp"
-#include "glm/gtx/compatibility.hpp"
-#include "util/timing.hpp"
 
 void CameraController::update() {
 	OrthoCamera &cam = Renderer2D::get_camera();
