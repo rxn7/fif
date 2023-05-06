@@ -8,10 +8,9 @@
 namespace fif::gfx {
 	class GfxModule final : public core::Module {
 	public:
-		FIF_MODULE_NAME(GFX)
+		FIF_MODULE(GfxModule)
 
 		GfxModule();
-		FIF_MODULE_INSTANCE_FUNC_DECL(GfxModule)
 
 		inline glm::vec2 get_viewport_size() { return m_ViewportSize; }
 		inline glm::vec2 get_viewport_position() { return m_ViewportPosition; }

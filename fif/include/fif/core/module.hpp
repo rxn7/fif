@@ -21,12 +21,12 @@ namespace fif::core {
 	};
 }// namespace fif::core
 
+#define FIF_MODULE(x)                                                                                                                                \
+	FIF_MODULE_NAME(x)                                                                                                                               \
+	FIF_MODULE_INSTANCE_FUNC_DECL(x)
+
 #define FIF_MODULE_NAME(x)                                                                                                                           \
 	constexpr std::string_view get_name() const override { return #x; }
-
-#define FIF_MODULE_INIT_INSTANCE()                                                                                                                   \
-	FIF_ASSERT(s_Instance == nullptr, "There can only one instance of this module");                                                                 \
-	s_Instance = this;
 
 #define FIF_MODULE_INSTANCE_FUNC_DECL(c) static c *get_instance();
 #define FIF_MODULE_INSTANCE_IMPL(c)                                                                                                                  \
@@ -35,3 +35,7 @@ namespace fif::core {
 		FIF_ASSERT(s_Instance != nullptr, "There is no instance of " #c);                                                                            \
 		return s_Instance;                                                                                                                           \
 	}
+
+#define FIF_MODULE_INIT_INSTANCE()                                                                                                                   \
+	FIF_ASSERT(s_Instance == nullptr, "There can only one instance of this module");                                                                 \
+	s_Instance = this;

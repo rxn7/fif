@@ -5,8 +5,7 @@
 namespace fif::imgui {
 	class ImGuiModule final : public core::Module {
 	public:
-		FIF_MODULE_NAME(ImGui)
-		FIF_MODULE_INSTANCE_FUNC_DECL(ImGuiModule);
+		FIF_MODULE(ImGuiModule)
 
 		ImGuiModule();
 		virtual ~ImGuiModule();

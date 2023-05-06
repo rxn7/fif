@@ -8,8 +8,7 @@
 namespace fif::lua_scripting {
 	class LuaScriptingModule final : public core::Module {
 	public:
-		FIF_MODULE_NAME(LuaScriptingModule)
-		FIF_MODULE_INSTANCE_FUNC_DECL(LuaScriptingModule);
+		FIF_MODULE(LuaScriptingModule)
 
 		LuaScriptingModule();
 		~LuaScriptingModule();

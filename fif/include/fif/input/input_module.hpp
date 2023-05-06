@@ -6,8 +6,7 @@
 namespace fif::input {
 	class InputModule final : public core::Module {
 	public:
-		FIF_MODULE_NAME(Input)
-		FIF_MODULE_INSTANCE_FUNC_DECL(InputModule);
+		FIF_MODULE(InputModule)
 
 		InputModule();
 

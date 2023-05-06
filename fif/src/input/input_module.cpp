@@ -8,7 +8,7 @@ namespace fif::input {
 	InputModule::InputModule() {
 		FIF_MODULE_INIT_INSTANCE();
 
-		GLFWwindow *glfwWindow = core::Application::get_instance().get_window().get_glfw_window();
+		GLFWwindow *glfwWindow = core::Application::get_instance()->get_window().get_glfw_window();
 
 		glfwSetKeyCallback(glfwWindow, []([[maybe_unused]] GLFWwindow *glfwWindow, int key, [[maybe_unused]] int scancode, int action, [[maybe_unused]] int mods) {
 			FIF_ASSERT(key >= 0 && key <= KEY_COUNT, "The key " << key << " is out of range");

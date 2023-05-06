@@ -10,7 +10,7 @@
 namespace fifed {
 	class EditorModule final : public Module {
 	public:
-		FIF_MODULE_NAME(Editor)
+		FIF_MODULE(EditorModule)
 
 		EditorModule();
 		virtual ~EditorModule();

@@ -37,9 +37,8 @@ namespace fif::imgui {
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 
-		for(const auto &renderFunc : m_RenderFunctions) {
+		for(const auto &renderFunc : m_RenderFunctions)
 			renderFunc();
-		}
 
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -51,15 +50,22 @@ namespace fif::imgui {
 
 		ImGuiIO &io = ImGui::GetIO();
 
-		if(event.get_category() == core::EventCategory::Mouse)
+		switch(event.get_category()) {
+		case core::EventCategory::Mouse:
 			event.m_Handled = io.WantCaptureMouse;
+			break;
 
-		else if(event.get_category() == core::EventCategory::Keyboard)
+		case core::EventCategory::Keyboard:
 			event.m_Handled = io.WantCaptureKeyboard;
+			break;
+
+		default:
+			break;
+		}
 	}
 
 	bool ImGuiModule::begin_dockspace() const {
-		static ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_NoBackground;
+		constexpr static ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_NoBackground;
 
 		const ImGuiViewport *viewport = ImGui::GetMainViewport();
 		ImGui::SetNextWindowPos(viewport->WorkPos);
@@ -70,9 +76,7 @@ namespace fif::imgui {
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
 
-		static bool open = true;
-
-		if(ImGui::Begin("Dockspace", &open, windowFlags)) {
+		if(ImGui::Begin("Dockspace", nullptr, windowFlags)) {
 			ImGui::PopStyleVar(3);
 
 			const u32 &dockspaceId = ImGui::GetID("DockSpace");

@@ -10,7 +10,7 @@ namespace fifed {
 	}
 
 	void PerformancePanel::on_render() {
-		const PerformanceStats &stats = Application::get_instance().get_performance_stats();
+		const PerformanceStats &stats = Application::get_instance()->get_performance_stats();
 		ImGui::Text("Frame time: %f ms", stats.frameTimeMs);
 		ImGui::Text("FPS: %f", stats.fps);
 

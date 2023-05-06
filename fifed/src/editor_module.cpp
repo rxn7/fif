@@ -22,7 +22,8 @@ namespace fifed {
 		mp_ViewportPanel = add_panel<ViewportPanel>(*mp_FrameBuffer);
 		add_panel<PerformancePanel>();
 		add_panel<SettingsPanel>();
-		add_panel<EntitiesPanel>();
+		InspectorPanel *inspector = add_panel<InspectorPanel>();
+		add_panel<EntitiesPanel>(*inspector);
 	}
 
 	void EditorModule::on_render_im_gui() {
