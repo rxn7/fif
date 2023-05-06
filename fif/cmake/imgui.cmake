@@ -13,7 +13,6 @@ file(GLOB IMGUI_SOURCES
     ${IMGUI_PATH}/imstb_truetype.h
     ${IMGUI_PATH}/imgui_tables.cpp
     ${IMGUI_PATH}/imgui_widgets.cpp
-
     ${IMGUI_PATH}/backends/imgui_impl_glfw.h
     ${IMGUI_PATH}/backends/imgui_impl_glfw.cpp
     ${IMGUI_PATH}/backends/imgui_impl_opengl3.h
