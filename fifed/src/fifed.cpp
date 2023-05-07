@@ -7,7 +7,7 @@
 const WindowProperties WINDOW_PROPS = {
 	.title = "Fif Editor",
 	.size = glm::i16vec2(1280, 720),
-	.iconPath = "assets/logo.png",
+	.iconPath = "assets/textures/logo.png",
 	.vsync = false,
 };
 

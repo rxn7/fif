@@ -66,7 +66,8 @@ namespace fifed {
 
 		if(deleteEntity) {
 			scene.delete_entity(ent);
-			m_Inspector.m_SelectedEntity = entt::null;
+			if(m_Inspector.m_SelectedEntity == ent)
+				m_Inspector.m_SelectedEntity = entt::null;
 		}
 	}
 }// namespace fifed

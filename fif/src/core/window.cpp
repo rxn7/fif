@@ -12,9 +12,9 @@ namespace fif::core {
 
 		FIF_ASSERT(glfwInit(), "Failed to initialize GLFW");
 
-		glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+		glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
 
 		mp_GlfwWindow = glfwCreateWindow(props.size.x, props.size.y, props.title.c_str(), NULL, NULL);
 		glfwMakeContextCurrent(mp_GlfwWindow);
@@ -35,9 +35,8 @@ namespace fif::core {
 
 		glfwSwapInterval(static_cast<int>(props.vsync));
 
-		if(!props.iconPath.empty()) {
+		if(!props.iconPath.empty())
 			set_icon(props.iconPath);
-		}
 	}
 
 	Window::~Window() {

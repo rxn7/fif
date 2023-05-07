@@ -5,15 +5,17 @@
 #include "fif/gfx/vertex_buffer_layout.hpp"
 
 namespace fif::gfx {
-	struct CircleVertex final {
+	struct SpriteVertex final {
 		glm::vec2 position;
 		glm::vec2 uv;
 		Color color;
+		f32 textureSlot;
 	};
 
-	inline const VertexBufferLayout circleVertexBufferLayout = {
+	inline const VertexBufferLayout spriteVertexBufferLayout = {
 		{GlslDataType::Float2, "a_Position", false},
 		{GlslDataType::Float2, "a_UV", false},
 		{GlslDataType::UByte4, "a_Color", true},
+		{GlslDataType::Float, "a_TextureSlot", false},
 	};
 }// namespace fif::gfx

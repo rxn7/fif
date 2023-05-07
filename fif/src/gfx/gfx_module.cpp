@@ -11,7 +11,6 @@ namespace fif::gfx {
 
 	GfxModule::GfxModule() {
 		FIF_MODULE_INIT_INSTANCE();
-		ShaderLibrary::init();
 	}
 
 	void GfxModule::on_start(core::Application &app) {

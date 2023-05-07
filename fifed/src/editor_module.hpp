@@ -32,6 +32,5 @@ namespace fifed {
 		ViewportPanel *mp_ViewportPanel;
 		std::vector<std::unique_ptr<EditorPanel>> m_Panels;
 		std::unique_ptr<FrameBuffer> mp_FrameBuffer;
-		std::unique_ptr<Texture> mp_LogoTexture;
 	};
 }// namespace fifed

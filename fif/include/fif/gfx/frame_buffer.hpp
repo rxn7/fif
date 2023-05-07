@@ -11,6 +11,10 @@ namespace fif::gfx {
 
 		inline u32 getFboID() const { return m_FboID; }
 		inline const Texture &getTexture() const { return m_Texture; }
+
+		void start();
+		void end();
+
 		void bind();
 		void unbind();
 		void invalidate();

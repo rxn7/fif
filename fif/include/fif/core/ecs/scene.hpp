@@ -1,7 +1,6 @@
 #pragma once
 
-#include "entt/entt.hpp"
-#include <optional>
+#include "entt/entity/registry.hpp"
 
 namespace fif::core {
 	typedef entt::entity EntityID;
@@ -9,6 +8,7 @@ namespace fif::core {
 	class Scene {
 	public:
 		EntityID create_entity(const std::string &name = "Entity");
+		EntityID duplicate_entity(EntityID source);
 
 		inline void for_each(const std::function<void(EntityID &ent)> &func) { m_Registry.each(func); }
 		inline void delete_entity(EntityID entity) { m_Registry.destroy(entity); }

@@ -12,12 +12,13 @@
 
 #include "fif/core/types.hpp"
 
-#include "entt/fwd.hpp"
+#include "entt/entity/fwd.hpp"
 
 #include "glm/glm.hpp"
 #include "glm/gtc/type_ptr.hpp"
 #include "glm/gtx/compatibility.hpp"
 
+#include "fif/core/ecs/components/component.hpp"
 #include "fif/core/event/event.hpp"
 #include "fif/core/event/event_dispatcher.hpp"
 #include "fif/core/opengl.hpp"

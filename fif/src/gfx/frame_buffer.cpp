@@ -16,6 +16,15 @@ namespace fif::gfx {
 		glDeleteFramebuffers(1, &m_FboID);
 	}
 
+	void FrameBuffer::start() {
+		bind();
+		glClear(GL_COLOR_BUFFER_BIT);
+	}
+
+	void FrameBuffer::end() {
+		unbind();
+	}
+
 	void FrameBuffer::set_size(const glm::vec2 &size) {
 		m_Size = size;
 
@@ -24,7 +33,7 @@ namespace fif::gfx {
 
 		glBindFramebuffer(GL_FRAMEBUFFER, m_FboID);
 		glViewport(0, 0, size.x, size.y);
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_Texture.getID(), 0);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_Texture.get_id(), 0);
 
 		Texture::unbind();
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);

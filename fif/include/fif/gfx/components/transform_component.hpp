@@ -1,9 +1,7 @@
 #pragma once
 
-#include "fif/core/types.hpp"
-
 namespace fif::gfx {
-	struct TransformComponent {
+	struct TransformComponent : core::Component {
 		glm::vec2 position;
 		f32 angle;
 	};

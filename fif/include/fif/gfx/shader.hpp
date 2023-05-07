@@ -4,7 +4,7 @@
 
 #include <unordered_map>
 
-#define FIF_GLSL_VERSION "#version 300 es\n"
+#define FIF_GLSL_VERSION "#version 450\n"
 #define FIF_GLSL_PRECISION "precision mediump float;\n"
 
 namespace fif::gfx {
@@ -17,7 +17,11 @@ namespace fif::gfx {
 		u32 register_uniform(const std::string &name);
 		static void unbind();
 
-		inline void set_uniform(const std::string &name, int value) { glUniform1i(get_uniform_location(name), value); }
+		inline void set_uniform(const std::string &name, i32 value) { glUniform1i(get_uniform_location(name), value); }
+
+		inline void set_uniform(const std::string &name, i32 values[], u32 count) { glUniform1iv(get_uniform_location(name), count, values); }
+
+		inline void set_uniform(const std::string &name, u32 values[], u32 count) { glUniform1uiv(get_uniform_location(name), count, values); }
 
 		inline void set_uniform(const std::string &name, f32 value) { glUniform1f(get_uniform_location(name), value); }
 

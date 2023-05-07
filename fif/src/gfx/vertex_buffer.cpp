@@ -1,4 +1,5 @@
 #include "fif/gfx/vertex_buffer.hpp"
+#include "glsl_data_type.hpp"
 
 namespace fif::gfx {
 	VertexBuffer::VertexBuffer(u32 vertexCount, u32 elementCount, u32 vertexSize) :
@@ -52,38 +53,7 @@ namespace fif::gfx {
 		u8 i = 0;
 		for(const VertexBufferElement &el : m_Layout.get_elements()) {
 			glEnableVertexAttribArray(i);
-
-			switch(el.type) {
-			case GlslDataType::Float:
-			case GlslDataType::Float2:
-			case GlslDataType::Float3:
-			case GlslDataType::Float4:
-				glVertexAttribPointer(i, get_glsl_data_type_component_count(el.type), GL_FLOAT, el.normalized, m_Layout.get_stride(), reinterpret_cast<void *>(el.offset));
-				break;
-
-			case GlslDataType::Int:
-			case GlslDataType::Int2:
-			case GlslDataType::Int3:
-			case GlslDataType::Int4:
-				glVertexAttribPointer(i, get_glsl_data_type_component_count(el.type), GL_INT, el.normalized, m_Layout.get_stride(), reinterpret_cast<void *>(el.offset));
-				break;
-
-			case GlslDataType::UByte:
-			case GlslDataType::UByte2:
-			case GlslDataType::UByte3:
-			case GlslDataType::UByte4:
-				glVertexAttribPointer(i, get_glsl_data_type_component_count(el.type), GL_UNSIGNED_BYTE, el.normalized, m_Layout.get_stride(), reinterpret_cast<void *>(el.offset));
-				break;
-
-			case GlslDataType::Bool:
-				glVertexAttribPointer(i, get_glsl_data_type_component_count(el.type), GL_BOOL, el.normalized, m_Layout.get_stride(), reinterpret_cast<void *>(el.offset));
-				break;
-
-			default:
-				FIF_LOG_ERROR("Unsupported GlslDataType for VertexBufferElement: " << (int)el.type);
-				break;
-			};
-
+			glVertexAttribPointer(i, get_glsl_data_type_component_count(el.type), glsl_data_type_to_opengl_enum(el.type), el.normalized, m_Layout.get_stride(), reinterpret_cast<void *>(el.offset));
 			++i;
 		}
 	}

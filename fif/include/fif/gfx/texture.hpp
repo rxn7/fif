@@ -9,12 +9,14 @@ namespace fif::gfx {
 		Texture(const std::string &path, GLenum filter = GL_LINEAR, GLenum wrap = GL_CLAMP_TO_EDGE);
 		~Texture();
 
-		inline u32 getID() const { return m_ID; }
-		inline u16 getWidth() const { return m_Width; }
-		inline u16 getHeight() const { return m_Height; }
-		inline glm::u16vec2 getSize() const { return glm::u16vec2(m_Width, m_Height); }
+		inline u32 get_id() const { return m_ID; }
+		inline u16 get_width() const { return m_Width; }
+		inline u16 get_height() const { return m_Height; }
+		inline glm::u16vec2 get_size() const { return glm::u16vec2(m_Width, m_Height); }
+		inline void bind(u32 slot) const { glBindTextureUnit(slot, m_ID); }
 		inline void bind() const { glBindTexture(GL_TEXTURE_2D, m_ID); }
 		inline static void unbind() { glBindTexture(GL_TEXTURE_2D, 0); }
+		inline bool operator==(const Texture &other) const { return other.get_id() == get_id(); }
 
 		void create(u16 width, u16 height, GLenum internalFormat, GLenum dataFormat, GLenum filter, GLenum wrap, void *data);
 
