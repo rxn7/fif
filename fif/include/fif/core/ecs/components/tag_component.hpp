@@ -1,7 +1,7 @@
 #pragma once
 
 namespace fif::core {
-	struct TagComponent : Component {
+	struct TagComponent final {
 		TagComponent(const std::string &tag) : tag(tag) {}
 		TagComponent(const char *tag) : tag(tag) {}
 

@@ -3,7 +3,7 @@
 #include "sol/load_result.hpp"
 
 namespace fif::lua_scripting {
-	struct LuaScriptComponent : core::Component {
+	struct LuaScriptComponent final {
 		char path[1024] = "";
 
 		// TODO: LuaScriptAsset

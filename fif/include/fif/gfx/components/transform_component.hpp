@@ -1,7 +1,7 @@
 #pragma once
 
 namespace fif::gfx {
-	struct TransformComponent : core::Component {
+	struct TransformComponent final {
 		glm::vec2 position;
 		f32 angle;
 	};

@@ -3,7 +3,7 @@
 #include "fif/gfx/texture.hpp"
 
 namespace fif::gfx {
-	struct SpriteComponent : core::Component {
+	struct SpriteComponent final {
 		SpriteComponent() {}
 		SpriteComponent(const std::string &path) : p_texture(std::make_shared<Texture>(path, GL_NEAREST)) {}
 		SpriteComponent(const std::shared_ptr<Texture> &texture) : p_texture(texture) {}
