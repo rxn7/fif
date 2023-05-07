@@ -43,7 +43,9 @@ function(build_module target dir libs)
   target_include_directories(${target} PUBLIC ${INC_DIR} ${INC_DIR}/fif/${dir} PRIVATE ${SRC_DIR}/${dir} ${LIB_DIR}/stb)
   target_link_libraries(${target} ${libs})
 
-  target_precompile_headers(${target} PUBLIC ${INC_DIR}/fif/pch.hpp)
+  if(NOT ${target} MATCHES fif-core)
+    target_precompile_headers(${target} REUSE_FROM fif-core)
+  endif()
 
   if(MSVC)
     target_compile_options(${target} PUBLIC /W4 /bigobj)
@@ -55,6 +57,7 @@ endfunction()
 if(FIF_BUILD_CORE)
   build_module(fif-core core "glfw;glm;glad;EnTT")
   target_compile_definitions(fif-core PUBLIC ENTT_DISABLE_ASSERT)
+  target_precompile_headers(fif-core PUBLIC ${INC_DIR}/fif/pch.hpp)
   add_compile_definitions(FIF_CORE)
 endif()
 

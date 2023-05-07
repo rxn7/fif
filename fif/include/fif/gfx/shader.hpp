@@ -2,8 +2,6 @@
 
 #include "fif/gfx/color.hpp"
 
-#include <unordered_map>
-
 #define FIF_GLSL_VERSION "#version 450\n"
 #define FIF_GLSL_PRECISION "precision mediump float;\n"
 

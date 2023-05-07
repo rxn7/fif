@@ -1,7 +1,6 @@
 #pragma once
 
 #include "glsl_data_type.hpp"
-#include <initializer_list>
 
 namespace fif::gfx {
 	struct VertexBufferElement {
