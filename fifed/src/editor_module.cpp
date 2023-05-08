@@ -7,6 +7,7 @@
 #include "panels/entities/entities_panel.hpp"
 #include "panels/performance/performance_panel.hpp"
 #include "panels/settings/settings_panel.hpp"
+#include "panels/status/status_panel.hpp"
 
 namespace fifed {
 	EditorModule::EditorModule() {}
@@ -18,6 +19,7 @@ namespace fifed {
 		mp_ViewportPanel = add_panel<ViewportPanel>(*mp_FrameBuffer);
 		add_panel<PerformancePanel>();
 		add_panel<SettingsPanel>();
+		add_panel<StatusPanel>();
 		InspectorPanel *inspector = add_panel<InspectorPanel>();
 		add_panel<EntitiesPanel>(*inspector);
 

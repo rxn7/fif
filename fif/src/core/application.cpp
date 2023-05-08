@@ -42,16 +42,16 @@ namespace fif::core {
 		for(auto &mod : m_Modules)
 			mod->on_update();
 
-		for(auto &system : m_UpdateSystems)
-			system(mp_Scene->get_registry(), Timing::get_delta_time());
+		for(auto &updateSystem : m_UpdateSystems)
+			updateSystem(m_Status, mp_Scene->get_registry(), Timing::get_delta_time());
 	}
 
 	void Application::render() {
 		for(auto &mod : m_Modules)
 			mod->on_render();
 
-		for(auto &system : m_RenderSystems)
-			system(mp_Scene->get_registry());
+		for(auto &renderSystem : m_RenderSystems)
+			renderSystem(m_Status, mp_Scene->get_registry());
 
 		mp_Window->end_frame();
 	}
@@ -60,7 +60,11 @@ namespace fif::core {
 		for(auto &mod : m_Modules)
 			mod->on_event(event);
 
-		for(auto &system : m_EventSystems)
-			system(mp_Scene->get_registry(), event);
+		for(auto &eventSystem : m_EventSystems)
+			eventSystem(m_Status, mp_Scene->get_registry(), event);
+	}
+
+	void Application::pause(bool paused) {
+		m_Status.paused = paused;
 	}
 }// namespace fif::core

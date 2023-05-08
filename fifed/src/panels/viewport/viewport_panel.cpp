@@ -3,10 +3,6 @@
 namespace fifed {
 	ViewportPanel::ViewportPanel(FrameBuffer &frameBuffer) : m_FrameBuffer(frameBuffer) {}
 
-	const char *ViewportPanel::get_title() const {
-		return "Viewport";
-	}
-
 	void ViewportPanel::on_render() {
 		ImGui::BeginChild("FrameBuffer");
 

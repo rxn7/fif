@@ -6,7 +6,7 @@
 #include "fif/gfx/gfx_module.hpp"
 
 namespace fif::gfx {
-	void renderer_system(entt::registry &registry) {
+	void renderer_system([[maybe_unused]] const core::ApplicationStatus &status, entt::registry &registry) {
 		Renderer2D &renderer = GfxModule::get_instance()->get_renderer2D();
 
 		registry.view<TransformComponent, CircleComponent>().each([&]([[maybe_unused]] core::EntityID entity, TransformComponent &trans, CircleComponent &circle) {

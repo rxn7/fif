@@ -6,8 +6,10 @@
 namespace fifed {
 	class EntitiesPanel final : public EditorPanel {
 	public:
+		PANEL_NAME("Entities")
+
 		EntitiesPanel(InspectorPanel &inspector);
-		const char *get_title() const override;
+
 		void on_render() override;
 
 	private:

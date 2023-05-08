@@ -2,7 +2,7 @@
 
 namespace fifed {
 	void EditorPanel::render() {
-		if(ImGui::Begin(get_title()))
+		if(ImGui::Begin(get_title().data()))
 			on_render();
 
 		ImGui::End();

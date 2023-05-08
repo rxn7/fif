@@ -15,8 +15,6 @@ namespace fifed::shaders::Grid {
 			gl_Position = vec4(a_Position, 0.0, 1.0);
 		})";
 
-	// TODO: Fix aliasing
-
 	const std::string FRAGMENT = FIF_GLSL_VERSION FIF_GLSL_PRECISION
 		R"(
 		uniform vec2 u_CameraSize;

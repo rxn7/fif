@@ -15,10 +15,6 @@ namespace fifed {
 
 	EntitiesPanel::EntitiesPanel(InspectorPanel &inspector) : m_Inspector(inspector) {}
 
-	const char *EntitiesPanel::get_title() const {
-		return "Entities";
-	}
-
 	void EntitiesPanel::on_render() {
 		Scene &scene = Application::get_instance()->get_scene();
 

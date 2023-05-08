@@ -5,10 +5,6 @@
 #include "gfx_module.hpp"
 
 namespace fifed {
-	const char *PerformancePanel::get_title() const {
-		return "Performance";
-	}
-
 	void PerformancePanel::on_render() {
 		const PerformanceStats &stats = Application::get_instance()->get_performance_stats();
 		ImGui::Text("Frame time: %f ms", stats.frameTimeMs);

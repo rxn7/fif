@@ -4,7 +4,8 @@
 
 namespace fifed {
 	class PerformancePanel final : public EditorPanel {
-		const char *get_title() const override;
+		PANEL_NAME("Performance");
+
 		void on_render() override;
 	};
 }// namespace fifed

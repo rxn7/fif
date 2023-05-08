@@ -7,10 +7,6 @@
 #include "imgui.h"
 
 namespace fifed {
-	const char *InspectorPanel::get_title() const {
-		return "Inspector";
-	}
-
 	template<typename T, typename... Args> static void draw_add_component_entry(const std::string &name, EntityID ent, Scene &scene, Args &&...args) {
 		if(scene.has_component<T>(ent))
 			return;

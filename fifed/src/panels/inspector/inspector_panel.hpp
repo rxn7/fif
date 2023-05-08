@@ -5,7 +5,8 @@
 namespace fifed {
 	class InspectorPanel final : public EditorPanel {
 	public:
-		const char *get_title() const override;
+		PANEL_NAME("Inspector")
+
 		void on_render() override;
 
 		static void draw_color_selector(Color &color);

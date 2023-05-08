@@ -3,10 +3,6 @@
 #include "../../grid.hpp"
 
 namespace fifed {
-	const char *SettingsPanel::get_title() const {
-		return "Settings";
-	}
-
 	void SettingsPanel::on_render() {
 		if(ImGui::TreeNode("Grid")) {
 			ImGui::Checkbox("Enabled", &Grid::enabled);
