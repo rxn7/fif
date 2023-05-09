@@ -1,14 +1,22 @@
--- DEBUG
-vim.api.nvim_set_keymap('n', '<f4>', ':te cmake --build build/debug<cr>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<f28>', ':te cmake --build build/debug --clean-first<cr>',
-	{ noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<f5>', ':te pushd build/debug/fifed ; ./fifed ; popd<cr>',
-	{ noremap = true, silent = true })
+local function build_debug() vim.cmd.te('cmake --build build/debug') end
 
--- RELEASE
-vim.api.nvim_set_keymap('n', '<f16>', ':te cmake --build build/release<cr>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<f29>', ':te cmake --build build/release --clean-first<cr>',
-	{ noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<f17>', ':te build/release/fifed/fifed<cr>', { noremap = true, silent = true })
+local function run_debug()
+	build_debug()
+	vim.cmd.te('pushd build/debug/fifed ; ./fifed ; popd')
+end
 
-vim.cmd [[autocmd BufWritePre * lua vim.lsp.buf.format()]]
+vim.keymap.set('n', '<f4>', build_debug)
+vim.keymap.set('n', '<f5>', run_debug)
+
+local function build_release() vim.cmd.te('cmake --build build/release') end
+
+local function run_release()
+	build_release()
+	vim.cmd.te('pushd build/release/fifed ; ./fifed ; popd')
+end
+
+vim.keymap.set('n', '<f16>', build_release)
+vim.keymap.set('n', '<f17>', run_release)
+
+vim.cmd [[autocmd BufWritePre *.cpp lua vim.lsp.buf.format()]]
+vim.cmd [[autocmd BufWritePre *.hpp lua vim.lsp.buf.format()]]
