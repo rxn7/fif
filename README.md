@@ -11,9 +11,6 @@ Fif is a 2D game engine with an editor (fifed).
 - [Contributing](#contributing)  
 - [Dependencies](#dependencies)  
 
-# To do
-See [TODO.md](TODO.md)
-
 # Modules
 Fif is split into core module and other independent modules:
 - gfx
