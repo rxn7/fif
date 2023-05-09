@@ -9,6 +9,10 @@
 #include "shaders/quad.hpp"
 #include "shaders/sprite.hpp"
 
+#define FLUSH_IF_FULL(batch, shader)                                                                                                                 \
+	if((batch)->is_full())                                                                                                                           \
+		flush_batch(*(batch), *(shader));
+
 namespace fif::gfx {
 	Renderer2D::Renderer2D() {
 		FIF_LOG("[Renderer2D] OpenGL Renderer: " << glGetString(GL_RENDERER));
@@ -43,14 +47,10 @@ namespace fif::gfx {
 
 	void Renderer2D::start() {
 		m_BeginTime = core::Clock::now();
+		mp_Camera->update();
 	}
 
 	void Renderer2D::end() {
-		mp_Camera->update();
-
-		for(u32 i = 0; i < m_TextureIdx; ++i)
-			m_Textures[i]->bind(i);
-
 		flush_batch(*mp_QuadBatch, *mp_QuadShader);
 		flush_batch(*mp_CircleBatch, *mp_CircleShader);
 		flush_batch(*mp_SpriteBatch, *mp_SpriteShader);
@@ -67,6 +67,8 @@ namespace fif::gfx {
 		if(!mp_Camera->contains_quad(position, size))
 			return;
 
+		FLUSH_IF_FULL(mp_SpriteBatch, mp_SpriteShader)
+
 		f32 textureSlot = -1.0f;
 		for(u32 i = 0; i < m_TextureIdx; ++i) {
 			if(m_Textures[i]->get_id() == texture->get_id()) {
@@ -78,6 +80,7 @@ namespace fif::gfx {
 		if(textureSlot == -1.0f) {
 			textureSlot = static_cast<f32>(m_TextureIdx);
 			m_Textures[m_TextureIdx++] = texture;
+			m_Textures[textureSlot]->bind(textureSlot);
 		}
 
 		const u32 vertCount = mp_SpriteBatch->get_vertex_count();
@@ -106,6 +109,8 @@ namespace fif::gfx {
 	void Renderer2D::render_quad(const glm::vec2 &position, const glm::vec2 &size, f32 angle, const Color &color) {
 		if(!mp_Camera->contains_quad(position, size))
 			return;
+
+		FLUSH_IF_FULL(mp_QuadBatch, mp_QuadShader)
 
 		const u32 vertCount = mp_QuadBatch->get_vertex_count();
 		glm::mat4 matrix(1.0F);
@@ -136,6 +141,8 @@ namespace fif::gfx {
 		if(!mp_Camera->contains_circle(position, radius))
 			return;
 
+		FLUSH_IF_FULL(mp_QuadBatch, mp_QuadShader)
+
 		const u32 vertCount = mp_QuadBatch->get_vertex_count();
 		const f32 segmentAngle = glm::two_pi<f32>() / segmentCount;
 		f32 angle = 0.0F;
@@ -162,6 +169,8 @@ namespace fif::gfx {
 	void Renderer2D::render_circle_frag(const glm::vec2 &position, f32 radius, const Color &color) {
 		if(!mp_Camera->contains_circle(position, radius))
 			return;
+
+		FLUSH_IF_FULL(mp_CircleBatch, mp_CircleShader)
 
 		const u32 vertCount = mp_CircleBatch->get_vertex_count();
 

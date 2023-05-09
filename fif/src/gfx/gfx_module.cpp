@@ -17,7 +17,7 @@ namespace fif::gfx {
 		app.add_render_system(&fif::gfx::renderer_system);
 	}
 
-	void GfxModule::on_update() {
+	void GfxModule::pre_render() {
 		glClear(GL_COLOR_BUFFER_BIT);
 		m_Renderer2D.start();
 	}

@@ -24,8 +24,8 @@ namespace fif::gfx {
 		}
 
 		void on_start(core::Application &app) override;
-		void on_update() override;
 		void on_render() override;
+		void pre_render() override;
 		void on_event(core::Event &event) override;
 
 	public:

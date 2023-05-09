@@ -8,30 +8,46 @@ namespace fif::gfx {
 	template<typename Vertex> class Batch {
 	public:
 		Batch(u32 verticesPerInstance, u32 elementsPerInstance, u32 size, const VertexBufferLayout &layout) :
-			m_Vertices(verticesPerInstance * size), m_Elements(elementsPerInstance * size), m_Buffer(verticesPerInstance * size, elementsPerInstance * size, sizeof(Vertex)) {
+			m_MaxElements(elementsPerInstance * size), m_MaxVertices(verticesPerInstance * size), mp_Vertices(new Vertex[m_MaxVertices]), mp_Elements(new u16[m_MaxElements]), m_Buffer(m_MaxVertices, m_MaxElements, sizeof(Vertex)) {
 			m_Buffer.set_layout(layout);
 		}
 
 		inline u32 get_vertex_count() const { return m_VertexCount; }
 		inline u32 get_element_count() const { return m_ElementCount; }
+		inline bool is_full() const { return m_VertexCount >= m_MaxVertices; }
+		inline bool is_empty() const { return m_VertexCount == 0; }
 
 		void flush() {
-			m_Buffer.set_vertices_and_elements(m_Vertices.data(), m_VertexCount, m_Elements.data(), m_ElementCount);
+			m_Buffer.set_vertices_and_elements(mp_Vertices, m_VertexCount, mp_Elements, m_ElementCount);
 			m_Buffer.render();
 
 			m_VertexCount = m_ElementCount = 0;
 		}
 
-		void add_vertex(const Vertex &vertex) { m_Vertices[m_VertexCount++] = vertex; }
+		void add_vertex(const Vertex &vertex) {
+			if(m_VertexCount >= m_MaxVertices) {
+				FIF_LOG_ERROR("The batch's vertex buffer is full: [" << m_VertexCount << " / " << m_MaxVertices << "]");
+				return;
+			}
 
-		void add_element(u16 element) { m_Elements[m_ElementCount++] = element; }
+			mp_Vertices[m_VertexCount++] = vertex;
+		}
+
+		void add_element(u16 element) {
+			if(m_ElementCount >= m_MaxElements) {
+				FIF_LOG_ERROR("The batch's element buffer is full: [" << m_ElementCount << " / " << m_MaxElements << "]");
+				return;
+			}
+
+			mp_Elements[m_ElementCount++] = element;
+		}
 
 	private:
-		u32 m_VertexCount;
-		u32 m_ElementCount;
+		u32 m_ElementCount, m_MaxElements;
+		u32 m_VertexCount, m_MaxVertices;
 
-		std::vector<Vertex> m_Vertices;
-		std::vector<u16> m_Elements;
+		Vertex *mp_Vertices;
+		u16 *mp_Elements;
 
 		VertexBuffer m_Buffer;
 	};
