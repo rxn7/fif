@@ -36,6 +36,7 @@ The dependencies are used as submodules:
 * If you already cloned the repo, run ```git submodule update --init --recursive```  
 * To clone the repo with submodules ```git clone https://github.com/rxn7/fif --recurse-submodules -j8```  
 
+## Libraries
 - [glm](https://github.com/g-truc/glm) ([MIT license](https://github.com/g-truc/glm/blob/master/copying.txt))   
 - [glfw](https://github.com/glfw/glfw) ([zlib license](https://github.com/glfw/glfw/blob/master/LICENSE.md))     
 - [glad](https://github.com/nitrix/glad/) ([UNLICENSE](https://github.com/nitrix/glad/blob/master/UNLICENSE))   
@@ -45,3 +46,6 @@ The dependencies are used as submodules:
 - [sol2](https://github.com/ThePhD/sol2) ([MIT license](https://github.com/ThePhD/sol2/blob/develop/LICENSE.txt))    
 - [stb_image](https://github.com/nothings/stb/blob/master/stb_image.h) ([Public Domain license](https://github.com/nothings/stb/blob/master/stb_image.h)
 - [tiny file dialogs](https://sourceforge.net/projects/tinyfiledialogs) ([zlib license](https://sourceforge.net/p/tinyfiledialogs/code/ci/master/tree/README.txt#l1)
+
+## Fonts
+- [iosevka](https://github.com/be5invis/Iosevka) ([SIL Open Font License 1.1](https://github.com/be5invis/Iosevka/blob/main/LICENSE.md))
