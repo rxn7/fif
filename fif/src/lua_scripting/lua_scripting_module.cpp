@@ -1,10 +1,12 @@
 #include "fif/lua_scripting/lua_scripting_module.hpp"
-#include "systems/lua_script_system.hpp"
 
 #include <sol/protected_function_result.hpp>
 
 namespace fif::lua_scripting {
 	FIF_MODULE_INSTANCE_IMPL(LuaScriptingModule);
+
+	static void lua_script_update_system(const core::ApplicationStatus &status, entt::registry &registry, float dt);
+	static void lua_script_render_system([[maybe_unused]] const core::ApplicationStatus &status, entt::registry &registry);
 
 	LuaScriptingModule::LuaScriptingModule() {
 		FIF_MODULE_INIT_INSTANCE();
@@ -50,6 +52,23 @@ namespace fif::lua_scripting {
 			const sol::error error = result;
 			core::Logger::error("Failed to load lua script: %s", error.what());
 		}
+	}
+
+	static void lua_script_update_system(const core::ApplicationStatus &status, entt::registry &registry, float dt) {
+		if(status.paused)
+			return;
+
+		registry.view<LuaScriptComponent>().each([&]([[maybe_unused]] core::EntityID entity, LuaScriptComponent &luaScript) {
+			if(luaScript.updateFunc.valid())
+				luaScript.updateFunc(dt);
+		});
+	}
+
+	static void lua_script_render_system([[maybe_unused]] const core::ApplicationStatus &status, entt::registry &registry) {
+		registry.view<LuaScriptComponent>().each([&]([[maybe_unused]] core::EntityID entity, LuaScriptComponent &luaScript) {
+			if(luaScript.renderFunc.valid())
+				luaScript.renderFunc();
+		});
 	}
 
 }// namespace fif::lua_scripting
