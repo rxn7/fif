@@ -32,7 +32,6 @@ namespace fif::imgui {
 		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
 		ImGui_ImplOpenGL3_Init(FIF_GLSL_VERSION);
-
 		ImGui_ImplGlfw_InitForOpenGL(app.get_window().get_glfw_window(), true);
 
 		apply_default_theme();
