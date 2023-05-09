@@ -5,11 +5,20 @@
 #include "imconfig.h"
 #include "imgui.h"
 
+#ifdef FIF_GFX
+#include "fif/gfx/shader.hpp"
+#else
+#define FIF_GLSL_VERSION "#version 300 es"
+#endif
+
 namespace fif::imgui {
 	FIF_MODULE_INSTANCE_IMPL(ImGuiModule);
 
 	ImGuiModule::ImGuiModule() {
 		FIF_MODULE_INIT_INSTANCE();
+		IMGUI_CHECKVERSION();
+
+		ImGui::CreateContext();
 	}
 
 	ImGuiModule::~ImGuiModule() {
@@ -19,14 +28,11 @@ namespace fif::imgui {
 	}
 
 	void ImGuiModule::on_start(core::Application &app) {
-		IMGUI_CHECKVERSION();
-
-		ImGui::CreateContext();
-
 		ImGuiIO &io = ImGui::GetIO();
 		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
-		ImGui_ImplOpenGL3_Init("#version 300 es");
+		ImGui_ImplOpenGL3_Init(FIF_GLSL_VERSION);
+
 		ImGui_ImplGlfw_InitForOpenGL(app.get_window().get_glfw_window(), true);
 
 		apply_default_theme();

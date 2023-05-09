@@ -18,6 +18,8 @@ namespace fif::gfx {
 
 	void FrameBuffer::start() {
 		bind();
+		const glm::vec4 clearColor = gfx::get_normalized_color(m_Color);
+		glClearColor(clearColor.r, clearColor.g, clearColor.b, clearColor.a);
 		glClear(GL_COLOR_BUFFER_BIT);
 	}
 
@@ -46,5 +48,4 @@ namespace fif::gfx {
 	void FrameBuffer::unbind() {
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
-
 }// namespace fif::gfx

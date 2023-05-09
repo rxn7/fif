@@ -46,8 +46,8 @@ namespace fif::gfx {
 	}
 
 	void Renderer2D::start() {
-		m_BeginTime = core::Clock::now();
 		mp_Camera->update();
+		m_BeginTime = core::Clock::now();
 	}
 
 	void Renderer2D::end() {
