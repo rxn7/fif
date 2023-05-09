@@ -2,7 +2,7 @@
 <p align=center>
   <img src="docs/logo.png" width="256">
 </p>
-Fif is a framework that can be used as a library (like SFML) or as an actual game engine (like Godot or Unity) using Fifed (fif editor).    
+Fif is a 2D game engine with an editor (fifed).
 
 # Table of contents
 - [To do](#to-do)  
@@ -19,12 +19,13 @@ Fif is split into core module and other independent modules:
 - gfx
 - input
 - imgui
+- lua_scripting
+- native_scripting
 
 # Building
 - ```./scripts/configure.sh``` - configure the build targets
 - ```cmake --build build/debug``` - compile a debug build
 - ```cmake --build build/release``` - compile a release build
-- if you use vscode you can press `Ctrl+Shift+B` to build and run the debug build
 - if you use nvim you can press `F4` to compile a debug build, `Shift+F4` to compile a release build, `F5` to run the debug build, `Shift+F5` to run the release build
 
 # Contributing
@@ -42,5 +43,5 @@ The dependencies are used as submodules:
 - [entt](https://github.com/skypjack/entt) ([MIT license](https://github.com/skypjack/entt/blob/master/LICENSE))    
 - [lua-cmake](https://github.com/lubgr/lua-cmake) ([MIT license](https://github.com/lubgr/lua-cmake/blob/master/LICENSE))    
 - [sol2](https://github.com/ThePhD/sol2) ([MIT license](https://github.com/ThePhD/sol2/blob/develop/LICENSE.txt))    
-- [stb_image](https://github.com/nothings/stb/blob/master/stb_image.h) ([MIT license](https://github.com/nothings/stb/blob/master/stb_image.h)
+- [stb_image](https://github.com/nothings/stb/blob/master/stb_image.h) ([Public Domain license](https://github.com/nothings/stb/blob/master/stb_image.h)
 - [tiny file dialogs](https://sourceforge.net/projects/tinyfiledialogs) ([zlib license](https://sourceforge.net/p/tinyfiledialogs/code/ci/master/tree/README.txt#l1)
