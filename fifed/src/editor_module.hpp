@@ -1,6 +1,5 @@
 #pragma once
 
-#include "common.hpp"
 #include "panels/editor_panel.hpp"
 #include "panels/viewport/viewport_panel.hpp"
 

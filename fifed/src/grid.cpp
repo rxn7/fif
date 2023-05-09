@@ -1,5 +1,4 @@
 #include "grid.hpp"
-#include "common.hpp"
 #include "shaders/grid.hpp"
 
 #include "fif/gfx/renderer2d.hpp"

@@ -5,16 +5,16 @@
 namespace fif::core {
 	Application *fif::core::Application::s_Instance = nullptr;
 
-	Application::Application(const WindowProperties &windowProperties, bool createDefaultScene) {
+	Application::Application(const ApplicationProperties &appProperties) {
 		FIF_ASSERT(s_Instance == nullptr, "Only 1 instance of fif::core::Application can exist!");
 		s_Instance = this;
 
-		mp_Window = std::make_unique<Window>(*this, windowProperties);
+		mp_Window = std::make_unique<Window>(*this, appProperties.windowProps);
 		gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress));
 
 		Rng::init();
 
-		if(createDefaultScene)
+		if(appProperties.createDefaultScene)
 			mp_Scene = std::make_unique<Scene>();
 	}
 

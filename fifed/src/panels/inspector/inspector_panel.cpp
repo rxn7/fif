@@ -4,6 +4,7 @@
 #include "components/sprite_component.hpp"
 #include "components/transform_component.hpp"
 #include "fif/core/ecs/components/tag_component.hpp"
+#include "fif/native_scripting/components/native_script_component.hpp"
 #include "imgui.h"
 
 namespace fifed {
@@ -157,6 +158,9 @@ namespace fifed {
 				ImGui::EndPopup();
 			}
 		});
+
+		draw_component<NativeScriptComponent>("Native Script", m_SelectedEntity, scene,
+											  [](NativeScriptComponent &script) { ImGui::Text("Loaded script: %s", script.scriptName.c_str()); });
 	}
 
 	void InspectorPanel::draw_color_selector(Color &color) {

@@ -1,7 +1,5 @@
 #pragma once
 
-#include "common.hpp"
-
 namespace fifed::CameraController {
 	void update();
 	void on_event(Event &event, bool viewportHovered);

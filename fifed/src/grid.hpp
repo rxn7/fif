@@ -1,6 +1,5 @@
 #pragma once
 
-#include "common.hpp"
 #include "fif/gfx/color.hpp"
 #include "fif/gfx/vertex_buffer_layout.hpp"
 

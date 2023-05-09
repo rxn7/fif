@@ -1,12 +1,11 @@
 #include "entities_panel.hpp"
-
-#include "components/circle_component.hpp"
-#include "components/lua_script_component.hpp"
-#include "entt/entity/entity.hpp"
-#include "fif/gfx/components/quad_component.hpp"
-#include "fif/gfx/components/transform_component.hpp"
+#include "../../scripts/spinner_script.hpp"
 
 #include "fif/core/ecs/components/tag_component.hpp"
+#include "fif/gfx/components/quad_component.hpp"
+#include "fif/gfx/components/transform_component.hpp"
+#include "fif/native_scripting/components/native_script_component.hpp"
+
 #include "imgui.h"
 #include "lua_scripting_module.hpp"
 

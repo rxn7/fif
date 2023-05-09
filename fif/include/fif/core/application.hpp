@@ -9,9 +9,14 @@
 #include "fif/core/window.hpp"
 
 namespace fif::core {
+	struct ApplicationProperties {
+		WindowProperties windowProps;
+		bool createDefaultScene = true;
+	};
+
 	class Application {
 	public:
-		Application(const WindowProperties &windowProperties, bool createDefaultScene = true);
+		Application(const ApplicationProperties &appProperties);
 		virtual ~Application();
 
 		void start();

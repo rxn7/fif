@@ -1,5 +1,4 @@
 #include "performance_panel.hpp"
-#include "../../common.hpp"
 
 #include "fif/gfx/renderer2d.hpp"
 #include "gfx_module.hpp"

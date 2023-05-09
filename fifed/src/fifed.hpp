@@ -1,6 +1,11 @@
 #pragma once
 
-#include "common.hpp"
+using namespace fif::core;
+using namespace fif::gfx;
+using namespace fif::input;
+using namespace fif::imgui;
+using namespace fif::lua_scripting;
+using namespace fif::native_scripting;
 
 namespace fifed {
 	class Fifed : public Application {
