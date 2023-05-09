@@ -7,7 +7,7 @@ namespace fif::core {
 
 	class Scene {
 	public:
-		EntityID create_entity(const std::string &name = "Entity");
+		EntityID create_entity(const char *name = "Entity");
 		EntityID duplicate_entity(EntityID source);
 
 		inline void for_each(const std::function<void(EntityID &ent)> &func) { m_Registry.each(func); }

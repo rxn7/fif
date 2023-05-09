@@ -2,8 +2,7 @@
 
 namespace fif::core {
 	struct TagComponent final {
-		TagComponent(const std::string &tag) : tag(tag) {}
-		TagComponent(const char *tag) : tag(tag) {}
+		TagComponent(const char *tag = "Entity") : tag(tag) {}
 
 		std::string tag;
 	};

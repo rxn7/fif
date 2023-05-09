@@ -60,7 +60,7 @@ namespace fifed {
 
 		if(ImGui::BeginPopup("AddComponent")) {
 			// TODO: Automate this?
-			draw_add_component_entry<TagComponent>("Tag", m_SelectedEntity, scene, "Entity");
+			draw_add_component_entry<TagComponent>("Tag", m_SelectedEntity, scene);
 			draw_add_component_entry<TransformComponent>("Transform", m_SelectedEntity, scene);
 			draw_add_component_entry<SpriteComponent>("Sprite", m_SelectedEntity, scene);
 			draw_add_component_entry<QuadComponent>("Quad", m_SelectedEntity, scene);
