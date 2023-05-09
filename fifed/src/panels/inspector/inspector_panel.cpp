@@ -50,6 +50,8 @@ namespace fifed {
 		if(removeComponent)
 			scene.remove_component<T>(ent);
 
+		ImGui::Separator();
+
 		ImGui::PopID();
 	}
 
@@ -77,7 +79,7 @@ namespace fifed {
 			ImGui::EndPopup();
 		}
 
-		ImGui::Separator();
+		ImGui::Spacing();
 
 		if(TagComponent *tag = scene.get_registry().try_get<TagComponent>(m_SelectedEntity)) {
 			std::strncpy(m_TagBuffer.data(), tag->tag.c_str(), tag->tag.size());
@@ -88,8 +90,6 @@ namespace fifed {
 		draw_component<TransformComponent>("Transform", m_SelectedEntity, scene, [](TransformComponent &transform) {
 			ImGui::DragFloat2("Position", glm::value_ptr(transform.position));
 
-			ImGui::Separator();
-
 			float angleDegrees = glm::degrees(transform.angle);
 			ImGui::DragFloat("Angle", &angleDegrees, 1.0f, 0.0f, 360.0f);
 			transform.angle = glm::radians(angleDegrees);
@@ -97,24 +97,18 @@ namespace fifed {
 
 		draw_component<QuadComponent>("Quad", m_SelectedEntity, scene, [](QuadComponent &quad) {
 			draw_color_selector(quad.tint);
-			ImGui::Separator();
 			ImGui::DragFloat2("Size", glm::value_ptr(quad.size));
 		});
 
 		draw_component<SpriteComponent>("Sprite", m_SelectedEntity, scene, [&workingDirectoryStr](SpriteComponent &sprite) {
 			draw_color_selector(sprite.tint);
-			ImGui::Separator();
 			ImGui::DragFloat2("Size", glm::value_ptr(sprite.size), 1.0f, 0.0f, std::numeric_limits<float>::max());
-
-			ImGui::Separator();
 
 			if(sprite.p_texture) {
 				ImGui::Text("Texture");
 				ImGui::Image(reinterpret_cast<ImTextureID>(sprite.p_texture->get_id()), ImVec2(100, 100), ImVec2(0, 1), ImVec2(1, 0));
 			} else
 				ImGui::Text("Texture is not loaded!");
-
-			ImGui::Separator();
 
 			if(ImGui::Button("Load texture")) {
 				constexpr std::array<const char *, 2> filterPatterns = {"*.png", "*.jpg"};
@@ -129,8 +123,6 @@ namespace fifed {
 		draw_component<CircleComponent>("Circle", m_SelectedEntity, scene, [](CircleComponent &circle) {
 			draw_color_selector(circle.tint);
 			ImGui::DragFloat("Radius", &circle.radius, 1.0f, 0.0f, std::numeric_limits<float>::max());
-
-			ImGui::Separator();
 
 			bool useFrag = circle.segments == 0;
 			if(ImGui::Checkbox("Use frag", &useFrag))
@@ -148,8 +140,6 @@ namespace fifed {
 				ImGui::Text("Script: %s", script.path.c_str());
 			else
 				ImGui::Text("No script is attached to this component!");
-
-			ImGui::Separator();
 
 			if(ImGui::Button("Load script")) {
 				constexpr const char *filterPattern = "*.lua";
