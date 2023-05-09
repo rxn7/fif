@@ -20,8 +20,8 @@ namespace fifed {
 	Fifed::Fifed() : Application(APP_PROPS) {
 		attach_module<InputModule>();
 		attach_module<GfxModule>();
-		attach_module<EditorModule>();
 		attach_module<ImGuiModule>();
+		attach_module<EditorModule>();
 		attach_module<LuaScriptingModule>();
 		attach_module<NativeScriptingModule>();
 	}

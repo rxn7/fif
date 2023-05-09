@@ -12,6 +12,8 @@ namespace fifed {
 	EditorModule::~EditorModule() {}
 
 	void EditorModule::on_start(Application &app) {
+		ImGuiIO &io = ImGui::GetIO();
+		io.Fonts->AddFontFromFileTTF("assets/fonts/ProggySquare.ttf", 20);
 		mp_FrameBuffer = std::make_unique<FrameBuffer>(app.get_window().get_size());
 
 		mp_ViewportPanel = add_panel<ViewportPanel>(*mp_FrameBuffer);
@@ -25,7 +27,7 @@ namespace fifed {
 		Grid::init();
 
 		ImGuiModule::get_instance()->add_render_func(std::bind(&EditorModule::on_render_im_gui, this));
-	}// namespace fifed
+	}
 
 	void EditorModule::on_render_im_gui() {
 		if(ImGuiModule::get_instance()->begin_dockspace())
