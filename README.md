@@ -44,8 +44,8 @@ The dependencies are used as submodules:
 - [entt](https://github.com/skypjack/entt) ([MIT license](https://github.com/skypjack/entt/blob/master/LICENSE))    
 - [lua-cmake](https://github.com/lubgr/lua-cmake) ([MIT license](https://github.com/lubgr/lua-cmake/blob/master/LICENSE))    
 - [sol2](https://github.com/ThePhD/sol2) ([MIT license](https://github.com/ThePhD/sol2/blob/develop/LICENSE.txt))    
-- [stb_image](https://github.com/nothings/stb/blob/master/stb_image.h) ([Public Domain license](https://github.com/nothings/stb/blob/master/stb_image.h)
-- [tiny file dialogs](https://sourceforge.net/projects/tinyfiledialogs) ([zlib license](https://sourceforge.net/p/tinyfiledialogs/code/ci/master/tree/README.txt#l1)
+- [stb_image](https://github.com/nothings/stb/blob/master/stb_image.h) ([Public Domain license](https://github.com/nothings/stb/blob/master/stb_image.h))
+- [tiny file dialogs](https://sourceforge.net/projects/tinyfiledialogs) ([zlib license](https://sourceforge.net/p/tinyfiledialogs/code/ci/master/tree/README.txt#l1))
 
 ## Fonts
 - [iosevka](https://github.com/be5invis/Iosevka) ([SIL Open Font License 1.1](https://github.com/be5invis/Iosevka/blob/main/LICENSE.md))
