@@ -86,7 +86,7 @@ namespace fif::gfx {
 		const u32 vertCount = mp_SpriteBatch->get_vertex_count();
 		glm::mat4 matrix(1.0f);
 		matrix = glm::translate(glm::mat4(1.0f), glm::vec3(position, 0.0f));
-		matrix = glm::rotate(matrix, angle, {0, 0, 1});
+		matrix = glm::rotate(matrix, -angle, {0, 0, 1});
 		matrix = glm::scale(matrix, glm::vec3(size, 1.0));
 
 		mp_SpriteBatch->add_vertex({glm::vec3(matrix * glm::vec4(-0.5f, -0.5f, 0.0f, 1.0f)), glm::vec2(0.0f, 0.0f), color, textureSlot});
@@ -113,9 +113,9 @@ namespace fif::gfx {
 		FLUSH_IF_FULL(mp_QuadBatch, mp_QuadShader)
 
 		const u32 vertCount = mp_QuadBatch->get_vertex_count();
-		glm::mat4 matrix(1.0F);
-		matrix = glm::translate(glm::mat4(1.0F), glm::vec3(position, 0.0F));
-		matrix = glm::rotate(matrix, angle, {0, 0, 1});
+		glm::mat4 matrix(1.0f);
+		matrix = glm::translate(glm::mat4(1.0f), glm::vec3(position, 0.0f));
+		matrix = glm::rotate(matrix, -angle, {0, 0, 1});
 		matrix = glm::scale(matrix, glm::vec3(size, 1.0));
 
 		mp_QuadBatch->add_vertex({glm::vec2(matrix * glm::vec4(-0.5f, -0.5f, 0.0f, 1.0f)), color});

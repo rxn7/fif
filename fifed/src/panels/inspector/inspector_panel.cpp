@@ -91,7 +91,7 @@ namespace fifed {
 			ImGui::DragFloat2("Position", glm::value_ptr(transform.position));
 
 			float angleDegrees = glm::degrees(transform.angle);
-			ImGui::DragFloat("Angle", &angleDegrees, 1.0f, 0.0f, 360.0f);
+			ImGui::DragFloat("Angle", &angleDegrees, 1.0f, -360.0f, 360.0f);
 			transform.angle = glm::radians(angleDegrees);
 		});
 
