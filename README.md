@@ -1,5 +1,7 @@
 # Fif
-![logo](docs/logo.png)
+<p align=center>
+  <img src="docs/logo.png" width="256">
+</p>
 Fif is a framework that can be used as a library (like SFML) or as an actual game engine (like Godot or Unity) using Fifed (fif editor).    
 
 # Table of contents
