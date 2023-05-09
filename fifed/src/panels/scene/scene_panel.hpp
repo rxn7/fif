@@ -4,11 +4,11 @@
 #include "../inspector/inspector_panel.hpp"
 
 namespace fifed {
-	class EntitiesPanel final : public EditorPanel {
+	class ScenePanel final : public EditorPanel {
 	public:
-		PANEL_NAME("Entities")
+		PANEL_NAME("Scene")
 
-		EntitiesPanel(InspectorPanel &inspector);
+		ScenePanel(InspectorPanel &inspector);
 
 		void on_render() override;
 

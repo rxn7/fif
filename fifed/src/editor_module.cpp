@@ -3,8 +3,8 @@
 #include "components/sprite_component.hpp"
 #include "components/transform_component.hpp"
 #include "grid.hpp"
-#include "panels/entities/entities_panel.hpp"
 #include "panels/performance/performance_panel.hpp"
+#include "panels/scene/scene_panel.hpp"
 #include "panels/settings/settings_panel.hpp"
 #include "panels/status/status_panel.hpp"
 
@@ -20,7 +20,7 @@ namespace fifed {
 		add_panel<SettingsPanel>();
 		add_panel<StatusPanel>();
 		InspectorPanel *inspector = add_panel<InspectorPanel>();
-		add_panel<EntitiesPanel>(*inspector);
+		add_panel<ScenePanel>(*inspector);
 
 		Grid::init();
 

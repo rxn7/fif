@@ -31,8 +31,8 @@ namespace fif::core {
 	void Application::game_loop() {
 		Timing::update();
 
-		m_PerformanceStats.fps = 1.0F / Timing::get_delta_time();
-		m_PerformanceStats.frameTimeMs = Timing::get_delta_time() * 1000.0F;
+		m_PerformanceStats.fps = 1.0f / Timing::get_delta_time();
+		m_PerformanceStats.frameTimeMs = Timing::get_delta_time() * 1000.0f;
 
 		update();
 		render();

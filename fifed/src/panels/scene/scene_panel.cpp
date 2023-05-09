@@ -1,5 +1,4 @@
-#include "entities_panel.hpp"
-#include "../../scripts/spinner_script.hpp"
+#include "scene_panel.hpp"
 
 #include "fif/core/ecs/components/tag_component.hpp"
 #include "fif/gfx/components/quad_component.hpp"
@@ -12,9 +11,9 @@
 namespace fifed {
 	template<typename T> static void draw_component(const std::string &name, EntityID ent, Scene &scene, std::function<void(T &)> drawFunc);
 
-	EntitiesPanel::EntitiesPanel(InspectorPanel &inspector) : m_Inspector(inspector) {}
+	ScenePanel::ScenePanel(InspectorPanel &inspector) : m_Inspector(inspector) {}
 
-	void EntitiesPanel::on_render() {
+	void ScenePanel::on_render() {
 		Scene &scene = Application::get_instance()->get_scene();
 
 		ImGui::Text("Count: %lu", scene.get_entity_count());
@@ -22,6 +21,7 @@ namespace fifed {
 		if(ImGui::Button("Create entity")) {
 			const EntityID ent = scene.create_entity();
 			scene.add_component<TransformComponent>(ent);
+			m_Inspector.m_SelectedEntity = ent;
 		}
 
 		if(ImGui::BeginChild("EntityList"))
@@ -30,13 +30,15 @@ namespace fifed {
 		ImGui::EndChild();
 	}
 
-	void EntitiesPanel::draw_entity(EntityID ent, Scene &scene) {
+	void ScenePanel::draw_entity(EntityID ent, Scene &scene) {
 		const char *name = scene.has_component<TagComponent>(ent) ? scene.get_component<TagComponent>(ent).tag.c_str() : "Entity";
 
 		ImGui::PushID(static_cast<u32>(ent));
 
 		const bool isSelected = m_Inspector.m_SelectedEntity == ent;
-		const ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_OpenOnArrow | (isSelected ? ImGuiTreeNodeFlags_Selected : 0);
+
+		// TODO: Remove ImGuiTreeNodeFlags_Leaf if entity has children
+		const ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_OpenOnArrow | (isSelected ? ImGuiTreeNodeFlags_Selected : 0);
 
 		const bool open = ImGui::TreeNodeEx(name, flags);
 		bool deleteEntity = false;
