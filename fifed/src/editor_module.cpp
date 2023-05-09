@@ -36,8 +36,11 @@ namespace fifed {
 	}
 
 	void EditorModule::on_update() {
-		mp_FrameBuffer->start();
 		CameraController::update();
+	}
+
+	void EditorModule::pre_render() {
+		mp_FrameBuffer->start();
 		Grid::render();
 	}
 

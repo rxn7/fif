@@ -16,6 +16,7 @@ namespace fifed {
 
 		void on_start(Application &app) override;
 		void on_render() override;
+		void pre_render() override;
 		void on_update() override;
 		void on_event(Event &event) override;
 

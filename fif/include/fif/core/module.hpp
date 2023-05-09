@@ -14,6 +14,7 @@ namespace fif::core {
 		virtual void on_start([[maybe_unused]] Application &app) {}
 		virtual void on_event([[maybe_unused]] Event &event) {}
 		virtual void on_update() {}
+		virtual void pre_render() {}
 		virtual void on_render() {}
 
 	protected:

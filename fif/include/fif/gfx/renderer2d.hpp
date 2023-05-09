@@ -25,6 +25,9 @@ namespace fif::gfx {
 		inline const Renderer2DStats &get_stats() const { return m_Stats; }
 
 		template<typename Vertex> void flush_batch(Batch<Vertex> &batch, Shader &shader) {
+			if(batch.is_empty())
+				return;
+
 			shader.bind();
 			shader.set_uniform("u_ProjectionMatrix", mp_Camera->get_matrix());
 			batch.flush();
@@ -40,7 +43,7 @@ namespace fif::gfx {
 		void render_sprite(const std::shared_ptr<Texture> &texture, const glm::vec2 &position, const glm::vec2 &size, f32 angle = 0.0f, const Color &color = {255, 255, 255, 255});
 
 	private:
-		static constexpr u32 BATCH_SIZE = 10000;
+		static constexpr u32 BATCH_SIZE = 1000;
 
 		std::unique_ptr<Batch<QuadVertex>> mp_QuadBatch;
 		std::unique_ptr<Batch<CircleVertex>> mp_CircleBatch;

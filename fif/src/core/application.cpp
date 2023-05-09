@@ -48,10 +48,13 @@ namespace fif::core {
 
 	void Application::render() {
 		for(auto &mod : m_Modules)
-			mod->on_render();
+			mod->pre_render();
 
 		for(auto &renderSystem : m_RenderSystems)
 			renderSystem(m_Status, mp_Scene->get_registry());
+
+		for(auto &mod : m_Modules)
+			mod->on_render();
 
 		mp_Window->end_frame();
 	}
