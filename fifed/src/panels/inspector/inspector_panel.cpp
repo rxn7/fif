@@ -59,6 +59,10 @@ namespace fifed {
 
 		Scene &scene = Application::get_instance()->get_scene();
 
+		std::stringstream workingDirectorySs;
+		workingDirectorySs << std::filesystem::current_path() << "/";
+		const std::string workingDirectoryStr = workingDirectorySs.str();
+
 		if(ImGui::Button("Add Component"))
 			ImGui::OpenPopup("AddComponent");
 
@@ -97,7 +101,7 @@ namespace fifed {
 			ImGui::DragFloat2("Size", glm::value_ptr(quad.size));
 		});
 
-		draw_component<SpriteComponent>("Sprite", m_SelectedEntity, scene, [](SpriteComponent &sprite) {
+		draw_component<SpriteComponent>("Sprite", m_SelectedEntity, scene, [&workingDirectoryStr](SpriteComponent &sprite) {
 			draw_color_selector(sprite.tint);
 			ImGui::Separator();
 			ImGui::DragFloat2("Size", glm::value_ptr(sprite.size), 1.0f, 0.0f, std::numeric_limits<float>::max());
@@ -115,13 +119,10 @@ namespace fifed {
 			if(ImGui::Button("Load texture")) {
 				constexpr std::array<const char *, 2> filterPatterns = {"*.png", "*.jpg"};
 
-				const std::filesystem::path workingDirectory = std::filesystem::current_path();
-				char *path = tinyfd_openFileDialog("Select texture", workingDirectory.c_str(), filterPatterns.size(), filterPatterns.data(), "Image", false);
+				char *path = tinyfd_openFileDialog("Select texture", workingDirectoryStr.c_str(), filterPatterns.size(), filterPatterns.data(), "Image", false);
 
 				if(path)
 					sprite.p_texture = std::make_shared<Texture>(path, GL_NEAREST);
-
-				std::free(path);
 			}
 		});
 
@@ -142,7 +143,7 @@ namespace fifed {
 			}
 		});
 
-		draw_component<LuaScriptComponent>("Lua Script", m_SelectedEntity, scene, [](LuaScriptComponent &script) {
+		draw_component<LuaScriptComponent>("Lua Script", m_SelectedEntity, scene, [&workingDirectoryStr](LuaScriptComponent &script) {
 			if(script.loaded)
 				ImGui::Text("Script: %s", script.path.c_str());
 			else
@@ -152,13 +153,10 @@ namespace fifed {
 
 			if(ImGui::Button("Load script")) {
 				constexpr const char *filterPattern = "*.lua";
-				const std::filesystem::path workingDirectory = std::filesystem::current_path();
-				char *path = tinyfd_openFileDialog("Select lua script", workingDirectory.c_str(), 1, &filterPattern, "Lua script", false);
+				char *path = tinyfd_openFileDialog("Select lua script", workingDirectoryStr.c_str(), 0, &filterPattern, "Lua script", false);
 
 				if(path)
 					LuaScriptingModule::get_instance()->attach_script(script, path);
-
-				free(path);
 			}
 		});
 
