@@ -7,7 +7,7 @@ namespace fif::gfx {
 		set_size(size);
 
 		i32 status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-		FIF_ASSERT(status == GL_FRAMEBUFFER_COMPLETE, "Frame buffer is not complete, status: " << status);
+		FIF_ASSERT(status == GL_FRAMEBUFFER_COMPLETE, "Frame buffer is not complete, status: %d", status);
 
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}

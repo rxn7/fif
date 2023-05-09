@@ -9,7 +9,7 @@ namespace fif::gfx {
 
 	std::shared_ptr<Shader> ShaderLibrary::get(const std::string &name) {
 		auto it = s_Shaders.find(name);
-		FIF_ASSERT(it != s_Shaders.end(), "Shader with name '" << name << "' doesn't exists");
+		FIF_ASSERT(it != s_Shaders.end(), "Shader with name '%s' doesn't exists", name.c_str());
 		return it->second;
 	}
 

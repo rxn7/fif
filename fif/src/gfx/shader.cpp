@@ -46,7 +46,7 @@ namespace fif::gfx {
 	u32 Shader::register_uniform(const std::string &name) {
 		const auto it = m_UniformIDs.find(name);
 		if(it != m_UniformIDs.end()) {
-			FIF_LOG_ERROR("Uniform " << name << " already registered");
+			core::Logger::error("Uniform %s already registered", name.c_str());
 			return it->second;
 		}
 
@@ -92,6 +92,6 @@ namespace fif::gfx {
 		else
 			glGetShaderInfoLog(id, logLength, NULL, buffer);
 
-		FIF_LOG_ERROR(buffer);
+		core::Logger::error("Shader erro: %s", buffer);
 	}
 }// namespace fif::gfx

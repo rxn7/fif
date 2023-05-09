@@ -26,7 +26,7 @@ namespace fif::gfx {
 
 		void add_vertex(const Vertex &vertex) {
 			if(m_VertexCount >= m_MaxVertices) {
-				FIF_LOG_ERROR("The batch's vertex buffer is full: [" << m_VertexCount << " / " << m_MaxVertices << "]");
+				core::Logger::error("The batch's vertex buffer is full: [%u/%u]", m_VertexCount, m_MaxVertices);
 				return;
 			}
 
@@ -35,7 +35,7 @@ namespace fif::gfx {
 
 		void add_element(u16 element) {
 			if(m_ElementCount >= m_MaxElements) {
-				FIF_LOG_ERROR("The batch's element buffer is full: [" << m_ElementCount << " / " << m_MaxElements << "]");
+				core::Logger::error("The batch's element buffer is full: [%u/%u]", m_ElementCount, m_MaxElements);
 				return;
 			}
 

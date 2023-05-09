@@ -33,7 +33,7 @@ namespace fif::gfx {
 			return GL_BOOL;
 		}
 
-		FIF_LOG_ERROR("Unknown GlslDataType: " << (int)type);
+		core::Logger::error("Unknown GlslDataType: %d", static_cast<i32>(type));
 		return GL_NONE;
 	}
 
@@ -69,7 +69,7 @@ namespace fif::gfx {
 			return 1;
 		}
 
-		FIF_LOG_ERROR("Unknown GlslDataType: " << (int)type);
+		core::Logger::error("Unknown GlslDataType: %d", static_cast<i32>(type));
 		return 0;
 	}
 
@@ -110,7 +110,7 @@ namespace fif::gfx {
 			return 1;
 		}
 
-		FIF_LOG_ERROR("Unknown GlslDataType: " << (int)type);
+		core::Logger::error("Unknown GlslDataType: %d", static_cast<i32>(type));
 
 		return 0;
 	}

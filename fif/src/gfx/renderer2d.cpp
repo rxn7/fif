@@ -15,9 +15,9 @@
 
 namespace fif::gfx {
 	Renderer2D::Renderer2D() {
-		FIF_LOG("[Renderer2D] OpenGL Renderer: " << glGetString(GL_RENDERER));
-		FIF_LOG("[Renderer2D] OpenGL Version: " << glGetString(GL_VERSION));
-		FIF_LOG("[Renderer2D] OpenGL Vendor: " << glGetString(GL_VENDOR));
+		core::Logger::info("[Renderer2D] OpenGL Renderer: %s", glGetString(GL_RENDERER));
+		core::Logger::info("[Renderer2D] OpenGL Version: %s", glGetString(GL_VERSION));
+		core::Logger::info("[Renderer2D] OpenGL Vendor: %s", glGetString(GL_VENDOR));
 
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -25,7 +25,7 @@ namespace fif::gfx {
 		i32 textureSlotCount = 0;
 		glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &textureSlotCount);
 
-		FIF_LOG("[Renderer2D] Max texture slots: " << textureSlotCount);
+		core::Logger::info("[Renderer2D] Max texture slots: %d", textureSlotCount);
 
 		m_TextureSlotCount = textureSlotCount;
 		mp_Camera = std::make_unique<OrthoCamera>();

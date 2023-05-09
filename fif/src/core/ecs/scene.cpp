@@ -9,7 +9,7 @@ namespace fif::core {
 	}
 
 	EntityID Scene::duplicate_entity([[maybe_unused]] EntityID source) {
-		FIF_LOG_ERROR("This function is not implemented");
+		Logger::error("This function is not implemented");
 		return entt::null;
 
 		// FIXME: This doesnt work, creates multiple entities

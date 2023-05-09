@@ -8,7 +8,7 @@
 
 namespace fif::core {
 	Window::Window(Application &app, const WindowProperties &props) : m_Size(props.size), m_App(app) {
-		glfwSetErrorCallback([]([[maybe_unused]] int error, const char *msg) { FIF_LOG_ERROR("GLFW Error: " << msg); });
+		glfwSetErrorCallback([]([[maybe_unused]] int error, const char *msg) { Logger::error("GLFW Error: %s", msg); });
 
 		FIF_ASSERT(glfwInit(), "Failed to initialize GLFW");
 

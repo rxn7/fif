@@ -27,7 +27,7 @@
 #include "fif/core/util/assertion.hpp"
 #include "fif/core/util/clock.hpp"
 #include "fif/core/util/function_name.hpp"
-#include "fif/core/util/log.hpp"
+#include "fif/core/util/logger.hpp"
 #include "fif/core/util/rng.hpp"
 #include "fif/core/util/timing.hpp"
 

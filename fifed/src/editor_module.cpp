@@ -1,8 +1,7 @@
 #include "editor_module.hpp"
 #include "camera_controller.hpp"
-#include "components/sprite_component.hpp"
-#include "components/transform_component.hpp"
 #include "grid.hpp"
+#include "panels/console/console_panel.hpp"
 #include "panels/performance/performance_panel.hpp"
 #include "panels/scene/scene_panel.hpp"
 #include "panels/settings/settings_panel.hpp"
@@ -21,6 +20,7 @@ namespace fifed {
 		add_panel<StatusPanel>();
 		InspectorPanel *inspector = add_panel<InspectorPanel>();
 		add_panel<ScenePanel>(*inspector);
+		add_panel<ConsolePanel>();
 
 		Grid::init();
 

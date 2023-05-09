@@ -1,8 +1,8 @@
 #pragma once
 
-#define FIF_ASSERT(cond, msg)                                                                                                                                \
-	if(!(cond)) {                                                                                                                                            \
-		FIF_LOG_ERROR("Assertion failed: [" << #cond << "] in file: " << __FILE__ << ", function: [" << FIF_FUNCTION_NAME << "], line: " << __LINE__ << "\n" \
-											<< msg << std::endl);                                                                                            \
-		std::abort();                                                                                                                                        \
+#define FIF_ASSERT(cond, msg, ...)                                                                                                                   \
+	if(!(cond)) {                                                                                                                                    \
+		fif::core::Logger::error("Assertion failed: [%s] in file: %s, function: [%s], line: \n%s", #cond, __FILE__, FIF_FUNCTION_NAME, __LINE__);    \
+		fif::core::Logger::error(msg, ##__VA_ARGS__);                                                                                                \
+		std::abort();                                                                                                                                \
 	}

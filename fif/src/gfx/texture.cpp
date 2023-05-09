@@ -19,7 +19,7 @@ namespace fif::gfx {
 		stbi_uc *data = stbi_load(path.c_str(), &width, &height, &channels, 0);
 
 		if(!data) {
-			FIF_LOG_ERROR("Failed to load texture: " << path);
+			core::Logger::error("Failed to load texture: %s", path.c_str());
 			return;
 		}
 
