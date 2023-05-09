@@ -5,7 +5,7 @@ namespace fifed {
 	ConsolePanel::ConsolePanel() {
 		m_Output.reserve(MAX_LINES);
 		Logger::add_callback([&output = m_Output]([[maybe_unused]] Logger::LogType type, const char *msg) {
-			if(output.size() > MAX_LINES)
+			if(output.size() >= MAX_LINES)
 				output.erase(output.begin());
 
 			output.push_back(msg);
