@@ -11,8 +11,6 @@ namespace fif::gfx {
 		Color tint = Colors::WHITE;
 		glm::vec2 size = {50, 50};
 
-		// TODO: TextureAsset
-		char path[1024];
 		std::shared_ptr<Texture> p_texture = nullptr;
 	};
 }// namespace fif::gfx

@@ -20,3 +20,6 @@
 [submodule "fif/vendor/sol2"]
 	path = fif/vendor/sol2
 	url = https://github.com/ThePhD/sol2
+[submodule "fifed/vendor/tinyfd"]
+	path = fifed/vendor/tinyfd
+	url = http://git.code.sf.net/p/tinyfiledialogs/code

@@ -97,6 +97,6 @@ set(GLFW_INSTALL OFF CACHE INTERNAL "Install GLFW")
 add_subdirectory(${LIB_DIR}/glfw)
 add_subdirectory(${LIB_DIR}/glad)
 add_subdirectory(${LIB_DIR}/glm)
-
 add_subdirectory(${LIB_DIR}/entt)
+
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/imgui.cmake)

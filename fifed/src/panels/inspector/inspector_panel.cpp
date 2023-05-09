@@ -1,11 +1,15 @@
 #include "inspector_panel.hpp"
-#include "components/circle_component.hpp"
-#include "components/quad_component.hpp"
-#include "components/sprite_component.hpp"
-#include "components/transform_component.hpp"
+
 #include "fif/core/ecs/components/tag_component.hpp"
+#include "fif/gfx/components/circle_component.hpp"
+#include "fif/gfx/components/quad_component.hpp"
+#include "fif/gfx/components/sprite_component.hpp"
+#include "fif/gfx/components/transform_component.hpp"
 #include "fif/native_scripting/components/native_script_component.hpp"
+
 #include "imgui.h"
+#include "tinyfiledialogs.h"
+#include <filesystem>
 
 namespace fifed {
 	template<typename T, typename... Args> static void draw_add_component_entry(const std::string &name, EntityID ent, Scene &scene, Args &&...args) {
@@ -108,16 +112,16 @@ namespace fifed {
 
 			ImGui::Separator();
 
-			if(ImGui::Button("Load texture"))
-				ImGui::OpenPopup("LoadTexture");
+			if(ImGui::Button("Load texture")) {
+				constexpr std::array<const char *, 2> filterPatterns = {"*.png", "*.jpg"};
 
-			if(ImGui::BeginPopup("LoadTexture")) {
-				ImGui::InputText("File path", sprite.path, 1024);
-				if(ImGui::Button("Load")) {
-					sprite.p_texture = std::make_shared<Texture>(sprite.path, GL_NEAREST);
-					ImGui::CloseCurrentPopup();
-				}
-				ImGui::EndPopup();
+				const std::filesystem::path workingDirectory = std::filesystem::current_path();
+				char *path = tinyfd_openFileDialog("Select texture", workingDirectory.c_str(), filterPatterns.size(), filterPatterns.data(), "Image", false);
+
+				if(path)
+					sprite.p_texture = std::make_shared<Texture>(path, GL_NEAREST);
+
+				std::free(path);
 			}
 		});
 
@@ -140,22 +144,21 @@ namespace fifed {
 
 		draw_component<LuaScriptComponent>("Lua Script", m_SelectedEntity, scene, [](LuaScriptComponent &script) {
 			if(script.loaded)
-				ImGui::Text("Script: %s", script.path);
+				ImGui::Text("Script: %s", script.path.c_str());
 			else
 				ImGui::Text("No script is attached to this component!");
 
 			ImGui::Separator();
 
-			if(ImGui::Button("Load script"))
-				ImGui::OpenPopup("LoadScript");
+			if(ImGui::Button("Load script")) {
+				constexpr const char *filterPattern = "*.lua";
+				const std::filesystem::path workingDirectory = std::filesystem::current_path();
+				char *path = tinyfd_openFileDialog("Select lua script", workingDirectory.c_str(), 1, &filterPattern, "Lua script", false);
 
-			if(ImGui::BeginPopup("LoadScript")) {
-				ImGui::InputText("File path", script.path, 1024);
-				if(ImGui::Button("Load")) {
-					LuaScriptingModule::get_instance()->attach_script(script, script.path);
-					ImGui::CloseCurrentPopup();
-				}
-				ImGui::EndPopup();
+				if(path)
+					LuaScriptingModule::get_instance()->attach_script(script, path);
+
+				free(path);
 			}
 		});
 

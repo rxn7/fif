@@ -38,6 +38,7 @@ namespace fif::lua_scripting {
 			return;
 		}
 
+		script.path = path;
 		script.loaded = true;
 		script.updateFunc = m_Lua["Update"];
 		script.renderFunc = m_Lua["Render"];

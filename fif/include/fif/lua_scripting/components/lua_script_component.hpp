@@ -4,9 +4,8 @@
 
 namespace fif::lua_scripting {
 	struct LuaScriptComponent final {
-		char path[1024] = "";
+		std::string path;
 
-		// TODO: LuaScriptAsset
 		bool loaded = false;
 		sol::function updateFunc;
 		sol::function renderFunc;

@@ -43,3 +43,4 @@ The dependencies are used as submodules:
 - [lua-cmake](https://github.com/lubgr/lua-cmake) ([MIT license](https://github.com/lubgr/lua-cmake/blob/master/LICENSE))    
 - [sol2](https://github.com/ThePhD/sol2) ([MIT license](https://github.com/ThePhD/sol2/blob/develop/LICENSE.txt))    
 - [stb_image](https://github.com/nothings/stb/blob/master/stb_image.h) ([MIT license](https://github.com/nothings/stb/blob/master/stb_image.h)
+- [tiny file dialogs](https://sourceforge.net/projects/tinyfiledialogs) ([zlib license](https://sourceforge.net/p/tinyfiledialogs/code/ci/master/tree/README.txt#l1)
