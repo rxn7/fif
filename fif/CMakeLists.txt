@@ -58,7 +58,7 @@ endfunction()
 if(FIF_BUILD_CORE)
   build_module(fif-core core "glfw;glm;glad;EnTT")
   target_compile_definitions(fif-core PUBLIC ENTT_DISABLE_ASSERT)
-  target_precompile_headers(fif-core PRIVATE ${INC_DIR}/fif/pch.hpp)
+  target_precompile_headers(fif-core PUBLIC ${INC_DIR}/fif/pch.hpp)
   add_compile_definitions(FIF_CORE)
 endif()
 
