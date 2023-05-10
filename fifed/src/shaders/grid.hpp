@@ -22,12 +22,18 @@ namespace fifed::shaders::Grid {
 		uniform vec4 u_LineColor;
 		uniform float u_LineThickness;
 		uniform float u_CellSize;
+		uniform float u_Zoom;
 
 		in vec2 v_UV;
 		out vec4 f_Color;
 
+		float log10(float x) {
+			return log(x) / log(10.0);
+		}
+
 		void main() {
-			vec2 p = mod(v_UV * u_CameraSize + u_CameraPosition + u_LineThickness * 0.5, u_CellSize);
+			float actualCellSize = max(0.0, log(10(u_CellSize / mod(u_Zoom, 0.2);
+			vec2 p = mod(v_UV * u_CameraSize * u_Zoom + u_CameraPosition + u_LineThickness * 0.5, actualCellSize);
 
 			float x = step(u_LineThickness, p.x);
 			float y = step(u_LineThickness, p.y);

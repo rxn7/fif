@@ -2,6 +2,8 @@
 #include "../../camera_controller.hpp"
 #include "../../grid.hpp"
 #include "editor_module.hpp"
+#include "gfx_module.hpp"
+#include "ortho_camera.hpp"
 
 namespace fifed {
 	void SettingsPanel::on_render() {
@@ -25,9 +27,11 @@ namespace fifed {
 			ImGui::TreePop();
 		}
 		if(ImGui::TreeNode("Camera controller")) {
+			OrthoCamera &cam = GfxModule::get_instance()->get_renderer2D().get_camera();
 			ImGui::SliderFloat("Zoom lerp speed", &CameraController::zoomLerpSpeed, 0.1f, 100.0f);
 			ImGui::SliderFloat("Min zoom", &CameraController::minZoom, 0.001f, 0.1f);
 			ImGui::SliderFloat("Max zoom", &CameraController::maxZoom, 1.0f, 1000.0f);
+			ImGui::SliderFloat("Current zoom", &cam.m_Zoom, 0.0f, 1000.0f);
 
 			ImGui::TreePop();
 		}
