@@ -20,10 +20,11 @@ namespace fif::gfx {
 		void invalidate();
 
 		void set_size(const glm::vec2 &size);
-		inline void set_clear_color(const Color &color) { m_Color = color; }
+
+	public:
+		Color m_Color = {200u, 200u, 200u, 255u};
 
 	private:
-		Color m_Color = {200u, 200u, 200u, 255u};
 		Texture m_Texture;
 		glm::vec2 m_Size;
 		u32 m_FboID = 0;

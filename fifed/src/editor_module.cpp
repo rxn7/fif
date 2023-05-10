@@ -1,6 +1,7 @@
 #include "editor_module.hpp"
 #include "camera_controller.hpp"
 #include "grid.hpp"
+#include "module.hpp"
 #include "panels/console/console_panel.hpp"
 #include "panels/performance/performance_panel.hpp"
 #include "panels/scene/scene_panel.hpp"
@@ -8,7 +9,12 @@
 #include "panels/status/status_panel.hpp"
 
 namespace fifed {
-	EditorModule::EditorModule() {}
+	FIF_MODULE_INSTANCE_IMPL(EditorModule);
+
+	EditorModule::EditorModule() {
+		FIF_MODULE_INIT_INSTANCE();
+	}
+
 	EditorModule::~EditorModule() {}
 
 	void EditorModule::on_start(Application &app) {

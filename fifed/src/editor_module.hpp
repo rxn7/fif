@@ -14,6 +14,8 @@ namespace fifed {
 		EditorModule();
 		virtual ~EditorModule();
 
+		inline FrameBuffer &get_frame_buffer() { return *mp_FrameBuffer; }
+
 		void on_start(Application &app) override;
 		void on_render() override;
 		void pre_render() override;

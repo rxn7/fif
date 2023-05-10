@@ -1,17 +1,25 @@
 #include "settings_panel.hpp"
 #include "../../camera_controller.hpp"
 #include "../../grid.hpp"
+#include "editor_module.hpp"
 
 namespace fifed {
 	void SettingsPanel::on_render() {
+		EditorModule *editor = EditorModule::get_instance();
+		FrameBuffer &frameBuffer = editor->get_frame_buffer();
+
+		glm::vec4 clearColor = get_normalized_color(frameBuffer.m_Color);
+		ImGui::ColorEdit4("Clear color", glm::value_ptr(clearColor));
+		frameBuffer.m_Color = get_color_from_normalized(clearColor);
+
 		if(ImGui::TreeNode("Grid")) {
 			ImGui::Checkbox("Enabled", &Grid::enabled);
 			ImGui::SliderFloat("Line tickness", &Grid::lineThickness, 0.0f, 1.0f);
 			ImGui::SliderFloat("Cell size", &Grid::cellSize, 0.1f, 100.0f);
 
-			glm::vec4 colorNormalized = get_normalized_color(Grid::lineColor);
-			ImGui::ColorEdit4("Line color", glm::value_ptr(colorNormalized));
-			Grid::lineColor = get_color_from_normalized(colorNormalized);
+			glm::vec4 lineColorNormalized = get_normalized_color(Grid::lineColor);
+			ImGui::ColorEdit4("Line color", glm::value_ptr(lineColorNormalized));
+			Grid::lineColor = get_color_from_normalized(lineColorNormalized);
 			ImGui::SliderFloat("Wrap Value", &Grid::wrapValue, 1.0f, 1000.0f);
 
 			ImGui::TreePop();
