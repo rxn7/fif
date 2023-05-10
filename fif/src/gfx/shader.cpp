@@ -92,6 +92,6 @@ namespace fif::gfx {
 		else
 			glGetShaderInfoLog(id, logLength, NULL, buffer);
 
-		core::Logger::error("Shader erro: %s", buffer);
+		core::Logger::error("Shader error: %s", buffer);
 	}
 }// namespace fif::gfx

@@ -32,7 +32,7 @@ namespace fif::gfx::shaders {
 
 		out vec4 f_Color;
 
-		uniform sampler2D u_Textures[32];
+		uniform sampler2D u_Textures[$textureSlotCount];
 
 		void main() {
 			f_Color = v_Color * texture(u_Textures[int(v_TextureSlot)], v_UV);

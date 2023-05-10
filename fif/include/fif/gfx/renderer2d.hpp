@@ -53,10 +53,10 @@ namespace fif::gfx {
 		std::shared_ptr<Shader> mp_QuadShader, mp_CircleShader, mp_SpriteShader;
 
 		std::array<std::shared_ptr<Texture>, 32> m_Textures;
-		u32 m_TextureIdx = 0;
+		i32 m_TextureIdx = 0;
 
 		core::Clock::time_point m_BeginTime;
 		Renderer2DStats m_Stats, m_TempStats;
-		u32 m_TextureSlotCount;
+		i32 m_TextureSlotCount;
 	};
 }// namespace fif::gfx

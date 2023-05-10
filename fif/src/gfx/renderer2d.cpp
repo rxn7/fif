@@ -9,6 +9,8 @@
 #include "shaders/quad.hpp"
 #include "shaders/sprite.hpp"
 
+#include <regex>
+
 #define FLUSH_IF_FULL(batch, shader)                                                                                                                 \
 	if((batch)->is_full())                                                                                                                           \
 		flush_batch(*(batch), *(shader));
@@ -22,27 +24,26 @@ namespace fif::gfx {
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-		i32 textureSlotCount = 0;
-		glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &textureSlotCount);
+		glGetIntegerv(GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS, &m_TextureSlotCount);
+		core::Logger::info("[Renderer2D] Max texture slots: %d", m_TextureSlotCount);
 
-		core::Logger::info("[Renderer2D] Max texture slots: %d", textureSlotCount);
-
-		m_TextureSlotCount = textureSlotCount;
 		mp_Camera = std::make_unique<OrthoCamera>();
 		mp_QuadBatch = std::make_unique<Batch<QuadVertex>>(4, 6, BATCH_SIZE, quadVertexBufferLayout);
 		mp_CircleBatch = std::make_unique<Batch<CircleVertex>>(4, 6, BATCH_SIZE, circleVertexBufferLayout);
 		mp_SpriteBatch = std::make_unique<Batch<SpriteVertex>>(4, 6, BATCH_SIZE, spriteVertexBufferLayout);
 
-		mp_SpriteShader = ShaderLibrary::add("sprite", shaders::Sprite::VERTEX, shaders::Sprite::FRAGMENT);
+		std::string spriteFrag = std::regex_replace(shaders::Sprite::FRAGMENT, std::regex("\\$textureSlotCount"), std::to_string(m_TextureSlotCount - 1));
+
+		mp_SpriteShader = ShaderLibrary::add("sprite", shaders::Sprite::VERTEX, spriteFrag);
 		mp_CircleShader = ShaderLibrary::add("circle", shaders::Circle::VERTEX, shaders::Circle::FRAGMENT);
 		mp_QuadShader = ShaderLibrary::add("quad", shaders::Quad::VERTEX, shaders::Quad::FRAGMENT);
 
-		std::array<i32, 32> texturesUniform;
-		for(i32 i = 0; i < 32; ++i)
+		std::vector<i32> texturesUniform(m_TextureSlotCount);
+		for(i32 i = 0; i < m_TextureSlotCount; ++i)
 			texturesUniform[i] = i;
 
 		mp_SpriteShader->bind();
-		mp_SpriteShader->set_uniform("u_Textures", texturesUniform.data(), texturesUniform.size());
+		mp_SpriteShader->set_uniform("u_Textures", texturesUniform.data(), m_TextureSlotCount);
 	}
 
 	void Renderer2D::start() {
@@ -70,7 +71,7 @@ namespace fif::gfx {
 		FLUSH_IF_FULL(mp_SpriteBatch, mp_SpriteShader)
 
 		f32 textureSlot = -1.0f;
-		for(u32 i = 0; i < m_TextureIdx; ++i) {
+		for(i32 i = 0; i < m_TextureIdx; ++i) {
 			if(m_Textures[i]->get_id() == texture->get_id()) {
 				textureSlot = static_cast<f32>(i);
 				break;
@@ -78,6 +79,11 @@ namespace fif::gfx {
 		}
 
 		if(textureSlot == -1.0f) {
+			if(m_TextureIdx == m_TextureSlotCount) {
+				flush_batch(*mp_SpriteBatch, *mp_SpriteShader);
+				m_TextureIdx = 0;
+			}
+
 			textureSlot = static_cast<f32>(m_TextureIdx);
 			m_Textures[m_TextureIdx++] = texture;
 			m_Textures[textureSlot]->bind(textureSlot);
