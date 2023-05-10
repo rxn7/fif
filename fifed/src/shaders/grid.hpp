@@ -32,11 +32,10 @@ namespace fifed::shaders::Grid {
 		}
 
 		void main() {
-			float actualCellSize = max(0.0, log(10(u_CellSize / mod(u_Zoom, 0.2);
-			vec2 p = mod(v_UV * u_CameraSize * u_Zoom + u_CameraPosition + u_LineThickness * 0.5, actualCellSize);
+			vec2 p = mod(v_UV * u_CameraSize * u_Zoom + u_CameraPosition + u_LineThickness * 0.5, u_CellSize);
 
-			float x = step(u_LineThickness, p.x);
-			float y = step(u_LineThickness, p.y);
+			float x = step(u_LineThickness, p.x * -u_Zoom);
+			float y = step(u_LineThickness, p.y * -u_Zoom);
 
 			float grid = min(x, y);
 
