@@ -16,8 +16,8 @@ namespace fifed {
 
 		if(ImGui::TreeNode("Grid")) {
 			ImGui::Checkbox("Enabled", &Grid::enabled);
-			ImGui::SliderFloat("Line tickness", &Grid::lineThickness, 0.0f, 1.0f);
-			ImGui::SliderFloat("Cell size", &Grid::cellSize, 0.1f, 100.0f);
+			ImGui::SliderFloat("Line tickness", &Grid::lineThickness, 1.0f, 10.0f);
+			ImGui::SliderFloat("Cell size", &Grid::minCellSize, 0.1f, 100.0f);
 
 			glm::vec4 lineColorNormalized = get_normalized_color(Grid::lineColor);
 			ImGui::ColorEdit4("Line color", glm::value_ptr(lineColorNormalized));

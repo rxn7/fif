@@ -21,24 +21,50 @@ namespace fifed::shaders::Grid {
 		uniform vec2 u_CameraPosition;
 		uniform vec4 u_LineColor;
 		uniform float u_LineThickness;
-		uniform float u_CellSize;
+		uniform float u_MinCellSize;
 		uniform float u_Zoom;
 
 		in vec2 v_UV;
 		out vec4 f_Color;
 
+		const float minCellPixelWidth = 2.0;
+		vec3 thinColor = vec3(0.5, 0.5, 0.5);
+		vec3 thickColor = vec3(0.0, 0.0, 0.0);
+
+		const float log10Multiplier = 1.0 / log(10.0);
+
 		float log10(float x) {
-			return log(x) / log(10.0);
+			return log(x) * log10Multiplier;
+		}
+
+		float max2(vec2 v) {
+			return max(v.x, v.y);
+		}
+
+		vec4 grid(vec2 uv) {
+			vec2 dudv = vec2(
+				length(vec2(dFdx(uv.x), dFdy(uv.x))),
+				length(vec2(dFdx(uv.y), dFdy(uv.y)))
+			);
+
+			float lod = max(0.0, log10((max2(dudv) * minCellPixelWidth) / u_MinCellSize) + 1.0);
+			float fade = fract(lod);
+
+			float lod0 = u_MinCellSize * pow(10.0, floor(lod));
+			float lod1 = lod0 * 10.0;
+			float lod2 = lod1 * 10.0;
+
+			float lod0a = max2(vec2(1.0) - abs(clamp(mod(uv, lod0) / dudv / u_LineThickness, 0.0, 1.0) * 2.0 - vec2(1.0)));
+			float lod1a = max2(vec2(1.0) - abs(clamp(mod(uv, lod1) / dudv / u_LineThickness, 0.0, 1.0) * 2.0 - vec2(1.0)));
+			float lod2a = max2(vec2(1.0) - abs(clamp(mod(uv, lod2) / dudv / u_LineThickness, 0.0, 1.0) * 2.0 - vec2(1.0)));
+
+			return vec4(
+				lod2a > 0.0 ? thickColor : lod1a > 0.0 ? mix(thickColor, thinColor, fade) : thinColor,
+				lod2a > 0.0 ? lod2a : lod1a > 0.0 ? lod1a : lod1a * (1.0 - fade)
+			);
 		}
 
 		void main() {
-			vec2 p = mod(v_UV * u_CameraSize * u_Zoom + u_CameraPosition + u_LineThickness * 0.5, u_CellSize);
-
-			float x = step(u_LineThickness, p.x * -u_Zoom);
-			float y = step(u_LineThickness, p.y * -u_Zoom);
-
-			float grid = min(x, y);
-
-			f_Color = mix(u_LineColor, vec4(0.0), grid);
+			f_Color = grid(v_UV * u_CameraSize + u_CameraPosition);
 		})";
 }// namespace fifed::shaders::Grid

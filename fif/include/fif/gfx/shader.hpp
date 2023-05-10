@@ -47,7 +47,7 @@ namespace fif::gfx {
 		u32 get_uniform_location(const std::string &name);
 
 		static u32 compile(GLenum type, const char *src);
-		static void check_status(u32 id, GLenum type, bool program = true);
+		static bool check_status(u32 id, GLenum type, bool program = true);
 		static void print_info_log(u32 id, bool program = true);
 
 	private:

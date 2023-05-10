@@ -11,10 +11,10 @@ namespace fif::gfx {
 		glAttachShader(m_ID, vertID);
 
 		glLinkProgram(m_ID);
-		check_status(m_ID, GL_LINK_STATUS, true);
-
-		glValidateProgram(m_ID);
-		check_status(m_ID, GL_VALIDATE_STATUS, true);
+		if(check_status(m_ID, GL_LINK_STATUS, true)) {
+			glValidateProgram(m_ID);
+			check_status(m_ID, GL_VALIDATE_STATUS, true);
+		}
 
 		glDeleteShader(fragID);
 		glDeleteShader(vertID);
@@ -65,7 +65,7 @@ namespace fif::gfx {
 		return it->second;
 	}
 
-	void Shader::check_status(u32 id, GLenum type, bool program) {
+	bool Shader::check_status(u32 id, GLenum type, bool program) {
 		i32 status;
 
 		if(program)
@@ -75,6 +75,8 @@ namespace fif::gfx {
 
 		if(!status)
 			print_info_log(id, program);
+
+		return static_cast<bool>(status);
 	}
 
 	void Shader::print_info_log(u32 id, bool program) {
