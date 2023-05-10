@@ -13,6 +13,7 @@ namespace fif::core {
 		gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress));
 
 		Rng::init();
+		Timing::init();
 
 		if(appProperties.createDefaultScene)
 			mp_Scene = std::make_unique<Scene>();

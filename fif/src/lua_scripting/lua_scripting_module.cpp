@@ -12,14 +12,10 @@ namespace fif::lua_scripting {
 		FIF_MODULE_INIT_INSTANCE();
 		m_Lua.open_libraries(sol::lib::base, sol::lib::math, sol::lib::string);
 
-		const auto log = [](const std::string &msg) { core::Logger::info("[LUA] %s", msg.c_str()); };
-		m_Lua.set_function("log", log);
-
-		const auto log_error = [](const std::string &msg) { core::Logger::error("[LUA] %s", msg.c_str()); };
-		m_Lua.set_function("log_error", log_error);
-
-		const auto log_warn = [](const std::string &msg) { core::Logger::warn("[LUA] %s", msg.c_str()); };
-		m_Lua.set_function("log_warn", log_warn);
+		// Logger
+		m_Lua.set_function("log", [](const std::string &msg) { core::Logger::info("[LUA] %s", msg.c_str()); });
+		m_Lua.set_function("log_error", [](const std::string &msg) { core::Logger::error("[LUA] %s", msg.c_str()); });
+		m_Lua.set_function("log_warn", [](const std::string &msg) { core::Logger::warn("[LUA] %s", msg.c_str()); });
 	}
 
 	LuaScriptingModule::~LuaScriptingModule() {}
