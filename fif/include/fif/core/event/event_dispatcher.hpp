@@ -7,7 +7,7 @@
 namespace fif::core {
 	class EventDispatcher {
 	public:
-		template<typename T, typename F> static bool dispatch(Event &event, const F &func) {
+		template<typename T> static bool dispatch(Event &event, const std::function<bool(T &)> &func) {
 			static_assert(std::is_base_of<Event, T>().value, "T has to be derived from Event!");
 
 			if(event.get_type() == T::get_type_static()) {
