@@ -24,22 +24,4 @@ namespace fif::gfx {
 
 		return normalizedPosition * m_Size + m_Position;
 	}
-
-	bool OrthoCamera::contains_circle(const glm::vec2 &position, f32 radius) const {
-		const glm::vec2 delta = glm::abs(m_Position - position);
-		return delta.x <= m_Size.x + radius && delta.y <= m_Size.y + radius;
-	}
-
-	bool OrthoCamera::contains_quad(const glm::vec2 &position, const glm::vec2 &size) const {
-		const glm::vec2 halfSize = size * 0.5f;
-
-		// TODO: Handle rotation
-
-		// clang-format off
-		return position.x + halfSize.x > m_Position.x - m_Size.x && 
-			   position.x - halfSize.x < m_Position.x + m_Size.x && 
-			   position.y + halfSize.y > m_Position.y - m_Size.y &&
-			   position.y - halfSize.y < m_Position.y + m_Size.y;
-		// clang-format on
-	}
 }// namespace fif::gfx

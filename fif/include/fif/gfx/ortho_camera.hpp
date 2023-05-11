@@ -9,8 +9,6 @@ namespace fif::gfx {
 		~OrthoCamera();
 
 		void update() override;
-		bool contains_circle(const glm::vec2 &position, f32 radius) const;
-		bool contains_quad(const glm::vec2 &position, const glm::vec2 &size) const;
 		glm::vec2 screen_to_world(const glm::vec2 &position) const;
 		void update_size();
 

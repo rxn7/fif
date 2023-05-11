@@ -8,7 +8,7 @@
 namespace fifed {
 	f32 CameraController::s_ZoomLerpDuration = 0.5f;
 	f32 CameraController::s_MaxZoom = 1000.0f;
-	f32 CameraController::s_MinZoom = 0.010f;
+	f32 CameraController::s_MinZoom = 0.05f;
 	glm::vec2 CameraController::s_ViewportSize;
 	glm::vec2 CameraController::s_ViewportPosition;
 

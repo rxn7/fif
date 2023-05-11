@@ -89,10 +89,11 @@ namespace fifed {
 
 		draw_component<TransformComponent>("Transform", m_SelectedEntity, scene, [](TransformComponent &transform) {
 			ImGui::DragFloat2("Position", glm::value_ptr(transform.position));
+			ImGui::DragFloat2("Scale", glm::value_ptr(transform.scale), 0.1f);
 
-			float angleDegrees = glm::degrees(transform.angle);
+			float angleDegrees = glm::degrees(transform.angleRadians);
 			ImGui::DragFloat("Angle", &angleDegrees, 1.0f, -360.0f, 360.0f);
-			transform.angle = glm::radians(angleDegrees);
+			transform.angleRadians = glm::radians(angleDegrees);
 		});
 
 		draw_component<QuadComponent>("Quad", m_SelectedEntity, scene, [](QuadComponent &quad) {

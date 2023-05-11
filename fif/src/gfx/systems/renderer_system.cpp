@@ -10,6 +10,7 @@ namespace fif::gfx {
 		Renderer2D &renderer = GfxModule::get_instance()->get_renderer2D();
 
 		registry.view<TransformComponent, CircleComponent>().each([&]([[maybe_unused]] core::EntityID entity, TransformComponent &trans, CircleComponent &circle) {
+			// TODO: Should the radius be scaled by trans.scale.x or trans.scale.y or not at all?
 			if(circle.segments == 0)
 				renderer.render_circle_frag(trans.position, circle.radius, circle.tint);
 			else
@@ -17,14 +18,16 @@ namespace fif::gfx {
 		});
 
 		registry.view<TransformComponent, QuadComponent>().each([&]([[maybe_unused]] core::EntityID entity, TransformComponent &trans, QuadComponent &quad) {
-			renderer.render_quad(trans.position, quad.size, trans.angle, quad.tint);
+			renderer.render_quad(trans.position, quad.size * trans.scale, trans.angleRadians, quad.tint);
 		});
 
 		registry.view<TransformComponent, SpriteComponent>().each([&]([[maybe_unused]] core::EntityID entity, TransformComponent &trans, SpriteComponent &sprite) {
-			if(!sprite.p_texture)
+			if(!sprite.p_texture) {
+				renderer.render_quad(trans.position, sprite.size * trans.scale, trans.angleRadians, sprite.tint);
 				return;
+			}
 
-			renderer.render_sprite(sprite.p_texture, trans.position, sprite.size, trans.angle, sprite.tint);
+			renderer.render_sprite(sprite.p_texture, trans.position, sprite.size * trans.scale, trans.angleRadians, sprite.tint);
 		});
 	}
 }// namespace fif::gfx
