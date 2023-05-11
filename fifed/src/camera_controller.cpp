@@ -23,8 +23,6 @@ namespace fifed {
 		OrthoCamera &cam = renderer2D.get_camera();
 
 		if(s_IsZooming) {
-			Logger::info("zooming");
-
 			const glm::vec2 mousePosition = InputModule::get_instance()->get_mouse_position();
 			const glm::vec2 mouseWorldPositionBeforeZoom = cam.screen_to_world(mousePosition);
 

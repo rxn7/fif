@@ -4,13 +4,22 @@
 
 namespace fif::gfx {
 	typedef glm::u8vec4 Color;
+	typedef glm::u8vec3 Color3;
 
 	inline glm::vec4 get_normalized_color(const Color &color) {
 		return glm::vec4(color) * (1.0f / 255.0f);
 	}
 
+	inline glm::vec3 get_normalized_color(const Color3 &color) {
+		return glm::vec3(color) * (1.0f / 255.0f);
+	}
+
 	inline Color get_color_from_normalized(const glm::vec4 &color) {
 		return Color(color * 255.0f);
+	}
+
+	inline Color3 get_color_from_normalized(const glm::vec3 &color) {
+		return Color3(color * 255.0f);
 	}
 
 #define DEFINE_COLOR(name, r, g, b)                                                                                                                  \

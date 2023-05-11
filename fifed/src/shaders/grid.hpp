@@ -16,20 +16,19 @@ namespace fifed::shaders::Grid {
 		})";
 
 	const std::string FRAGMENT = FIF_GLSL_VERSION FIF_GLSL_PRECISION
+		// Yoinked from https://www.shadertoy.com/view/7tGBDK
 		R"(
 		uniform vec2 u_CameraSize;
 		uniform vec2 u_CameraPosition;
-		uniform vec4 u_LineColor;
+		uniform vec3 u_LineColor;
+		uniform vec3 u_BackgroundColor;
 		uniform float u_LineThickness;
 		uniform float u_MinCellSize;
-		uniform float u_Zoom;
 
 		in vec2 v_UV;
 		out vec4 f_Color;
 
 		const float minCellPixelWidth = 2.0;
-		vec3 thinColor = vec3(0.5, 0.5, 0.5);
-		vec3 thickColor = vec3(0.0, 0.0, 0.0);
 
 		const float log10Multiplier = 1.0 / log(10.0);
 
@@ -59,7 +58,7 @@ namespace fifed::shaders::Grid {
 			float lod2a = max2(vec2(1.0) - abs(clamp(mod(uv, lod2) / dudv / u_LineThickness, 0.0, 1.0) * 2.0 - vec2(1.0)));
 
 			return vec4(
-				lod2a > 0.0 ? thickColor : lod1a > 0.0 ? mix(thickColor, thinColor, fade) : thinColor,
+				lod2a > 0.0 ? u_LineColor : lod1a > 0.0 ? mix(u_LineColor, u_BackgroundColor, fade) : u_BackgroundColor,
 				lod2a > 0.0 ? lod2a : lod1a > 0.0 ? lod1a : lod1a * (1.0 - fade)
 			);
 		}

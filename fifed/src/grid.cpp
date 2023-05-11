@@ -1,4 +1,5 @@
 #include "grid.hpp"
+#include "color.hpp"
 #include "shaders/grid.hpp"
 
 #include "fif/gfx/renderer2d.hpp"
@@ -46,10 +47,10 @@ namespace fifed {
 		sp_Shader->bind();
 		sp_Shader->set_uniform("u_CameraSize", cam.get_size());
 		sp_Shader->set_uniform("u_CameraPosition", cam.m_Position);
-		sp_Shader->set_uniform("u_LineColor", lineColor);
+		sp_Shader->set_uniform("u_LineColor", get_normalized_color(lineColor));
+		sp_Shader->set_uniform("u_BackgroundColor", get_normalized_color(backgroundColor));
 		sp_Shader->set_uniform("u_LineThickness", lineThickness);
 		sp_Shader->set_uniform("u_MinCellSize", minCellSize);
-		sp_Shader->set_uniform("u_Zoom", cam.m_Zoom);
 
 		sp_VertexBuffer->render();
 		sp_Shader->unbind();
