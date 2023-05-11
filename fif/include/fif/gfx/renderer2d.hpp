@@ -9,12 +9,13 @@
 
 namespace fif::gfx {
 	struct Renderer2DStats {
+		u32 drawCalls = 0;
+		u32 batchesFlushed = 0;
+		u32 vertices = 0;
+		u32 elements = 0;
 		u32 circles = 0;
 		u32 quads = 0;
 		u32 sprites = 0;
-		u32 vertices = 0;
-		u32 elements = 0;
-		u32 batchesFlushed = 0;
 	};
 
 	class Renderer2D {
@@ -32,6 +33,7 @@ namespace fif::gfx {
 			shader.set_uniform("u_ProjectionMatrix", mp_Camera->get_matrix());
 			batch.flush();
 			m_TempStats.batchesFlushed++;
+			m_TempStats.drawCalls++;
 		}
 
 		void start();

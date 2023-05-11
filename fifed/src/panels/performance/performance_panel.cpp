@@ -11,12 +11,13 @@ namespace fifed {
 
 		if(ImGui::TreeNode("Renderer2D")) {
 			const Renderer2DStats &rendererStats = GfxModule::get_instance()->get_renderer2D().get_stats();
-			ImGui::Text("Batches flushed: %i", rendererStats.batchesFlushed);
-			ImGui::Text("Sprites: %i", rendererStats.sprites);
-			ImGui::Text("Circles: %i", rendererStats.circles);
-			ImGui::Text("Quads: %i", rendererStats.quads);
-			ImGui::Text("Vertices: %i", rendererStats.vertices);
-			ImGui::Text("Elements: %i", rendererStats.elements);
+			ImGui::Text("Draw Calls: %u", rendererStats.drawCalls);
+			ImGui::Text("Batches flushed: %u", rendererStats.batchesFlushed);
+			ImGui::Text("Sprites: %u", rendererStats.sprites);
+			ImGui::Text("Circles: %u", rendererStats.circles);
+			ImGui::Text("Quads: %u", rendererStats.quads);
+			ImGui::Text("Vertices: %u", rendererStats.vertices);
+			ImGui::Text("Elements: %u", rendererStats.elements);
 			ImGui::TreePop();
 		}
 	}

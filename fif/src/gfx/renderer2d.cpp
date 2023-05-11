@@ -28,6 +28,9 @@ namespace fif::gfx {
 		glFrontFace(GL_CW);
 		glCullFace(GL_BACK);
 
+		glDisable(GL_DEPTH_TEST);
+		glDisable(GL_DITHER);
+
 		glGetIntegerv(GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS, &m_TextureSlotCount);
 		core::Logger::info("[Renderer2D] Max texture slots: %d", m_TextureSlotCount);
 
