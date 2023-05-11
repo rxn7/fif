@@ -1,6 +1,8 @@
 #pragma once
 
 struct PerformanceStats final {
-	float frameTimeMs;
-	float fps;
+	f32 frameTimeMs;
+	u32 fps;
+	u32 frameCount;
+	f32 timer;
 };

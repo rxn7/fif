@@ -7,7 +7,7 @@ namespace fifed {
 	void PerformancePanel::on_render() {
 		const PerformanceStats &stats = Application::get_instance()->get_performance_stats();
 		ImGui::Text("Frame time: %f ms", stats.frameTimeMs);
-		ImGui::Text("FPS: %f", stats.fps);
+		ImGui::Text("FPS: %u", stats.fps);
 
 		if(ImGui::TreeNode("Renderer2D")) {
 			const Renderer2DStats &rendererStats = GfxModule::get_instance()->get_renderer2D().get_stats();
