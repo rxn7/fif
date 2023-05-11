@@ -22,7 +22,7 @@ namespace fif::gfx {
 		void set_size(const glm::vec2 &size);
 
 	public:
-		Color m_Color = {200u, 200u, 200u, 255u};
+		Color3 m_Color = {200u, 200u, 200u};
 
 	private:
 		Texture m_Texture;

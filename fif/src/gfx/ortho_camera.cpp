@@ -14,7 +14,7 @@ namespace fif::gfx {
 	void OrthoCamera::update_size() {
 		const glm::vec2 viewportSize = GfxModule::get_instance()->get_viewport_size();
 		const f32 aspect = static_cast<f32>(viewportSize.y) / static_cast<f32>(viewportSize.x);
-		m_Size = glm::vec2(BASE_SIZE, BASE_SIZE * aspect) * m_Zoom;
+		m_Size = glm::vec2(1.0f, aspect) * m_Zoom * BASE_ZOOM;
 	}
 
 	glm::vec2 OrthoCamera::screen_to_world(const glm::vec2 &position) const {
@@ -23,23 +23,5 @@ namespace fif::gfx {
 		const glm::vec2 normalizedPosition((relativePosition.x * 2.0f) / viewportSize.x - 1.0f, 1.0f - (2.0f * relativePosition.y) / viewportSize.y);
 
 		return normalizedPosition * m_Size + m_Position;
-	}
-
-	bool OrthoCamera::contains_circle(const glm::vec2 &position, f32 radius) const {
-		const glm::vec2 delta = glm::abs(m_Position - position);
-		return delta.x <= m_Size.x + radius && delta.y <= m_Size.y + radius;
-	}
-
-	bool OrthoCamera::contains_quad(const glm::vec2 &position, const glm::vec2 &size) const {
-		const glm::vec2 halfSize = size * 0.5f;
-
-		// TODO: What about rotation?
-
-		// clang-format off
-		return position.x + halfSize.x > m_Position.x - m_Size.x && 
-			   position.x - halfSize.x < m_Position.x + m_Size.x && 
-			   position.y + halfSize.y > m_Position.y - m_Size.y &&
-			   position.y - halfSize.y < m_Position.y + m_Size.y;
-		// clang-format on
 	}
 }// namespace fif::gfx
