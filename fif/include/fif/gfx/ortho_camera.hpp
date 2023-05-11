@@ -17,7 +17,7 @@ namespace fif::gfx {
 		inline glm::vec2 get_size() const { return m_Size; }
 
 	public:
-		static constexpr f32 BASE_SIZE = 500.0f;
+		static constexpr f32 BASE_ZOOM = 500.0f;
 		f32 m_Zoom = 1.0f;
 		glm::vec2 m_Position;
 

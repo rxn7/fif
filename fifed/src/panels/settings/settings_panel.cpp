@@ -10,10 +10,9 @@ namespace fifed {
 		EditorModule *editor = EditorModule::get_instance();
 		FrameBuffer &frameBuffer = editor->get_frame_buffer();
 
-		glm::vec4 clearColor = get_normalized_color(frameBuffer.m_Color);
-		if(ImGui::ColorEdit4("Clear color", glm::value_ptr(clearColor))) {
+		glm::vec3 clearColor = get_normalized_color(frameBuffer.m_Color);
+		if(ImGui::ColorEdit3("Clear color", glm::value_ptr(clearColor)))
 			Grid::backgroundColor = frameBuffer.m_Color = get_color_from_normalized(clearColor);
-		}
 
 		if(ImGui::TreeNode("Grid")) {
 			ImGui::Checkbox("Enabled", &Grid::enabled);
