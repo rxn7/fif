@@ -21,6 +21,7 @@ namespace fifed {
 		void pre_render() override;
 		void on_update() override;
 		void on_event(Event &event) override;
+		void load_default_layout();
 
 		template<class T, class... Args> T *add_panel(Args &&...args) {
 			std::unique_ptr<EditorPanel> &panel = m_Panels.emplace_back(std::make_unique<T>(std::forward<Args>(args)...));

@@ -1,7 +1,6 @@
 #include "editor_module.hpp"
 #include "camera_controller.hpp"
 #include "grid.hpp"
-#include "module.hpp"
 #include "panels/console/console_panel.hpp"
 #include "panels/performance/performance_panel.hpp"
 #include "panels/scene/scene_panel.hpp"
@@ -18,8 +17,12 @@ namespace fifed {
 	EditorModule::~EditorModule() {}
 
 	void EditorModule::on_start(Application &app) {
+		if(!std::filesystem::exists("layout.ini"))
+			load_default_layout();
+
 		ImGuiIO &io = ImGui::GetIO();
 		io.Fonts->AddFontFromFileTTF("assets/fonts/iosevka-regular.ttf", 18);
+		io.IniFilename = "layout.ini";
 
 		mp_FrameBuffer = std::make_unique<FrameBuffer>(app.get_window().get_size());
 
@@ -36,7 +39,25 @@ namespace fifed {
 		ImGuiModule::get_instance()->add_render_func(std::bind(&EditorModule::on_render_im_gui, this));
 	}
 
+	void EditorModule::load_default_layout() {
+		ImGui::LoadIniSettingsFromDisk("default_layout.ini");
+	}
+
 	void EditorModule::on_render_im_gui() {
+		if(ImGui::BeginMainMenuBar()) {
+			if(ImGui::BeginMenu("Layout")) {
+				if(ImGui::MenuItem("Load Default"))
+					load_default_layout();
+
+				if(ImGui::MenuItem("Save"))
+					ImGui::SaveIniSettingsToDisk("layout.ini");
+
+				ImGui::EndMenu();
+			}
+
+			ImGui::EndMainMenuBar();
+		}
+
 		if(ImGuiModule::get_instance()->begin_dockspace())
 			for(std::unique_ptr<EditorPanel> &panel : m_Panels)
 				panel->render();
