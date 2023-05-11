@@ -9,7 +9,7 @@
 namespace fif::native_scripting {
 	class NativeScriptingModule : public fif::core::Module {
 	public:
-		FIF_MODULE(NativeScriptingModule);
+		FIF_MODULE(NativeScriptingModule)
 
 		NativeScriptingModule();
 

@@ -31,10 +31,11 @@ namespace fif::gfx {
 
 		case GlslDataType::Bool:
 			return GL_BOOL;
-		}
 
-		core::Logger::error("Unknown GlslDataType: %d", static_cast<i32>(type));
-		return GL_NONE;
+		default:
+			core::Logger::error("Unknown GlslDataType: %d", static_cast<i32>(type));
+			return GL_NONE;
+		}
 	}
 
 	u32 get_glsl_data_type_size(GlslDataType type) {
@@ -67,10 +68,11 @@ namespace fif::gfx {
 
 		case GlslDataType::Bool:
 			return 1;
-		}
 
-		core::Logger::error("Unknown GlslDataType: %d", static_cast<i32>(type));
-		return 0;
+		default:
+			core::Logger::error("Unknown GlslDataType: %d", static_cast<i32>(type));
+			return GL_NONE;
+		}
 	}
 
 	u32 get_glsl_data_type_component_count(GlslDataType type) {
@@ -109,9 +111,5 @@ namespace fif::gfx {
 		default:
 			return 1;
 		}
-
-		core::Logger::error("Unknown GlslDataType: %d", static_cast<i32>(type));
-
-		return 0;
 	}
 }// namespace fif::gfx

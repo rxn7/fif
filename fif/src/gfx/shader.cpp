@@ -43,7 +43,7 @@ namespace fif::gfx {
 		return id;
 	}
 
-	u32 Shader::register_uniform(const std::string &name) {
+	i32 Shader::register_uniform(const std::string &name) {
 		const auto it = m_UniformIDs.find(name);
 		if(it != m_UniformIDs.end()) {
 			core::Logger::error("Uniform %s already registered", name.c_str());
@@ -56,7 +56,7 @@ namespace fif::gfx {
 		return id;
 	}
 
-	u32 Shader::get_uniform_location(const std::string &name) {
+	i32 Shader::get_uniform_location(const std::string &name) {
 		const auto it = m_UniformIDs.find(name);
 
 		if(it == m_UniformIDs.end())
@@ -87,7 +87,7 @@ namespace fif::gfx {
 		else
 			glGetShaderiv(id, GL_INFO_LOG_LENGTH, &logLength);
 
-		char buffer[logLength];
+		char *buffer = new char[logLength + 1];
 
 		if(program)
 			glGetProgramInfoLog(id, logLength, NULL, buffer);
@@ -95,5 +95,7 @@ namespace fif::gfx {
 			glGetShaderInfoLog(id, logLength, NULL, buffer);
 
 		core::Logger::error("Shader error: %s", buffer);
+
+		delete[] buffer;
 	}
 }// namespace fif::gfx

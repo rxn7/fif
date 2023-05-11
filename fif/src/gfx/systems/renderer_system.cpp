@@ -1,3 +1,4 @@
+#include "renderer_system.hpp"
 #include "fif/core/ecs/scene.hpp"
 #include "fif/gfx/components/circle_component.hpp"
 #include "fif/gfx/components/quad_component.hpp"

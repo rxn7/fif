@@ -1,5 +1,6 @@
-set(IMGUI_PATH ${CMAKE_CURRENT_SOURCE_DIR}/vendor/imgui)
+project(imgui)
 
+set(IMGUI_PATH ${CMAKE_CURRENT_SOURCE_DIR}/vendor/imgui)
 set(GLFW_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vendor/glfw)
 
 file(GLOB IMGUI_SOURCES
@@ -20,6 +21,5 @@ file(GLOB IMGUI_SOURCES
     ${IMGUI_PATH}/backends/imgui_impl_opengl3_loader.cpp
 )
 
-add_library("ImGui" STATIC ${IMGUI_SOURCES})
-target_include_directories("ImGui" PUBLIC ${IMGUI_PATH} PRIVATE ${GLFW_DIR}/include)
-set_target_properties("ImGui" PROPERTIES LINK_FLAGS "${LFLAGS}")
+add_library(${PROJECT_NAME} STATIC ${IMGUI_SOURCES})
+target_include_directories(${PROJECT_NAME} PUBLIC ${IMGUI_PATH} PRIVATE ${GLFW_DIR}/include)

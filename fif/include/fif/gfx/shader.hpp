@@ -12,7 +12,7 @@ namespace fif::gfx {
 		~Shader();
 
 		void bind() const;
-		u32 register_uniform(const std::string &name);
+		i32 register_uniform(const std::string &name);
 		static void unbind();
 
 		inline void set_uniform(const std::string &name, i32 value) { glUniform1i(get_uniform_location(name), value); }
@@ -44,7 +44,7 @@ namespace fif::gfx {
 		}
 
 	private:
-		u32 get_uniform_location(const std::string &name);
+		i32 get_uniform_location(const std::string &name);
 
 		static u32 compile(GLenum type, const char *src);
 		static bool check_status(u32 id, GLenum type, bool program = true);
