@@ -12,11 +12,13 @@ namespace fif::core {
 
 		FIF_ASSERT(glfwInit(), "Failed to initialize GLFW");
 
-		glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
+		glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 
 		mp_GlfwWindow = glfwCreateWindow(props.size.x, props.size.y, props.title.c_str(), NULL, NULL);
+		FIF_ASSERT(mp_GlfwWindow != nullptr, "Failed to create GLFW window!")
+
 		glfwMakeContextCurrent(mp_GlfwWindow);
 		glfwSetWindowUserPointer(mp_GlfwWindow, this);
 
@@ -42,6 +44,7 @@ namespace fif::core {
 	Window::~Window() {
 		FIF_ASSERT(mp_GlfwWindow != nullptr, "Glfw window is not created!");
 		glfwDestroyWindow(mp_GlfwWindow);
+		glfwTerminate();
 	}
 
 	void Window::end_frame() {

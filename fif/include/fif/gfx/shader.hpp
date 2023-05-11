@@ -2,8 +2,8 @@
 
 #include "fif/gfx/color.hpp"
 
-#define FIF_GLSL_VERSION "#version 450 core\n"
-#define FIF_GLSL_PRECISION "precision highp float;\n"
+#define FIF_GLSL_VERSION "#version 300 es\n"
+#define FIF_GLSL_PRECISION "precision mediump float;\n"
 
 namespace fif::gfx {
 	class Shader final {

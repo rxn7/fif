@@ -32,15 +32,20 @@ namespace fif::gfx {
 		mp_CircleBatch = std::make_unique<Batch<CircleVertex>>(4, 6, BATCH_SIZE, circleVertexBufferLayout);
 		mp_SpriteBatch = std::make_unique<Batch<SpriteVertex>>(4, 6, BATCH_SIZE, spriteVertexBufferLayout);
 
-		std::string spriteFrag = std::regex_replace(shaders::Sprite::FRAGMENT, std::regex("\\$textureSlotCount"), std::to_string(m_TextureSlotCount - 1));
+		std::ostringstream textureSlotSwitchContent;
+		std::vector<i32> texturesUniform(m_TextureSlotCount);
+		for(i32 i = 0; i < m_TextureSlotCount; ++i) {
+			texturesUniform[i] = i;
+			// Note: Goofy ahh hack to avoid this error: sampler arrays indexed with non-constant expressions are forbidden in GLSL 1.30 and later
+			textureSlotSwitchContent << "case " << i << ": f_Color = texture(u_Textures[" << i << "], v_UV); break;\n";
+		}
+
+		std::string spriteFrag = std::regex_replace(shaders::Sprite::FRAGMENT, std::regex("\\$textureSlotCount"), std::to_string(m_TextureSlotCount));
+		spriteFrag = std::regex_replace(spriteFrag, std::regex("\\$generateTextureSlotSwitch"), textureSlotSwitchContent.str());
 
 		mp_SpriteShader = ShaderLibrary::add("sprite", shaders::Sprite::VERTEX, spriteFrag);
 		mp_CircleShader = ShaderLibrary::add("circle", shaders::Circle::VERTEX, shaders::Circle::FRAGMENT);
 		mp_QuadShader = ShaderLibrary::add("quad", shaders::Quad::VERTEX, shaders::Quad::FRAGMENT);
-
-		std::vector<i32> texturesUniform(m_TextureSlotCount);
-		for(i32 i = 0; i < m_TextureSlotCount; ++i)
-			texturesUniform[i] = i;
 
 		mp_SpriteShader->bind();
 		mp_SpriteShader->set_uniform("u_Textures", texturesUniform.data(), m_TextureSlotCount);
@@ -83,7 +88,7 @@ namespace fif::gfx {
 
 			textureSlot = static_cast<f32>(m_TextureIdx);
 			m_Textures[m_TextureIdx++] = texture;
-			m_Textures[textureSlot]->bind(textureSlot);
+			m_Textures[textureSlot]->bind_on_slot(textureSlot);
 		}
 
 		const u32 vertCount = mp_SpriteBatch->get_vertex_count();

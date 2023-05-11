@@ -117,7 +117,7 @@ namespace fifed {
 				char *path = tinyfd_openFileDialog("Select texture", workingDirectoryStr.c_str(), filterPatterns.size(), filterPatterns.data(), "Image", false);
 
 				if(path)
-					sprite.p_texture = std::make_shared<Texture>(path, GL_NEAREST);
+					sprite.p_texture = Texture::load(path, GL_NEAREST);
 			}
 		});
 

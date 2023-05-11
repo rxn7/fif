@@ -10,7 +10,7 @@ namespace fif::gfx {
 		virtual ~FrameBuffer();
 
 		inline u32 getFboID() const { return m_FboID; }
-		inline const Texture &getTexture() const { return m_Texture; }
+		inline const std::shared_ptr<Texture> &getTexture() const { return mp_Texture; }
 
 		void start();
 		void end();
@@ -25,7 +25,7 @@ namespace fif::gfx {
 		Color3 m_Color = {200u, 200u, 200u};
 
 	private:
-		Texture m_Texture;
+		std::shared_ptr<Texture> mp_Texture;
 		glm::vec2 m_Size;
 		u32 m_FboID = 0;
 	};

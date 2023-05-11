@@ -35,7 +35,10 @@ namespace fif::gfx::shaders {
 		uniform sampler2D u_Textures[$textureSlotCount];
 
 		void main() {
-			f_Color = v_Color * texture(u_Textures[int(v_TextureSlot)], v_UV);
+			switch(int(v_TextureSlot))  {
+				$generateTextureSlotSwitch
+			}
+			f_Color *= v_Color;
 		})";
 	}// namespace Sprite
 }// namespace fif::gfx::shaders
