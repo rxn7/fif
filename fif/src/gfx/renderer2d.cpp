@@ -24,6 +24,10 @@ namespace fif::gfx {
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+		glEnable(GL_CULL_FACE);
+		glFrontFace(GL_CW);
+		glCullFace(GL_BACK);
+
 		glGetIntegerv(GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS, &m_TextureSlotCount);
 		core::Logger::info("[Renderer2D] Max texture slots: %d", m_TextureSlotCount);
 
