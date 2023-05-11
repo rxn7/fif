@@ -43,15 +43,23 @@ namespace fifed {
 		const bool open = ImGui::TreeNodeEx(name, flags);
 		bool deleteEntity = false;
 
-		if(ImGui::IsItemClicked(ImGuiMouseButton_Right))
-			ImGui::OpenPopup("EntitySettings");
+		if(ImGui::IsItemVisible()) {
+			if(ImGui::IsItemClicked(ImGuiMouseButton_Right))
+				ImGui::OpenPopup("EntitySettings");
 
-		if(ImGui::IsItemClicked(ImGuiMouseButton_Left))
-			m_Inspector.m_SelectedEntity = ent;
+			if(ImGui::IsItemClicked(ImGuiMouseButton_Left))
+				m_Inspector.m_SelectedEntity = ent;
 
-		if(ImGui::BeginPopup("EntitySettings")) {
-			deleteEntity = ImGui::MenuItem("Delete entity");
-			ImGui::EndPopup();
+			if(ImGui::BeginPopup("EntitySettings")) {
+				deleteEntity = ImGui::MenuItem("Delete entity");
+				ImGui::EndPopup();
+			}
+
+			if(deleteEntity) {
+				scene.delete_entity(ent);
+				if(m_Inspector.m_SelectedEntity == ent)
+					m_Inspector.m_SelectedEntity = entt::null;
+			}
 		}
 
 		if(open) {
@@ -60,11 +68,5 @@ namespace fifed {
 		}
 
 		ImGui::PopID();
-
-		if(deleteEntity) {
-			scene.delete_entity(ent);
-			if(m_Inspector.m_SelectedEntity == ent)
-				m_Inspector.m_SelectedEntity = entt::null;
-		}
 	}
 }// namespace fifed
