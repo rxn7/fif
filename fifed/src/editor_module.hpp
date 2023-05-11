@@ -1,6 +1,7 @@
 #pragma once
 
 #include "panels/editor_panel.hpp"
+#include "panels/inspector/inspector_panel.hpp"
 #include "panels/viewport/viewport_panel.hpp"
 
 #include "fif/gfx/frame_buffer.hpp"
@@ -33,6 +34,7 @@ namespace fifed {
 
 	private:
 		ViewportPanel *mp_ViewportPanel;
+		InspectorPanel *mp_InspectorPanel;
 		std::vector<std::unique_ptr<EditorPanel>> m_Panels;
 		std::unique_ptr<FrameBuffer> mp_FrameBuffer;
 	};

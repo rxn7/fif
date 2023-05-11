@@ -9,11 +9,10 @@ namespace fifed {
 	f32 CameraController::s_ZoomLerpDuration = 0.5f;
 	f32 CameraController::s_MaxZoom = 1000.0f;
 	f32 CameraController::s_MinZoom = 0.05f;
-	glm::vec2 CameraController::s_ViewportSize;
-	glm::vec2 CameraController::s_ViewportPosition;
 
 	static float s_TargetZoom = 1.0f;
 	static float s_StartZoom = 1.0f;
+	static glm::vec2 s_StartMousePositionLocal;
 	static float s_SnapTolerance;
 	static float s_ZoomTimer = 0.0f;
 	static bool s_IsZooming = false;
@@ -23,8 +22,7 @@ namespace fifed {
 		OrthoCamera &cam = renderer2D.get_camera();
 
 		if(s_IsZooming) {
-			const glm::vec2 mousePosition = InputModule::get_instance()->get_mouse_position();
-			const glm::vec2 mouseWorldPositionBeforeZoom = cam.screen_to_world(mousePosition);
+			const glm::vec2 mouseWorldPositionBeforeZoom = cam.screen_to_world(s_StartMousePositionLocal);
 
 			if(s_ZoomLerpDuration > 0) {
 				const f32 zoomLerpPercentage = s_ZoomTimer / s_ZoomLerpDuration;
@@ -49,7 +47,7 @@ namespace fifed {
 
 			cam.update_size();
 
-			const glm::vec2 mouseWorldPositionAfterZoom = cam.screen_to_world(mousePosition);
+			const glm::vec2 mouseWorldPositionAfterZoom = cam.screen_to_world(s_StartMousePositionLocal);
 			const glm::vec2 mousePostionDelta = mouseWorldPositionBeforeZoom - mouseWorldPositionAfterZoom;
 			cam.m_Position += mousePostionDelta;
 		}
@@ -64,8 +62,10 @@ namespace fifed {
 		Renderer2D &renderer2D = gfx->get_renderer2D();
 		OrthoCamera &cam = renderer2D.get_camera();
 
-		const glm::vec2 mousePosition = gfx->get_point_relative_to_viewport(input->get_mouse_position());
-		if(mousePosition.x < 0 || mousePosition.y < 0 || mousePosition.x > gfx->get_viewport_size().x || mousePosition.y > gfx->get_viewport_size().y)
+		const glm::vec2 mousePosition = input->get_mouse_position();
+		const glm::vec2 mousePositionRelativeToViewport = gfx->get_point_relative_to_viewport(mousePosition);
+		if(mousePositionRelativeToViewport.x < 0 || mousePositionRelativeToViewport.y < 0 ||
+		   mousePositionRelativeToViewport.x > gfx->get_viewport_size().x || mousePositionRelativeToViewport.y > gfx->get_viewport_size().y)
 			return;
 
 		EventDispatcher::dispatch<MouseScrolledEvent>(event, [&](MouseScrolledEvent &scrollEvent) {
@@ -76,6 +76,7 @@ namespace fifed {
 			s_TargetZoom *= scrollEvent.get_value().y > 0 ? 0.9f : 1.1f;
 			s_TargetZoom = std::clamp(s_TargetZoom, s_MinZoom, s_MaxZoom);
 			s_SnapTolerance = std::log10(1.0f + s_TargetZoom) * 0.001f;
+			s_StartMousePositionLocal = mousePosition;
 
 			s_ZoomTimer = 0.0f;
 			s_IsZooming = s_TargetZoom != cam.m_Zoom;

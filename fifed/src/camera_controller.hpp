@@ -9,8 +9,5 @@ namespace fifed {
 		static f32 s_MaxZoom;
 		static f32 s_MinZoom;
 		static f32 s_ZoomLerpDuration;
-
-		static glm::vec2 s_ViewportPosition;
-		static glm::vec2 s_ViewportSize;
 	};
 }// namespace fifed
