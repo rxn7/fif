@@ -1,19 +1,16 @@
 #pragma once
 
-namespace fifed::CameraController {
-	void update();
-	void on_event(Event &event, bool viewportHovered);
+namespace fifed {
+	class CameraController {
+	public:
+		static void update();
+		static void on_event(Event &event, bool viewportHovered);
 
-	inline float maxZoom = 100.0f;
-	inline float minZoom = 0.005f;
-	inline float zoomLerpSpeed = 20.0f;
+		static f32 s_MaxZoom;
+		static f32 s_MinZoom;
+		static f32 s_ZoomLerpDuration;
 
-	inline glm::vec2 viewportPosition;
-
-	inline glm::vec2 viewportSize;
-
-	inline glm::vec2 targetPosition = {0, 0};
-	inline float targetZoom = 1.0f;
-
-	inline bool isZooming = false;
-};// namespace fifed::CameraController
+		static glm::vec2 s_ViewportPosition;
+		static glm::vec2 s_ViewportSize;
+	};
+}// namespace fifed

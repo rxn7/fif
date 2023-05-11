@@ -28,9 +28,9 @@ namespace fifed {
 		}
 		if(ImGui::TreeNode("Camera controller")) {
 			OrthoCamera &cam = GfxModule::get_instance()->get_renderer2D().get_camera();
-			ImGui::SliderFloat("Zoom lerp speed", &CameraController::zoomLerpSpeed, 0.1f, 100.0f);
-			ImGui::SliderFloat("Min zoom", &CameraController::minZoom, 0.001f, 0.1f);
-			ImGui::SliderFloat("Max zoom", &CameraController::maxZoom, 1.0f, 1000.0f);
+			ImGui::SliderFloat("Zoom lerp duration", &CameraController::s_ZoomLerpDuration, 0.0f, 3.0f);
+			ImGui::SliderFloat("Min zoom", &CameraController::s_MinZoom, 0.001f, 0.1f);
+			ImGui::SliderFloat("Max zoom", &CameraController::s_MaxZoom, 1.0f, 1000.0f);
 			ImGui::SliderFloat("Current zoom", &cam.m_Zoom, 0.0f, 1000.0f);
 
 			ImGui::TreePop();
