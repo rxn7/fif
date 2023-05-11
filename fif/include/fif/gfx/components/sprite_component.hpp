@@ -5,7 +5,12 @@
 namespace fif::gfx {
 	struct SpriteComponent final {
 		SpriteComponent() {}
-		SpriteComponent(std::shared_ptr<Texture> texture) : p_texture(texture) {}
+		SpriteComponent(const std::shared_ptr<Texture> &texture) { set_texture(texture); }
+
+		void set_texture(const std::shared_ptr<Texture> &texture) {
+			p_texture = texture;
+			size = texture->get_size();
+		}
 
 		Color tint = Colors::WHITE;
 		glm::vec2 size = {100.0f, 100.0f};

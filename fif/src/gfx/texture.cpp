@@ -22,10 +22,6 @@ namespace fif::gfx {
 	}
 
 	std::shared_ptr<Texture> Texture::load(const std::string &path, GLenum filter, GLenum wrap) {
-		std::shared_ptr<Texture> texture(new Texture());
-
-		glGenTextures(1, &texture->m_ID);
-
 		i32 width, height, channels;
 		stbi_set_flip_vertically_on_load(true);
 		stbi_uc *data = stbi_load(path.c_str(), &width, &height, &channels, 0);
@@ -34,6 +30,9 @@ namespace fif::gfx {
 			core::Logger::error("Failed to load texture: %s", path.c_str());
 			return nullptr;
 		}
+
+		std::shared_ptr<Texture> texture(new Texture());
+		glGenTextures(1, &texture->m_ID);
 
 		GLenum internalFormat, dataFormat;
 
@@ -57,6 +56,8 @@ namespace fif::gfx {
 	}
 
 	void Texture::create(u16 width, u16 height, GLenum internalFormat, GLenum dataFormat, GLenum filter, GLenum wrap, void *data) {
+		m_Width = width;
+		m_Height = height;
 		m_InternalFormat = internalFormat;
 		m_DataFormat = dataFormat;
 
