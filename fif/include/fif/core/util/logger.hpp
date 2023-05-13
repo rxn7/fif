@@ -9,22 +9,7 @@ namespace fif::core {
 
 		static void add_callback(LoggerCallback callback);
 
-		template<LogType T> static void print_prefix() {
-			switch(T) {
-			case LogType::INFO:
-				std::printf("[INFO]\t");
-				break;
-			case LogType::WARN:
-				std::printf("[WARN]\t");
-				break;
-			case LogType::ERROR:
-				std::printf("[ERROR]\t");
-				break;
-			case LogType::DEBUG:
-				std::printf("[DEBUG]\t");
-				break;
-			}
-		}
+		template<LogType> static void print_prefix();
 
 		template<LogType T, typename... Args> static void print(const char *msg, Args... args) {
 			print_prefix<T>();
