@@ -13,7 +13,7 @@ namespace fifed {
 		void on_render() override;
 
 	private:
-		void draw_entity(EntityID ent, Scene &scene);
+		void draw_entity(EntityID ent, const char *name, Scene &scene);
 
 	private:
 		InspectorPanel &m_Inspector;

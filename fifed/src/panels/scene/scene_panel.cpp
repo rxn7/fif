@@ -16,7 +16,8 @@ namespace fifed {
 	void ScenePanel::on_render() {
 		Scene &scene = Application::get_instance()->get_scene();
 
-		ImGui::Text("Count: %lu", scene.get_entity_count());
+		const u32 entCount = scene.get_entity_count();
+		ImGui::Text("Count: %u", entCount);
 
 		if(ImGui::Button("Create entity")) {
 			const EntityID ent = scene.create_entity();
@@ -24,42 +25,49 @@ namespace fifed {
 			m_Inspector.m_SelectedEntity = ent;
 		}
 
-		if(ImGui::BeginChild("EntityList"))
-			scene.for_each([&](EntityID &ent) { draw_entity(ent, scene); });
+		if(ImGui::BeginChild("EntityList")) {
+			const auto &view = scene.get_registry().view<TagComponent>();
 
+			ImGuiListClipper clipper;
+			clipper.Begin(view.size());
+
+			while(clipper.Step()) {
+				for(i32 i = clipper.DisplayStart; i < clipper.DisplayEnd; ++i) {
+					EntityID ent = *std::next(view.begin(), i);
+					const TagComponent &tag = std::get<0>(view.get(ent));
+					draw_entity(ent, tag.tag.c_str(), scene);
+				}
+			}
+
+			clipper.End();
+		}
 		ImGui::EndChild();
 	}
 
-	void ScenePanel::draw_entity(EntityID ent, Scene &scene) {
-		const char *name = scene.has_component<TagComponent>(ent) ? scene.get_component<TagComponent>(ent).tag.c_str() : "Entity";
-
+	void ScenePanel::draw_entity(EntityID ent, const char *name, Scene &scene) {
 		ImGui::PushID(static_cast<u32>(ent));
 
 		const bool isSelected = m_Inspector.m_SelectedEntity == ent;
-
-		// TODO: Remove ImGuiTreeNodeFlags_Leaf if entity has children
 		const ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_OpenOnArrow | (isSelected ? ImGuiTreeNodeFlags_Selected : 0);
 
 		const bool open = ImGui::TreeNodeEx(name, flags);
 		bool deleteEntity = false;
 
-		if(ImGui::IsItemVisible()) {
-			if(ImGui::IsItemClicked(ImGuiMouseButton_Right))
-				ImGui::OpenPopup("EntitySettings");
+		if(ImGui::IsItemClicked(ImGuiMouseButton_Right))
+			ImGui::OpenPopup("EntitySettings");
 
-			if(ImGui::IsItemClicked(ImGuiMouseButton_Left))
-				m_Inspector.m_SelectedEntity = ent;
+		if(ImGui::IsItemClicked(ImGuiMouseButton_Left))
+			m_Inspector.m_SelectedEntity = ent;
 
-			if(ImGui::BeginPopup("EntitySettings")) {
-				deleteEntity = ImGui::MenuItem("Delete entity");
-				ImGui::EndPopup();
-			}
+		if(ImGui::BeginPopup("EntitySettings")) {
+			deleteEntity = ImGui::MenuItem("Delete entity");
+			ImGui::EndPopup();
+		}
 
-			if(deleteEntity) {
-				scene.delete_entity(ent);
-				if(m_Inspector.m_SelectedEntity == ent)
-					m_Inspector.m_SelectedEntity = entt::null;
-			}
+		if(deleteEntity) {
+			scene.delete_entity(ent);
+			if(m_Inspector.m_SelectedEntity == ent)
+				m_Inspector.m_SelectedEntity = entt::null;
 		}
 
 		if(open) {
