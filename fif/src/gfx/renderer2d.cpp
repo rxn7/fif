@@ -35,16 +35,17 @@ namespace fif::gfx {
 		mp_CircleBatch = std::make_unique<Batch<CircleVertex>>(4, 6, BATCH_SIZE, circleVertexBufferLayout);
 		mp_SpriteBatch = std::make_unique<Batch<SpriteVertex>>(4, 6, BATCH_SIZE, spriteVertexBufferLayout);
 
-		std::ostringstream textureSlotSwitchContent;
+		// NOTE: textureSlotSwitch is a goofy ahh hack to avoid this error: sampler arrays indexed with non-constant expressions are forbidden in
+		// GLSL 1.30 and later
 		std::vector<i32> texturesUniform(m_TextureSlotCount);
+		std::ostringstream textureSlotSwitchContent;
 		for(i32 i = 0; i < m_TextureSlotCount; ++i) {
 			texturesUniform[i] = i;
-			// Note: Goofy ahh hack to avoid this error: sampler arrays indexed with non-constant expressions are forbidden in GLSL 1.30 and later
 			textureSlotSwitchContent << "case " << i << ": f_Color = texture(u_Textures[" << i << "], v_UV); break;\n";
 		}
 
 		std::string spriteFrag = std::regex_replace(shaders::Sprite::FRAGMENT, std::regex("\\$textureSlotCount"), std::to_string(m_TextureSlotCount));
-		spriteFrag = std::regex_replace(spriteFrag, std::regex("\\$generateTextureSlotSwitch"), textureSlotSwitchContent.str());
+		spriteFrag = std::regex_replace(spriteFrag, std::regex("\\$textureSlotSwitch"), textureSlotSwitchContent.str());
 
 		mp_SpriteShader = ShaderLibrary::add("sprite", shaders::Sprite::VERTEX, spriteFrag);
 		mp_CircleShader = ShaderLibrary::add("circle", shaders::Circle::VERTEX, shaders::Circle::FRAGMENT);
@@ -96,7 +97,9 @@ namespace fif::gfx {
 
 		const u32 vertCount = mp_SpriteBatch->get_vertex_count();
 
-		if(glm::mod(angle, glm::half_pi<f32>())) {
+		if(glm::mod(angle, glm::two_pi<f32>())) {
+			m_TempStats.rotatedSpriteCount++;
+
 			glm::mat4 matrix(1.0f);
 			matrix = glm::translate(glm::mat4(1.0f), glm::vec3(position, 0.0f));
 			matrix = glm::rotate(matrix, -angle, {0, 0, 1});
@@ -107,6 +110,7 @@ namespace fif::gfx {
 			mp_SpriteBatch->add_vertex({glm::vec3(matrix * glm::vec4(1.0f, 1.0f, 0.0f, 1.0f)), glm::vec2(1.0f, 1.0f), color, textureSlot});
 			mp_SpriteBatch->add_vertex({glm::vec3(matrix * glm::vec4(1.0f, -1.0f, 0.0f, 1.0f)), glm::vec2(1.0f, 0.0f), color, textureSlot});
 		} else {
+			m_TempStats.spriteCount++;
 			mp_SpriteBatch->add_vertex({glm::vec2(position.x - size.x, position.y - size.y), glm::vec2(0.0f, 0.0f), color, textureSlot});
 			mp_SpriteBatch->add_vertex({glm::vec2(position.x - size.x, position.y + size.y), glm::vec2(0.0f, 1.0f), color, textureSlot});
 			mp_SpriteBatch->add_vertex({glm::vec2(position.x + size.x, position.y + size.y), glm::vec2(1.0f, 1.0f), color, textureSlot});
@@ -120,9 +124,8 @@ namespace fif::gfx {
 		mp_SpriteBatch->add_element(vertCount + 3);
 		mp_SpriteBatch->add_element(vertCount);
 
-		m_TempStats.sprites++;
-		m_TempStats.vertices += 4;
-		m_TempStats.elements += 6;
+		m_TempStats.vertexCount += 4;
+		m_TempStats.elementCount += 6;
 	}
 
 	void Renderer2D::render_quad(const glm::vec2 &position, const glm::vec2 &size, f32 angle, const Color &color) {
@@ -130,21 +133,22 @@ namespace fif::gfx {
 
 		const u32 vertCount = mp_QuadBatch->get_vertex_count();
 
-		glm::mat4 matrix(1.0f);
-		matrix = glm::translate(glm::mat4(1.0f), glm::vec3(position, 0.0f));
-		matrix = glm::rotate(matrix, -angle, {0, 0, 1});
-		matrix = glm::scale(matrix, glm::vec3(size, 1.0));
-
-		if(glm::mod(angle, glm::half_pi<f32>())) {
+		if(glm::mod(angle, glm::two_pi<f32>())) {
+			glm::mat4 matrix(1.0f);
+			matrix = glm::translate(glm::mat4(1.0f), glm::vec3(position, 0.0f));
+			matrix = glm::rotate(matrix, -angle, {0, 0, 1});
+			matrix = glm::scale(matrix, glm::vec3(size, 1.0));
 			mp_QuadBatch->add_vertex({glm::vec2(matrix * glm::vec4(-1.0f, -1.0f, 0.0f, 1.0f)), color});
 			mp_QuadBatch->add_vertex({glm::vec2(matrix * glm::vec4(-1.0f, 1.0f, 0.0f, 1.0f)), color});
 			mp_QuadBatch->add_vertex({glm::vec2(matrix * glm::vec4(1.0f, 1.0f, 0.0f, 1.0f)), color});
 			mp_QuadBatch->add_vertex({glm::vec2(matrix * glm::vec4(1.0f, -1.0f, 0.0f, 1.0f)), color});
+			m_TempStats.rotatedQuadCount++;
 		} else {
 			mp_QuadBatch->add_vertex({glm::vec2(position.x - size.x, position.y - size.y), color});
 			mp_QuadBatch->add_vertex({glm::vec2(position.x - size.x, position.y + size.y), color});
 			mp_QuadBatch->add_vertex({glm::vec2(position.x + size.x, position.y + size.y), color});
 			mp_QuadBatch->add_vertex({glm::vec2(position.x + size.x, position.y - size.y), color});
+			m_TempStats.quadCount++;
 		}
 
 		mp_QuadBatch->add_element(vertCount);
@@ -154,40 +158,11 @@ namespace fif::gfx {
 		mp_QuadBatch->add_element(vertCount + 3);
 		mp_QuadBatch->add_element(vertCount);
 
-		m_TempStats.quads++;
-		m_TempStats.vertices += 4;
-		m_TempStats.elements += 6;
+		m_TempStats.vertexCount += 4;
+		m_TempStats.elementCount += 6;
 	}
 
-	void Renderer2D::render_circle(const glm::vec2 &position, f32 radius, u16 segmentCount, const glm::u8vec4 &color) {
-		FIF_ASSERT(segmentCount > 2u, "Circle must have at least 3 segments!");
-
-		FLUSH_IF_FULL(mp_QuadBatch, mp_QuadShader)
-
-		const u32 vertCount = mp_QuadBatch->get_vertex_count();
-		const f32 segmentAngle = glm::two_pi<f32>() / segmentCount;
-		f32 angle = 0.0F;
-
-		for(u16 i = 0; i < segmentCount; ++i) {
-			mp_QuadBatch->add_vertex({
-				.position = position + glm::vec2(glm::cos(angle), glm::sin(angle)) * radius,
-				.color = color,
-			});
-			angle += segmentAngle;
-		}
-
-		for(u16 i = 1u; i < segmentCount - 1u; ++i) {
-			mp_QuadBatch->add_element(vertCount);
-			mp_QuadBatch->add_element(vertCount + i);
-			mp_QuadBatch->add_element(vertCount + i + 1u);
-		}
-
-		m_TempStats.circles++;
-		m_TempStats.vertices += vertCount;
-		m_TempStats.elements += (segmentCount - 2u) * 3u;
-	}
-
-	void Renderer2D::render_circle_frag(const glm::vec2 &position, f32 radius, const Color &color) {
+	void Renderer2D::render_circle(const glm::vec2 &position, f32 radius, const Color &color) {
 		FLUSH_IF_FULL(mp_CircleBatch, mp_CircleShader)
 
 		const u32 vertCount = mp_CircleBatch->get_vertex_count();
@@ -204,8 +179,8 @@ namespace fif::gfx {
 		mp_CircleBatch->add_element(vertCount + 3u);
 		mp_CircleBatch->add_element(vertCount);
 
-		m_TempStats.circles++;
-		m_TempStats.vertices += 4u;
-		m_TempStats.elements += 6u;
+		m_TempStats.circleCount++;
+		m_TempStats.vertexCount += 4u;
+		m_TempStats.elementCount += 6u;
 	}
 }// namespace fif::gfx

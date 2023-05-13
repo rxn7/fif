@@ -9,13 +9,18 @@
 
 namespace fif::gfx {
 	struct Renderer2DStats {
-		u32 drawCalls = 0;
+		u32 drawCallCount = 0;
 		u32 batchesFlushed = 0;
-		u32 vertices = 0;
-		u32 elements = 0;
-		u32 circles = 0;
-		u32 quads = 0;
-		u32 sprites = 0;
+		u32 vertexCount = 0;
+		u32 elementCount = 0;
+
+		u32 circleCount = 0;
+
+		u32 quadCount = 0;
+		u32 rotatedQuadCount = 0;
+
+		u32 spriteCount = 0;
+		u32 rotatedSpriteCount = 0;
 	};
 
 	class Renderer2D {
@@ -33,7 +38,7 @@ namespace fif::gfx {
 			shader.set_uniform("u_ProjectionMatrix", mp_Camera->get_matrix());
 			batch.flush();
 			m_TempStats.batchesFlushed++;
-			m_TempStats.drawCalls++;
+			m_TempStats.drawCallCount++;
 		}
 
 		void start();
@@ -41,8 +46,7 @@ namespace fif::gfx {
 
 		void render_quad(const glm::vec2 &position, const glm::vec2 &size, f32 angle = 0.0f, const Color &color = {255, 255, 255, 255});
 		void render_sprite(const std::shared_ptr<Texture> &texture, const glm::vec2 &position, const glm::vec2 &size, f32 angle = 0.0f, const Color &color = {255, 255, 255, 255});
-		void render_circle(const glm::vec2 &position, f32 radius, u16 segmentCount = 0, const Color &color = {255, 255, 255, 255});
-		void render_circle_frag(const glm::vec2 &position, f32 radius, const Color &color = {255, 255, 255, 255});
+		void render_circle(const glm::vec2 &position, f32 radius, const Color &color = {255, 255, 255, 255});
 
 	private:
 		static constexpr u32 BATCH_SIZE = 1000;

@@ -15,6 +15,9 @@ namespace fif::gfx {
 		inline u32 get_vertex_count() const { return m_VertexCount; }
 		inline u32 get_element_count() const { return m_ElementCount; }
 		inline bool is_full() const { return m_VertexCount >= m_MaxVertices; }
+		inline bool can_fit(u32 vertexCount, u32 elementCount) const {
+			return m_VertexCount + vertexCount <= m_MaxVertices && m_ElementCount + elementCount <= m_MaxElements;
+		}
 		inline bool is_empty() const { return m_VertexCount == 0; }
 
 		void flush() {

@@ -124,16 +124,6 @@ namespace fifed {
 		draw_component<CircleComponent>("Circle", m_SelectedEntity, scene, [](CircleComponent &circle) {
 			draw_color_selector(circle.tint);
 			ImGui::DragFloat("Radius", &circle.radius, 1.0f, 0.0f, std::numeric_limits<float>::max());
-
-			bool useFrag = circle.segments == 0;
-			if(ImGui::Checkbox("Use frag", &useFrag))
-				circle.segments = useFrag ? 0 : 16;
-
-			if(!useFrag) {
-				static constexpr u16 MIN_SEGMENTS = 5;
-				static constexpr u16 MAX_SEGMENTS = 100;
-				ImGui::DragScalar("Segments", ImGuiDataType_U16, &circle.segments, 1, &MIN_SEGMENTS, &MAX_SEGMENTS);
-			}
 		});
 
 		draw_component<LuaScriptComponent>("Lua Script", m_SelectedEntity, scene, [&workingDirectoryStr](LuaScriptComponent &script) {

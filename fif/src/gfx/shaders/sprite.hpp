@@ -36,7 +36,7 @@ namespace fif::gfx::shaders {
 
 		void main() {
 			switch(int(v_TextureSlot))  {
-				$generateTextureSlotSwitch
+				$textureSlotSwitch
 			}
 			f_Color *= v_Color;
 		})";
