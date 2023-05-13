@@ -17,10 +17,6 @@
 
 namespace fif::gfx {
 	Renderer2D::Renderer2D() {
-		core::Logger::info("[Renderer2D] OpenGL Renderer: %s", glGetString(GL_RENDERER));
-		core::Logger::info("[Renderer2D] OpenGL Version: %s", glGetString(GL_VERSION));
-		core::Logger::info("[Renderer2D] OpenGL Vendor: %s", glGetString(GL_VENDOR));
-
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 

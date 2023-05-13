@@ -1,7 +1,7 @@
 #include "fif/gfx/shader.hpp"
 
 namespace fif::gfx {
-	Shader::Shader(const std::string &vertexSrc, const std::string &fragmentSrc) {
+	Shader::Shader(const std::string &vertexSrc, const std::string &fragmentSrc, const std::initializer_list<std::string_view> uniforms) {
 		m_ID = glCreateProgram();
 
 		const u32 fragID = compile(GL_FRAGMENT_SHADER, fragmentSrc.c_str());
@@ -13,11 +13,26 @@ namespace fif::gfx {
 		glLinkProgram(m_ID);
 		if(check_status(m_ID, GL_LINK_STATUS, true)) {
 			glValidateProgram(m_ID);
-			check_status(m_ID, GL_VALIDATE_STATUS, true);
+			m_Valid = check_status(m_ID, GL_VALIDATE_STATUS, true);
 		}
 
 		glDeleteShader(fragID);
 		glDeleteShader(vertID);
+
+		if(!m_Valid) {
+			core::Logger::error("Shader is invalid: %s", glGetError());
+			return;
+		}
+
+		for(std::string_view uniform : uniforms) {
+			const i32 location = glGetUniformLocation(m_ID, uniform.data());
+			if(location == -1) {
+				core::Logger::error("Uniform '%s' doesn't exist.", uniform.data());
+				continue;
+			}
+
+			m_UniformLocations.insert({uniform, location});
+		}
 	}
 
 	Shader::~Shader() {
@@ -43,24 +58,16 @@ namespace fif::gfx {
 		return id;
 	}
 
-	i32 Shader::register_uniform(const std::string &name) {
-		const auto it = m_UniformIDs.find(name);
-		if(it != m_UniformIDs.end()) {
-			core::Logger::error("Uniform %s already registered", name.c_str());
-			return it->second;
+	i32 Shader::get_uniform_location(std::string_view name) {
+		const auto it = m_UniformLocations.find(name);
+
+		if(it == m_UniformLocations.end()) {
+			const i32 location = glGetUniformLocation(m_ID, name.data());
+			if(location == -1)
+				return -1;
+
+			return m_UniformLocations.insert({name, location}).second;
 		}
-
-		const u32 id = glGetUniformLocation(m_ID, name.c_str());
-		m_UniformIDs.insert({name, id});
-
-		return id;
-	}
-
-	i32 Shader::get_uniform_location(const std::string &name) {
-		const auto it = m_UniformIDs.find(name);
-
-		if(it == m_UniformIDs.end())
-			return register_uniform(name);
 
 		return it->second;
 	}

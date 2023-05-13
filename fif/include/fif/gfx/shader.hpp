@@ -8,12 +8,18 @@
 namespace fif::gfx {
 	class Shader final {
 	public:
-		Shader(const std::string &vertexSrc, const std::string &fragmentSrc);
+		/*
+		To precache uniforms' locations you can pass the uniforms' names as the last parameter.
+		Otherwise the locations will be cached the first time they're used.
+		*/
+		Shader(const std::string &vertexSrc, const std::string &fragmentSrc, std::initializer_list<std::string_view> uniforms = {});
 		~Shader();
 
 		void bind() const;
-		i32 register_uniform(const std::string &name);
+
 		static void unbind();
+
+		inline bool is_valid() const { return m_Valid; }
 
 		inline void set_uniform(const std::string &name, i32 value) { glUniform1i(get_uniform_location(name), value); }
 
@@ -44,14 +50,15 @@ namespace fif::gfx {
 		}
 
 	private:
-		i32 get_uniform_location(const std::string &name);
+		i32 get_uniform_location(std::string_view name);
 
 		static u32 compile(GLenum type, const char *src);
 		static bool check_status(u32 id, GLenum type, bool program = true);
 		static void print_info_log(u32 id, bool program = true);
 
 	private:
-		std::unordered_map<std::string, u32> m_UniformIDs;
+		bool m_Valid = false;
+		std::unordered_map<std::string_view, i32> m_UniformLocations;
 		u32 m_ID;
 	};
 }// namespace fif::gfx
