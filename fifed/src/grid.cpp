@@ -47,8 +47,8 @@ namespace fifed {
 		sp_Shader->bind();
 		sp_Shader->set_uniform("u_CameraSize", cam.get_size());
 		sp_Shader->set_uniform("u_CameraPosition", cam.m_Position);
-		sp_Shader->set_uniform("u_LineColor", get_normalized_color(lineColor));
-		sp_Shader->set_uniform("u_BackgroundColor", get_normalized_color(backgroundColor));
+		sp_Shader->set_uniform("u_LineColor", denormalize_color(lineColor));
+		sp_Shader->set_uniform("u_BackgroundColor", denormalize_color(backgroundColor));
 		sp_Shader->set_uniform("u_LineThickness", lineThickness);
 		sp_Shader->set_uniform("u_MinCellSize", minCellSize);
 

@@ -29,7 +29,7 @@ namespace fif::gfx {
 
 		inline void set_uniform(const std::string &name, f32 value) { glUniform1f(get_uniform_location(name), value); }
 
-		inline void set_uniform(const std::string &name, const Color &value) { set_uniform(name, fif::gfx::get_normalized_color(value)); }
+		inline void set_uniform(const std::string &name, const Color &value) { set_uniform(name, fif::gfx::denormalize_color(value)); }
 
 		inline void set_uniform(const std::string &name, const glm::vec2 &value) { glUniform2f(get_uniform_location(name), value.x, value.y); }
 
