@@ -10,18 +10,18 @@ namespace fifed {
 		EditorModule *editor = EditorModule::get_instance();
 		FrameBuffer &frameBuffer = editor->get_frame_buffer();
 
-		glm::vec3 clearColor = denormalize_color(frameBuffer.m_Color);
+		glm::vec3 clearColor = denormalize_color3(frameBuffer.m_Color);
 		if(ImGui::ColorEdit3("Clear color", glm::value_ptr(clearColor)))
-			Grid::backgroundColor = frameBuffer.m_Color = denormalize_color(clearColor);
+			Grid::backgroundColor = frameBuffer.m_Color = denormalize_color3(clearColor);
 
 		if(ImGui::TreeNode("Grid")) {
 			ImGui::Checkbox("Enabled", &Grid::enabled);
 			ImGui::SliderFloat("Line tickness", &Grid::lineThickness, 1.0f, 10.0f);
 			ImGui::SliderFloat("Cell size", &Grid::minCellSize, 0.1f, 100.0f);
 
-			glm::vec3 lineColorNormalized = denormalize_color(Grid::lineColor);
+			glm::vec3 lineColorNormalized = denormalize_color3(Grid::lineColor);
 			if(ImGui::ColorEdit3("Line color", glm::value_ptr(lineColorNormalized)))
-				Grid::lineColor = denormalize_color(lineColorNormalized);
+				Grid::lineColor = denormalize_color3(lineColorNormalized);
 
 			ImGui::TreePop();
 		}

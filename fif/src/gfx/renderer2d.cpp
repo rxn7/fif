@@ -185,7 +185,7 @@ namespace fif::gfx {
 
 		std::shared_ptr<Shader> spriteShader = ShaderLibrary::add("sprite", shaders::Sprite::VERTEX, spriteFrag);
 		spriteShader->bind();
-		spriteShader->set_uniform("u_Textures", texturesUniform.data(), m_TextureSlotCount);
+		spriteShader->set_uniform_i32_array("u_Textures", texturesUniform.data(), m_TextureSlotCount);
 
 		return spriteShader;
 	}

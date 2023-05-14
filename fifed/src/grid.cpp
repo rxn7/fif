@@ -45,12 +45,12 @@ namespace fifed {
 		const OrthoCamera &cam = GfxModule::get_instance()->get_renderer2D().get_camera();
 
 		sp_Shader->bind();
-		sp_Shader->set_uniform("u_CameraSize", cam.get_size());
-		sp_Shader->set_uniform("u_CameraPosition", cam.m_Position);
-		sp_Shader->set_uniform("u_LineColor", denormalize_color(lineColor));
-		sp_Shader->set_uniform("u_BackgroundColor", denormalize_color(backgroundColor));
-		sp_Shader->set_uniform("u_LineThickness", lineThickness);
-		sp_Shader->set_uniform("u_MinCellSize", minCellSize);
+		sp_Shader->set_uniform_vec2("u_CameraSize", cam.get_size());
+		sp_Shader->set_uniform_vec2("u_CameraPosition", cam.m_Position);
+		sp_Shader->set_uniform_vec3("u_LineColor", normalize_color3(lineColor));
+		sp_Shader->set_uniform_vec3("u_BackgroundColor", normalize_color3(backgroundColor));
+		sp_Shader->set_uniform_f32("u_LineThickness", lineThickness);
+		sp_Shader->set_uniform_f32("u_MinCellSize", minCellSize);
 
 		sp_VertexBuffer->render();
 		sp_Shader->unbind();

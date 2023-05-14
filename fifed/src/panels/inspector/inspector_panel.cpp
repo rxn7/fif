@@ -146,7 +146,7 @@ namespace fifed {
 	}
 
 	void InspectorPanel::draw_color_selector(Color &color) {
-		glm::vec4 colorNormalized = denormalize_color(color);
+		glm::vec4 colorNormalized = normalize_color(color);
 		ImGui::ColorEdit4("Color", glm::value_ptr(colorNormalized));
 		color = denormalize_color(colorNormalized);
 	}

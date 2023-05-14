@@ -39,7 +39,7 @@ namespace fif::gfx {
 				return;
 
 			shader->bind();
-			shader->set_uniform("u_ProjectionMatrix", mp_Camera->get_matrix());
+			shader->set_uniform_mat4("u_ProjectionMatrix", mp_Camera->get_matrix());
 			batch->flush();
 			m_TempStats.batchesFlushed++;
 			m_TempStats.drawCallCount++;
