@@ -30,13 +30,17 @@ namespace fif::gfx {
 		inline OrthoCamera &get_camera() const { return *mp_Camera; }
 		inline const Renderer2DStats &get_stats() const { return m_Stats; }
 
-		template<typename Vertex> void flush_batch(Batch<Vertex> &batch, Shader &shader) {
-			if(batch.is_empty())
+		template<typename Vertex> void flush_batch(const std::unique_ptr<Batch<Vertex>> &batch) {
+			if(batch->is_empty())
 				return;
 
-			shader.bind();
-			shader.set_uniform("u_ProjectionMatrix", mp_Camera->get_matrix());
-			batch.flush();
+			Shader *shader = batch->get_shader();
+			if(!shader)
+				return;
+
+			shader->bind();
+			shader->set_uniform("u_ProjectionMatrix", mp_Camera->get_matrix());
+			batch->flush();
 			m_TempStats.batchesFlushed++;
 			m_TempStats.drawCallCount++;
 		}
@@ -49,14 +53,15 @@ namespace fif::gfx {
 		void render_circle(const glm::vec2 &position, f32 radius, const Color &color = {255, 255, 255, 255});
 
 	private:
+		std::shared_ptr<Shader> create_sprite_shader();
+
+	private:
 		static constexpr u32 BATCH_SIZE = 1000;
 
 		std::unique_ptr<Batch<QuadVertex>> mp_QuadBatch;
 		std::unique_ptr<Batch<CircleVertex>> mp_CircleBatch;
 		std::unique_ptr<Batch<SpriteVertex>> mp_SpriteBatch;
 		std::unique_ptr<OrthoCamera> mp_Camera;
-
-		std::shared_ptr<Shader> mp_QuadShader, mp_CircleShader, mp_SpriteShader;
 
 		std::array<std::shared_ptr<Texture>, 32> m_Textures;
 		i32 m_TextureIdx = 0;
