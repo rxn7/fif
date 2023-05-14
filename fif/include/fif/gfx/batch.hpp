@@ -12,6 +12,11 @@ namespace fif::gfx {
 			m_Buffer.set_layout(layout);
 		}
 
+		virtual ~Batch() {
+			delete[] mp_Vertices;
+			delete[] mp_Elements;
+		}
+
 		inline Shader *get_shader() const { return mp_Shader.get(); }
 		inline u32 get_vertex_count() const { return m_VertexCount; }
 		inline u32 get_element_count() const { return m_ElementCount; }
