@@ -10,12 +10,6 @@ namespace fif::lua_scripting {
 
 	LuaScriptingModule::LuaScriptingModule() {
 		FIF_MODULE_INIT_INSTANCE();
-		m_Lua.open_libraries(sol::lib::base, sol::lib::math, sol::lib::string);
-
-		// Logger
-		m_Lua.set_function("log", [](const std::string &msg) { core::Logger::info("[LUA] %s", msg.c_str()); });
-		m_Lua.set_function("log_error", [](const std::string &msg) { core::Logger::error("[LUA] %s", msg.c_str()); });
-		m_Lua.set_function("log_warn", [](const std::string &msg) { core::Logger::warn("[LUA] %s", msg.c_str()); });
 	}
 
 	LuaScriptingModule::~LuaScriptingModule() {}
@@ -26,28 +20,34 @@ namespace fif::lua_scripting {
 	}
 
 	void LuaScriptingModule::attach_script(LuaScriptComponent &script, const std::string &path) {
-		sol::protected_function_result result = m_Lua.safe_script_file(path);
+		script.luaState.open_libraries(sol::lib::base, sol::lib::math, sol::lib::string);
+
+		script.luaState.set_function("log", [](const std::string &msg) { core::Logger::info("[LUA] %s", msg.c_str()); });
+		script.luaState.set_function("log_error", [](const std::string &msg) { core::Logger::error("[LUA] %s", msg.c_str()); });
+		script.luaState.set_function("log_warn", [](const std::string &msg) { core::Logger::warn("[LUA] %s", msg.c_str()); });
+
+		script.luaState.set_function("log", [](const std::string &msg) { core::Logger::info("[LUA] %s", msg.c_str()); });
+		script.luaState.set_function("log_error", [](const std::string &msg) { core::Logger::error("[LUA] %s", msg.c_str()); });
+		script.luaState.set_function("log_warn", [](const std::string &msg) { core::Logger::warn("[LUA] %s", msg.c_str()); });
+
+		sol::protected_function_result result = script.luaState.safe_script_file(path);
 		if(!result.valid()) {
-			const sol::error error = result;
-			core::Logger::error("Failed to load lua script: %s", error.what());
 			script.loaded = false;
 			script.updateFunc = nullptr;
 			script.renderFunc = nullptr;
+
+			const sol::error error = result;
+			core::Logger::error("Failed to load lua script: %s", error.what());
+
 			return;
 		}
 
 		script.path = path;
 		script.loaded = true;
-		script.updateFunc = m_Lua["Update"];
-		script.renderFunc = m_Lua["Render"];
-	}
 
-	void LuaScriptingModule::run_script(const std::string &path) {
-		sol::protected_function_result result = m_Lua.safe_script_file(path);
-		if(!result.valid()) {
-			const sol::error error = result;
-			core::Logger::error("Failed to load lua script: %s", error.what());
-		}
+		// TODO: Test if caching lua functions is any faster
+		script.updateFunc = script.luaState["Update"];
+		script.renderFunc = script.luaState["Render"];
 	}
 
 	static void lua_script_update_system(const core::ApplicationStatus &status, entt::registry &registry, float dt) {
