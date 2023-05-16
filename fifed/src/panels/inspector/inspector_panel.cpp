@@ -82,7 +82,7 @@ namespace fifed {
 		ImGui::Spacing();
 
 		if(TagComponent *tag = scene.get_registry().try_get<TagComponent>(m_SelectedEntity)) {
-			std::strncpy(m_TagBuffer.data(), tag->tag.c_str(), tag->tag.size());
+			std::strncpy(m_TagBuffer.data(), tag->tag.c_str(), tag->tag.size() + 1);
 			if(ImGui::InputText("Tag", m_TagBuffer.data(), m_TagBuffer.size()))
 				tag->tag = m_TagBuffer.data();
 		}

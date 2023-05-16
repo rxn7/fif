@@ -2,6 +2,7 @@
 
 #include "../editor_panel.hpp"
 #include "../inspector/inspector_panel.hpp"
+#include "entity_template/entity_template.hpp"
 
 namespace fifed {
 	class ScenePanel final : public EditorPanel {
@@ -17,5 +18,6 @@ namespace fifed {
 
 	private:
 		InspectorPanel &m_Inspector;
+		std::vector<std::unique_ptr<EntityTemplate>> m_Templates;
 	};
 }// namespace fifed

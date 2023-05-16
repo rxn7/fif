@@ -1,4 +1,6 @@
 #include "scene_panel.hpp"
+#include "entity_template/empty_template.hpp"
+#include "entity_template/sprite_template.hpp"
 
 #include "fif/core/ecs/components/tag_component.hpp"
 #include "fif/gfx/components/quad_component.hpp"
@@ -11,7 +13,10 @@
 namespace fifed {
 	template<typename T> static void draw_component(const std::string &name, EntityID ent, Scene &scene, std::function<void(T &)> drawFunc);
 
-	ScenePanel::ScenePanel(InspectorPanel &inspector) : m_Inspector(inspector) {}
+	ScenePanel::ScenePanel(InspectorPanel &inspector) : m_Inspector(inspector) {
+		m_Templates.push_back(std::make_unique<EmptyTemplate>());
+		m_Templates.push_back(std::make_unique<SpriteTemplate>());
+	}
 
 	void ScenePanel::on_render() {
 		Scene &scene = Application::get_instance()->get_scene();
@@ -19,10 +24,17 @@ namespace fifed {
 		const u32 entCount = scene.get_entity_count();
 		ImGui::Text("Count: %u", entCount);
 
-		if(ImGui::Button("Create entity")) {
-			const EntityID ent = scene.create_entity();
-			scene.add_component<TransformComponent>(ent);
-			m_Inspector.m_SelectedEntity = ent;
+		if(ImGui::Button("Create entity"))
+			ImGui::OpenPopup("SelectTemplate");
+
+		if(ImGui::BeginPopup("SelectTemplate")) {
+			for(auto &tmplt : m_Templates) {
+				if(ImGui::MenuItem(tmplt->get_name().data())) {
+					m_Inspector.m_SelectedEntity = tmplt->create(scene);
+					break;
+				}
+			}
+			ImGui::EndPopup();
 		}
 
 		if(ImGui::BeginChild("EntityList")) {
