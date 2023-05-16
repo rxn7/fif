@@ -7,7 +7,11 @@
 const ApplicationProperties APP_PROPS = {
 	.windowProps =
 		{
+#ifdef FIF_DEBUG
+			.title = "Fif Editor [DEBUG]",
+#else
 			.title = "Fif Editor",
+#endif
 			.size = glm::i16vec2(1280, 720),
 			.iconPath = "assets/textures/logo.png",
 			.vsync = false,
