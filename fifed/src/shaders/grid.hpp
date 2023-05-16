@@ -16,7 +16,7 @@ namespace fifed::shaders::Grid {
 		})";
 
 	const std::string FRAGMENT = FIF_GLSL_VERSION FIF_GLSL_PRECISION
-		// Yoinked from https://www.shadertoy.com/view/7tGBDK
+		// Yoinked from https://www.shadertoy.com/view/7tGBDK
 		R"(
 		uniform vec2 u_CameraSize;
 		uniform vec2 u_CameraPosition;
