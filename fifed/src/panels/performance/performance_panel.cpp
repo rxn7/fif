@@ -27,5 +27,10 @@ namespace fifed {
 
 			ImGui::TreePop();
 		}
+
+		if(ImGui::TreeNode("Lua")) {
+			ImGui::Text("Memory used: %g kb", static_cast<float>(LuaScriptingModule::get_instance()->get_lua_memory_usage()) * 0.001f);
+			ImGui::TreePop();
+		}
 	}
 }// namespace fifed

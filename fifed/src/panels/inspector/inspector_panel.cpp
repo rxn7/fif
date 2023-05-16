@@ -126,7 +126,7 @@ namespace fifed {
 			ImGui::DragFloat("Radius", &circle.radius, 1.0f, 0.0f, std::numeric_limits<float>::max());
 		});
 
-		draw_component<LuaScriptComponent>("Lua Script", m_SelectedEntity, scene, [&workingDirectoryStr](LuaScriptComponent &script) {
+		draw_component<LuaScriptComponent>("Lua Script", m_SelectedEntity, scene, [&workingDirectoryStr, &ent = m_SelectedEntity](LuaScriptComponent &script) {
 			if(script.loaded)
 				ImGui::Text("Script: %s", script.path.c_str());
 			else
@@ -137,7 +137,7 @@ namespace fifed {
 				char *path = tinyfd_openFileDialog("Select lua script", workingDirectoryStr.c_str(), 0, &filterPattern, "Lua script", false);
 
 				if(path)
-					LuaScriptingModule::get_instance()->attach_script(script, path);
+					LuaScriptingModule::get_instance()->attach_script(ent, script, path);
 			}
 		});
 

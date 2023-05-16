@@ -12,7 +12,7 @@ namespace fif::core {
 		std::printf("[WARN] ");
 	}
 	template<> void Logger::print_prefix<Logger::LogType::ERROR>() {
-		std::printf("[DEBUG] ");
+		std::printf("[ERROR] ");
 	}
 	template<> void Logger::print_prefix<Logger::LogType::DEBUG>() {
 		std::printf("[DEBUG] ");

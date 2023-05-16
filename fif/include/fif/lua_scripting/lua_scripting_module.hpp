@@ -13,8 +13,10 @@ namespace fif::lua_scripting {
 		LuaScriptingModule();
 		~LuaScriptingModule();
 
+		inline u32 get_lua_memory_usage() { return m_Lua.memory_used(); }
+
 		void on_start(core::Application &app) override;
-		void attach_script(LuaScriptComponent &component, const std::string &path);
+		void attach_script(core::EntityID ent, LuaScriptComponent &component, const std::string &path);
 		void run_script(const std::string &path);
 
 	private:
