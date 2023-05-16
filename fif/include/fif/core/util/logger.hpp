@@ -5,9 +5,10 @@ namespace fif::core {
 	public:
 		enum class LogType : u8 { INFO, WARN, ERROR, DEBUG };
 
-		using LoggerCallback = std::function<void(LogType, const char *msg)>;
+		typedef void (*LoggerCallback)(LogType, const char *msg);
 
 		static void add_callback(LoggerCallback callback);
+		static void delete_callback(LoggerCallback callback);
 
 		template<LogType> static void print_prefix();
 

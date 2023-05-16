@@ -18,7 +18,9 @@ namespace fifed {
 		FIF_MODULE_INIT_INSTANCE();
 	}
 
-	EditorModule::~EditorModule() {}
+	EditorModule::~EditorModule() {
+		ImGuiModule::get_instance()->delete_render_func(&EditorModule::on_render_im_gui);
+	}
 
 	void EditorModule::on_start(Application &app) {
 		if(!std::filesystem::exists("layout.ini"))
@@ -40,7 +42,7 @@ namespace fifed {
 
 		Grid::init();
 
-		ImGuiModule::get_instance()->add_render_func(std::bind(&EditorModule::on_render_im_gui, this));
+		ImGuiModule::get_instance()->add_render_func(&EditorModule::on_render_im_gui);
 	}
 
 	void EditorModule::load_default_layout() {
@@ -48,10 +50,12 @@ namespace fifed {
 	}
 
 	void EditorModule::on_render_im_gui() {
+		EditorModule *_this = EditorModule::get_instance(); 
+
 		if(ImGui::BeginMainMenuBar()) {
 			if(ImGui::BeginMenu("Layout")) {
 				if(ImGui::MenuItem("Load Default"))
-					load_default_layout();
+					_this->load_default_layout();
 
 				if(ImGui::MenuItem("Save"))
 					ImGui::SaveIniSettingsToDisk("layout.ini");
@@ -63,7 +67,7 @@ namespace fifed {
 		}
 
 		if(ImGuiModule::get_instance()->begin_dockspace())
-			for(std::unique_ptr<EditorPanel> &panel : m_Panels)
+			for(std::unique_ptr<EditorPanel> &panel : _this->m_Panels)
 				panel->render();
 
 		ImGui::End();

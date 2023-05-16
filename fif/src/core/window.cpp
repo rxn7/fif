@@ -56,13 +56,13 @@ namespace fif::core {
 		return glfwWindowShouldClose(mp_GlfwWindow) != 0;
 	}
 
-	void Window::set_should_close(bool value) {
+	void Window::close(bool value) {
 		glfwSetWindowShouldClose(mp_GlfwWindow, static_cast<int>(value));
 	}
 
-	void Window::set_icon(const std::string &path) {
+	void Window::set_icon(std::string_view path) {
 		GLFWimage icon;
-		icon.pixels = stbi_load(path.c_str(), &icon.width, &icon.height, nullptr, 4);
+		icon.pixels = stbi_load(path.data(), &icon.width, &icon.height, nullptr, 4);
 		glfwSetWindowIcon(mp_GlfwWindow, 1, &icon);
 		stbi_image_free(icon.pixels);
 	}

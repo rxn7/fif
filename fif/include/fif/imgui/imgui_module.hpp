@@ -5,6 +5,8 @@
 #include "imgui.h"
 
 namespace fif::imgui {
+	typedef void (*ImGuiRenderFunc)();
+
 	class ImGuiModule final : public core::Module {
 	public:
 		FIF_MODULE(ImGuiModule)
@@ -12,7 +14,8 @@ namespace fif::imgui {
 		ImGuiModule();
 		virtual ~ImGuiModule();
 
-		inline void add_render_func(const std::function<void()> &renderFunc) { m_RenderFunctions.push_back(renderFunc); }
+		inline void add_render_func(ImGuiRenderFunc renderFunc) { m_RenderFunctions.push_back(renderFunc); }
+		void delete_render_func(ImGuiRenderFunc renderFunc);
 
 		void on_start(core::Application &app) override final;
 		void on_render() override final;
@@ -23,6 +26,6 @@ namespace fif::imgui {
 		void apply_default_theme() const;
 
 	private:
-		std::vector<std::function<void()>> m_RenderFunctions;
+		std::vector<ImGuiRenderFunc> m_RenderFunctions;
 	};
 }// namespace fif::imgui

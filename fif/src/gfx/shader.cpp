@@ -1,4 +1,5 @@
 #include "fif/gfx/shader.hpp"
+#include "util/logger.hpp"
 
 namespace fif::gfx {
 	Shader::Shader(const std::string &vertexSrc, const std::string &fragmentSrc, const std::initializer_list<std::string_view> uniforms) {

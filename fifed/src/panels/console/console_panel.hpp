@@ -7,15 +7,13 @@ namespace fifed {
 	public:
 		PANEL_NAME("Console")
 		ConsolePanel();
+		~ConsolePanel();
 		void on_render() override;
 
 	private:
-		struct ConsoleEntry {
-			ImVec4 color;
-			std::string message;
-		};
+		static void logger_callback(Logger::LogType logType, const char *msg);
 
+	private:
 		static constexpr u32 MAX_LINES = 50;
-		std::vector<ConsoleEntry> m_Output;
 	};
 }// namespace fifed

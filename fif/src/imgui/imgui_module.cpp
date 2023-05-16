@@ -69,6 +69,16 @@ namespace fif::imgui {
 		}
 	}
 
+	void ImGuiModule::delete_render_func(ImGuiRenderFunc renderFunc) {
+		const auto it = std::find(m_RenderFunctions.begin(), m_RenderFunctions.end(), renderFunc);
+		if(it == m_RenderFunctions.end()) {
+			core::Logger::error("Cannot remove ImGuiRenderFunc that doesn't exist in m_RenderFunctions");
+			return;
+		}
+
+		m_RenderFunctions.erase(it);
+	}
+
 	bool ImGuiModule::begin_dockspace() const {
 		constexpr static ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_NoBackground;
 

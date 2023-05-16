@@ -22,10 +22,12 @@ namespace fif::core {
 	Application::~Application() {}
 
 	void Application::start() {
+		m_Status.running = true;
+
 		for(const auto &mod : m_Modules)
 			mod->on_start(*this);
 
-		while(!mp_Window->get_should_close())
+		while(m_Status.running)
 			game_loop();
 	}
 
@@ -42,6 +44,11 @@ namespace fif::core {
 		m_PerformanceStats.frameTimeMs = Timing::get_delta_time() * 1000.0f;
 
 		update();
+
+		// update() could change the status
+		if(!m_Status.running)
+			return;
+
 		render();
 	}
 
@@ -67,6 +74,11 @@ namespace fif::core {
 	}
 
 	void Application::on_event(Event &event) {
+		EventDispatcher::dispatch<WindowCloseEvent>(event, [&](WindowCloseEvent &) noexcept {
+			m_Status.running = false;
+			return true;
+		});
+
 		for(auto &mod : m_Modules)
 			mod->on_event(event);
 

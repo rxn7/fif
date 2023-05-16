@@ -30,7 +30,7 @@ namespace fifed {
 		}
 
 	private:
-		void on_render_im_gui();
+		static void on_render_im_gui();
 
 	private:
 		ViewportPanel *mp_ViewportPanel;

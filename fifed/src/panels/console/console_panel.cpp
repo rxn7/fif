@@ -2,51 +2,64 @@
 #include "imgui.h"
 
 namespace fifed {
+	struct ConsoleEntry {
+		ImVec4 color;
+		std::string message;
+	};
+
+	static std::vector<ConsoleEntry> s_Output;
+
 	ConsolePanel::ConsolePanel() {
-		m_Output.reserve(MAX_LINES);
-		Logger::add_callback([&output = m_Output]([[maybe_unused]] Logger::LogType type, const char *msg) {
-			if(output.size() >= MAX_LINES)
-				output.erase(output.begin());
+		s_Output.clear();
+		s_Output.reserve(MAX_LINES);
+		Logger::add_callback(&ConsolePanel::logger_callback);
+	}
 
-			ConsoleEntry entry;
+	ConsolePanel::~ConsolePanel() {
+		Logger::delete_callback(&ConsolePanel::logger_callback);
+	}
 
-			switch(type) {
-			default:
-			case Logger::LogType::INFO:
-				entry.color = ImGui::GetStyle().Colors[ImGuiCol_Text];
-				entry.message = "[INFO] ";
-				break;
+	void ConsolePanel::logger_callback(Logger::LogType logType, const char *msg) {
+		if(s_Output.size() >= MAX_LINES)
+			s_Output.erase(s_Output.begin());
 
-			case Logger::LogType::WARN:
-				entry.color = ImVec4(1.0f, 1.0f, 0.05f, 1.0f);
-				entry.message = "[WARNING] ";
-				break;
+		ConsoleEntry entry;
 
-			case Logger::LogType::ERROR:
-				entry.color = ImVec4(1.0f, 0.05f, 0.05f, 1.0f);
-				entry.message = "[ERROR] ";
-				break;
+		switch(logType) {
+		default:
+		case Logger::LogType::INFO:
+			entry.color = ImGui::GetStyle().Colors[ImGuiCol_Text];
+			entry.message = "[INFO] ";
+			break;
 
-			case Logger::LogType::DEBUG:
-				entry.color = ImVec4(0.05f, 0.9f, 0.05f, 1.0f);
-				entry.message = "[DEBUG] ";
-				break;
-			}
+		case Logger::LogType::WARN:
+			entry.color = ImVec4(1.0f, 1.0f, 0.05f, 1.0f);
+			entry.message = "[WARNING] ";
+			break;
 
-			entry.message += msg;
+		case Logger::LogType::ERROR:
+			entry.color = ImVec4(1.0f, 0.05f, 0.05f, 1.0f);
+			entry.message = "[ERROR] ";
+			break;
 
-			output.push_back(entry);
-		});
+		case Logger::LogType::DEBUG:
+			entry.color = ImVec4(0.05f, 0.9f, 0.05f, 1.0f);
+			entry.message = "[DEBUG] ";
+			break;
+		}
+
+		entry.message += msg;
+
+		s_Output.push_back(entry);
 	}
 
 	void ConsolePanel::on_render() {
 		if(ImGui::Button("Clear"))
-			m_Output.clear();
+			s_Output.clear();
 
 		if(ImGui::BeginListBox("###ConsolePanelList", ImVec2(-FLT_MIN, -FLT_MIN))) {
-			for(const ConsoleEntry &entry : m_Output) {
+			for(const ConsoleEntry &entry : s_Output)
 				ImGui::TextColored(entry.color, "%s", entry.message.c_str());
-			}
 
 			// If the list is scrolled all the way down
 			if(ImGui::GetScrollY() >= ImGui::GetScrollMaxY())
