@@ -16,5 +16,8 @@ namespace fif::lua_scripting {
 		void on_start(core::Application &app) override;
 		void attach_script(LuaScriptComponent &component, const std::string &path);
 		void run_script(const std::string &path);
+
+	private:
+		sol::state m_Lua;
 	};
 }// namespace fif::lua_scripting

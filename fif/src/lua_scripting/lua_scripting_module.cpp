@@ -17,20 +17,18 @@ namespace fif::lua_scripting {
 	void LuaScriptingModule::on_start(core::Application &app) {
 		app.add_update_system(lua_script_update_system);
 		app.add_render_system(lua_script_render_system);
+
+		m_Lua.open_libraries(sol::lib::base, sol::lib::math, sol::lib::string);
+
+		m_Lua.set_function("log", [](const std::string &msg) { core::Logger::info("[LUA] %s", msg.c_str()); });
+		m_Lua.set_function("log_error", [](const std::string &msg) { core::Logger::error("[LUA] %s", msg.c_str()); });
+		m_Lua.set_function("log_warn", [](const std::string &msg) { core::Logger::warn("[LUA] %s", msg.c_str()); });
+
+		m_Lua.set_function("get_component", [](const std::string &msg) { core::Logger::info("[LUA] %s", msg.c_str()); });
 	}
 
 	void LuaScriptingModule::attach_script(LuaScriptComponent &script, const std::string &path) {
-		script.luaState.open_libraries(sol::lib::base, sol::lib::math, sol::lib::string);
-
-		script.luaState.set_function("log", [](const std::string &msg) { core::Logger::info("[LUA] %s", msg.c_str()); });
-		script.luaState.set_function("log_error", [](const std::string &msg) { core::Logger::error("[LUA] %s", msg.c_str()); });
-		script.luaState.set_function("log_warn", [](const std::string &msg) { core::Logger::warn("[LUA] %s", msg.c_str()); });
-
-		script.luaState.set_function("log", [](const std::string &msg) { core::Logger::info("[LUA] %s", msg.c_str()); });
-		script.luaState.set_function("log_error", [](const std::string &msg) { core::Logger::error("[LUA] %s", msg.c_str()); });
-		script.luaState.set_function("log_warn", [](const std::string &msg) { core::Logger::warn("[LUA] %s", msg.c_str()); });
-
-		sol::protected_function_result result = script.luaState.safe_script_file(path);
+		sol::protected_function_result result = m_Lua.safe_script_file(path);
 		if(!result.valid()) {
 			script.loaded = false;
 			script.updateFunc = nullptr;
@@ -44,10 +42,8 @@ namespace fif::lua_scripting {
 
 		script.path = path;
 		script.loaded = true;
-
-		// TODO: Test if caching lua functions is any faster
-		script.updateFunc = script.luaState["Update"];
-		script.renderFunc = script.luaState["Render"];
+		script.updateFunc = m_Lua["Update"];
+		script.renderFunc = m_Lua["Render"];
 	}
 
 	static void lua_script_update_system(const core::ApplicationStatus &status, entt::registry &registry, float dt) {
