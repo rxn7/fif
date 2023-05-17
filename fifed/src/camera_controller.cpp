@@ -6,48 +6,37 @@
 #include "gfx_module.hpp"
 
 namespace fifed {
-	f32 CameraController::s_ZoomLerpDuration = 0.5f;
-	f32 CameraController::s_MaxZoom = 1000.0f;
-	f32 CameraController::s_MinZoom = 0.05f;
-
-	static float s_TargetZoom = 1.0f;
-	static float s_StartZoom = 1.0f;
-	static glm::vec2 s_StartMousePositionLocal;
-	static float s_SnapTolerance;
-	static float s_ZoomTimer = 0.0f;
-	static bool s_IsZooming = false;
-
 	void CameraController::update() {
 		Renderer2D &renderer2D = GfxModule::get_instance()->get_renderer2D();
 		OrthoCamera &cam = renderer2D.get_camera();
 
-		if(s_IsZooming) {
-			const glm::vec2 mouseWorldPositionBeforeZoom = cam.screen_to_world(s_StartMousePositionLocal);
+		if(m_IsZooming) {
+			const glm::vec2 mouseWorldPositionBeforeZoom = cam.screen_to_world(m_StartMousePositionLocal);
 
-			if(s_ZoomLerpDuration > 0) {
-				const f32 zoomLerpPercentage = s_ZoomTimer / s_ZoomLerpDuration;
+			if(m_ZoomLerpDuration > 0) {
+				const f32 zoomLerpPercentage = m_ZoomTimer / m_ZoomLerpDuration;
 
 				// Ease out algortihm
 				const f32 smoothZoomLerpPercentage = glm::sin(zoomLerpPercentage * glm::pi<f32>() * 0.5f);
 
 				if(zoomLerpPercentage < 1.0f) {
-					cam.m_Zoom = glm::lerp(s_StartZoom, s_TargetZoom, smoothZoomLerpPercentage);
+					cam.m_Zoom = glm::lerp(m_StartZoom, m_TargetZoom, smoothZoomLerpPercentage);
 
-					s_IsZooming = true;
-					s_ZoomTimer += Timing::get_delta_time();
+					m_IsZooming = true;
+					m_ZoomTimer += Timing::get_delta_time();
 				} else {
-					cam.m_Zoom = s_TargetZoom;
+					cam.m_Zoom = m_TargetZoom;
 
-					s_IsZooming = false;
+					m_IsZooming = false;
 				}
 			} else {
-				cam.m_Zoom = s_TargetZoom;
-				s_IsZooming = false;
+				cam.m_Zoom = m_TargetZoom;
+				m_IsZooming = false;
 			}
 
 			cam.update_size();
 
-			const glm::vec2 mouseWorldPositionAfterZoom = cam.screen_to_world(s_StartMousePositionLocal);
+			const glm::vec2 mouseWorldPositionAfterZoom = cam.screen_to_world(m_StartMousePositionLocal);
 			const glm::vec2 mousePostionDelta = mouseWorldPositionBeforeZoom - mouseWorldPositionAfterZoom;
 			cam.m_Position += mousePostionDelta;
 		}
@@ -72,14 +61,13 @@ namespace fifed {
 			if(scrollEvent.get_value().y == 0)
 				return false;
 
-			s_StartZoom = cam.m_Zoom;
-			s_TargetZoom *= scrollEvent.get_value().y > 0 ? 0.9f : 1.1f;
-			s_TargetZoom = std::clamp(s_TargetZoom, s_MinZoom, s_MaxZoom);
-			s_SnapTolerance = std::log10(1.0f + s_TargetZoom) * 0.001f;
-			s_StartMousePositionLocal = mousePosition;
+			m_StartZoom = cam.m_Zoom;
+			m_TargetZoom *= scrollEvent.get_value().y > 0 ? 0.9f : 1.1f;
+			m_TargetZoom = std::clamp(m_TargetZoom, m_MinZoom, m_MaxZoom);
+			m_StartMousePositionLocal = mousePosition;
 
-			s_ZoomTimer = 0.0f;
-			s_IsZooming = s_TargetZoom != cam.m_Zoom;
+			m_ZoomTimer = 0.0f;
+			m_IsZooming = m_TargetZoom != cam.m_Zoom;
 
 			return true;
 		});

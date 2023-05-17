@@ -34,7 +34,7 @@ namespace fifed {
 		mp_ViewportPanel = add_panel<ViewportPanel>(m_FrameBuffer);
 		mp_InspectorPanel = add_panel<InspectorPanel>();
 		add_panel<PerformancePanel>();
-		add_panel<SettingsPanel>(m_Grid, m_FrameBuffer);
+		add_panel<SettingsPanel>(m_Grid, m_FrameBuffer, m_CameraController);
 		add_panel<ScenePanel>(*mp_InspectorPanel);
 		add_panel<ConsolePanel>();
 
@@ -70,7 +70,7 @@ namespace fifed {
 	}
 
 	void EditorModule::on_update() {
-		CameraController::update();
+		m_CameraController.update();
 	}
 
 	void EditorModule::pre_render() {
@@ -83,7 +83,7 @@ namespace fifed {
 	}
 
 	void EditorModule::on_event(Event &event) {
-		CameraController::on_event(event, mp_ViewportPanel->is_hovered());
+		m_CameraController.on_event(event, mp_ViewportPanel->is_hovered());
 		EventDispatcher::dispatch<KeyPressedEvent>(event, [selectedEnt = mp_InspectorPanel->m_SelectedEntity](KeyPressedEvent &keyEvent) {
 			switch(keyEvent.get_key_code()) {
 			// Go to selected entity

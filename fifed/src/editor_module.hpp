@@ -1,5 +1,6 @@
 #pragma once
 
+#include "camera_controller.hpp"
 #include "entt/entity/group.hpp"
 #include "grid.hpp"
 #include "panels/editor_panel.hpp"
@@ -42,5 +43,6 @@ namespace fifed {
 
 		FrameBuffer m_FrameBuffer;
 		Grid m_Grid;
+		CameraController m_CameraController;
 	};
 }// namespace fifed
