@@ -1,4 +1,7 @@
 #include "fif/lua_scripting/lua_scripting_module.hpp"
+#include "components/lua_script_component.hpp"
+#include "ecs/scene.hpp"
+#include <sol/property.hpp>
 
 namespace fif::lua_scripting {
 	FIF_MODULE_INSTANCE_IMPL(LuaScriptingModule);
@@ -6,7 +9,12 @@ namespace fif::lua_scripting {
 	static void lua_script_update_system(const core::ApplicationStatus &status, entt::registry &registry, float dt);
 	static void lua_script_render_system([[maybe_unused]] const core::ApplicationStatus &status, entt::registry &registry);
 
-	LuaScriptingModule::LuaScriptingModule() {
+	inline static void on_lua_panic(sol::optional<std::string> msg) {
+		if(msg)
+			core::Logger::error("Lua panic: %s", msg.value());
+	}
+
+	LuaScriptingModule::LuaScriptingModule() : m_Lua(sol::c_call<decltype(&on_lua_panic), &on_lua_panic>) {
 		FIF_MODULE_INIT_INSTANCE();
 	}
 
@@ -23,23 +31,27 @@ namespace fif::lua_scripting {
 		m_Lua.set_function("log_warn", [](const std::string &msg) { core::Logger::warn("[LUA] %s", msg.c_str()); });
 	}
 
-	void LuaScriptingModule::attach_script(core::EntityID ent, LuaScriptComponent &script, const std::string &path) {
-		sol::protected_function_result result = m_Lua.safe_script_file(path);
+	void LuaScriptingModule::attach_script(core::EntityID ent, core::Scene &scene, const std::string &path) {
+		auto result = m_Lua.script_file(path);
+
 		if(!result.valid()) {
-			script.loaded = false;
-			script.updateFunc = nullptr;
-			script.renderFunc = nullptr;
-
-			const sol::error error = result;
-			core::Logger::error("Failed to load lua script: %s", error.what());
-
+			sol::error err = result;
+			core::Logger::error("Failed to load lua script '%s': %s", path.c_str(), err.what());
 			return;
 		}
 
+		auto &script = scene.add_component<LuaScriptComponent>(ent, result);
 		script.path = path;
-		script.loaded = true;
-		script.updateFunc = m_Lua["Update"];
-		script.renderFunc = m_Lua["Render"];
+
+		// TODO: Move this to a init_script function once we have a runtime
+		script.hooks.update = script.self["update"];
+		script.hooks.render = script.self["render"];
+
+		script.self["id"] = sol::readonly_property([ent] { return ent; });
+
+		auto init = script.self["init"];
+		if(init.valid())
+			init(script.self);
 	}
 
 	static void lua_script_update_system(const core::ApplicationStatus &status, entt::registry &registry, float dt) {
@@ -47,15 +59,15 @@ namespace fif::lua_scripting {
 			return;
 
 		registry.view<LuaScriptComponent>().each([&]([[maybe_unused]] core::EntityID entity, LuaScriptComponent &luaScript) {
-			if(luaScript.updateFunc.valid())
-				luaScript.updateFunc(dt);
+			if(luaScript.hooks.update.valid())
+				luaScript.hooks.update(luaScript.self, dt);
 		});
 	}
 
 	static void lua_script_render_system([[maybe_unused]] const core::ApplicationStatus &status, entt::registry &registry) {
 		registry.view<LuaScriptComponent>().each([&]([[maybe_unused]] core::EntityID entity, LuaScriptComponent &luaScript) {
-			if(luaScript.renderFunc.valid())
-				luaScript.renderFunc();
+			if(luaScript.hooks.render.valid())
+				luaScript.hooks.render(luaScript.self);
 		});
 	}
 }// namespace fif::lua_scripting

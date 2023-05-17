@@ -4,10 +4,13 @@
 
 namespace fif::lua_scripting {
 	struct LuaScriptComponent final {
-		std::string path;
+		sol::table self;
 
-		bool loaded = false;
-		sol::function updateFunc;
-		sol::function renderFunc;
+		struct {
+			sol::function update;
+			sol::function render;
+		} hooks;
+
+		std::string path;
 	};
 }// namespace fif::lua_scripting

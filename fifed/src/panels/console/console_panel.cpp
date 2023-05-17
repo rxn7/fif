@@ -58,8 +58,11 @@ namespace fifed {
 			s_Output.clear();
 
 		if(ImGui::BeginListBox("###ConsolePanelList", ImVec2(-FLT_MIN, -FLT_MIN))) {
-			for(const ConsoleEntry &entry : s_Output)
+			for(const ConsoleEntry &entry : s_Output) {
+				ImGui::PushTextWrapPos();
 				ImGui::TextColored(entry.color, "%s", entry.message.c_str());
+				ImGui::PopTextWrapPos();
+			}
 
 			// If the list is scrolled all the way down
 			if(ImGui::GetScrollY() >= ImGui::GetScrollMaxY())

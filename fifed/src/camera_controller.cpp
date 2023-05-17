@@ -15,8 +15,6 @@ namespace fifed {
 
 			if(m_ZoomLerpDuration > 0) {
 				const f32 zoomLerpPercentage = m_ZoomTimer / m_ZoomLerpDuration;
-
-				// Ease out algortihm
 				const f32 smoothZoomLerpPercentage = glm::sin(zoomLerpPercentage * glm::pi<f32>() * 0.5f);
 
 				if(zoomLerpPercentage < 1.0f) {

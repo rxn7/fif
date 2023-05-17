@@ -1,5 +1,6 @@
 #include "inspector_panel.hpp"
 
+#include "components/lua_script_component.hpp"
 #include "fif/core/ecs/components/tag_component.hpp"
 #include "fif/gfx/components/circle_component.hpp"
 #include "fif/gfx/components/quad_component.hpp"
@@ -8,6 +9,7 @@
 #include "fif/native_scripting/components/native_script_component.hpp"
 
 #include "imgui.h"
+#include "lua_scripting_module.hpp"
 #include "tinyfiledialogs.h"
 #include <filesystem>
 
@@ -75,7 +77,18 @@ namespace fifed {
 			draw_add_component_entry<SpriteComponent>("Sprite", m_SelectedEntity, scene);
 			draw_add_component_entry<QuadComponent>("Quad", m_SelectedEntity, scene);
 			draw_add_component_entry<CircleComponent>("Circle", m_SelectedEntity, scene);
-			draw_add_component_entry<LuaScriptComponent>("Lua Script", m_SelectedEntity, scene);
+
+			if(!scene.has_component<LuaScriptComponent>(m_SelectedEntity)) {
+				if(ImGui::MenuItem("Lua Script")) {
+					const char *filter = "*.lua";
+					char *path = tinyfd_openFileDialog("Select lua script", workingDirectoryStr.c_str(), 1, &filter, "Lua script", false);
+
+					if(path)
+						LuaScriptingModule::get_instance()->attach_script(m_SelectedEntity, scene, path);
+
+					ImGui::CloseCurrentPopup();
+				}
+			}
 			ImGui::EndPopup();
 		}
 
@@ -112,8 +125,7 @@ namespace fifed {
 				ImGui::Text("Texture is not loaded!");
 
 			if(ImGui::Button("Load texture")) {
-				constexpr std::array<const char *, 2> filterPatterns = {"*.png", "*.jpg"};
-
+				constexpr std::array<const char *, 3> filterPatterns = {"*.png", "*.jpg", "*.gif"};
 				char *path = tinyfd_openFileDialog("Select texture", workingDirectoryStr.c_str(), filterPatterns.size(), filterPatterns.data(), "Image", false);
 
 				if(path)
@@ -126,19 +138,26 @@ namespace fifed {
 			ImGui::DragFloat("Radius", &circle.radius, 1.0f, 0.0f, std::numeric_limits<float>::max());
 		});
 
-		draw_component<LuaScriptComponent>("Lua Script", m_SelectedEntity, scene, [&workingDirectoryStr, &ent = m_SelectedEntity](LuaScriptComponent &script) {
-			if(script.loaded)
-				ImGui::Text("Script: %s", script.path.c_str());
-			else
-				ImGui::Text("No script is attached to this component!");
+		draw_component<LuaScriptComponent>("Lua Script", m_SelectedEntity, scene, [](LuaScriptComponent &script) {
+			// ImGui::Text("Script: %s", script.path.c_str());
+			script.self.for_each([](const sol::object &key, const sol::object &value) {
+				switch(value.get_type()) {
+				case sol::type::string:
+					ImGui::LabelText(key.as<const char *>(), "%s", value.as<const char *>());
+					break;
 
-			if(ImGui::Button("Load script")) {
-				constexpr const char *filterPattern = "*.lua";
-				char *path = tinyfd_openFileDialog("Select lua script", workingDirectoryStr.c_str(), 0, &filterPattern, "Lua script", false);
+				case sol::type::number:
+					ImGui::LabelText(key.as<const char *>(), "%g", value.as<float>());
+					break;
 
-				if(path)
-					LuaScriptingModule::get_instance()->attach_script(ent, script, path);
-			}
+				case sol::type::boolean:
+					ImGui::LabelText(key.as<const char *>(), "%i", value.as<bool>());
+					break;
+
+				default:
+					break;
+				}
+			});
 		});
 
 		draw_component<NativeScriptComponent>("Native Script", m_SelectedEntity, scene,
