@@ -1,5 +1,6 @@
 #include "grid.hpp"
 #include "color.hpp"
+#include "frame_buffer.hpp"
 #include "shaders/grid.hpp"
 
 #include "fif/gfx/renderer2d.hpp"
@@ -7,52 +8,54 @@
 #include "fif/gfx/vertex_buffer.hpp"
 
 namespace fifed {
-	constexpr std::array<Grid::GridVertex, 4> VERTICES = {
-		Grid::GridVertex{
+	struct GridVertex {
+		glm::vec2 position;
+		glm::vec2 uv;
+	};
+
+	static constexpr std::array<GridVertex, 4> VERTICES = {
+		GridVertex{
 			.position = {-1.0f, -1.0f},
 			.uv = {-1.0f, -1.0f},
 		},
-		Grid::GridVertex{
+		GridVertex{
 			.position = {-1.0f, 1.0f},
 			.uv = {-1.0f, 1.0f},
 		},
-		Grid::GridVertex{
+		GridVertex{
 			.position = {1.0f, 1.0f},
 			.uv = {1.0f, 1.0f},
 		},
-		Grid::GridVertex{
+		GridVertex{
 			.position = {1.0f, -1.0f},
 			.uv = {1.0f, -1.0f},
 		},
 	};
 
-	constexpr std::array<u16, 6> ELEMENTS = {0u, 1u, 2u, 2u, 3u, 0u};
+	static constexpr std::array<u16, 6> ELEMENTS = {0u, 1u, 2u, 2u, 3u, 0u};
 
-	std::unique_ptr<VertexBuffer> sp_VertexBuffer = nullptr;
-	std::unique_ptr<Shader> sp_Shader = nullptr;
+	static const VertexBufferLayout VERTEX_LAYOUT = {
+		{GlslDataType::Float2, "a_Position", false},
+		{GlslDataType::Float2, "a_UV", false},
+	};
 
-	void Grid::init() {
-		sp_Shader = std::make_unique<Shader>(shaders::Grid::VERTEX, shaders::Grid::FRAGMENT);
-
-		sp_VertexBuffer = std::make_unique<VertexBuffer>(VERTICES.data(), VERTICES.size(), ELEMENTS.data(), ELEMENTS.size(), sizeof(Grid::GridVertex));
-		sp_VertexBuffer->set_layout(gridVertexBufferLayout);
-	}
+	Grid::Grid(const OrthoCamera &cam, const FrameBuffer &frameBuffer) :
+		m_VertexBuffer(VERTICES.data(), VERTICES.size(), ELEMENTS.data(), ELEMENTS.size(), sizeof(GridVertex), VERTEX_LAYOUT), m_Shader(shaders::Grid::VERTEX, shaders::Grid::FRAGMENT), m_Camera(cam), m_FrameBuffer(frameBuffer) {}
 
 	void Grid::render() {
-		if(!enabled)
+		if(!m_Enabled)
 			return;
 
-		const OrthoCamera &cam = GfxModule::get_instance()->get_renderer2D().get_camera();
+		m_Shader.bind();
+		m_Shader.set_uniform_vec2("u_CameraSize", m_Camera.get_size());
+		m_Shader.set_uniform_vec2("u_CameraPosition", m_Camera.m_Position);
+		m_Shader.set_uniform_vec3("u_LineColor", normalize_color3(m_LineColor));
+		m_Shader.set_uniform_vec3("u_BackgroundColor", normalize_color3(m_FrameBuffer.m_Color));
+		m_Shader.set_uniform_f32("u_LineThickness", m_LineThickness);
+		m_Shader.set_uniform_f32("u_MinCellSize", m_MinCellSize);
 
-		sp_Shader->bind();
-		sp_Shader->set_uniform_vec2("u_CameraSize", cam.get_size());
-		sp_Shader->set_uniform_vec2("u_CameraPosition", cam.m_Position);
-		sp_Shader->set_uniform_vec3("u_LineColor", normalize_color3(lineColor));
-		sp_Shader->set_uniform_vec3("u_BackgroundColor", normalize_color3(backgroundColor));
-		sp_Shader->set_uniform_f32("u_LineThickness", lineThickness);
-		sp_Shader->set_uniform_f32("u_MinCellSize", minCellSize);
+		m_VertexBuffer.render();
 
-		sp_VertexBuffer->render();
-		sp_Shader->unbind();
+		m_Shader.unbind();
 	}
 }// namespace fifed

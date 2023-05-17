@@ -1,6 +1,7 @@
 #include "fif/core/application.hpp"
 #include "fif/core/event/event_dispatcher.hpp"
 #include "fif/core/event/window_event.hpp"
+#include "util/logger.hpp"
 
 namespace fif::core {
 	Application *fif::core::Application::s_Instance = nullptr;
@@ -24,11 +25,15 @@ namespace fif::core {
 	void Application::start() {
 		m_Status.running = true;
 
+		setup_modules();
+
 		for(const auto &mod : m_Modules)
 			mod->on_start(*this);
 
 		while(m_Status.running)
 			game_loop();
+
+		Logger::info("Game loop finished");
 	}
 
 	void Application::game_loop() {
@@ -74,7 +79,8 @@ namespace fif::core {
 	}
 
 	void Application::on_event(Event &event) {
-		EventDispatcher::dispatch<WindowCloseEvent>(event, [&](WindowCloseEvent &) noexcept {
+		EventDispatcher::dispatch<WindowCloseEvent>(event, [&](WindowCloseEvent &) {
+			Logger::info("Quitting...");
 			m_Status.running = false;
 			return true;
 		});

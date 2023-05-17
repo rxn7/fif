@@ -9,8 +9,8 @@ namespace fif::gfx {
 		FrameBuffer(const glm::vec2 &size);
 		virtual ~FrameBuffer();
 
-		inline u32 getFboID() const { return m_FboID; }
-		inline const std::shared_ptr<Texture> &getTexture() const { return mp_Texture; }
+		inline u32 get_fbo_id() const { return m_FboID; }
+		inline const Texture &get_texture() const { return m_Texture; }
 
 		void start();
 		void end();
@@ -20,12 +20,13 @@ namespace fif::gfx {
 		void invalidate();
 
 		void set_size(const glm::vec2 &size);
+		inline const glm::vec2 &get_size() const { return m_Size; }
 
 	public:
 		Color3 m_Color = {200u, 200u, 200u};
 
 	private:
-		std::shared_ptr<Texture> mp_Texture;
+		Texture m_Texture;
 		glm::vec2 m_Size;
 		u32 m_FboID = 0;
 	};

@@ -1,9 +1,10 @@
 #include "fif/gfx/vertex_buffer.hpp"
 #include "glsl_data_type.hpp"
+#include "vertex_buffer_layout.hpp"
 
 namespace fif::gfx {
-	VertexBuffer::VertexBuffer(u32 vertexCount, u32 elementCount, u32 vertexSize) :
-		m_VertexCount(vertexCount), m_ElementCount(elementCount), m_VertexSize(vertexSize) {
+	VertexBuffer::VertexBuffer(u32 vertexCount, u32 elementCount, u32 vertexSize, const VertexBufferLayout &layout) :
+		m_Layout(layout), m_VertexCount(vertexCount), m_ElementCount(elementCount), m_VertexSize(vertexSize) {
 		glGenVertexArrays(1, &m_Vao);
 		glBindVertexArray(m_Vao);
 
@@ -15,11 +16,13 @@ namespace fif::gfx {
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_Ebo);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, elementCount * sizeof(u16), nullptr, GL_DYNAMIC_DRAW);
 
+		setup_vertex_attributes();
+
 		glBindVertexArray(0);
 	}
 
-	VertexBuffer::VertexBuffer(const void *vertices, u32 vertexCount, const u16 *elements, u32 elementCount, u32 vertexSize) :
-		m_VertexCount(vertexCount), m_ElementCount(elementCount), m_VertexSize(vertexSize) {
+	VertexBuffer::VertexBuffer(const void *vertices, u32 vertexCount, const u16 *elements, u32 elementCount, u32 vertexSize, const VertexBufferLayout &layout) :
+		m_Layout(layout), m_VertexCount(vertexCount), m_ElementCount(elementCount), m_VertexSize(vertexSize) {
 		glGenVertexArrays(1, &m_Vao);
 		glBindVertexArray(m_Vao);
 
@@ -31,19 +34,13 @@ namespace fif::gfx {
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_Ebo);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, elementCount * sizeof(u16), elements, GL_STATIC_DRAW);
 
-		glBindVertexArray(0);
-	}
-
-	void VertexBuffer::set_layout(const VertexBufferLayout &layout) {
-		glBindVertexArray(m_Vao);
-		m_Layout = layout;
 		setup_vertex_attributes();
+
 		glBindVertexArray(0);
 	}
 
 	void VertexBuffer::render() const {
 		glBindVertexArray(m_Vao);
-
 		glDrawElements(GL_TRIANGLES, m_ElementCount, GL_UNSIGNED_SHORT, 0);
 
 		glBindVertexArray(0);

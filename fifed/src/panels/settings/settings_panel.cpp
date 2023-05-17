@@ -2,26 +2,25 @@
 #include "../../camera_controller.hpp"
 #include "../../grid.hpp"
 #include "editor_module.hpp"
-#include "gfx_module.hpp"
-#include "ortho_camera.hpp"
+
+#include "fif/gfx/gfx_module.hpp"
+#include "fif/gfx/ortho_camera.hpp"
 
 namespace fifed {
-	void SettingsPanel::on_render() {
-		EditorModule *editor = EditorModule::get_instance();
-		FrameBuffer &frameBuffer = editor->get_frame_buffer();
+	SettingsPanel::SettingsPanel(Grid &grid, FrameBuffer &frameBuffer) : m_Grid(grid), m_FrameBuffer(frameBuffer) {}
 
-		glm::vec3 clearColor = denormalize_color3(frameBuffer.m_Color);
-		if(ImGui::ColorEdit3("Clear color", glm::value_ptr(clearColor)))
-			Grid::backgroundColor = frameBuffer.m_Color = denormalize_color3(clearColor);
+	void SettingsPanel::on_render() {
+		if(ImGui::TreeNode("Viewport")) {
+			utils::imgui::draw_color3_picker("Viewport clear color", m_FrameBuffer.m_Color);
+			ImGui::TreePop();
+		}
 
 		if(ImGui::TreeNode("Grid")) {
-			ImGui::Checkbox("Enabled", &Grid::enabled);
-			ImGui::SliderFloat("Line tickness", &Grid::lineThickness, 1.0f, 10.0f);
-			ImGui::SliderFloat("Cell size", &Grid::minCellSize, 0.1f, 100.0f);
+			ImGui::Checkbox("Enabled", &m_Grid.m_Enabled);
+			ImGui::SliderFloat("Line tickness", &m_Grid.m_LineThickness, 1.0f, 10.0f);
+			ImGui::SliderFloat("Cell size", &m_Grid.m_MinCellSize, 0.1f, 100.0f);
 
-			glm::vec3 lineColorNormalized = denormalize_color3(Grid::lineColor);
-			if(ImGui::ColorEdit3("Line color", glm::value_ptr(lineColorNormalized)))
-				Grid::lineColor = denormalize_color3(lineColorNormalized);
+			utils::imgui::draw_color3_picker("Line color", m_Grid.m_LineColor);
 
 			ImGui::TreePop();
 		}

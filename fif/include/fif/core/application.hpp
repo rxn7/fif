@@ -21,6 +21,8 @@ namespace fif::core {
 
 		void start();
 		void pause(bool paused);
+
+		virtual void setup_modules() {}
 		virtual void on_event(Event &event);
 
 		inline void add_render_system(RenderSystem system) { m_RenderSystems.push_back(system); }

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "entt/entity/group.hpp"
+#include "grid.hpp"
 #include "panels/editor_panel.hpp"
 #include "panels/inspector/inspector_panel.hpp"
 #include "panels/viewport/viewport_panel.hpp"
@@ -15,7 +17,7 @@ namespace fifed {
 		EditorModule();
 		virtual ~EditorModule();
 
-		inline FrameBuffer &get_frame_buffer() { return *mp_FrameBuffer; }
+		inline FrameBuffer &get_frame_buffer() { return m_FrameBuffer; }
 
 		void on_start(Application &app) override;
 		void on_render() override;
@@ -35,7 +37,10 @@ namespace fifed {
 	private:
 		ViewportPanel *mp_ViewportPanel;
 		InspectorPanel *mp_InspectorPanel;
+
 		std::vector<std::unique_ptr<EditorPanel>> m_Panels;
-		std::unique_ptr<FrameBuffer> mp_FrameBuffer;
+
+		FrameBuffer m_FrameBuffer;
+		Grid m_Grid;
 	};
 }// namespace fifed

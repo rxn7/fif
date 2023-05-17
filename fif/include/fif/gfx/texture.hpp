@@ -5,9 +5,10 @@
 namespace fif::gfx {
 	class Texture {
 	public:
+		Texture() {}
+		Texture(u16 width, u16 height, GLenum internalFormat = GL_RGBA8, GLenum dataFormat = GL_RGBA, GLenum filter = GL_LINEAR, GLenum wrap = GL_CLAMP_TO_EDGE);
 		~Texture();
 
-		static std::shared_ptr<Texture> create(u16 width, u16 height, GLenum internalFormat = GL_RGBA8, GLenum dataFormat = GL_RGBA, GLenum filter = GL_LINEAR, GLenum wrap = GL_CLAMP_TO_EDGE);
 		static std::shared_ptr<Texture> load(const std::string &path, GLenum filter = GL_LINEAR, GLenum wrap = GL_CLAMP_TO_EDGE);
 
 		inline u32 get_id() const { return m_ID; }
@@ -22,9 +23,6 @@ namespace fif::gfx {
 
 		void bind_on_slot(u32 slot) const;
 		void create(u16 width, u16 height, GLenum internalFormat, GLenum dataFormat, GLenum filter, GLenum wrap, void *data);
-
-	protected:
-		Texture();
 
 	public:
 		GLenum m_InternalFormat;

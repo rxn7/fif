@@ -3,7 +3,6 @@
 #include "fif/core/event/event_dispatcher.hpp"
 #include "fif/core/event/window_event.hpp"
 #include "fif/gfx/renderer2d.hpp"
-#include "fif/gfx/shader_library.hpp"
 #include "systems/renderer_system.hpp"
 
 namespace fif::gfx {

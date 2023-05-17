@@ -12,7 +12,7 @@ namespace fif::gfx {
 		f32 textureSlot;
 	};
 
-	inline const VertexBufferLayout spriteVertexBufferLayout = {
+	inline const VertexBufferLayout SPRITE_VERTEX_BUFFER_LAYOUT = {
 		{GlslDataType::Float2, "a_Position", false},
 		{GlslDataType::Float2, "a_UV", false},
 		{GlslDataType::UByte4, "a_Color", true},

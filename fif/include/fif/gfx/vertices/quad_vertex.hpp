@@ -10,7 +10,7 @@ namespace fif::gfx {
 		Color color;
 	};
 
-	inline const VertexBufferLayout quadVertexBufferLayout = {
+	inline const VertexBufferLayout QUAD_VERTEX_BUFFER_LAYOUT = {
 		{GlslDataType::Float2, "a_Position", false},
 		{GlslDataType::UByte4, "a_Color", true},
 	};

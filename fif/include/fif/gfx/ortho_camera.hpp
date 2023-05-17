@@ -12,12 +12,12 @@ namespace fif::gfx {
 		glm::vec2 screen_to_world(const glm::vec2 &position) const;
 		void update_size();
 
-		inline glm::vec2 get_size() const { return m_Size; }
+		inline const glm::vec2 &get_size() const { return m_Size; }
 
 	public:
 		static constexpr f32 BASE_ZOOM = 500.0f;
 		f32 m_Zoom = 1.0f;
-		glm::vec2 m_Position;
+		glm::vec2 m_Position{0.0f, 0.0f};
 
 	private:
 		glm::vec2 m_Size;

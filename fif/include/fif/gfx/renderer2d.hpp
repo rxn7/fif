@@ -3,6 +3,7 @@
 #include "fif/gfx/batch.hpp"
 #include "fif/gfx/ortho_camera.hpp"
 #include "fif/gfx/texture.hpp"
+#include "shader.hpp"
 #include "vertices/circle_vertex.hpp"
 #include "vertices/quad_vertex.hpp"
 #include "vertices/sprite_vertex.hpp"
@@ -27,20 +28,20 @@ namespace fif::gfx {
 	public:
 		Renderer2D();
 
-		inline OrthoCamera &get_camera() const { return *mp_Camera; }
+		inline OrthoCamera &get_camera() { return m_Camera; }
 		inline const Renderer2DStats &get_stats() const { return m_Stats; }
 
-		template<typename Vertex> void flush_batch(const std::unique_ptr<Batch<Vertex>> &batch) {
-			if(batch->is_empty())
+		template<typename Batch> void flush_batch(Batch &batch) {
+			if(batch.is_empty())
 				return;
 
-			Shader *shader = batch->get_shader();
-			if(!shader)
-				return;
+			Shader &shader = batch.get_shader();
 
-			shader->bind();
-			shader->set_uniform_mat4("u_ProjectionMatrix", mp_Camera->get_matrix());
-			batch->flush();
+			shader.bind();
+			shader.set_uniform_mat4("u_ProjectionMatrix", m_Camera.get_matrix());
+			batch.flush();
+			shader.unbind();
+
 			m_TempStats.batchesFlushed++;
 			m_TempStats.drawCallCount++;
 		}
@@ -53,15 +54,13 @@ namespace fif::gfx {
 		void render_circle(const glm::vec2 &position, f32 radius, const Color &color = {255, 255, 255, 255});
 
 	private:
-		std::shared_ptr<Shader> create_sprite_shader();
-
-	private:
 		static constexpr u32 BATCH_SIZE = 1000;
 
 		std::unique_ptr<Batch<QuadVertex>> mp_QuadBatch;
 		std::unique_ptr<Batch<CircleVertex>> mp_CircleBatch;
 		std::unique_ptr<Batch<SpriteVertex>> mp_SpriteBatch;
-		std::unique_ptr<OrthoCamera> mp_Camera;
+
+		OrthoCamera m_Camera;
 
 		std::array<std::shared_ptr<Texture>, 32> m_Textures;
 		i32 m_TextureIdx = 0;

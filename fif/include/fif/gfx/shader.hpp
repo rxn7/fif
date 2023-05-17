@@ -8,11 +8,7 @@
 namespace fif::gfx {
 	class Shader final {
 	public:
-		/*
-		To precache uniforms' locations you can pass the uniforms' names as the last parameter.
-		Otherwise the locations will be cached the first time they're used.
-		*/
-		Shader(const std::string &vertexSrc, const std::string &fragmentSrc, std::initializer_list<std::string_view> uniforms = {});
+		Shader(const std::string &vertexSrc, const std::string &fragmentSrc);
 		~Shader();
 
 		void bind() const;
@@ -21,31 +17,29 @@ namespace fif::gfx {
 
 		inline bool is_valid() const { return m_Valid; }
 
-		inline void set_uniform_i32(const std::string &name, i32 value) { glUniform1i(get_uniform_location(name), value); }
+		inline void set_uniform_i32(std::string_view name, i32 value) { glUniform1i(get_uniform_location(name), value); }
 
-		inline void set_uniform_i32_array(const std::string &name, i32 values[], u32 count) {
-			glUniform1iv(get_uniform_location(name), count, values);
-		}
+		inline void set_uniform_i32_array(std::string_view name, i32 values[], u32 count) { glUniform1iv(get_uniform_location(name), count, values); }
 
-		inline void set_uniform_f32(const std::string &name, f32 value) { glUniform1f(get_uniform_location(name), value); }
+		inline void set_uniform_f32(std::string_view name, f32 value) { glUniform1f(get_uniform_location(name), value); }
 
-		inline void set_uniform_color(const std::string &name, const Color &value) { set_uniform_vec3(name, fif::gfx::denormalize_color3(value)); }
+		inline void set_uniform_color(std::string_view name, const Color &value) { set_uniform_vec3(name, fif::gfx::denormalize_color3(value)); }
 
-		inline void set_uniform_vec2(const std::string &name, const glm::vec2 &value) { glUniform2f(get_uniform_location(name), value.x, value.y); }
+		inline void set_uniform_vec2(std::string_view name, const glm::vec2 &value) { glUniform2f(get_uniform_location(name), value.x, value.y); }
 
-		inline void set_uniform_vec3(const std::string &name, const glm::vec3 &value) {
+		inline void set_uniform_vec3(std::string_view name, const glm::vec3 &value) {
 			glUniform3f(get_uniform_location(name), value.x, value.y, value.z);
 		}
 
-		inline void set_uniform_vec4(const std::string &name, const glm::vec4 &value) {
+		inline void set_uniform_vec4(std::string_view name, const glm::vec4 &value) {
 			glUniform4f(get_uniform_location(name), value.x, value.y, value.z, value.w);
 		}
 
-		inline void set_uniform_mat3(const std::string &name, const glm::mat3 &value) {
+		inline void set_uniform_mat3(std::string_view name, const glm::mat3 &value) {
 			glUniformMatrix3fv(get_uniform_location(name), 1, 0u, glm::value_ptr(value));
 		}
 
-		inline void set_uniform_mat4(const std::string &name, const glm::mat4 &value) {
+		inline void set_uniform_mat4(std::string_view name, const glm::mat4 &value) {
 			glUniformMatrix4fv(get_uniform_location(name), 1, 0u, glm::value_ptr(value));
 		}
 
@@ -59,6 +53,6 @@ namespace fif::gfx {
 	private:
 		bool m_Valid = false;
 		std::unordered_map<std::string_view, i32> m_UniformLocations;
-		u32 m_ID;
+		u32 m_ID = 0;
 	};
 }// namespace fif::gfx

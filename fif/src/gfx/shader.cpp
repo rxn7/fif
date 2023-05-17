@@ -2,9 +2,7 @@
 #include "util/logger.hpp"
 
 namespace fif::gfx {
-	Shader::Shader(const std::string &vertexSrc, const std::string &fragmentSrc, const std::initializer_list<std::string_view> uniforms) {
-		m_ID = glCreateProgram();
-
+	Shader::Shader(const std::string &vertexSrc, const std::string &fragmentSrc) : m_ID(glCreateProgram()) {
 		const u32 fragID = compile(GL_FRAGMENT_SHADER, fragmentSrc.c_str());
 		const u32 vertID = compile(GL_VERTEX_SHADER, vertexSrc.c_str());
 
@@ -23,16 +21,6 @@ namespace fif::gfx {
 		if(!m_Valid) {
 			core::Logger::error("Shader is invalid: %s", glGetError());
 			return;
-		}
-
-		for(std::string_view uniform : uniforms) {
-			const i32 location = glGetUniformLocation(m_ID, uniform.data());
-			if(location == -1) {
-				core::Logger::error("Uniform '%s' doesn't exist.", uniform.data());
-				continue;
-			}
-
-			m_UniformLocations.insert({uniform, location});
 		}
 	}
 
@@ -64,8 +52,10 @@ namespace fif::gfx {
 
 		if(it == m_UniformLocations.end()) {
 			const i32 location = glGetUniformLocation(m_ID, name.data());
-			if(location == -1)
+			if(location == -1) {
+				core::Logger::error("Cannot find uniform '%s'", name.data());
 				return -1;
+			}
 
 			return m_UniformLocations.insert({name, location}).second;
 		}

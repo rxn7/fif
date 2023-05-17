@@ -17,3 +17,4 @@ using namespace fif::lua_scripting;
 using namespace fif::native_scripting;
 
 #include "fifed.hpp"
+#include "utils/imgui_utils.hpp"

@@ -7,17 +7,15 @@
 namespace fif::gfx {
 	template<typename Vertex> class Batch {
 	public:
-		Batch(u32 verticesPerInstance, u32 elementsPerInstance, u32 size, const VertexBufferLayout &layout, const std::shared_ptr<Shader> &p_shader) :
-			m_MaxElements(elementsPerInstance * size), m_MaxVertices(verticesPerInstance * size), mp_Vertices(new Vertex[m_MaxVertices]), mp_Elements(new u16[m_MaxElements]), m_Buffer(m_MaxVertices, m_MaxElements, sizeof(Vertex)), mp_Shader(p_shader) {
-			m_Buffer.set_layout(layout);
-		}
+		Batch(u32 verticesPerInstance, u32 elementsPerInstance, u32 size, const VertexBufferLayout &layout, const std::string &shaderVert, const std::string &shaderFrag) :
+			m_MaxElements(elementsPerInstance * size), m_MaxVertices(verticesPerInstance * size), mp_Vertices(new Vertex[m_MaxVertices]), mp_Elements(new u16[m_MaxElements]), m_Buffer(m_MaxVertices, m_MaxElements, sizeof(Vertex), layout), m_Shader(shaderVert, shaderFrag) {}
 
 		virtual ~Batch() {
 			delete[] mp_Vertices;
 			delete[] mp_Elements;
 		}
 
-		inline Shader *get_shader() const { return mp_Shader.get(); }
+		inline Shader &get_shader() { return m_Shader; }
 		inline u32 get_vertex_count() const { return m_VertexCount; }
 		inline u32 get_element_count() const { return m_ElementCount; }
 
@@ -60,7 +58,7 @@ namespace fif::gfx {
 		u16 *mp_Elements;
 
 		VertexBuffer m_Buffer;
-		std::shared_ptr<Shader> mp_Shader;
+		Shader m_Shader;
 
 		friend class Renderer2D;
 	};

@@ -6,8 +6,8 @@
 namespace fif::gfx {
 	class VertexBuffer {
 	public:
-		VertexBuffer(const void *vertices, u32 vertexCount, const u16 *elements, u32 elementCount, u32 m_VertexSize);
-		VertexBuffer(u32 vertexCount, u32 elementCount, u32 m_VertexSize);
+		VertexBuffer(const void *vertices, u32 vertexCount, const u16 *elements, u32 elementCount, u32 m_VertexSize, const VertexBufferLayout &layout);
+		VertexBuffer(u32 vertexCount, u32 elementCount, u32 m_VertexSize, const VertexBufferLayout &layout);
 
 		void render() const;
 		void set_vertices_and_elements(const void *vertices, u32 vertexCount, const u16 *elements, u32 elementCount);
@@ -18,7 +18,7 @@ namespace fif::gfx {
 		void setup_vertex_attributes();
 
 	protected:
-		VertexBufferLayout m_Layout;
+		const VertexBufferLayout &m_Layout;
 		u32 m_VertexCount;
 		u32 m_ElementCount;
 		u32 m_VertexSize;

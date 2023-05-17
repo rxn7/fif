@@ -5,20 +5,13 @@
 #include "stb_image.h"
 
 namespace fif::gfx {
-	Texture::Texture() {}
+	Texture::Texture(u16 width, u16 height, GLenum internalFormat, GLenum dataFormat, GLenum filter, GLenum wrap) {
+		glGenTextures(1, &m_ID);
+		create(width, height, internalFormat, dataFormat, filter, wrap, nullptr);
+	}
 
 	Texture::~Texture() {
 		glDeleteTextures(1, &m_ID);
-	}
-
-	std::shared_ptr<Texture> Texture::create(u16 width, u16 height, GLenum internalFormat, GLenum dataFormat, GLenum filter, GLenum wrap) {
-		std::shared_ptr<Texture> texture(new Texture());
-
-		glGenTextures(1, &texture->m_ID);
-
-		texture->create(width, height, internalFormat, dataFormat, filter, wrap, nullptr);
-
-		return texture;
 	}
 
 	std::shared_ptr<Texture> Texture::load(const std::string &path, GLenum filter, GLenum wrap) {
@@ -75,6 +68,6 @@ namespace fif::gfx {
 
 	void Texture::bind_on_slot(u32 slot) const {
 		glActiveTexture(GL_TEXTURE0 + slot);
-		bind();
+		glBindTexture(GL_TEXTURE_2D, m_ID);
 	}
 }// namespace fif::gfx
