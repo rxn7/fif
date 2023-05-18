@@ -42,6 +42,7 @@ namespace fifed {
 		bool m_AboutWindowOpen = false;
 		std::vector<std::unique_ptr<EditorPanel>> m_Panels;
 
+		Texture m_GithubIconTexture;
 		FrameBuffer m_FrameBuffer;
 		Grid m_Grid;
 		CameraController m_CameraController;

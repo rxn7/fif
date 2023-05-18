@@ -1,9 +1,7 @@
 #include "editor_module.hpp"
 #include "camera_controller.hpp"
-#include "gfx_module.hpp"
 #include "grid.hpp"
 
-#include "imgui.h"
 #include "panels/console/console_panel.hpp"
 #include "panels/performance/performance_panel.hpp"
 #include "panels/scene/scene_panel.hpp"
@@ -11,12 +9,18 @@
 
 #include "fif/core/event/key_event.hpp"
 #include "fif/gfx/components/transform_component.hpp"
-#include "vertex_buffer_layout.hpp"
+
+#include "imgui.h"
+
+#include <fstream>
+#include <iterator>
+#include <streambuf>
 
 namespace fifed {
 	FIF_MODULE_INSTANCE_IMPL(EditorModule);
 
-	EditorModule::EditorModule() : m_FrameBuffer({0, 0}), m_Grid(fif::gfx::GfxModule::get_instance()->get_renderer2D().get_camera(), m_FrameBuffer) {
+	EditorModule::EditorModule() :
+		m_GithubIconTexture("assets/icons/github.png"), m_FrameBuffer({0, 0}), m_Grid(fif::gfx::GfxModule::get_instance()->get_renderer2D().get_camera(), m_FrameBuffer) {
 		FIF_MODULE_INIT_INSTANCE();
 	}
 
@@ -28,8 +32,10 @@ namespace fifed {
 		if(!std::filesystem::exists("layout.ini"))
 			load_default_layout();
 
+		static constexpr ImWchar ranges[] = {0x0020, 0x017f, 0};
+
 		ImGuiIO &io = ImGui::GetIO();
-		io.Fonts->AddFontFromFileTTF("assets/fonts/iosevka-regular.ttf", 18);
+		io.Fonts->AddFontFromFileTTF("assets/fonts/iosevka-regular.ttf", 18, nullptr, ranges);
 		io.IniFilename = "layout.ini";
 
 		mp_ViewportPanel = add_panel<ViewportPanel>(m_FrameBuffer);
@@ -70,7 +76,19 @@ namespace fifed {
 		if(_this->m_AboutWindowOpen) {
 			if(ImGui::Begin("About", &_this->m_AboutWindowOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoDocking)) {
 				ImGui::Text("Fif v%u.%u.%u", 0, 0, 0);// TODO: version(major,minor,patch)
-				ImGui::Text("Fif is licensed under MIT license see LICENSE file for more info");
+				if(ImGui::CollapsingHeader("License")) {
+					static std::ifstream stream("LICENSE", std::ios::in | std::ios::binary);
+					static std::string content(std::istreambuf_iterator<char>(stream), {});
+					ImGui::TextWrapped(content.c_str());
+				}
+				if(ImGui::ImageButton("Source", reinterpret_cast<ImTextureID>(_this->m_GithubIconTexture.get_id()), ImVec2{32.0f, 32.0f}, ImVec2{0.0f, 1.0f}, ImVec2(1.0f, 0.0f))) {
+#define GITHUB_URL "https://github.com/rxn7/fif"
+#ifdef _WIN32
+					system("start /b open " GITHUB_URL);
+#elif defined(__linux__)
+					system("xdg-open " GITHUB_URL "&");
+#endif
+				}
 			}
 			ImGui::End();
 		}
