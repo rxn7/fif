@@ -7,9 +7,8 @@ namespace fif::gfx {
 	public:
 		Texture() {}
 		Texture(u16 width, u16 height, GLenum internalFormat = GL_RGBA8, GLenum dataFormat = GL_RGBA, GLenum filter = GL_LINEAR, GLenum wrap = GL_CLAMP_TO_EDGE);
+		Texture(std::string_view path, GLenum filter = GL_LINEAR, GLenum wrap = GL_CLAMP_TO_EDGE);
 		~Texture();
-
-		static std::shared_ptr<Texture> load(const std::string &path, GLenum filter = GL_LINEAR, GLenum wrap = GL_CLAMP_TO_EDGE);
 
 		inline u32 get_id() const { return m_ID; }
 		inline u16 get_width() const { return m_Width; }
