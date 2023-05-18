@@ -3,6 +3,7 @@
 #include "gfx_module.hpp"
 #include "grid.hpp"
 
+#include "imgui.h"
 #include "panels/console/console_panel.hpp"
 #include "panels/performance/performance_panel.hpp"
 #include "panels/scene/scene_panel.hpp"
@@ -49,6 +50,10 @@ namespace fifed {
 		EditorModule *_this = EditorModule::get_instance();
 
 		if(ImGui::BeginMainMenuBar()) {
+			if(ImGui::Button("About")) {
+				_this->m_AboutWindowOpen = true;
+			}
+
 			if(ImGui::BeginMenu("Layout")) {
 				if(ImGui::MenuItem("Load Default"))
 					_this->load_default_layout();
@@ -62,10 +67,17 @@ namespace fifed {
 			ImGui::EndMainMenuBar();
 		}
 
+		if(_this->m_AboutWindowOpen) {
+			if(ImGui::Begin("About", &_this->m_AboutWindowOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoDocking)) {
+				ImGui::Text("Fif v%u.%u.%u", 0, 0, 0);// TODO: version(major,minor,patch)
+				ImGui::Text("Fif is licensed under MIT license see LICENSE file for more info");
+			}
+			ImGui::End();
+		}
+
 		if(ImGuiModule::get_instance()->begin_dockspace())
 			for(std::unique_ptr<EditorPanel> &panel : _this->m_Panels)
 				panel->render();
-
 		ImGui::End();
 	}
 

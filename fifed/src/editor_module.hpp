@@ -39,6 +39,7 @@ namespace fifed {
 		ViewportPanel *mp_ViewportPanel;
 		InspectorPanel *mp_InspectorPanel;
 
+		bool m_AboutWindowOpen = false;
 		std::vector<std::unique_ptr<EditorPanel>> m_Panels;
 
 		FrameBuffer m_FrameBuffer;
