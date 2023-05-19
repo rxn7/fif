@@ -49,17 +49,22 @@ namespace fif::core {
 	}
 
 	bool Window::get_should_close() const {
-		return glfwWindowShouldClose(mp_GlfwWindow) != 0;
+		return static_cast<bool>(glfwWindowShouldClose(mp_GlfwWindow));
 	}
 
 	void Window::close(bool value) {
-		glfwSetWindowShouldClose(mp_GlfwWindow, static_cast<int>(value));
+		glfwSetWindowShouldClose(mp_GlfwWindow, value);
 	}
 
 	void Window::set_icon(std::string_view path) {
 		GLFWimage icon;
 		icon.pixels = stbi_load(path.data(), &icon.width, &icon.height, nullptr, 4);
-		glfwSetWindowIcon(mp_GlfwWindow, 1, &icon);
+
+		if(icon.pixels)
+			glfwSetWindowIcon(mp_GlfwWindow, 1, &icon);
+		else
+			Logger::error("Failed to open window icon '%s'", path.data());
+
 		stbi_image_free(icon.pixels);
 	}
 }// namespace fif::core
