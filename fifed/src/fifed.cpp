@@ -4,7 +4,7 @@
 #include "fif/fif.hpp"
 #include "fif/native_scripting/native_scripting_module.hpp"
 
-const ApplicationProperties APP_PROPS = {
+static const ApplicationProperties APP_PROPS = {
 	.windowProps =
 		{
 #ifdef FIF_DEBUG

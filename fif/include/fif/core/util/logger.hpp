@@ -15,12 +15,13 @@ namespace fif::core {
 		template<LogType T, typename... Args> static void print(std::string_view msg, Args... args) {
 			print_prefix<T>();
 
-			size_t size = std::snprintf(NULL, 0, msg.data(), std::forward<Args>(args)...) + 1;
+			const size_t size = std::snprintf(NULL, 0, msg.data(), std::forward<Args>(args)...) + 1;
 
 			char *buf = static_cast<char *>(std::malloc(size));
 			std::snprintf(buf, size, msg.data(), std::forward<Args>(args)...);
 
-			std::puts(buf);
+			std::fputs(buf, stdout);
+			std::puts("\033[0m");
 
 			for(LoggerCallback &callback : s_Callbacks)
 				callback(T, buf);
@@ -28,10 +29,13 @@ namespace fif::core {
 			std::free(buf);
 		}
 
-		template<typename... Args> static void info(std::string_view msg, Args... args) { print<LogType::INFO>(msg, std::forward<Args>(args)...); }
-		template<typename... Args> static void warn(std::string_view msg, Args... args) { print<LogType::WARN>(msg, std::forward<Args>(args)...); }
-		template<typename... Args> static void error(std::string_view msg, Args... args) { print<LogType::ERROR>(msg, std::forward<Args>(args)...); }
-		template<typename... Args> static void debug(std::string_view msg, Args... args) { print<LogType::DEBUG>(msg, std::forward<Args>(args)...); }
+#define FIF_PRINT_FUNC(name, logType)                                                                                                                \
+	template<typename... Args> static void name(std::string_view msg, Args... args) { print<logType>(msg, std::forward<Args>(args)...); }
+
+		FIF_PRINT_FUNC(info, LogType::INFO)
+		FIF_PRINT_FUNC(warn, LogType::WARN)
+		FIF_PRINT_FUNC(error, LogType::ERROR)
+		FIF_PRINT_FUNC(debug, LogType::DEBUG)
 
 	public:
 		static std::vector<LoggerCallback> s_Callbacks;
