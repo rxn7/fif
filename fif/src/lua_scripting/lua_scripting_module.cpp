@@ -26,24 +26,27 @@ namespace fif::lua_scripting {
 
 		m_Lua.open_libraries(sol::lib::base, sol::lib::math, sol::lib::string);
 
-		m_Lua.set_function("log", [](const std::string &msg) { core::Logger::info("[LUA] %s", msg.c_str()); });
-		m_Lua.set_function("log_error", [](const std::string &msg) { core::Logger::error("[LUA] %s", msg.c_str()); });
-		m_Lua.set_function("log_warn", [](const std::string &msg) { core::Logger::warn("[LUA] %s", msg.c_str()); });
+		sol::table loggerTable = m_Lua.create_named_table("Logger");
+		loggerTable.set_function("info", [](const std::string &msg) { core::Logger::info("%s", msg.c_str()); });
+		loggerTable.set_function("error", [](const std::string &msg) { core::Logger::error("%s", msg.c_str()); });
+		loggerTable.set_function("warn", [](const std::string &msg) { core::Logger::warn("%s", msg.c_str()); });
+		loggerTable.set_function("debug", [](const std::string &msg) { core::Logger::debug("%s", msg.c_str()); });
 	}
 
-	void LuaScriptingModule::attach_script(core::EntityID ent, core::Scene &scene, const std::string &path) {
-		auto result = m_Lua.script_file(path);
+	void LuaScriptingModule::attach_script(core::EntityID ent, core::Scene &scene, const std::filesystem::path &filepath) {
+		auto result = m_Lua.script_file(filepath.string());
 
 		if(!result.valid()) {
 			sol::error err = result;
-			core::Logger::error("Failed to load lua script '%s': %s", path.c_str(), err.what());
+			core::Logger::error("Failed to load lua script '%s': %s", filepath.stem().c_str(), err.what());
 			return;
 		}
 
 		auto &script = scene.add_component<LuaScriptComponent>(ent, result);
-		script.path = path;
+		script.filepath = filepath;
 
 		// TODO: Move this to a init_script function once we have a runtime
+		script.inited = true;
 		script.hooks.update = script.self["update"];
 		script.hooks.render = script.self["render"];
 

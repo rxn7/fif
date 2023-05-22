@@ -1,22 +1,27 @@
-local script = {
-	fps = 0
-}
-
 local timer = 0
 local frames = 0
 
-function script:init()
-	log("fps.lua loaded")
+local function tick(self, dt)
+	self.fps = frames
+	self.dt = dt
+	timer = 0
+	frames = 0
 end
 
-function script:update(dt)
-	frames = frames + 1;
-	timer = timer + dt
-	if timer >= 1 then
-		script.fps = frames
-		timer = 0
-		frames = 0
-	end
-end
+return {
+	fps = 0,
+	dt = 0,
 
-return script
+	init = function()
+		Logger.info("fps.lua loaded")
+	end,
+
+	update = function(self, dt)
+		frames = frames + 1;
+		timer = timer + dt
+
+		if timer >= 1 then
+			tick(self, dt)
+		end
+	end,
+}
