@@ -7,6 +7,7 @@ option(FIF_BUILD_INPUT "Build the input module" ON)
 option(FIF_BUILD_IMGUI "Build the imgui module" ON)
 option(FIF_BUILD_LUA_SCRIPTING "Build the lua_scripting module" ON)
 option(FIF_BUILD_NATIVE_SCRIPTING "Build the native_scripting module" ON)
+option(FIF_BUILD_AUDIO "Build the audio module" ON)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_PCH_INSTANTIATE_TEMPLATES ON)
@@ -78,6 +79,11 @@ endif()
 
 if(FIF_BUILD_NATIVE_SCRIPTING)
   build_module(fif-native_scripting native_scripting "fif-core")
+endif()
+
+if(FIF_BUILD_AUDIO)
+  include_directories(SYSTEM ${LIB_DIR}/miniaudio)
+  build_module(fif-audio audio "fif-core")
 endif()
 
 set(GLFW_BUILD_EXAMPLES OFF CACHE INTERNAL "Build GLFW examples")
