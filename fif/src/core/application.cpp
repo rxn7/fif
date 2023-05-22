@@ -27,8 +27,10 @@ namespace fif::core {
 
 		setup_modules();
 
-		for(const auto &mod : m_Modules)
+		for(const auto &mod : m_Modules) {
+			Logger::info("Module '%s' started", mod->get_name().data());
 			mod->on_start(*this);
+		}
 
 		while(m_Status.running)
 			game_loop();

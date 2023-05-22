@@ -22,6 +22,7 @@ namespace fifed {
 	EditorModule::EditorModule() :
 		m_GithubIconTexture("assets/icons/github.png"), m_FrameBuffer({0, 0}), m_Grid(fif::gfx::GfxModule::get_instance()->get_renderer2D().get_camera(), m_FrameBuffer) {
 		FIF_MODULE_INIT_INSTANCE();
+		add_panel<ConsolePanel>();
 	}
 
 	EditorModule::~EditorModule() {
@@ -43,7 +44,6 @@ namespace fifed {
 		add_panel<PerformancePanel>();
 		add_panel<SettingsPanel>(m_Grid, m_FrameBuffer, m_CameraController);
 		add_panel<ScenePanel>(*mp_InspectorPanel);
-		add_panel<ConsolePanel>();
 
 		ImGuiModule::get_instance()->add_render_func(&EditorModule::on_render_im_gui);
 	}
