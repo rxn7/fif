@@ -1,17 +1,23 @@
 #include "console_panel.hpp"
-#include "imgui.h"
 
 namespace fifed {
-	struct ConsoleEntry {
-		ImVec4 color;
-		std::string message;
-	};
+#define RGBU8_TO_RGBAF32(r, g, b) ImVec4((r) / 255.0f, (g) / 255.0f, (b) / 255.0f, 1.0f)
+	static ConsolePanel *s_Instance;
 
-	static std::vector<ConsoleEntry> s_Output;
+	static constexpr LogTypeData LOG_TYPE_INFO_DATA{.color = RGBU8_TO_RGBAF32(199, 199, 199), .prefix = "INFO"};
+	static constexpr LogTypeData LOG_TYPE_WARN_DATA{.color = RGBU8_TO_RGBAF32(255, 197, 145), .prefix = "WARN"};
+	static constexpr LogTypeData LOG_TYPE_ERROR_DATA{.color = RGBU8_TO_RGBAF32(255, 102, 102), .prefix = "ERROR"};
+	static constexpr LogTypeData LOG_TYPE_DEBUG_DATA{.color = RGBU8_TO_RGBAF32(97, 149, 127), .prefix = "DEBUG"};
+	static constexpr std::array<const LogTypeData *, 4> LOG_TYPE_DATA_LOOKUP = {{&LOG_TYPE_INFO_DATA, &LOG_TYPE_WARN_DATA, &LOG_TYPE_ERROR_DATA, &LOG_TYPE_DEBUG_DATA}};
+
+	ConsolePanelEntry::ConsolePanelEntry(const LogTypeData *data, const char *msg) : logTypeData(data), message(msg) {
+		const time_t now = time(nullptr);
+		const tm *timeInfo = localtime(&now);
+		strftime(timePrefixBuffer.data(), timePrefixBuffer.size() - 1, "%H:%M:%S", timeInfo);
+	}
 
 	ConsolePanel::ConsolePanel() {
-		s_Output.clear();
-		s_Output.reserve(MAX_LINES);
+		s_Instance = this;
 		Logger::add_callback(&ConsolePanel::logger_callback);
 	}
 
@@ -20,47 +26,23 @@ namespace fifed {
 	}
 
 	void ConsolePanel::logger_callback(Logger::LogType logType, const char *msg) {
-		if(s_Output.size() >= MAX_LINES)
-			s_Output.erase(s_Output.begin());
+		if(!s_Instance)
+			return;
 
-		ConsoleEntry entry;
+		if(s_Instance->m_Output.size() >= MAX_LINES)
+			s_Instance->m_Output.pop_front();
 
-		switch(logType) {
-		default:
-		case Logger::LogType::INFO:
-			entry.color = ImGui::GetStyle().Colors[ImGuiCol_Text];
-			entry.message = "[INFO] ";
-			break;
-
-		case Logger::LogType::WARN:
-			entry.color = ImVec4(1.0f, 1.0f, 0.05f, 1.0f);
-			entry.message = "[WARNING] ";
-			break;
-
-		case Logger::LogType::ERROR:
-			entry.color = ImVec4(1.0f, 0.05f, 0.05f, 1.0f);
-			entry.message = "[ERROR] ";
-			break;
-
-		case Logger::LogType::DEBUG:
-			entry.color = ImVec4(0.05f, 0.9f, 0.05f, 1.0f);
-			entry.message = "[DEBUG] ";
-			break;
-		}
-
-		entry.message += msg;
-
-		s_Output.push_back(entry);
+		s_Instance->m_Output.emplace_back(LOG_TYPE_DATA_LOOKUP[static_cast<int>(logType)], msg);
 	}
 
 	void ConsolePanel::on_render() {
 		if(ImGui::Button("Clear"))
-			s_Output.clear();
+			m_Output.clear();
 
 		if(ImGui::BeginListBox("###ConsolePanelList", ImVec2(-FLT_MIN, -FLT_MIN))) {
-			for(const ConsoleEntry &entry : s_Output) {
+			for(const ConsolePanelEntry &entry : m_Output) {
 				ImGui::PushTextWrapPos();
-				ImGui::TextColored(entry.color, "%s", entry.message.c_str());
+				ImGui::TextColored(entry.logTypeData->color, "(%s) [%s] %s", entry.timePrefixBuffer.data(), entry.logTypeData->prefix, entry.message.c_str());
 				ImGui::PopTextWrapPos();
 			}
 

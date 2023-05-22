@@ -34,7 +34,7 @@ namespace fif::lua_scripting {
 	}
 
 	void LuaScriptingModule::attach_script(core::EntityID ent, core::Scene &scene, const std::filesystem::path &filepath) {
-		auto result = m_Lua.script_file(filepath.string());
+		const auto &result = m_Lua.safe_script_file(filepath.string());
 
 		if(!result.valid()) {
 			sol::error err = result;
