@@ -7,8 +7,8 @@
 #include "panels/scene/scene_panel.hpp"
 #include "panels/settings/settings_panel.hpp"
 
+#include "fif/core/ecs/components/transform_component.hpp"
 #include "fif/core/event/key_event.hpp"
-#include "fif/gfx/components/transform_component.hpp"
 
 #include "imgui.h"
 

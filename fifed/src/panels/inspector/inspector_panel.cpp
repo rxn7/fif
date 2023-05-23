@@ -2,10 +2,10 @@
 
 #include "components/lua_script_component.hpp"
 #include "fif/core/ecs/components/tag_component.hpp"
+#include "fif/core/ecs/components/transform_component.hpp"
 #include "fif/gfx/components/circle_component.hpp"
 #include "fif/gfx/components/quad_component.hpp"
 #include "fif/gfx/components/sprite_component.hpp"
-#include "fif/gfx/components/transform_component.hpp"
 #include "fif/native_scripting/components/native_script_component.hpp"
 
 #include "imgui.h"

@@ -2,9 +2,9 @@
 #include "entity_template/empty_template.hpp"
 #include "entity_template/sprite_template.hpp"
 
+#include "fif/core/ecs//components/transform_component.hpp"
 #include "fif/core/ecs/components/tag_component.hpp"
 #include "fif/gfx/components/quad_component.hpp"
-#include "fif/gfx/components/transform_component.hpp"
 #include "fif/native_scripting/components/native_script_component.hpp"
 
 #include "imgui.h"
