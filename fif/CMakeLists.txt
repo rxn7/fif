@@ -15,7 +15,7 @@ set(LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vendor)
 set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 set(INC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-add_compile_options(-fPIC -fno-exceptions) 
+add_compile_options(-fPIC -fno-exceptions)
 add_compile_options(-fno-exceptions)
 add_compile_options(-ffast-math)
 
