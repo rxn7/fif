@@ -9,7 +9,7 @@ namespace fif::core {
 
 	struct WindowProperties final {
 		std::string title = "untitled application";
-		glm::i16vec2 size = {1280, 720};
+		i16vec2 size = {1280, 720};
 		std::string iconPath = "";
 		bool vsync = true;
 	};
@@ -21,7 +21,7 @@ namespace fif::core {
 		Window(Application &app, const WindowProperties &props);
 		~Window();
 
-		inline glm::i16vec2 get_size() const { return m_Size; }
+		inline i16vec2 get_size() const { return m_Size; }
 		bool get_should_close() const;
 		void close(bool value);
 		void set_icon(std::string_view path);
@@ -33,7 +33,7 @@ namespace fif::core {
 		void end_frame();
 
 	private:
-		glm::i16vec2 m_Size;
+		i16vec2 m_Size;
 		Application &m_App;
 		GLFWwindow *mp_GlfwWindow = nullptr;
 	};

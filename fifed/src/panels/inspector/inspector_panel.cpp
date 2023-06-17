@@ -105,7 +105,7 @@ namespace fifed {
 			ImGui::DragFloat2("Scale", glm::value_ptr(transform.scale), 0.1f);
 
 			float angleDegrees = glm::degrees(transform.angleRadians);
-			ImGui::DragFloat("Angle", &angleDegrees, 1.0f, -360.0f, 360.0f);
+			ImGui::DragFloat("Angle", &angleDegrees, 1.0f);
 			transform.angleRadians = glm::radians(angleDegrees);
 		});
 
@@ -165,7 +165,7 @@ namespace fifed {
 	}
 
 	void InspectorPanel::draw_color_selector(Color &color) {
-		glm::vec4 colorNormalized = normalize_color(color);
+		fif::vec4 colorNormalized = normalize_color(color);
 		ImGui::ColorEdit4("Color", glm::value_ptr(colorNormalized));
 		color = denormalize_color(colorNormalized);
 	}

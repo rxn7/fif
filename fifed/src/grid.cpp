@@ -9,8 +9,8 @@
 
 namespace fifed {
 	struct GridVertex {
-		glm::vec2 position;
-		glm::vec2 uv;
+		fif::vec2 position;
+		fif::vec2 uv;
 	};
 
 	static constexpr std::array<GridVertex, 4> VERTICES = {

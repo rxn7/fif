@@ -1,7 +1,5 @@
 #pragma once
 
-#include "glm/mat4x4.hpp"
-
 namespace fif::gfx {
 	class Camera {
 	public:
@@ -9,9 +7,9 @@ namespace fif::gfx {
 
 		virtual void update() {}
 
-		inline const glm::mat4 &get_matrix() const { return m_CameraMatrix; }
+		inline const mat4 &get_matrix() const { return m_CameraMatrix; }
 
 	protected:
-		glm::mat4 m_CameraMatrix;
+		mat4 m_CameraMatrix;
 	};
 }// namespace fif::gfx

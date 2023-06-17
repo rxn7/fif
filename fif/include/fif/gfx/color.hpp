@@ -1,24 +1,22 @@
 #pragma once
 
-#include "glm/vec4.hpp"
-
 namespace fif::gfx {
-	typedef glm::u8vec4 Color;
-	typedef glm::u8vec3 Color3;
+	typedef u8vec4 Color;
+	typedef u8vec3 Color3;
 
-	inline glm::vec4 normalize_color(const Color &color) {
-		return glm::vec4(color) * (1.0f / 255.0f);
+	inline vec4 normalize_color(const Color &color) {
+		return vec4(color) * (1.0f / 255.0f);
 	}
 
-	inline glm::vec3 normalize_color3(const Color3 &color) {
-		return glm::vec3(color) * (1.0f / 255.0f);
+	inline vec3 normalize_color3(const Color3 &color) {
+		return vec3(color) * (1.0f / 255.0f);
 	}
 
-	inline Color denormalize_color(const glm::vec4 &color) {
+	inline Color denormalize_color(const vec4 &color) {
 		return Color(color * 255.0f);
 	}
 
-	inline Color3 denormalize_color3(const glm::vec3 &color) {
+	inline Color3 denormalize_color3(const vec3 &color) {
 		return Color3(color * 255.0f);
 	}
 

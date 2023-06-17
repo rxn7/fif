@@ -9,18 +9,18 @@ namespace fif::gfx {
 		~OrthoCamera();
 
 		void update() override;
-		glm::vec2 screen_to_world(const glm::vec2 &position) const;
+		vec2 screen_to_world(const vec2 &position) const;
 		void update_size();
 
-		inline const glm::vec2 &get_size() const { return m_Size; }
+		inline const vec2 &get_size() const { return m_Size; }
 
 	public:
 		static constexpr f32 BASE_ZOOM = 500.0f;
 		f32 m_Zoom = 1.0f;
-		glm::vec2 m_Position{0.0f, 0.0f};
+		vec2 m_Position{0.0f, 0.0f};
 
 	private:
-		glm::vec2 m_Size;
+		vec2 m_Size;
 		f32 m_Aspect;
 	};
 }// namespace fif::gfx
