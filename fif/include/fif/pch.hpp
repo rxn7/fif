@@ -15,11 +15,11 @@
 #include <unordered_map>
 #include <vector>
 
-#include "entt/entity/fwd.hpp"
+#include <entt/entity/fwd.hpp>
 
-#include "glm/glm.hpp"
-#include "glm/gtc/type_ptr.hpp"
-#include "glm/gtx/compatibility.hpp"
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtx/compatibility.hpp>
 
 // clang-format off
 #include "fif/core/types.hpp"

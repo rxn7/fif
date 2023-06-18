@@ -23,7 +23,8 @@ namespace fif::gfx {
 			m_ViewportPosition = pos;
 		}
 
-		void on_start(core::Application &app) override;
+	protected:
+		void on_start() override;
 		void on_render() override;
 		void pre_render() override;
 		void on_event(core::Event &event) override;

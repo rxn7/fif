@@ -6,30 +6,32 @@
 #include "fif/gfx/components/circle_component.hpp"
 #include "fif/gfx/components/quad_component.hpp"
 #include "fif/gfx/components/sprite_component.hpp"
+#include "fif/lua_scripting/lua_scripting_module.hpp"
 #include "fif/native_scripting/components/native_script_component.hpp"
 
-#include "imgui.h"
-#include "lua_scripting_module.hpp"
-#include "tinyfiledialogs.h"
 #include <filesystem>
+#include <imgui.h>
+#include <tinyfiledialogs.h>
 
 namespace fifed {
-	template<typename T, typename... Args> static void draw_add_component_entry(const std::string &name, EntityID ent, Scene &scene, Args &&...args) {
-		if(scene.has_component<T>(ent))
+	InspectorPanel::InspectorPanel(Scene &scene) : m_SelectedEntity(scene, entt::null) {}
+
+	template<typename T, typename... Args> static void draw_add_component_entry(const std::string &name, Entity &ent, Args &&...args) {
+		if(ent.has_component<T>())
 			return;
 
 		if(ImGui::MenuItem(name.c_str())) {
-			scene.add_component<T>(ent, args...);
+			ent.add_component<T>(args...);
 			ImGui::CloseCurrentPopup();
 		}
 	}
 
-	template<typename T> static void draw_component(const std::string &name, EntityID ent, Scene &scene, std::function<void(T &)> drawFunc) {
-		T *comp = scene.get_registry().try_get<T>(ent);
+	template<typename T> static void draw_component(const std::string &name, Entity &ent, std::function<void(T &)> drawFunc) {
+		T *comp = ent.try_get_component<T>();
 		if(!comp)
 			return;
 
-		ImGui::PushID(typeid(T).hash_code() + static_cast<u32>(ent));
+		ImGui::PushID(typeid(T).hash_code() + static_cast<u32>(ent.m_ID));
 
 		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_SpanAvailWidth;
 		bool open = ImGui::TreeNodeEx(name.c_str(), flags);
@@ -50,7 +52,7 @@ namespace fifed {
 		}
 
 		if(removeComponent)
-			scene.remove_component<T>(ent);
+			ent.remove_component<T>();
 
 		ImGui::Separator();
 
@@ -58,7 +60,7 @@ namespace fifed {
 	}
 
 	void InspectorPanel::on_render() {
-		if(m_SelectedEntity == entt::null)
+		if(m_SelectedEntity.m_ID == entt::null)
 			return;
 
 		Scene &scene = Application::get_instance()->get_scene();
@@ -72,19 +74,19 @@ namespace fifed {
 
 		if(ImGui::BeginPopup("AddComponent")) {
 			// TODO: Automate this?
-			draw_add_component_entry<TagComponent>("Tag", m_SelectedEntity, scene);
-			draw_add_component_entry<TransformComponent>("Transform", m_SelectedEntity, scene);
-			draw_add_component_entry<SpriteComponent>("Sprite", m_SelectedEntity, scene);
-			draw_add_component_entry<QuadComponent>("Quad", m_SelectedEntity, scene);
-			draw_add_component_entry<CircleComponent>("Circle", m_SelectedEntity, scene);
+			draw_add_component_entry<TagComponent>("Tag", m_SelectedEntity);
+			draw_add_component_entry<TransformComponent>("Transform", m_SelectedEntity);
+			draw_add_component_entry<SpriteComponent>("Sprite", m_SelectedEntity);
+			draw_add_component_entry<QuadComponent>("Quad", m_SelectedEntity);
+			draw_add_component_entry<CircleComponent>("Circle", m_SelectedEntity);
 
-			if(!scene.has_component<LuaScriptComponent>(m_SelectedEntity)) {
+			if(!m_SelectedEntity.has_component<LuaScriptComponent>()) {
 				if(ImGui::MenuItem("Lua Script")) {
 					const char *filter = "*.lua";
 					char *path = tinyfd_openFileDialog("Select lua script", workingDirectoryStr.c_str(), 1, &filter, "Lua script", false);
 
 					if(path)
-						LuaScriptingModule::get_instance()->attach_script(m_SelectedEntity, scene, path);
+						LuaScriptingModule::get_instance()->attach_script(m_SelectedEntity, path);
 
 					ImGui::CloseCurrentPopup();
 				}
@@ -94,13 +96,13 @@ namespace fifed {
 
 		ImGui::Spacing();
 
-		if(TagComponent *tag = scene.get_registry().try_get<TagComponent>(m_SelectedEntity)) {
+		if(TagComponent *tag = m_SelectedEntity.try_get_component<TagComponent>()) {
 			std::strncpy(m_TagBuffer.data(), tag->tag.c_str(), tag->tag.size() + 1);
 			if(ImGui::InputText("Tag", m_TagBuffer.data(), m_TagBuffer.size()))
 				tag->tag = m_TagBuffer.data();
 		}
 
-		draw_component<TransformComponent>("Transform", m_SelectedEntity, scene, [](TransformComponent &transform) {
+		draw_component<TransformComponent>("Transform", m_SelectedEntity, [](TransformComponent &transform) {
 			ImGui::DragFloat2("Position", glm::value_ptr(transform.position));
 			ImGui::DragFloat2("Scale", glm::value_ptr(transform.scale), 0.1f);
 
@@ -109,12 +111,12 @@ namespace fifed {
 			transform.angleRadians = glm::radians(angleDegrees);
 		});
 
-		draw_component<QuadComponent>("Quad", m_SelectedEntity, scene, [](QuadComponent &quad) {
+		draw_component<QuadComponent>("Quad", m_SelectedEntity, [](QuadComponent &quad) {
 			draw_color_selector(quad.tint);
 			ImGui::DragFloat2("Size", glm::value_ptr(quad.size));
 		});
 
-		draw_component<SpriteComponent>("Sprite", m_SelectedEntity, scene, [&workingDirectoryStr](SpriteComponent &sprite) {
+		draw_component<SpriteComponent>("Sprite", m_SelectedEntity, [&workingDirectoryStr](SpriteComponent &sprite) {
 			draw_color_selector(sprite.tint);
 			ImGui::DragFloat2("Size", glm::value_ptr(sprite.size), 1.0f, 0.0f, std::numeric_limits<float>::max());
 
@@ -133,12 +135,12 @@ namespace fifed {
 			}
 		});
 
-		draw_component<CircleComponent>("Circle", m_SelectedEntity, scene, [](CircleComponent &circle) {
+		draw_component<CircleComponent>("Circle", m_SelectedEntity, [](CircleComponent &circle) {
 			draw_color_selector(circle.tint);
 			ImGui::DragFloat("Radius", &circle.radius, 1.0f, 0.0f, std::numeric_limits<float>::max());
 		});
 
-		draw_component<LuaScriptComponent>("Lua Script", m_SelectedEntity, scene, [](LuaScriptComponent &script) {
+		draw_component<LuaScriptComponent>("Lua Script", m_SelectedEntity, [](LuaScriptComponent &script) {
 			ImGui::Text("Script: %s", script.filepath.stem().c_str());
 
 			if(ImGui::Button("Reload"))
@@ -163,8 +165,7 @@ namespace fifed {
 			});
 		});
 
-		draw_component<NativeScriptComponent>("Native Script", m_SelectedEntity, scene,
-											  [](NativeScriptComponent &script) { ImGui::Text("Loaded script: %s", script.scriptName.c_str()); });
+		draw_component<NativeScriptComponent>("Native Script", m_SelectedEntity, [](NativeScriptComponent &script) { ImGui::Text("Loaded script: %s", script.scriptName.c_str()); });
 	}
 
 	void InspectorPanel::draw_color_selector(Color &color) {

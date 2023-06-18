@@ -1,7 +1,7 @@
 ﻿---
 AccessModifierOffset: '-4'
 AllowShortFunctionsOnASingleLine: Inline
-ColumnLimit: '150'
+ColumnLimit: '200'
 CompactNamespaces: 'false'
 IndentWidth: '4'
 KeepEmptyLinesAtTheStartOfBlocks: 'false'

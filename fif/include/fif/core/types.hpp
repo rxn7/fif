@@ -1,7 +1,7 @@
 #pragma once
 
-#include "glm/fwd.hpp"
 #include <cinttypes>
+#include <glm/fwd.hpp>
 
 typedef float f32;
 typedef double f64;

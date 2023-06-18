@@ -8,17 +8,19 @@ namespace fif::core {
 	class Module {
 	public:
 		virtual ~Module() {}
-
 		virtual constexpr std::string_view get_name() const = 0;
 
-		virtual void on_start([[maybe_unused]] Application &app) {}
+	protected:
+		Module() {}
+		virtual void on_start() {}
 		virtual void on_event([[maybe_unused]] Event &event) {}
 		virtual void on_update() {}
 		virtual void pre_render() {}
 		virtual void on_render() {}
 
 	protected:
-		Module() {}
+		Application *mp_Application;
+		friend class Application;
 	};
 }// namespace fif::core
 

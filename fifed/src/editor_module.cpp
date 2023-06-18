@@ -8,9 +8,11 @@
 #include "panels/settings/settings_panel.hpp"
 
 #include "fif/core/ecs/components/transform_component.hpp"
+#include "fif/core/ecs/scene_serializer.hpp"
 #include "fif/core/event/key_event.hpp"
 
-#include "imgui.h"
+#include <imgui.h>
+#include <tinyfiledialogs.h>
 
 #include <fstream>
 #include <iterator>
@@ -19,8 +21,7 @@
 namespace fifed {
 	FIF_MODULE_INSTANCE_IMPL(EditorModule);
 
-	EditorModule::EditorModule() :
-		m_IconManager("assets/textures/icons.png"), m_FrameBuffer({0, 0}), m_Grid(fif::gfx::GfxModule::get_instance()->get_renderer2D().get_camera(), m_FrameBuffer) {
+	EditorModule::EditorModule() : m_IconManager("assets/textures/icons.png"), m_FrameBuffer({0, 0}), m_Grid(fif::gfx::GfxModule::get_instance()->get_renderer2D().get_camera(), m_FrameBuffer) {
 		FIF_MODULE_INIT_INSTANCE();
 		add_panel<ConsolePanel>();
 	}
@@ -29,7 +30,7 @@ namespace fifed {
 		ImGuiModule::get_instance()->delete_render_func(&EditorModule::on_render_im_gui);
 	}
 
-	void EditorModule::on_start([[maybe_unused]] Application &app) {
+	void EditorModule::on_start() {
 		m_IconManager.add_icon(IconType::GITHUB, {{0.0f, 0.0f}, {230.0f, 225.0f}});
 		m_IconManager.add_icon(IconType::LOGO, {{0.0f, 225.0f}, {48.0f, 48.0f}});
 		m_IconManager.add_icon(IconType::PAUSE, {{48.0f, 225.0f}, {32.0f, 32.0f}});
@@ -45,7 +46,7 @@ namespace fifed {
 		io.IniFilename = "layout.ini";
 
 		mp_ViewportPanel = add_panel<ViewportPanel>(m_FrameBuffer);
-		mp_InspectorPanel = add_panel<InspectorPanel>();
+		mp_InspectorPanel = add_panel<InspectorPanel>(mp_Application->get_scene());
 		add_panel<PerformancePanel>();
 		add_panel<SettingsPanel>(m_Grid, m_FrameBuffer, m_CameraController);
 		add_panel<ScenePanel>(*mp_InspectorPanel);
@@ -61,8 +62,34 @@ namespace fifed {
 		EditorModule *_this = EditorModule::get_instance();
 
 		if(ImGui::BeginMainMenuBar()) {
-			if(ImGui::Button("About")) {
+			if(ImGui::Button("About"))
 				_this->m_AboutWindowOpen = true;
+
+			if(ImGui::BeginMenu("Scene")) {
+				if(ImGui::MenuItem("Save")) {
+					const char *filter = "*.yaml";
+					char *path = tinyfd_saveFileDialog("Save scene", "scene.yaml", 1, &filter, "YAML file");
+					if(path) {
+						SceneSerializer serializer(_this->mp_Application->get_scene());
+						serializer.serialize(path);
+						Logger::info("Scene saved to: %s", path);
+					}
+				}
+
+				if(ImGui::MenuItem("Load")) {
+					std::stringstream workingDirectorySs;
+					workingDirectorySs << std::filesystem::current_path() << "/";
+					const std::string workingDirectoryStr = workingDirectorySs.str();
+					const char *filter = "*.yaml";
+					char *path = tinyfd_openFileDialog("Select scene", workingDirectoryStr.c_str(), 1, &filter, "YAML scene", false);
+					if(path) {
+						SceneSerializer serializer(_this->mp_Application->get_scene());
+						serializer.deserialize(path);
+						Logger::info("Scene loaded: %s", path);
+					}
+				}
+
+				ImGui::EndMenu();
 			}
 
 			if(ImGui::BeginMenu("Layout")) {
@@ -123,7 +150,7 @@ namespace fifed {
 			switch(keyEvent.get_key_code()) {
 			// Go to selected entity
 			case GLFW_KEY_F:
-				if(TransformComponent *trans = Application::get_instance()->get_scene().get_registry().try_get<TransformComponent>(selectedEnt)) {
+				if(TransformComponent *trans = selectedEnt.try_get_component<TransformComponent>()) {
 					GfxModule::get_instance()->get_renderer2D().get_camera().m_Position = trans->position;
 					return true;
 				}

@@ -35,10 +35,11 @@ namespace fif::lua_scripting {
 		}
 
 		inline u32 get_lua_memory_usage() const { return m_Lua.memory_used(); }
-
-		void on_start(core::Application &app) override;
-		void attach_script(core::EntityID ent, core::Scene &scene, const std::filesystem::path &filepath);
+		void attach_script(core::Entity &ent, const std::filesystem::path &filepath);
 		void init_script(LuaScriptComponent &luaScript);
+
+	protected:
+		void on_start() override;
 
 	private:
 		sol::state m_Lua;

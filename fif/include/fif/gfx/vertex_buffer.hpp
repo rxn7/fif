@@ -1,7 +1,7 @@
 #pragma once
 
 #include "fif/gfx/shader.hpp"
-#include "vertex_buffer_layout.hpp"
+#include "fif/gfx/vertex_buffer_layout.hpp"
 
 namespace fif::gfx {
 	class VertexBuffer {

@@ -36,9 +36,11 @@ namespace fif::core {
 		inline Scene &get_scene() { return *mp_Scene; }
 
 	protected:
-		template<class T, class... Args> void attach_module(Args &&...args) {
+		template<class T, class... Args> const T &attach_module(Args &&...args) {
 			static_assert(std::is_base_of<Module, T>().value, "T doesn't derive from Module!");
 			const std::unique_ptr<Module> &mod = m_Modules.emplace_back(std::make_unique<T>(std::forward<Args>(args)...));
+			mod->mp_Application = this;
+			return *(static_cast<T *>(mod.get()));
 		}
 
 	private:

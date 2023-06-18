@@ -29,7 +29,7 @@ namespace fif::core {
 
 		for(const auto &mod : m_Modules) {
 			Logger::info("Module '%s' started", mod->get_name().data());
-			mod->on_start(*this);
+			mod->on_start();
 		}
 
 		while(m_Status.running)

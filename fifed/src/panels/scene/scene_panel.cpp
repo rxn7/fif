@@ -30,7 +30,7 @@ namespace fifed {
 		if(ImGui::BeginPopup("SelectTemplate")) {
 			for(auto &tmplt : m_Templates) {
 				if(ImGui::MenuItem(tmplt->get_name().data())) {
-					m_Inspector.m_SelectedEntity = tmplt->create(scene);
+					m_Inspector.m_SelectedEntity.m_ID = tmplt->create(scene);
 					break;
 				}
 			}
@@ -59,7 +59,7 @@ namespace fifed {
 	void ScenePanel::draw_entity(EntityID ent, const char *name, Scene &scene) {
 		ImGui::PushID(static_cast<u32>(ent));
 
-		const bool isSelected = m_Inspector.m_SelectedEntity == ent;
+		const bool isSelected = m_Inspector.m_SelectedEntity.m_ID == ent;
 		const ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_OpenOnArrow | (isSelected ? ImGuiTreeNodeFlags_Selected : 0);
 
 		const bool open = ImGui::TreeNodeEx(name, flags);
@@ -69,7 +69,7 @@ namespace fifed {
 			ImGui::OpenPopup("EntitySettings");
 
 		if(ImGui::IsItemClicked(ImGuiMouseButton_Left))
-			m_Inspector.m_SelectedEntity = ent;
+			m_Inspector.m_SelectedEntity.m_ID = ent;
 
 		if(ImGui::BeginPopup("EntitySettings")) {
 			deleteEntity = ImGui::MenuItem("Delete entity");
@@ -78,8 +78,8 @@ namespace fifed {
 
 		if(deleteEntity) {
 			scene.delete_entity(ent);
-			if(m_Inspector.m_SelectedEntity == ent)
-				m_Inspector.m_SelectedEntity = entt::null;
+			if(m_Inspector.m_SelectedEntity.m_ID == ent)
+				m_Inspector.m_SelectedEntity.m_ID = entt::null;
 		}
 
 		if(open) {

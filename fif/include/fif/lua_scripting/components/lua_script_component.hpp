@@ -5,6 +5,8 @@
 
 namespace fif::lua_scripting {
 	struct LuaScriptComponent final {
+		LuaScriptComponent(const core::Entity &ent) : entity(ent) {}
+
 		sol::table self;
 		struct {
 			sol::function update;

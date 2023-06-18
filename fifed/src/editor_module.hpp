@@ -21,7 +21,8 @@ namespace fifed {
 
 		inline FrameBuffer &get_frame_buffer() { return m_FrameBuffer; }
 
-		void on_start(Application &app) override;
+	protected:
+		void on_start() override;
 		void on_render() override;
 		void pre_render() override;
 		void on_update() override;

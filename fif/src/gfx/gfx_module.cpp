@@ -12,13 +12,13 @@ namespace fif::gfx {
 		FIF_MODULE_INIT_INSTANCE();
 	}
 
-	void GfxModule::on_start(core::Application &app) {
+	void GfxModule::on_start() {
 		core::Logger::info("OpenGL Version: %s", glGetString(GL_VERSION));
 		core::Logger::info("GLSL Version: %s", glGetString(GL_SHADING_LANGUAGE_VERSION));
 		core::Logger::info("OpenGL Renderer: %s", glGetString(GL_RENDERER));
 		core::Logger::info("OpenGL Vendor: %s", glGetString(GL_VENDOR));
 
-		app.add_render_system(&fif::gfx::renderer_system);
+		mp_Application->add_render_system(&fif::gfx::renderer_system);
 	}
 
 	void GfxModule::pre_render() {

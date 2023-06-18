@@ -22,9 +22,9 @@ namespace fif::lua_scripting {
 
 	LuaScriptingModule::~LuaScriptingModule() {}
 
-	void LuaScriptingModule::on_start(core::Application &app) {
-		app.add_update_system(lua_script_update_system);
-		app.add_render_system(lua_script_render_system);
+	void LuaScriptingModule::on_start() {
+		mp_Application->add_update_system(lua_script_update_system);
+		mp_Application->add_render_system(lua_script_render_system);
 
 		m_Lua.open_libraries(sol::lib::base, sol::lib::math, sol::lib::string);
 
@@ -34,7 +34,7 @@ namespace fif::lua_scripting {
 		loggerTable.set_function("warn", [](const std::string &msg) { core::Logger::warn("%s", msg.c_str()); });
 		loggerTable.set_function("debug", [](const std::string &msg) { core::Logger::debug("%s", msg.c_str()); });
 
-		m_Lua.new_usertype<core::Entity>("Entity", "id", sol::readonly_property(&core::Entity::get_id));
+		m_Lua.new_usertype<core::Entity>("Entity", "id", sol::readonly_property(&core::Entity::m_ID));
 		m_Lua.new_usertype<vec2>("Vec2", sol::call_constructor, sol::factories([](f32 x, f32 y) { return vec2(x, y); }), "x", &vec2::x, "y", &vec2::y);
 
 		if(gfx::GfxModule::exists()) {
@@ -47,10 +47,9 @@ namespace fif::lua_scripting {
 		register_component<core::TransformComponent>("TransformComponent", "position", &core::TransformComponent::position, "scale", &core::TransformComponent::scale, "angleRadians", &core::TransformComponent::angleRadians);
 	}
 
-	void LuaScriptingModule::attach_script(core::EntityID ent, core::Scene &scene, const std::filesystem::path &filepath) {
-		auto &script = scene.add_component<LuaScriptComponent>(ent);
+	void LuaScriptingModule::attach_script(core::Entity &ent, const std::filesystem::path &filepath) {
+		auto &script = ent.add_component<LuaScriptComponent>(core::Entity(ent.m_Scene, ent.m_ID));
 		script.filepath = filepath;
-		script.entity = core::Entity(&scene, ent);
 		init_script(script);
 	}
 

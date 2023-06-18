@@ -16,11 +16,12 @@ namespace fif::imgui {
 
 		inline void add_render_func(ImGuiRenderFunc renderFunc) { m_RenderFunctions.push_back(renderFunc); }
 		void delete_render_func(ImGuiRenderFunc renderFunc);
-
-		void on_start(core::Application &app) override final;
-		void on_render() override final;
-		void on_event(core::Event &event) override final;
 		bool begin_dockspace() const;
+
+	protected:
+		void on_start() override;
+		void on_render() override;
+		void on_event(core::Event &event) override;
 
 	private:
 		void apply_default_theme() const;

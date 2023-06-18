@@ -1,27 +1,25 @@
 #pragma once
 
+#include <optional>
 namespace fif::core {
 	class Entity final {
 	public:
-		Entity() {}
-		Entity(core::Scene *scene, core::EntityID id);
+		Entity(core::Scene &scene, core::EntityID id);
 
-		template<typename T> bool has_component() { return mp_Scene->has_component<T>(m_ID); }
-		template<typename T> T &get_component() { return mp_Scene->get_component<T>(m_ID); }
-		template<typename T, typename... Args> T &add_component(Args &&...args) { return mp_Scene->add_component<T>(m_ID, std::forward(args)...); }
-		template<typename T> void remove_component() { mp_Scene->remove_component<T>(m_ID); }
+		template<typename T> bool has_component() const { return m_Scene.has_component<T>(m_ID); }
+		template<typename T> T &get_component() const { return m_Scene.get_component<T>(m_ID); }
+		template<typename T> T *try_get_component() const { return m_Scene.get_registry().try_get<T>(m_ID); }
+		template<typename T, typename... Args> T &add_component(Args &&...args) { return m_Scene.add_component<T>(m_ID, std::forward<Args>(args)...); }
+		template<typename T> void remove_component() { m_Scene.remove_component<T>(m_ID); }
 		template<typename T, typename... Args> T &require_component(Args &&...args) {
-			if(mp_Scene->has_component<T>(m_ID))
-				return mp_Scene->get_component<T>(m_ID);
+			if(m_Scene.has_component<T>(m_ID))
+				return m_Scene.get_component<T>(m_ID);
 
-			return mp_Scene->add_component<T>(m_ID, std::forward(args)...);
+			return m_Scene.add_component<T>(m_ID, std::forward<Args>(args)...);
 		}
 
-		const core::Scene &get_scene() const { return *mp_Scene; }
-		core::EntityID get_id() const { return m_ID; }
-
 	public:
-		core::Scene *mp_Scene;
-		core::EntityID m_ID;
+		core::Scene &m_Scene;
+		core::EntityID m_ID = entt::null;
 	};
 }// namespace fif::core

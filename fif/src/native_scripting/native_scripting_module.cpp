@@ -21,8 +21,8 @@ namespace fif::native_scripting {
 			[&]([[maybe_unused]] core::EntityID entity, NativeScriptComponent &script) { script.p_script->on_render(); });
 	}
 
-	void NativeScriptingModule::on_start(core::Application &app) {
-		app.add_render_system(native_scripting_render_system);
-		app.add_update_system(native_scripting_update_system);
+	void NativeScriptingModule::on_start() {
+		mp_Application->add_render_system(native_scripting_render_system);
+		mp_Application->add_update_system(native_scripting_update_system);
 	}
 }// namespace fif::native_scripting

@@ -13,8 +13,6 @@ namespace fif::native_scripting {
 
 		NativeScriptingModule();
 
-		void on_start(core::Application &app) override;
-
 		template<typename T> T &attach_script(core::EntityID ent, core::Scene &scene) {
 			static_assert(std::is_base_of<NativeScript, T>().value);
 
@@ -34,5 +32,8 @@ namespace fif::native_scripting {
 
 			return *static_cast<T *>(nativeScriptComponent.p_script.get());
 		}
+
+	protected:
+		void on_start() override;
 	};
 }// namespace fif::native_scripting

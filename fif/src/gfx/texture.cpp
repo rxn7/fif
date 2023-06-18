@@ -14,7 +14,7 @@ namespace fif::gfx {
 		glDeleteTextures(1, &m_ID);
 	}
 
-	Texture::Texture(std::string_view path, GLenum filter, GLenum wrap) {
+	Texture::Texture(std::string_view path, GLenum filter, GLenum wrap) : m_Path(path) {
 		i32 width, height, channels;
 		stbi_set_flip_vertically_on_load(true);
 		stbi_uc *data = stbi_load(path.data(), &width, &height, &channels, 0);

@@ -23,3 +23,6 @@
 [submodule "fifed/vendor/tinyfd"]
 	path = fifed/vendor/tinyfd
 	url = http://git.code.sf.net/p/tinyfiledialogs/code
+[submodule "fif/vendor/yaml-cpp"]
+	path = fif/vendor/yaml-cpp
+	url = https://github.com/t123yh/yaml-cpp

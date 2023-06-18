@@ -24,6 +24,7 @@ namespace fif::gfx {
 		void create(u16 width, u16 height, GLenum internalFormat, GLenum dataFormat, GLenum filter, GLenum wrap, void *data);
 
 	public:
+		std::string m_Path;// TODO: Replace with UUID
 		GLenum m_InternalFormat;
 		GLenum m_DataFormat;
 		u32 m_ID;
