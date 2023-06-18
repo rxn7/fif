@@ -140,12 +140,15 @@ namespace fifed {
 
 		draw_component<LuaScriptComponent>("Lua Script", m_SelectedEntity, scene, [](LuaScriptComponent &script) {
 			ImGui::Text("Script: %s", script.filepath.stem().c_str());
+
+			if(ImGui::Button("Reload"))
+				LuaScriptingModule::get_instance()->init_script(script);
+
 			script.self.for_each([](const sol::object &key, const sol::object &value) {
 				switch(value.get_type()) {
 				case sol::type::string:
 					ImGui::LabelText(key.as<const char *>(), "%s", value.as<const char *>());
 					break;
-
 				case sol::type::number:
 					ImGui::LabelText(key.as<const char *>(), "%g", value.as<float>());
 					break;

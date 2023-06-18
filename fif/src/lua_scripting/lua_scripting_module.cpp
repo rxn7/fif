@@ -48,31 +48,39 @@ namespace fif::lua_scripting {
 	}
 
 	void LuaScriptingModule::attach_script(core::EntityID ent, core::Scene &scene, const std::filesystem::path &filepath) {
-		const sol::protected_function_result &result = m_Lua.safe_script_file(filepath.string());
+		auto &script = scene.add_component<LuaScriptComponent>(ent);
+		script.filepath = filepath;
+		script.entity = core::Entity(&scene, ent);
+		init_script(script);
+	}
+
+	void LuaScriptingModule::init_script(LuaScriptComponent &luaScript) {
+		luaScript.inited = false;
+		luaScript.hooks = {};
+		luaScript.self = {};
+
+		const sol::protected_function_result &result = m_Lua.safe_script_file(luaScript.filepath.string());
 		if(!result.valid()) {
 			sol::error err = result;
-			core::Logger::error("Failed to load lua script '%s': %s", filepath.stem().c_str(), err.what());
+			core::Logger::error("Failed to load lua script '%s': %s", luaScript.filepath.stem().c_str(), err.what());
 			return;
 		}
 
-		auto &script = scene.add_component<LuaScriptComponent>(ent, result);
-		script.filepath = filepath;
-		script.entity = core::Entity(&scene, ent);
+		luaScript.self = result;
 
-		// TODO: Move this to a init_script function once we have a runtime
-		script.inited = true;
-		script.hooks.update = script.self["update"];
-		script.hooks.render = script.self["render"];
+		luaScript.inited = true;
+		luaScript.hooks.update = luaScript.self["update"];
+		luaScript.hooks.render = luaScript.self["render"];
 
-		script.self["entity"] = &script.entity;
+		luaScript.self["entity"] = &luaScript.entity;
 
-		auto init = script.self["init"];
+		auto init = luaScript.self["init"];
 #ifdef FIF_DEBUG
 		if(init.valid()) {
-			const sol::protected_function_result result = init(script.self);
+			const sol::protected_function_result result = init(luaScript.self);
 			if(!result.valid()) {
 				sol::error err(result);
-				core::Logger::error("Failed to init lua script(%s): %s", script.filepath.c_str(), err.what());
+				core::Logger::error("Failed to init lua script(%s): %s", luaScript.filepath.c_str(), err.what());
 			}
 		}
 #endif

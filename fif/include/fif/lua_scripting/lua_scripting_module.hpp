@@ -38,7 +38,7 @@ namespace fif::lua_scripting {
 
 		void on_start(core::Application &app) override;
 		void attach_script(core::EntityID ent, core::Scene &scene, const std::filesystem::path &filepath);
-		void run_script(const std::string &path);
+		void init_script(LuaScriptComponent &luaScript);
 
 	private:
 		sol::state m_Lua;
