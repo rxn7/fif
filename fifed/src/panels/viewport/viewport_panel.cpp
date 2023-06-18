@@ -2,16 +2,21 @@
 #include "application.hpp"
 
 namespace fifed {
-	ViewportPanel::ViewportPanel(FrameBuffer &frameBuffer) : m_FrameBuffer(frameBuffer) {}
+	ViewportPanel::ViewportPanel(FrameBuffer &frameBuffer) :
+		m_FrameBuffer(frameBuffer), mp_PauseTexture(std::make_unique<Texture>("assets/textures/pause.png", GL_NEAREST)), mp_UnpauseTexture(std::make_unique<Texture>("assets/textures/unpause.png", GL_NEAREST)) {}
 
 	void ViewportPanel::on_render() {
-		ImGui::SameLine();
-
 		Application *app = Application::get_instance();
 		const ApplicationStatus &status = app->get_status();
-		// TODO: Pause and unpause icons
-		if(ImGui::Button(status.paused ? "Unpause" : "Pause"))
+
+		ImGui::SameLine();
+		const f32 windowWidth = ImGui::GetWindowSize().x;
+
+		ImGui::SetCursorPosX((windowWidth - 32.0f) * 0.5f);
+
+		if(ImGui::ImageButton("Pause", reinterpret_cast<ImTextureID>((status.paused ? mp_UnpauseTexture : mp_PauseTexture)->get_id()), ImVec2{32.0f, 32.0f}, ImVec2{0.0f, 1.0f}, ImVec2(1.0f, 0.0f))) {
 			app->pause(!status.paused);
+		}
 
 		ImGui::BeginChild("FrameBuffer");
 

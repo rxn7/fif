@@ -13,6 +13,7 @@ namespace fifed {
 		inline bool is_hovered() const { return m_Hovered; }
 
 	private:
+		std::unique_ptr<Texture> mp_PauseTexture, mp_UnpauseTexture;
 		FrameBuffer &m_FrameBuffer;
 		bool m_Hovered = false;
 	};
