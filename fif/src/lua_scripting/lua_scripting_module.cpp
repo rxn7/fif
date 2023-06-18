@@ -2,11 +2,13 @@
 #include "fif/core/ecs/components/transform_component.hpp"
 #include "fif/core/ecs/entity.hpp"
 #include "fif/core/ecs/scene.hpp"
+// TODO: Don't include this if gfx module isn't being used
 #include "fif/gfx/color.hpp"
+#include "fif/gfx/components/circle_component.hpp"
+#include "fif/gfx/components/quad_component.hpp"
 #include "fif/gfx/components/sprite_component.hpp"
 #include "fif/gfx/gfx_module.hpp"
 #include "fif/lua_scripting/components/lua_script_component.hpp"
-#include "util/logger.hpp"
 
 namespace fif::lua_scripting {
 	FIF_MODULE_INSTANCE_IMPL(LuaScriptingModule);
@@ -35,11 +37,13 @@ namespace fif::lua_scripting {
 		m_EntityUsertype = m_Lua.new_usertype<core::Entity>("Entity");
 		m_EntityUsertype.set("id", sol::readonly_property(&core::Entity::get_id));
 
-		m_Lua.new_usertype<vec2>("Vec2", "x", &vec2::x, "y", &vec2::y);
+		m_Lua.new_usertype<vec2>("Vec2", sol::call_constructor, sol::factories([](f32 x, f32 y) { return vec2(x, y); }), "x", &vec2::x, "y", &vec2::y);
 
 		if(gfx::GfxModule::exists()) {
-			m_Lua.new_usertype<gfx::Color>("Color", "r", &gfx::Color::r, "g", &gfx::Color::g, "b", &gfx::Color::b, "a", &gfx::Color::a);
+			m_Lua.new_usertype<gfx::Color>("Color", sol::call_constructor, sol::factories([](u8 r, u8 g, u8 b, u8 a) { return gfx::Color(r, g, b, a); }), "r", &gfx::Color::r, "g", &gfx::Color::g, "b", &gfx::Color::b, "a", &gfx::Color::a);
 			register_component<gfx::SpriteComponent>("SpriteComponent", "tint", &gfx::SpriteComponent::tint, "size", &gfx::SpriteComponent::size);
+			register_component<gfx::QuadComponent>("QuadComponent", "tint", &gfx::QuadComponent::tint, "size", &gfx::QuadComponent::size);
+			register_component<gfx::CircleComponent>("CircleComponent", "tint", &gfx::CircleComponent::tint, "radius", &gfx::CircleComponent::radius);
 		}
 
 		register_component<core::TransformComponent>("TransformComponent", "position", &core::TransformComponent::position, "scale", &core::TransformComponent::scale, "angleRadians", &core::TransformComponent::angleRadians);

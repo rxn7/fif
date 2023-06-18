@@ -15,8 +15,7 @@ return {
 		self.transform.angleRadians = self.i
 		local cosi = math.cos(self.i)
 		local sini = math.sin(self.i)
-		self.transform.position.x = sini * 200
-		self.transform.position.y = cosi * 200
+		self.transform.position = Vec2(sini * 200, cosi * 200)
 		self.sprite.tint.r = math.floor((cosi + 1) * 0.5 * 255)
 		self.sprite.tint.g = math.floor((sini + 1) * 0.5 * 255)
 		self.i = self.i + dt * 10
