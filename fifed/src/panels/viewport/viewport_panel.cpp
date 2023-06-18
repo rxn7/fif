@@ -1,9 +1,18 @@
 #include "viewport_panel.hpp"
+#include "application.hpp"
 
 namespace fifed {
 	ViewportPanel::ViewportPanel(FrameBuffer &frameBuffer) : m_FrameBuffer(frameBuffer) {}
 
 	void ViewportPanel::on_render() {
+		ImGui::SameLine();
+
+		Application *app = Application::get_instance();
+		const ApplicationStatus &status = app->get_status();
+		// TODO: Pause and unpause icons
+		if(ImGui::Button(status.paused ? "Unpause" : "Pause"))
+			app->pause(!status.paused);
+
 		ImGui::BeginChild("FrameBuffer");
 
 		const ImVec2 pos = ImGui::GetWindowPos();
