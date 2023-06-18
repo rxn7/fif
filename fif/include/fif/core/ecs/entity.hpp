@@ -9,7 +9,13 @@ namespace fif::core {
 		template<typename T> bool has_component() { return mp_Scene->has_component<T>(m_ID); }
 		template<typename T> T &get_component() { return mp_Scene->get_component<T>(m_ID); }
 		template<typename T, typename... Args> T &add_component(Args &&...args) { return mp_Scene->add_component<T>(m_ID, std::forward(args)...); }
-		template<typename T, typename... Args> void remove_component() { mp_Scene->remove_component<T>(m_ID); }
+		template<typename T> void remove_component() { mp_Scene->remove_component<T>(m_ID); }
+		template<typename T, typename... Args> T &require_component(Args &&...args) {
+			if(mp_Scene->has_component<T>(m_ID))
+				return mp_Scene->get_component<T>(m_ID);
+
+			return mp_Scene->add_component<T>(m_ID, std::forward(args)...);
+		}
 
 		const core::Scene &get_scene() const { return *mp_Scene; }
 		core::EntityID get_id() const { return m_ID; }

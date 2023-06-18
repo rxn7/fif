@@ -31,6 +31,7 @@ namespace fif::lua_scripting {
 			m_Lua["Entity"]["add_" + nameSnakeCase] = &core::Entity::add_component<T>;
 			m_Lua["Entity"]["has_" + nameSnakeCase] = &core::Entity::has_component<T>;
 			m_Lua["Entity"]["remove_" + nameSnakeCase] = &core::Entity::remove_component<T>;
+			m_Lua["Entity"]["require_" + nameSnakeCase] = &core::Entity::require_component<T>;
 		}
 
 		inline u32 get_lua_memory_usage() const { return m_Lua.memory_used(); }

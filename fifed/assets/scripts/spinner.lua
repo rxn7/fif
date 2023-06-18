@@ -1,14 +1,13 @@
 return {
 	transform = nil,
 	sprite = nil,
+	circle = nil,
 	i = 0,
 
 	init = function(self)
-		self.transform = self.entity:get_transform_component()
-		if self.transform == nil then Logger.error("TransformComponent is missing") end
-
-		self.sprite = self.entity:get_sprite_component()
-		if self.sprite == nil then Logger.error("SpriteComponent is missing") end
+		self.transform = self.entity:require_transform_component()
+		self.sprite = self.entity:require_sprite_component()
+		self.circle = self.entity:require_circle_component()
 	end,
 
 	update = function(self, dt)
@@ -17,7 +16,8 @@ return {
 		local sini = math.sin(self.i)
 		self.transform.position = Vec2(sini * 200, cosi * 200)
 		self.sprite.tint.r = math.floor((cosi + 1) * 0.5 * 255)
-		self.sprite.tint.g = math.floor((sini + 1) * 0.5 * 255)
+		self.sprite.tint.g = 255 - self.sprite.tint.r
+		self.circle.radius = cosi * 100
 		self.i = self.i + dt * 10
 	end,
 }
