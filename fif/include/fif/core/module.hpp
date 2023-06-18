@@ -23,11 +23,15 @@ namespace fif::core {
 }// namespace fif::core
 
 #define FIF_MODULE(x)                                                                                                                                \
-	FIF_MODULE_NAME(x)                                                                                                                               \
-	FIF_MODULE_INSTANCE_FUNC_DECL(x)
+	FIF_MODULE_NAME_DECL(x)                                                                                                                          \
+	FIF_MODULE_INSTANCE_FUNC_DECL(x)                                                                                                                 \
+	FIF_MODULE_EXISTS_DECL(x)
 
-#define FIF_MODULE_NAME(x)                                                                                                                           \
+#define FIF_MODULE_NAME_DECL(x)                                                                                                                      \
 	constexpr std::string_view get_name() const override { return #x; }
+
+#define FIF_MODULE_EXISTS_DECL(x)                                                                                                                    \
+	static bool exists() { return get_instance() != nullptr; }
 
 #define FIF_MODULE_INSTANCE_FUNC_DECL(c) static c *get_instance();
 #define FIF_MODULE_INSTANCE_IMPL(c)                                                                                                                  \

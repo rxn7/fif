@@ -2,7 +2,11 @@
 #include "fif/core/ecs/components/transform_component.hpp"
 #include "fif/core/ecs/entity.hpp"
 #include "fif/core/ecs/scene.hpp"
+#include "fif/gfx/color.hpp"
+#include "fif/gfx/components/sprite_component.hpp"
+#include "fif/gfx/gfx_module.hpp"
 #include "fif/lua_scripting/components/lua_script_component.hpp"
+#include "util/logger.hpp"
 
 namespace fif::lua_scripting {
 	FIF_MODULE_INSTANCE_IMPL(LuaScriptingModule);
@@ -31,14 +35,18 @@ namespace fif::lua_scripting {
 		m_EntityUsertype = m_Lua.new_usertype<core::Entity>("Entity");
 		m_EntityUsertype.set("id", sol::readonly_property(&core::Entity::get_id));
 
-		m_Lua.new_usertype<vec2>("vec2", "x", &vec2::x, "y", &vec2::y);
+		m_Lua.new_usertype<vec2>("Vec2", "x", &vec2::x, "y", &vec2::y);
+
+		if(gfx::GfxModule::exists()) {
+			m_Lua.new_usertype<gfx::Color>("Color", "r", &gfx::Color::r, "g", &gfx::Color::g, "b", &gfx::Color::b, "a", &gfx::Color::a);
+			register_component<gfx::SpriteComponent>("SpriteComponent", "tint", &gfx::SpriteComponent::tint, "size", &gfx::SpriteComponent::size);
+		}
 
 		register_component<core::TransformComponent>("TransformComponent", "position", &core::TransformComponent::position, "scale", &core::TransformComponent::scale, "angleRadians", &core::TransformComponent::angleRadians);
 	}
 
 	void LuaScriptingModule::attach_script(core::EntityID ent, core::Scene &scene, const std::filesystem::path &filepath) {
-		const auto &result = m_Lua.safe_script_file(filepath.string());
-
+		const sol::protected_function_result &result = m_Lua.safe_script_file(filepath.string());
 		if(!result.valid()) {
 			sol::error err = result;
 			core::Logger::error("Failed to load lua script '%s': %s", filepath.stem().c_str(), err.what());
@@ -57,6 +65,7 @@ namespace fif::lua_scripting {
 		script.self["entity"] = &script.entity;
 
 		auto init = script.self["init"];
+#ifdef FIF_DEBUG
 		if(init.valid()) {
 			const sol::protected_function_result result = init(script.self);
 			if(!result.valid()) {
@@ -64,6 +73,7 @@ namespace fif::lua_scripting {
 				core::Logger::error("Failed to init lua script(%s): %s", script.filepath.c_str(), err.what());
 			}
 		}
+#endif
 	}
 
 	static void lua_script_update_system(const core::ApplicationStatus &status, entt::registry &registry, float dt) {
@@ -71,8 +81,15 @@ namespace fif::lua_scripting {
 			return;
 
 		registry.view<LuaScriptComponent>().each([&]([[maybe_unused]] core::EntityID entity, LuaScriptComponent &luaScript) {
-			if(luaScript.hooks.update.valid())
-				luaScript.hooks.update(luaScript.self, dt);
+			if(luaScript.hooks.update.valid()) {
+				const auto &result = luaScript.hooks.update(luaScript.self, dt);
+#ifdef FIF_DEBUG
+				if(!result.valid()) {
+					sol::error err(result);
+					core::Logger::error("Failed to update lua script(%s): %s", luaScript.filepath.c_str(), err.what());
+				}
+#endif
+			}
 		});
 	}
 
