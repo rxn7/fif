@@ -139,7 +139,7 @@ namespace fifed {
 		});
 
 		draw_component<LuaScriptComponent>("Lua Script", m_SelectedEntity, scene, [](LuaScriptComponent &script) {
-			ImGui::Text("Path: %s", script.filepath.stem().c_str());
+			ImGui::Text("Script: %s", script.filepath.stem().c_str());
 			script.self.for_each([](const sol::object &key, const sol::object &value) {
 				switch(value.get_type()) {
 				case sol::type::string:

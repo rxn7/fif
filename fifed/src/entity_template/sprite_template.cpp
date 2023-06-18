@@ -1,5 +1,4 @@
 #include "sprite_template.hpp"
-
 #include "fif/core/ecs/components/transform_component.hpp"
 #include "fif/gfx/components/sprite_component.hpp"
 

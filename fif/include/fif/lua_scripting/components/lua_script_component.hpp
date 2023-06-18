@@ -1,5 +1,6 @@
 #pragma once
 
+#include "ecs/entity.hpp"
 #include "sol/sol.hpp"
 
 namespace fif::lua_scripting {
@@ -12,5 +13,6 @@ namespace fif::lua_scripting {
 
 		std::filesystem::path filepath;
 		bool inited = false;
+		core::Entity entity;
 	};
 }// namespace fif::lua_scripting

@@ -1,7 +1,8 @@
 #include "fif/lua_scripting/lua_scripting_module.hpp"
-#include "components/lua_script_component.hpp"
-#include "ecs/scene.hpp"
-#include <sol/property.hpp>
+#include "fif/core/ecs/components/transform_component.hpp"
+#include "fif/core/ecs/entity.hpp"
+#include "fif/core/ecs/scene.hpp"
+#include "fif/lua_scripting/components/lua_script_component.hpp"
 
 namespace fif::lua_scripting {
 	FIF_MODULE_INSTANCE_IMPL(LuaScriptingModule);
@@ -9,12 +10,7 @@ namespace fif::lua_scripting {
 	static void lua_script_update_system(const core::ApplicationStatus &status, entt::registry &registry, float dt);
 	static void lua_script_render_system([[maybe_unused]] const core::ApplicationStatus &status, entt::registry &registry);
 
-	inline static void on_lua_panic(sol::optional<std::string> msg) {
-		if(msg)
-			core::Logger::error("Lua panic: %s", msg.value());
-	}
-
-	LuaScriptingModule::LuaScriptingModule() : m_Lua(sol::c_call<decltype(&on_lua_panic), &on_lua_panic>) {
+	LuaScriptingModule::LuaScriptingModule() {
 		FIF_MODULE_INIT_INSTANCE();
 	}
 
@@ -31,6 +27,13 @@ namespace fif::lua_scripting {
 		loggerTable.set_function("error", [](const std::string &msg) { core::Logger::error("%s", msg.c_str()); });
 		loggerTable.set_function("warn", [](const std::string &msg) { core::Logger::warn("%s", msg.c_str()); });
 		loggerTable.set_function("debug", [](const std::string &msg) { core::Logger::debug("%s", msg.c_str()); });
+
+		m_EntityUsertype = m_Lua.new_usertype<core::Entity>("Entity");
+		m_EntityUsertype.set("id", sol::readonly_property(&core::Entity::get_id));
+
+		m_Lua.new_usertype<vec2>("vec2", "x", &vec2::x, "y", &vec2::y);
+
+		register_component<core::TransformComponent>("TransformComponent", "position", &core::TransformComponent::position, "scale", &core::TransformComponent::scale, "angleRadians", &core::TransformComponent::angleRadians);
 	}
 
 	void LuaScriptingModule::attach_script(core::EntityID ent, core::Scene &scene, const std::filesystem::path &filepath) {
@@ -44,17 +47,23 @@ namespace fif::lua_scripting {
 
 		auto &script = scene.add_component<LuaScriptComponent>(ent, result);
 		script.filepath = filepath;
+		script.entity = core::Entity(&scene, ent);
 
 		// TODO: Move this to a init_script function once we have a runtime
 		script.inited = true;
 		script.hooks.update = script.self["update"];
 		script.hooks.render = script.self["render"];
 
-		script.self["id"] = sol::readonly_property([ent] { return ent; });
+		script.self["entity"] = &script.entity;
 
 		auto init = script.self["init"];
-		if(init.valid())
-			init(script.self);
+		if(init.valid()) {
+			const sol::protected_function_result result = init(script.self);
+			if(!result.valid()) {
+				sol::error err(result);
+				core::Logger::error("Failed to init lua script(%s): %s", script.filepath.c_str(), err.what());
+			}
+		}
 	}
 
 	static void lua_script_update_system(const core::ApplicationStatus &status, entt::registry &registry, float dt) {

@@ -12,8 +12,8 @@ return {
 	fps = 0,
 	dt = 0,
 
-	init = function()
-		Logger.info("fps.lua loaded")
+	init = function(self)
+		Logger.info("fps.lua loaded id: " .. tostring(self.entity.id))
 	end,
 
 	update = function(self, dt)

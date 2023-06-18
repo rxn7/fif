@@ -18,10 +18,9 @@ namespace fif::native_scripting {
 		template<typename T> T &attach_script(core::EntityID ent, core::Scene &scene) {
 			static_assert(std::is_base_of<NativeScript, T>().value);
 
-			NativeScript *script = new T();
-
 			NativeScriptComponent &nativeScriptComponent = scene.add_component<NativeScriptComponent>(ent);
-			nativeScriptComponent.p_script = std::unique_ptr<NativeScript>(script);
+			nativeScriptComponent.p_script = std::make_unique<T>();
+			nativeScriptComponent.p_script->m_Entity = core::Entity(&scene, ent);
 
 #ifdef _WIN32
 			nativeScriptComponent.scriptName = typeid(T).name();
@@ -31,11 +30,9 @@ namespace fif::native_scripting {
 			std::free(demangledName);
 #endif
 
-			script->mp_Scene = &scene;
-			script->m_EntityID = ent;
-			script->on_create();
+			nativeScriptComponent.p_script->on_create();
 
-			return *static_cast<T *>(script);
+			return *static_cast<T *>(nativeScriptComponent.p_script.get());
 		}
 	};
 }// namespace fif::native_scripting

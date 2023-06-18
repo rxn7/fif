@@ -33,5 +33,5 @@
 #include "fif/core/util/rng.hpp"
 #include "fif/core/util/timing.hpp"
 #include "fif/core/application.hpp"
-
+#include "fif/core/ecs/entity.hpp"
 // clang-format on
