@@ -3,6 +3,7 @@
 #include "camera_controller.hpp"
 #include "entt/entity/group.hpp"
 #include "grid.hpp"
+#include "icon_manager.hpp"
 #include "panels/editor_panel.hpp"
 #include "panels/inspector/inspector_panel.hpp"
 #include "panels/viewport/viewport_panel.hpp"
@@ -29,6 +30,7 @@ namespace fifed {
 
 		template<class T, class... Args> T *add_panel(Args &&...args) {
 			std::unique_ptr<EditorPanel> &panel = m_Panels.emplace_back(std::make_unique<T>(std::forward<Args>(args)...));
+			panel->mp_IconManager = &m_IconManager;
 			return reinterpret_cast<T *>(panel.get());
 		}
 
@@ -42,7 +44,7 @@ namespace fifed {
 		bool m_AboutWindowOpen = false;
 		std::vector<std::unique_ptr<EditorPanel>> m_Panels;
 
-		Texture m_GithubIconTexture;
+		IconManager m_IconManager;
 		FrameBuffer m_FrameBuffer;
 		Grid m_Grid;
 		CameraController m_CameraController;

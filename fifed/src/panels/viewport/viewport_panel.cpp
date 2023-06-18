@@ -2,8 +2,7 @@
 #include "application.hpp"
 
 namespace fifed {
-	ViewportPanel::ViewportPanel(FrameBuffer &frameBuffer) :
-		m_FrameBuffer(frameBuffer), mp_PauseTexture(std::make_unique<Texture>("assets/textures/pause.png", GL_NEAREST)), mp_UnpauseTexture(std::make_unique<Texture>("assets/textures/unpause.png", GL_NEAREST)) {}
+	ViewportPanel::ViewportPanel(FrameBuffer &frameBuffer) : m_FrameBuffer(frameBuffer) {}
 
 	void ViewportPanel::on_render() {
 		Application *app = Application::get_instance();
@@ -13,10 +12,8 @@ namespace fifed {
 		const f32 windowWidth = ImGui::GetWindowSize().x;
 
 		ImGui::SetCursorPosX((windowWidth - 32.0f) * 0.5f);
-
-		if(ImGui::ImageButton("Pause", reinterpret_cast<ImTextureID>((status.paused ? mp_UnpauseTexture : mp_PauseTexture)->get_id()), ImVec2{32.0f, 32.0f}, ImVec2{0.0f, 1.0f}, ImVec2(1.0f, 0.0f))) {
+		if(mp_IconManager->imgui_button("Pause", status.paused ? IconType::UNPAUSE : IconType::PAUSE))
 			app->pause(!status.paused);
-		}
 
 		ImGui::BeginChild("FrameBuffer");
 

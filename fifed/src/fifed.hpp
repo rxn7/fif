@@ -1,5 +1,6 @@
 #pragma once
 
+using namespace fif;
 using namespace fif::core;
 using namespace fif::gfx;
 using namespace fif::input;

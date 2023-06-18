@@ -20,7 +20,7 @@ namespace fifed {
 	FIF_MODULE_INSTANCE_IMPL(EditorModule);
 
 	EditorModule::EditorModule() :
-		m_GithubIconTexture("assets/icons/github.png"), m_FrameBuffer({0, 0}), m_Grid(fif::gfx::GfxModule::get_instance()->get_renderer2D().get_camera(), m_FrameBuffer) {
+		m_IconManager("assets/textures/icons.png"), m_FrameBuffer({0, 0}), m_Grid(fif::gfx::GfxModule::get_instance()->get_renderer2D().get_camera(), m_FrameBuffer) {
 		FIF_MODULE_INIT_INSTANCE();
 		add_panel<ConsolePanel>();
 	}
@@ -30,6 +30,11 @@ namespace fifed {
 	}
 
 	void EditorModule::on_start([[maybe_unused]] Application &app) {
+		m_IconManager.add_icon(IconType::GITHUB, {{0.0f, 0.0f}, {230.0f, 225.0f}});
+		m_IconManager.add_icon(IconType::LOGO, {{0.0f, 225.0f}, {48.0f, 48.0f}});
+		m_IconManager.add_icon(IconType::PAUSE, {{48.0f, 225.0f}, {32.0f, 32.0f}});
+		m_IconManager.add_icon(IconType::UNPAUSE, {{80.0f, 225.0f}, {32.0f, 32.0f}});
+
 		if(!std::filesystem::exists("layout.ini"))
 			load_default_layout();
 
@@ -81,7 +86,7 @@ namespace fifed {
 					static std::string content(std::istreambuf_iterator<char>(stream), {});
 					ImGui::TextWrapped(content.c_str());
 				}
-				if(ImGui::ImageButton("Source", reinterpret_cast<ImTextureID>(_this->m_GithubIconTexture.get_id()), ImVec2{32.0f, 32.0f}, ImVec2{0.0f, 1.0f}, ImVec2(1.0f, 0.0f))) {
+				if(_this->m_IconManager.imgui_button("Source", IconType::GITHUB)) {
 #define GITHUB_URL "https://github.com/rxn7/fif"
 #ifdef _WIN32
 					system("start /b open " GITHUB_URL);

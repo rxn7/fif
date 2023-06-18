@@ -27,10 +27,10 @@ namespace fif::lua_scripting {
 				}
 			}
 
-			m_EntityUsertype.set_function("get_" + nameSnakeCase, &core::Entity::get_component<T>);
-			m_EntityUsertype.set_function("add_" + nameSnakeCase, &core::Entity::add_component<T>);
-			m_EntityUsertype.set_function("has_" + nameSnakeCase, &core::Entity::has_component<T>);
-			m_EntityUsertype.set_function("remove_" + nameSnakeCase, &core::Entity::remove_component<T>);
+			m_Lua["Entity"]["get_" + nameSnakeCase] = &core::Entity::get_component<T>;
+			m_Lua["Entity"]["add_" + nameSnakeCase] = &core::Entity::add_component<T>;
+			m_Lua["Entity"]["has_" + nameSnakeCase] = &core::Entity::has_component<T>;
+			m_Lua["Entity"]["remove_" + nameSnakeCase] = &core::Entity::remove_component<T>;
 		}
 
 		inline u32 get_lua_memory_usage() const { return m_Lua.memory_used(); }
@@ -40,7 +40,6 @@ namespace fif::lua_scripting {
 		void run_script(const std::string &path);
 
 	private:
-		sol::usertype<core::Entity> m_EntityUsertype;
 		sol::state m_Lua;
 	};
 }// namespace fif::lua_scripting

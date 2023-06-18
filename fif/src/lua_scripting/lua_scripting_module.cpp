@@ -34,9 +34,7 @@ namespace fif::lua_scripting {
 		loggerTable.set_function("warn", [](const std::string &msg) { core::Logger::warn("%s", msg.c_str()); });
 		loggerTable.set_function("debug", [](const std::string &msg) { core::Logger::debug("%s", msg.c_str()); });
 
-		m_EntityUsertype = m_Lua.new_usertype<core::Entity>("Entity");
-		m_EntityUsertype.set("id", sol::readonly_property(&core::Entity::get_id));
-
+		m_Lua.new_usertype<core::Entity>("Entity", "id", sol::readonly_property(&core::Entity::get_id));
 		m_Lua.new_usertype<vec2>("Vec2", sol::call_constructor, sol::factories([](f32 x, f32 y) { return vec2(x, y); }), "x", &vec2::x, "y", &vec2::y);
 
 		if(gfx::GfxModule::exists()) {
