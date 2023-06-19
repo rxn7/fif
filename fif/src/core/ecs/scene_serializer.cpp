@@ -118,10 +118,10 @@ namespace fif::core {
 	}
 
 	void SceneSerializer::deserialize(const std::string &path) {
+		m_Scene.clear();
 		Logger::info("Deserializing scene: %s", path.c_str());
 
 		std::ifstream fileStream(path);
-
 		std::stringstream ss;
 		ss << fileStream.rdbuf();
 
