@@ -22,7 +22,7 @@ namespace fif::core {
 		~Window();
 
 		inline i16vec2 get_size() const { return m_Size; }
-		bool get_should_close() const;
+		inline bool should_close() const { return static_cast<bool>(glfwWindowShouldClose(mp_GlfwWindow)); }
 		void close(bool value);
 		void set_icon(std::string_view path);
 

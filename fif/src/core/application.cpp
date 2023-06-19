@@ -93,8 +93,4 @@ namespace fif::core {
 		for(auto &eventSystem : m_EventSystems)
 			eventSystem(m_Status, mp_Scene->get_registry(), event);
 	}
-
-	void Application::pause(bool paused) {
-		m_Status.paused = paused;
-	}
 }// namespace fif::core

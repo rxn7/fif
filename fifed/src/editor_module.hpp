@@ -36,6 +36,7 @@ namespace fifed {
 		}
 
 	private:
+		void save_scene();
 		static void on_render_im_gui();
 
 	private:

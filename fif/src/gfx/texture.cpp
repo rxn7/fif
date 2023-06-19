@@ -2,7 +2,7 @@
 
 #define STB_IMAGE_IMPLEMENTATION
 #define STBI_ASSERT(x)
-#include "stb_image.h"
+#include <stb_image.h>
 
 namespace fif::gfx {
 	Texture::Texture(u16 width, u16 height, GLenum internalFormat, GLenum dataFormat, GLenum filter, GLenum wrap) {

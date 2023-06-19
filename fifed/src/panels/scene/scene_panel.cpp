@@ -64,6 +64,7 @@ namespace fifed {
 
 		const bool open = ImGui::TreeNodeEx(name, flags);
 		bool deleteEntity = false;
+		bool duplicateEntity = false;
 
 		if(ImGui::IsItemClicked(ImGuiMouseButton_Right))
 			ImGui::OpenPopup("EntitySettings");

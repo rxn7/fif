@@ -31,6 +31,8 @@ namespace fifed {
 	}
 
 	void EditorModule::on_start() {
+		mp_Application->set_pause(true);
+
 		m_IconManager.add_icon(IconType::GITHUB, {{0.0f, 0.0f}, {230.0f, 225.0f}});
 		m_IconManager.add_icon(IconType::LOGO, {{0.0f, 225.0f}, {48.0f, 48.0f}});
 		m_IconManager.add_icon(IconType::PAUSE, {{48.0f, 225.0f}, {32.0f, 32.0f}});
@@ -67,13 +69,7 @@ namespace fifed {
 
 			if(ImGui::BeginMenu("Scene")) {
 				if(ImGui::MenuItem("Save")) {
-					const char *filter = "*.yaml";
-					char *path = tinyfd_saveFileDialog("Save scene", "scene.yaml", 1, &filter, "YAML file");
-					if(path) {
-						SceneSerializer serializer(_this->mp_Application->get_scene());
-						serializer.serialize(path);
-						Logger::info("Scene saved to: %s", path);
-					}
+					_this->save_scene();
 				}
 
 				if(ImGui::MenuItem("Load")) {
@@ -144,16 +140,31 @@ namespace fifed {
 		m_FrameBuffer.end();
 	}
 
+	void EditorModule::save_scene() {
+		const char *filter = "*.yaml";
+		char *path = tinyfd_saveFileDialog("Save scene", "scene.yaml", 1, &filter, "YAML file");
+		if(path) {
+			SceneSerializer serializer(mp_Application->get_scene());
+			serializer.serialize(path);
+			Logger::info("Scene saved to: %s", path);
+		}
+	}
+
 	void EditorModule::on_event(Event &event) {
 		m_CameraController.on_event(event, mp_ViewportPanel->is_hovered());
-		EventDispatcher::dispatch<KeyPressedEvent>(event, [selectedEnt = mp_InspectorPanel->m_SelectedEntity](KeyPressedEvent &keyEvent) {
+		EventDispatcher::dispatch<KeyPressedEvent>(event, [&](KeyPressedEvent &keyEvent) {
 			switch(keyEvent.get_key_code()) {
 			// Go to selected entity
 			case GLFW_KEY_F:
-				if(TransformComponent *trans = selectedEnt.try_get_component<TransformComponent>()) {
+				if(TransformComponent *trans = mp_InspectorPanel->m_SelectedEntity.try_get_component<TransformComponent>()) {
 					GfxModule::get_instance()->get_renderer2D().get_camera().m_Position = trans->position;
 					return true;
 				}
+				break;
+
+			case GLFW_KEY_S:
+				if(InputModule::get_instance()->is_modifier_held(GLFW_MOD_CONTROL))
+					save_scene();
 				break;
 			}
 

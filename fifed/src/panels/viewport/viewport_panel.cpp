@@ -13,7 +13,7 @@ namespace fifed {
 
 		ImGui::SetCursorPosX((windowWidth - 32.0f) * 0.5f);
 		if(mp_IconManager->imgui_button("Pause", status.paused ? IconType::UNPAUSE : IconType::PAUSE))
-			app->pause(!status.paused);
+			app->set_pause(!status.paused);
 
 		ImGui::BeginChild("FrameBuffer");
 

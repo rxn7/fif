@@ -13,6 +13,7 @@ namespace fif::core {
 
 	protected:
 		u32 m_KeyCode;
+		u32 m_Modifiers;
 	};
 
 	class KeyPressedEvent final : public KeyEvent {

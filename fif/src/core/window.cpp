@@ -4,7 +4,7 @@
 #include "fif/core/event/mouse_event.hpp"
 #include "fif/core/event/window_event.hpp"
 
-#include "stb_image.h"
+#include <stb_image.h>
 
 namespace fif::core {
 	Window::Window(Application &app, const WindowProperties &props) : m_Size(props.size), m_App(app) {
@@ -31,7 +31,7 @@ namespace fif::core {
 			window->m_App.on_event(event);
 		});
 
-		glfwSwapInterval(static_cast<int>(props.vsync));
+		glfwSwapInterval(static_cast<i32>(props.vsync));
 
 		if(!props.iconPath.empty())
 			set_icon(props.iconPath);
@@ -46,10 +46,6 @@ namespace fif::core {
 	void Window::end_frame() {
 		glfwSwapBuffers(mp_GlfwWindow);
 		glfwPollEvents();
-	}
-
-	bool Window::get_should_close() const {
-		return static_cast<bool>(glfwWindowShouldClose(mp_GlfwWindow));
 	}
 
 	void Window::close(bool value) {
