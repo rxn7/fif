@@ -38,6 +38,11 @@ namespace fifed {
 		m_IconManager.add_icon(IconType::PAUSE, {{48.0f, 225.0f}, {32.0f, 32.0f}});
 		m_IconManager.add_icon(IconType::UNPAUSE, {{80.0f, 225.0f}, {32.0f, 32.0f}});
 
+		m_Shortcuts.emplace_back(GLFW_KEY_O, GLFW_MOD_CONTROL, "Open a scene", std::bind(&EditorModule::open_scene, this));
+		m_Shortcuts.emplace_back(GLFW_KEY_S, GLFW_MOD_CONTROL, "Save current scene", std::bind(&EditorModule::save_scene, this));
+		m_Shortcuts.emplace_back(GLFW_KEY_F, 0, "Follow/focus selected entity", std::bind(&EditorModule::follow_selected_entity, this));
+		m_Shortcuts.emplace_back(GLFW_KEY_DELETE, 0, "Delete selected entity", std::bind(&EditorModule::delete_selected_entity, this));
+
 		if(!std::filesystem::exists("layout.ini"))
 			load_default_layout();
 
@@ -87,6 +92,9 @@ namespace fifed {
 				ImGui::EndMenu();
 			}
 
+			if(ImGui::MenuItem("Shortcuts"))
+				_this->m_ShortcutsWindowOpen = true;
+
 			ImGui::EndMainMenuBar();
 		}
 
@@ -96,7 +104,7 @@ namespace fifed {
 				if(ImGui::CollapsingHeader("License")) {
 					static std::ifstream stream("LICENSE", std::ios::in | std::ios::binary);
 					static std::string content(std::istreambuf_iterator<char>(stream), {});
-					ImGui::TextWrapped(content.c_str());
+					ImGui::TextWrapped("%s", content.c_str());
 				}
 				if(_this->m_IconManager.imgui_button("Source", IconType::GITHUB)) {
 #define GITHUB_URL "https://github.com/rxn7/fif"
@@ -107,6 +115,14 @@ namespace fifed {
 #endif
 				}
 			}
+			ImGui::End();
+		}
+
+		if(_this->m_ShortcutsWindowOpen) {
+			if(ImGui::Begin("Shortcuts", &_this->m_ShortcutsWindowOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoDocking))
+				for(const Shortcut &shortcut : _this->m_Shortcuts)
+					ImGui::TextWrapped("%s", shortcut.get_description().c_str());
+
 			ImGui::End();
 		}
 
@@ -152,27 +168,27 @@ namespace fifed {
 		}
 	}
 
+	void EditorModule::follow_selected_entity() {
+		if(TransformComponent *trans = mp_InspectorPanel->m_SelectedEntity.try_get_component<TransformComponent>())
+			GfxModule::get_instance()->get_renderer2D().get_camera().m_Position = trans->position;
+		else
+			GfxModule::get_instance()->get_renderer2D().get_camera().m_Position = vec2(0, 0);
+	}
+
+	void EditorModule::delete_selected_entity() {
+		if(mp_InspectorPanel->m_SelectedEntity)
+			mp_InspectorPanel->m_SelectedEntity.delete_self();
+	}
+
 	void EditorModule::on_event(Event &event) {
 		m_CameraController.on_event(event, mp_ViewportPanel->is_hovered());
+
 		EventDispatcher::dispatch<KeyPressedEvent>(event, [&](KeyPressedEvent &keyEvent) {
-			switch(keyEvent.get_key_code()) {
-			// Go to selected entity
-			case GLFW_KEY_F:
-				if(TransformComponent *trans = mp_InspectorPanel->m_SelectedEntity.try_get_component<TransformComponent>()) {
-					GfxModule::get_instance()->get_renderer2D().get_camera().m_Position = trans->position;
+			for(const Shortcut &shortcut : m_Shortcuts) {
+				if(keyEvent.get_key_code() == shortcut.get_key() && (shortcut.get_modifier_bits() == 0 || (keyEvent.get_modifier_bits() & shortcut.get_modifier_bits()))) {
+					shortcut.callback();
 					return true;
 				}
-				break;
-
-			case GLFW_KEY_S:
-				if(InputModule::get_instance()->is_modifier_held(GLFW_MOD_CONTROL))
-					save_scene();
-				break;
-
-			case GLFW_KEY_O:
-				if(InputModule::get_instance()->is_modifier_held(GLFW_MOD_CONTROL))
-					open_scene();
-				break;
 			}
 
 			return false;

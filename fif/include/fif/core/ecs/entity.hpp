@@ -1,10 +1,16 @@
 #pragma once
 
-#include <optional>
 namespace fif::core {
 	class Entity final {
 	public:
 		Entity(core::Scene &scene, core::EntityID id);
+
+		inline operator bool() { return m_ID != entt::null; }
+
+		inline void delete_self() {
+			m_Scene.delete_entity(m_ID);
+			m_ID = entt::null;
+		}
 
 		template<typename T> bool has_component() const { return m_Scene.has_component<T>(m_ID); }
 		template<typename T> T &get_component() const { return m_Scene.get_component<T>(m_ID); }

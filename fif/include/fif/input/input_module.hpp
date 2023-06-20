@@ -15,7 +15,6 @@ namespace fif::input {
 
 		inline bool is_key_held(i32 key) const { return m_Keys[key]; }
 		inline bool is_button_held(i32 btn) const { return m_Buttons[btn]; }
-		inline bool is_modifier_held(u32 mod) const { return m_ModifierBits & mod; }
 
 	private:
 		static constexpr i32 BUTTON_COUNT = GLFW_MOUSE_BUTTON_LAST + 1;
@@ -23,7 +22,6 @@ namespace fif::input {
 
 		bool m_Buttons[BUTTON_COUNT];
 		bool m_Keys[KEY_COUNT];
-		u32 m_ModifierBits;
 
 		vec2 m_LastMousePosition;
 		vec2 m_MousePosition;

@@ -13,24 +13,20 @@ namespace fif::input {
 		glfwSetKeyCallback(glfwWindow, []([[maybe_unused]] GLFWwindow *glfwWindow, int key, [[maybe_unused]] int scancode, int action, [[maybe_unused]] int mods) {
 			FIF_ASSERT(key >= 0 && key <= KEY_COUNT, "The key %d is out of range", key);
 
-			s_Instance->m_ModifierBits = mods;
-
 			core::Window *window = FIF_GET_WINDOW_FROM_GLFW_WINDOW(glfwWindow);
 			if(action == GLFW_PRESS) {
 				s_Instance->m_Keys[key] = true;
-				core::KeyPressedEvent event(key);
+				core::KeyPressedEvent event(key, mods);
 				window->get_application().on_event(event);
 			} else if(action == GLFW_RELEASE) {
 				s_Instance->m_Keys[key] = false;
-				core::KeyReleasedEvent event(key);
+				core::KeyReleasedEvent event(key, mods);
 				window->get_application().on_event(event);
 			}
 		});
 
 		glfwSetMouseButtonCallback(glfwWindow, []([[maybe_unused]] GLFWwindow *glfwWindow, int button, int action, [[maybe_unused]] int mods) {
 			FIF_ASSERT(button >= 0 && button <= BUTTON_COUNT, "The button %d is out of range", button);
-
-			s_Instance->m_ModifierBits = mods;
 
 			core::Window *window = FIF_GET_WINDOW_FROM_GLFW_WINDOW(glfwWindow);
 			if(action == GLFW_PRESS) {

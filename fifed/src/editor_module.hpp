@@ -10,6 +10,7 @@
 
 #include "fif/gfx/frame_buffer.hpp"
 #include "fif/gfx/texture.hpp"
+#include "shortcut.hpp"
 
 namespace fifed {
 	class EditorModule final : public Module {
@@ -38,6 +39,8 @@ namespace fifed {
 	private:
 		void save_scene();
 		void open_scene();
+		void follow_selected_entity();
+		void delete_selected_entity();
 		static void on_render_im_gui();
 
 	private:
@@ -45,7 +48,9 @@ namespace fifed {
 		InspectorPanel *mp_InspectorPanel;
 
 		bool m_AboutWindowOpen = false;
+		bool m_ShortcutsWindowOpen = false;
 		std::vector<std::unique_ptr<EditorPanel>> m_Panels;
+		std::vector<Shortcut> m_Shortcuts;
 
 		IconManager m_IconManager;
 		FrameBuffer m_FrameBuffer;
