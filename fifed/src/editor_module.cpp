@@ -99,6 +99,7 @@ namespace fifed {
 		}
 
 		if(_this->m_AboutWindowOpen) {
+			ImGui::SetNextWindowSize(ImVec2(350, 200));
 			if(ImGui::Begin("About", &_this->m_AboutWindowOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoDocking)) {
 				ImGui::Text("Fif v%u.%u.%u", 0, 0, 0);// TODO: version(major,minor,patch)
 				if(ImGui::CollapsingHeader("License")) {
@@ -119,6 +120,8 @@ namespace fifed {
 		}
 
 		if(_this->m_ShortcutsWindowOpen) {
+			ImGui::SetNextWindowSize(ImVec2(300, 200), ImGuiCond_Once);
+			// TODO: scrollbar here
 			if(ImGui::Begin("Shortcuts", &_this->m_ShortcutsWindowOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoDocking))
 				for(const Shortcut &shortcut : _this->m_Shortcuts)
 					ImGui::TextWrapped("%s", shortcut.get_description().c_str());
