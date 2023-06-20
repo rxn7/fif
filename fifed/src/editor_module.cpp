@@ -68,22 +68,11 @@ namespace fifed {
 				_this->m_AboutWindowOpen = true;
 
 			if(ImGui::BeginMenu("Scene")) {
-				if(ImGui::MenuItem("Save")) {
+				if(ImGui::MenuItem("Save"))
 					_this->save_scene();
-				}
 
-				if(ImGui::MenuItem("Load")) {
-					std::stringstream workingDirectorySs;
-					workingDirectorySs << std::filesystem::current_path() << "/";
-					const std::string workingDirectoryStr = workingDirectorySs.str();
-					const char *filter = "*.yaml";
-					char *path = tinyfd_openFileDialog("Select scene", workingDirectoryStr.c_str(), 1, &filter, "YAML scene", false);
-					if(path) {
-						SceneSerializer serializer(_this->mp_Application->get_scene());
-						serializer.deserialize(path);
-						Logger::info("Scene loaded: %s", path);
-					}
-				}
+				if(ImGui::MenuItem("Load"))
+					_this->open_scene();
 
 				ImGui::EndMenu();
 			}
@@ -150,6 +139,19 @@ namespace fifed {
 		}
 	}
 
+	void EditorModule::open_scene() {
+		std::stringstream workingDirectorySs;
+		workingDirectorySs << std::filesystem::current_path() << "/";
+		const std::string workingDirectoryStr = workingDirectorySs.str();
+		const char *filter = "*.yaml";
+		char *path = tinyfd_openFileDialog("Select scene", workingDirectoryStr.c_str(), 1, &filter, "YAML scene", false);
+		if(path) {
+			SceneSerializer serializer(mp_Application->get_scene());
+			serializer.deserialize(path);
+			Logger::info("Scene loaded: %s", path);
+		}
+	}
+
 	void EditorModule::on_event(Event &event) {
 		m_CameraController.on_event(event, mp_ViewportPanel->is_hovered());
 		EventDispatcher::dispatch<KeyPressedEvent>(event, [&](KeyPressedEvent &keyEvent) {
@@ -165,6 +167,11 @@ namespace fifed {
 			case GLFW_KEY_S:
 				if(InputModule::get_instance()->is_modifier_held(GLFW_MOD_CONTROL))
 					save_scene();
+				break;
+
+			case GLFW_KEY_O:
+				if(InputModule::get_instance()->is_modifier_held(GLFW_MOD_CONTROL))
+					open_scene();
 				break;
 			}
 
