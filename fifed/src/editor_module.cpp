@@ -31,14 +31,14 @@ namespace fifed {
 	}
 
 	void EditorModule::on_start() {
-		mp_Application->set_pause(true);
+		set_runtime(false);
 
 		m_IconManager.add_icon(IconType::GITHUB, {{0.0f, 0.0f}, {230.0f, 225.0f}});
 		m_IconManager.add_icon(IconType::LOGO, {{0.0f, 225.0f}, {48.0f, 48.0f}});
 		m_IconManager.add_icon(IconType::PAUSE, {{48.0f, 225.0f}, {32.0f, 32.0f}});
 		m_IconManager.add_icon(IconType::UNPAUSE, {{80.0f, 225.0f}, {32.0f, 32.0f}});
 
-		m_Shortcuts.emplace_back(GLFW_KEY_O, GLFW_MOD_CONTROL, "Open a scene", std::bind(&EditorModule::open_scene, this));
+		m_Shortcuts.emplace_back(GLFW_KEY_O, GLFW_MOD_CONTROL, "Open a scene", std::bind(&EditorModule::open_scene_dialog, this));
 		m_Shortcuts.emplace_back(GLFW_KEY_S, GLFW_MOD_CONTROL, "Save current scene", std::bind(&EditorModule::save_scene, this));
 		m_Shortcuts.emplace_back(GLFW_KEY_F, 0, "Follow/focus selected entity", std::bind(&EditorModule::follow_selected_entity, this));
 		m_Shortcuts.emplace_back(GLFW_KEY_DELETE, 0, "Delete selected entity", std::bind(&EditorModule::delete_selected_entity, this));
@@ -77,7 +77,7 @@ namespace fifed {
 					_this->save_scene();
 
 				if(ImGui::MenuItem("Load"))
-					_this->open_scene();
+					_this->open_scene_dialog();
 
 				ImGui::EndMenu();
 			}
@@ -132,6 +132,7 @@ namespace fifed {
 		if(ImGuiModule::get_instance()->begin_dockspace())
 			for(std::unique_ptr<EditorPanel> &panel : _this->m_Panels)
 				panel->render();
+
 		ImGui::End();
 	}
 
@@ -149,26 +150,64 @@ namespace fifed {
 	}
 
 	void EditorModule::save_scene() {
-		const char *filter = "*.yaml";
-		char *path = tinyfd_saveFileDialog("Save scene", "scene.yaml", 1, &filter, "YAML file");
-		if(path) {
-			SceneSerializer serializer(mp_Application->get_scene());
-			serializer.serialize(path);
-			Logger::info("Scene saved to: %s", path);
+		if(m_CurrentScenePath.empty()) {
+			const char *filter = "*.yaml";
+			const char *result = tinyfd_saveFileDialog("Save scene", "scene.yaml", 1, &filter, "YAML file");
+
+			if(result == NULL) {
+				Logger::error("Failed to get path of the scene to save");
+				return;
+			}
+
+			m_CurrentScenePath = result;
 		}
+
+		SceneSerializer serializer(mp_Application->get_scene());
+		serializer.serialize(m_CurrentScenePath);
+		Logger::info("Scene saved to: %s", m_CurrentScenePath.c_str());
 	}
 
-	void EditorModule::open_scene() {
+	void EditorModule::open_scene_dialog() {
 		std::stringstream workingDirectorySs;
 		workingDirectorySs << std::filesystem::current_path() << "/";
 		const std::string workingDirectoryStr = workingDirectorySs.str();
+
 		const char *filter = "*.yaml";
-		char *path = tinyfd_openFileDialog("Select scene", workingDirectoryStr.c_str(), 1, &filter, "YAML scene", false);
-		if(path) {
-			SceneSerializer serializer(mp_Application->get_scene());
-			serializer.deserialize(path);
-			Logger::info("Scene loaded: %s", path);
+		const char *path = tinyfd_openFileDialog("Select scene", workingDirectoryStr.c_str(), 1, &filter, "YAML scene", false);
+
+		if(!path) {
+			Logger::error("Failed to get path of scene to open");
+			return;
 		}
+
+		m_CurrentScenePath = path;
+
+		open_scene(path);
+	}
+
+	void EditorModule::open_scene(const std::string_view path) {
+		if(!path.data()) {
+			Logger::error("Cannot open scene, invalid path!");
+			return;
+		}
+
+		Logger::info("Loading scene: %s...", path.data());
+		SceneSerializer serializer(mp_Application->get_scene());
+		serializer.deserialize(path.data());
+		Logger::info("Scene loaded: %s", path.data());
+	}
+
+	void EditorModule::set_runtime(bool runtime) {
+		m_Runtime = runtime;
+
+		if(!runtime) {
+			if(!m_CurrentScenePath.empty())
+				open_scene(m_CurrentScenePath);
+
+		} else
+			save_scene();
+
+		mp_Application->set_pause(!runtime);
 	}
 
 	void EditorModule::follow_selected_entity() {

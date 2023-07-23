@@ -20,7 +20,8 @@ namespace fif::core {
 		virtual ~Application();
 
 		void start();
-		inline void set_pause(bool paused) { m_Status.paused = paused; }
+
+		virtual void set_pause(bool paused) { m_Status.paused = paused; }
 
 		virtual void setup_modules() {}
 		virtual void on_event(Event &event);

@@ -20,6 +20,8 @@ namespace fifed {
 		EditorModule();
 		virtual ~EditorModule();
 
+		void set_runtime(bool runtime);
+		inline bool is_runtime() const { return m_Runtime; }
 		inline FrameBuffer &get_frame_buffer() { return m_FrameBuffer; }
 
 	protected:
@@ -38,7 +40,8 @@ namespace fifed {
 
 	private:
 		void save_scene();
-		void open_scene();
+		void open_scene_dialog();
+		void open_scene(const std::string_view path);
 		void follow_selected_entity();
 		void delete_selected_entity();
 		static void on_render_im_gui();
@@ -47,10 +50,13 @@ namespace fifed {
 		ViewportPanel *mp_ViewportPanel;
 		InspectorPanel *mp_InspectorPanel;
 
+		std::string m_CurrentScenePath = "";
 		bool m_AboutWindowOpen = false;
 		bool m_ShortcutsWindowOpen = false;
 		std::vector<std::unique_ptr<EditorPanel>> m_Panels;
 		std::vector<Shortcut> m_Shortcuts;
+
+		bool m_Runtime = false;
 
 		IconManager m_IconManager;
 		FrameBuffer m_FrameBuffer;
