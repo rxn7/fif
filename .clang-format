@@ -1,6 +1,6 @@
 ﻿---
 AccessModifierOffset: '-4'
-AllowShortFunctionsOnASingleLine: Inline
+AllowShortFunctionsOnASingleLine: 'false'
 ColumnLimit: '200'
 CompactNamespaces: 'false'
 IndentWidth: '4'

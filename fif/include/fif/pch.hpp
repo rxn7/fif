@@ -21,6 +21,8 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/compatibility.hpp>
 
+#include <yaml-cpp/yaml.h>
+
 // clang-format off
 #include "fif/core/types.hpp"
 #include "fif/core/event/event.hpp"

@@ -21,8 +21,12 @@ namespace fifed {
 		virtual ~EditorModule();
 
 		void set_runtime(bool runtime);
-		inline bool is_runtime() const { return m_Runtime; }
-		inline FrameBuffer &get_frame_buffer() { return m_FrameBuffer; }
+		inline bool is_runtime() const {
+			return m_Runtime;
+		}
+		inline FrameBuffer &get_frame_buffer() {
+			return m_FrameBuffer;
+		}
 
 	protected:
 		void on_start() override;

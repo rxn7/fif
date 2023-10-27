@@ -8,7 +8,7 @@
 #include "panels/settings/settings_panel.hpp"
 
 #include "fif/core/ecs/components/transform_component.hpp"
-#include "fif/core/ecs/scene_serializer.hpp"
+#include "fif/core/ecs/serialization/scene_serializer.hpp"
 #include "fif/core/event/key_event.hpp"
 
 #include <imgui.h>
