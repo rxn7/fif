@@ -1,6 +1,6 @@
 #include "./lua_scripting_serializer.hpp"
-#include "components/lua_script_component.hpp"
-#include "lua_scripting_module.hpp"
+#include "fif/lua_scripting/components/lua_script_component.hpp"
+#include "fif/lua_scripting/lua_scripting_module.hpp"
 
 namespace fif::lua_scripting {
 	void LuaScriptingSerializer::serialize(const core::Entity &entity, YAML::Emitter &emitter) {

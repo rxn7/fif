@@ -1,12 +1,13 @@
 #include "fif/gfx/gfx_module.hpp"
-// #include "fif/gfx/gfx_serializer.hpp"
 
 #include "fif/core/ecs/serialization/scene_serializer.hpp"
 #include "fif/core/event/event_dispatcher.hpp"
 #include "fif/core/event/window_event.hpp"
 #include "fif/gfx/renderer2d.hpp"
 
-#include "systems/renderer_system.hpp"
+#include "./serialization/gfx_serializer.hpp"
+#include "./systems/renderer_system.hpp"
+
 #include <memory>
 
 namespace fif::gfx {
@@ -24,7 +25,7 @@ namespace fif::gfx {
 
 		mp_Application->add_render_system(&fif::gfx::renderer_system);
 
-		// core::SceneSerializer::add_serializer<GfxSerializer>();
+		core::SceneSerializer::add_serializer<GfxSerializer>();
 	}
 
 	void GfxModule::pre_render() {

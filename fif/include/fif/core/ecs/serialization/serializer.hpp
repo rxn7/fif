@@ -2,6 +2,7 @@
 
 #include "fif/core/ecs/entity.hpp"
 
+#include "util/logger.hpp"
 #include "yaml-cpp/emitter.h"
 #include "yaml-cpp/node/node.h"
 

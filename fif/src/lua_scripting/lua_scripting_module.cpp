@@ -1,4 +1,4 @@
-#include "./serialization/lua_scripting_serializer.hpp"
+#include "./lua_scripting_serializer.hpp"
 
 #include "fif/core/ecs/components/transform_component.hpp"
 #include "fif/core/ecs/entity.hpp"

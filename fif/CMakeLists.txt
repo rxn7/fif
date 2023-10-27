@@ -16,8 +16,20 @@ set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 set(INC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 add_compile_options(-fPIC)
-add_compile_options(-fno-exceptions)
 add_compile_options(-ffast-math)
+
+set(GLFW_BUILD_EXAMPLES OFF CACHE INTERNAL "Build GLFW examples")
+set(GLFW_BUILD_TESTS OFF CACHE INTERNAL "Build GLFW tests")
+set(GLFW_BUILD_DOCS OFF CACHE INTERNAL "Build GLFW docs")
+set(GLFW_INSTALL OFF CACHE INTERNAL "Install GLFW")
+add_subdirectory(${LIB_DIR}/glfw)
+
+add_subdirectory(${LIB_DIR}/glad)
+add_subdirectory(${LIB_DIR}/glm)
+
+add_compile_definitions(ENTT_DISABLE_ASSERT)
+add_subdirectory(${LIB_DIR}/entt)
+add_subdirectory(${LIB_DIR}/yaml-cpp)
 
 if(FIF_RELEASE)
   if(MSVC)
@@ -35,8 +47,8 @@ function(build_module target dir libs)
 
   set_target_properties(${target} PROPERTIES PUBLIC_HEADER ${INC_DIR}/fif/${dir})
 
-  target_include_directories(${target} PUBLIC ${INC_DIR} ${INC_DIR}/fif/${dir} PRIVATE ${SRC_DIR}/${dir})
-  target_link_libraries(${target} ${libs})
+  target_include_directories(${target} PUBLIC ${INC_DIR} ${INC_DIR}/fif/${dir} ${SRC_DIR}/${dir})
+  target_link_libraries(${target} PUBLIC ${libs})
 
   if(NOT ${target} MATCHES fif-core)
     target_precompile_headers(${target} REUSE_FROM fif-core)
@@ -45,13 +57,12 @@ function(build_module target dir libs)
   if(MSVC)
     target_compile_options(${target} PRIVATE /W4 /bigobj)
   else()
-    target_compile_options(${target} PRIVATE -pedantic -Wall -Wextra -Wcast-align -Wcast-qual -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wlogical-op -Wmissing-include-dirs -Woverloaded-virtual -Wredundant-decls -Wsign-promo -Wstrict-null-sentinel -Wundef -Werror -Wno-unused)
+    target_compile_options(${target} PUBLIC -pedantic -Wall -Wextra -Wcast-align -Wcast-qual -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wlogical-op -Wmissing-include-dirs -Woverloaded-virtual -Wredundant-decls -Wsign-promo -Wstrict-null-sentinel -Wundef -Werror -Wno-unused)
   endif()
 endfunction()
 
 if(FIF_BUILD_CORE)
-  add_compile_definitions(ENTT_DISABLE_ASSERT)
-  build_module(fif-core core "glfw;glm;glad;EnTT;yaml-cpp")
+  build_module(fif-core core "yaml-cpp;glfw;glm;glad;EnTT")
   target_precompile_headers(fif-core PUBLIC ${INC_DIR}/fif/pch.hpp)
 endif()
 
@@ -79,19 +90,3 @@ endif()
 if(FIF_BUILD_NATIVE_SCRIPTING)
   build_module(fif-native_scripting native_scripting "fif-core")
 endif()
-
-set(GLFW_BUILD_EXAMPLES OFF CACHE INTERNAL "Build GLFW examples")
-set(GLFW_BUILD_TESTS OFF CACHE INTERNAL "Build GLFW tests")
-set(GLFW_BUILD_DOCS OFF CACHE INTERNAL "Build GLFW docs")
-set(GLFW_INSTALL OFF CACHE INTERNAL "Install GLFW")
-add_subdirectory(${LIB_DIR}/glfw)
-
-add_subdirectory(${LIB_DIR}/glad)
-add_subdirectory(${LIB_DIR}/glm)
-add_subdirectory(${LIB_DIR}/entt)
-
-set(YAML_CPP_BUILD_CONTRIB OFF CACHE INTERNAL "Build YAMLCPP contrib")
-set(YAML_CPP_BUILD_TOOLS OFF CACHE INTERNAL "Build YAMLCPP tools")
-set(YAML_CPP_INSTALL ON CACHE INTERNAL "Install YAMLCPP")
-set(YAML_CPP_FORMAT_SOURCE OFF CACHE INTERNAL "Format YAMLCPP")
-add_subdirectory(${LIB_DIR}/yaml-cpp)

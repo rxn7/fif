@@ -12,7 +12,7 @@ add_executable(${PROJECT_NAME} ${FIFED_SOURCES})
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
 target_precompile_headers(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/pch.hpp)
-target_link_libraries(${PROJECT_NAME} fif-core fif-gfx fif-input fif-imgui fif-lua_scripting fif-native_scripting tinyfd)
+target_link_libraries(${PROJECT_NAME} fif-core tinyfd fif-gfx fif-input fif-imgui fif-lua_scripting fif-native_scripting)
 
 set(CMAKE_CXX_STANDARD_LIBRARIES "-static-libgcc -static-libstdc++ ${CMAKE_CXX_STANDARD_LIBRARIES}")
 
