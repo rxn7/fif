@@ -21,20 +21,39 @@ namespace fif::core {
 
 		void start();
 
-		virtual void set_pause(bool paused) { m_Status.paused = paused; }
+		virtual void set_pause(bool paused) {
+			m_Status.paused = paused;
+		}
 
-		virtual void setup_modules() {}
+		virtual void setup_modules() {
+		}
 		virtual void on_event(Event &event);
 
-		inline void add_render_system(RenderSystem system) { m_RenderSystems.push_back(system); }
-		inline void add_update_system(UpdateSystem system) { m_UpdateSystems.push_back(system); }
-		inline void add_event_system(EventSystem system) { m_EventSystems.push_back(system); }
+		inline void add_render_system(RenderSystem system) {
+			m_RenderSystems.push_back(system);
+		}
+		inline void add_update_system(UpdateSystem system) {
+			m_UpdateSystems.push_back(system);
+		}
+		inline void add_event_system(EventSystem system) {
+			m_EventSystems.push_back(system);
+		}
 
-		inline static Application *get_instance() { return s_Instance; }
-		inline const PerformanceStats &get_performance_stats() const { return m_PerformanceStats; }
-		inline const ApplicationStatus &get_status() const { return m_Status; }
-		inline Window &get_window() { return *mp_Window; }
-		inline Scene &get_scene() { return *mp_Scene; }
+		inline static Application *get_instance() {
+			return s_Instance;
+		}
+		inline const PerformanceStats &get_performance_stats() const {
+			return m_PerformanceStats;
+		}
+		inline const ApplicationStatus &get_status() const {
+			return m_Status;
+		}
+		inline Window &get_window() {
+			return *mp_Window;
+		}
+		inline Scene &get_scene() {
+			return *mp_Scene;
+		}
 
 	protected:
 		template<class T, class... Args> const T &attach_module(Args &&...args) {

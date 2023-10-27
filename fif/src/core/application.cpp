@@ -1,7 +1,9 @@
 #include "fif/core/application.hpp"
+#include "./ecs/serialization/core_serializer.hpp"
+#include "fif/core/ecs/serialization/scene_serializer.hpp"
 #include "fif/core/event/event_dispatcher.hpp"
 #include "fif/core/event/window_event.hpp"
-#include "util/logger.hpp"
+#include "fif/core/util/logger.hpp"
 
 namespace fif::core {
 	Application *fif::core::Application::s_Instance = nullptr;
@@ -20,12 +22,15 @@ namespace fif::core {
 			mp_Scene = std::make_unique<Scene>();
 	}
 
-	Application::~Application() {}
+	Application::~Application() {
+	}
 
 	void Application::start() {
 		m_Status.running = true;
 
 		setup_modules();
+
+		SceneSerializer::add_serializer<CoreSerializer>();
 
 		for(const auto &mod : m_Modules) {
 			Logger::info("Module '%s' started", mod->get_name().data());

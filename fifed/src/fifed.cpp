@@ -21,7 +21,8 @@ static const ApplicationProperties APP_PROPS = {
 };
 
 namespace fifed {
-	Fifed::Fifed() : Application(APP_PROPS) {}
+	Fifed::Fifed() : Application(APP_PROPS) {
+	}
 
 	void Fifed::setup_modules() {
 		attach_module<InputModule>();

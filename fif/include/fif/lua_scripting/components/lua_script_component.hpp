@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ecs/entity.hpp"
-#include "sol/sol.hpp"
+#include <sol/sol.hpp>
 
 namespace fif::lua_scripting {
 	struct LuaScriptComponent final {

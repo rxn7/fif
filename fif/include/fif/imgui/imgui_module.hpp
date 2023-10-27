@@ -14,7 +14,9 @@ namespace fif::imgui {
 		ImGuiModule();
 		virtual ~ImGuiModule();
 
-		inline void add_render_func(ImGuiRenderFunc renderFunc) { m_RenderFunctions.push_back(renderFunc); }
+		inline void add_render_func(ImGuiRenderFunc renderFunc) {
+			m_RenderFunctions.push_back(renderFunc);
+		}
 		void delete_render_func(ImGuiRenderFunc renderFunc);
 		bool begin_dockspace() const;
 

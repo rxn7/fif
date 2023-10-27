@@ -34,7 +34,9 @@ namespace fif::lua_scripting {
 			m_Lua["Entity"]["require_" + nameSnakeCase] = &core::Entity::require_component<T>;
 		}
 
-		inline u32 get_lua_memory_usage() const { return m_Lua.memory_used(); }
+		inline u32 get_lua_memory_usage() const {
+			return m_Lua.memory_used();
+		}
 		void attach_script(core::Entity &ent, const std::filesystem::path &filepath);
 		void init_script(LuaScriptComponent &luaScript);
 

@@ -15,7 +15,7 @@ set(LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vendor)
 set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 set(INC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-add_compile_options(-fPIC -fno-exceptions)
+add_compile_options(-fPIC)
 add_compile_options(-fno-exceptions)
 add_compile_options(-ffast-math)
 
@@ -92,6 +92,6 @@ add_subdirectory(${LIB_DIR}/entt)
 
 set(YAML_CPP_BUILD_CONTRIB OFF CACHE INTERNAL "Build YAMLCPP contrib")
 set(YAML_CPP_BUILD_TOOLS OFF CACHE INTERNAL "Build YAMLCPP tools")
-set(YAML_CPP_INSTALL OFF CACHE INTERNAL "Install YAMLCPP")
+set(YAML_CPP_INSTALL ON CACHE INTERNAL "Install YAMLCPP")
 set(YAML_CPP_FORMAT_SOURCE OFF CACHE INTERNAL "Format YAMLCPP")
 add_subdirectory(${LIB_DIR}/yaml-cpp)

@@ -1,14 +1,18 @@
-#include "fif/lua_scripting/lua_scripting_module.hpp"
+#include "./serialization/lua_scripting_serializer.hpp"
+
 #include "fif/core/ecs/components/transform_component.hpp"
 #include "fif/core/ecs/entity.hpp"
 #include "fif/core/ecs/scene.hpp"
+#include "fif/core/ecs/serialization/scene_serializer.hpp"
+#include "fif/lua_scripting/components/lua_script_component.hpp"
+#include "fif/lua_scripting/lua_scripting_module.hpp"
+
 // TODO: Don't include this if gfx module isn't being used
 #include "fif/gfx/color.hpp"
 #include "fif/gfx/components/circle_component.hpp"
 #include "fif/gfx/components/quad_component.hpp"
 #include "fif/gfx/components/sprite_component.hpp"
 #include "fif/gfx/gfx_module.hpp"
-#include "fif/lua_scripting/components/lua_script_component.hpp"
 
 namespace fif::lua_scripting {
 	FIF_MODULE_INSTANCE_IMPL(LuaScriptingModule);
@@ -20,11 +24,13 @@ namespace fif::lua_scripting {
 		FIF_MODULE_INIT_INSTANCE();
 	}
 
-	LuaScriptingModule::~LuaScriptingModule() {}
+	LuaScriptingModule::~LuaScriptingModule() {
+	}
 
 	void LuaScriptingModule::on_start() {
 		mp_Application->add_update_system(lua_script_update_system);
 		mp_Application->add_render_system(lua_script_render_system);
+		core::SceneSerializer::add_serializer<LuaScriptingSerializer>();
 
 		m_Lua.open_libraries(sol::lib::base, sol::lib::math, sol::lib::string);
 
