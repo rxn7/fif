@@ -1,9 +1,21 @@
 #include "viewport_panel.hpp"
+#include "application.hpp"
+#include "editor_module.hpp"
 
 namespace fifed {
 	ViewportPanel::ViewportPanel(FrameBuffer &frameBuffer) : m_FrameBuffer(frameBuffer) {}
 
 	void ViewportPanel::on_render() {
+		EditorModule *editor = EditorModule::get_instance();
+
+		ImGui::SameLine();
+		const f32 windowWidth = ImGui::GetWindowSize().x;
+
+		const bool isRuntime = editor->is_runtime();
+		ImGui::SetCursorPosX((windowWidth - 32.0f) * 0.5f);
+		if(mp_IconManager->imgui_button("Pause", isRuntime ? IconType::PAUSE : IconType::UNPAUSE))
+			editor->set_runtime(!isRuntime);
+
 		ImGui::BeginChild("FrameBuffer");
 
 		const ImVec2 pos = ImGui::GetWindowPos();

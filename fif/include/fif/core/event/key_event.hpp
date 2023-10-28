@@ -5,27 +5,25 @@
 namespace fif::core {
 	class KeyEvent : public Event {
 	public:
+		KeyEvent(i32 keyCode, i32 modifierBits) : m_KeyCode(keyCode), m_ModifierBits(modifierBits) {}
 		EventCategory get_category() const override { return EventCategory::Keyboard; }
-		inline u32 get_key_code() const { return m_KeyCode; }
+		inline i32 get_key_code() const { return m_KeyCode; }
+		inline i32 get_modifier_bits() const { return m_ModifierBits; }
 
 	protected:
-		KeyEvent(u32 keyCode) : m_KeyCode(keyCode) {}
-
-	protected:
-		u32 m_KeyCode;
+		i32 m_KeyCode;
+		i32 m_ModifierBits;
 	};
 
 	class KeyPressedEvent final : public KeyEvent {
 	public:
-		KeyPressedEvent(u32 keyCode) : KeyEvent(keyCode) {}
-
+		using KeyEvent::KeyEvent;
 		FIF_EVENT_TYPE_DECL(EventType::KeyPressed);
 	};
 
 	class KeyReleasedEvent final : public KeyEvent {
 	public:
-		KeyReleasedEvent(u32 keyCode) : KeyEvent(keyCode) {}
-
+		using KeyEvent::KeyEvent;
 		FIF_EVENT_TYPE_DECL(EventType::KeyReleased);
 	};
 }// namespace fif::core

@@ -25,22 +25,20 @@ namespace fif::gfx {
 
 		inline void set_uniform_color(std::string_view name, const Color &value) { set_uniform_vec3(name, fif::gfx::denormalize_color3(value)); }
 
-		inline void set_uniform_vec2(std::string_view name, const glm::vec2 &value) { glUniform2f(get_uniform_location(name), value.x, value.y); }
+		inline void set_uniform_vec2(std::string_view name, const vec2 &value) { glUniform2f(get_uniform_location(name), value.x, value.y); }
 
-		inline void set_uniform_vec3(std::string_view name, const glm::vec3 &value) {
-			glUniform3f(get_uniform_location(name), value.x, value.y, value.z);
-		}
+		inline void set_uniform_vec3(std::string_view name, const vec3 &value) { glUniform3f(get_uniform_location(name), value.x, value.y, value.z); }
 
-		inline void set_uniform_vec4(std::string_view name, const glm::vec4 &value) {
+		inline void set_uniform_vec4(std::string_view name, const vec4 &value) {
 			glUniform4f(get_uniform_location(name), value.x, value.y, value.z, value.w);
 		}
 
-		inline void set_uniform_mat3(std::string_view name, const glm::mat3 &value) {
-			glUniformMatrix3fv(get_uniform_location(name), 1, 0u, glm::value_ptr(value));
+		inline void set_uniform_mat3(std::string_view name, const mat3 &value) {
+			glUniformMatrix3fv(get_uniform_location(name), 1, 0u, value_ptr(value));
 		}
 
-		inline void set_uniform_mat4(std::string_view name, const glm::mat4 &value) {
-			glUniformMatrix4fv(get_uniform_location(name), 1, 0u, glm::value_ptr(value));
+		inline void set_uniform_mat4(std::string_view name, const mat4 &value) {
+			glUniformMatrix4fv(get_uniform_location(name), 1, 0u, value_ptr(value));
 		}
 
 	private:

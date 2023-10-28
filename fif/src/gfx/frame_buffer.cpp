@@ -1,7 +1,7 @@
 #include "fif/gfx/frame_buffer.hpp"
 
 namespace fif::gfx {
-	FrameBuffer::FrameBuffer(const glm::vec2 &size) : m_Texture(size.x, size.y, GL_LINEAR) {
+	FrameBuffer::FrameBuffer(const vec2 &size) : m_Texture(size.x, size.y, GL_LINEAR) {
 		glGenFramebuffers(1, &m_FboID);
 		set_size(size);
 
@@ -17,7 +17,7 @@ namespace fif::gfx {
 
 	void FrameBuffer::start() {
 		bind();
-		const glm::vec3 clearColor = gfx::normalize_color3(m_Color);
+		const vec3 clearColor = gfx::normalize_color3(m_Color);
 		glClearColor(clearColor.r, clearColor.g, clearColor.b, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 	}
@@ -26,7 +26,7 @@ namespace fif::gfx {
 		unbind();
 	}
 
-	void FrameBuffer::set_size(const glm::vec2 &size) {
+	void FrameBuffer::set_size(const vec2 &size) {
 		m_Size = size;
 
 		m_Texture.bind();

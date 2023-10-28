@@ -6,7 +6,7 @@
 
 namespace fif::gfx {
 	struct QuadVertex final {
-		glm::vec2 position;
+		vec2 position;
 		Color color;
 	};
 

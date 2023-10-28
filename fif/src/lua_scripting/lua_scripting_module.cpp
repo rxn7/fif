@@ -1,7 +1,18 @@
+#include "./lua_scripting_serializer.hpp"
+
+#include "fif/core/ecs/components/transform_component.hpp"
+#include "fif/core/ecs/entity.hpp"
+#include "fif/core/ecs/scene.hpp"
+#include "fif/core/ecs/serialization/scene_serializer.hpp"
+#include "fif/lua_scripting/components/lua_script_component.hpp"
 #include "fif/lua_scripting/lua_scripting_module.hpp"
-#include "components/lua_script_component.hpp"
-#include "ecs/scene.hpp"
-#include <sol/property.hpp>
+
+// TODO: Don't include this if gfx module isn't being used
+#include "fif/gfx/color.hpp"
+#include "fif/gfx/components/circle_component.hpp"
+#include "fif/gfx/components/quad_component.hpp"
+#include "fif/gfx/components/sprite_component.hpp"
+#include "fif/gfx/gfx_module.hpp"
 
 namespace fif::lua_scripting {
 	FIF_MODULE_INSTANCE_IMPL(LuaScriptingModule);
@@ -9,49 +20,75 @@ namespace fif::lua_scripting {
 	static void lua_script_update_system(const core::ApplicationStatus &status, entt::registry &registry, float dt);
 	static void lua_script_render_system([[maybe_unused]] const core::ApplicationStatus &status, entt::registry &registry);
 
-	inline static void on_lua_panic(sol::optional<std::string> msg) {
-		if(msg)
-			core::Logger::error("Lua panic: %s", msg.value());
-	}
-
-	LuaScriptingModule::LuaScriptingModule() : m_Lua(sol::c_call<decltype(&on_lua_panic), &on_lua_panic>) {
+	LuaScriptingModule::LuaScriptingModule() {
 		FIF_MODULE_INIT_INSTANCE();
 	}
 
-	LuaScriptingModule::~LuaScriptingModule() {}
+	LuaScriptingModule::~LuaScriptingModule() {
+	}
 
-	void LuaScriptingModule::on_start(core::Application &app) {
-		app.add_update_system(lua_script_update_system);
-		app.add_render_system(lua_script_render_system);
+	void LuaScriptingModule::on_start() {
+		mp_Application->add_update_system(lua_script_update_system);
+		mp_Application->add_render_system(lua_script_render_system);
+		core::SceneSerializer::add_serializer<LuaScriptingSerializer>();
 
 		m_Lua.open_libraries(sol::lib::base, sol::lib::math, sol::lib::string);
 
-		m_Lua.set_function("log", [](const std::string &msg) { core::Logger::info("[LUA] %s", msg.c_str()); });
-		m_Lua.set_function("log_error", [](const std::string &msg) { core::Logger::error("[LUA] %s", msg.c_str()); });
-		m_Lua.set_function("log_warn", [](const std::string &msg) { core::Logger::warn("[LUA] %s", msg.c_str()); });
+		sol::table loggerTable = m_Lua.create_named_table("Logger");
+		loggerTable.set_function("info", [](const std::string &msg) { core::Logger::info("%s", msg.c_str()); });
+		loggerTable.set_function("error", [](const std::string &msg) { core::Logger::error("%s", msg.c_str()); });
+		loggerTable.set_function("warn", [](const std::string &msg) { core::Logger::warn("%s", msg.c_str()); });
+		loggerTable.set_function("debug", [](const std::string &msg) { core::Logger::debug("%s", msg.c_str()); });
+
+		m_Lua.new_usertype<core::Entity>("Entity", "id", sol::readonly_property(&core::Entity::m_ID));
+		m_Lua.new_usertype<vec2>("Vec2", sol::call_constructor, sol::factories([](f32 x, f32 y) { return vec2(x, y); }), "x", &vec2::x, "y", &vec2::y);
+
+		if(gfx::GfxModule::exists()) {
+			m_Lua.new_usertype<gfx::Color>("Color", sol::call_constructor, sol::factories([](u8 r, u8 g, u8 b, u8 a) { return gfx::Color(r, g, b, a); }), "r", &gfx::Color::r, "g", &gfx::Color::g, "b", &gfx::Color::b, "a", &gfx::Color::a);
+			register_component<gfx::SpriteComponent>("SpriteComponent", "tint", &gfx::SpriteComponent::tint, "size", &gfx::SpriteComponent::size);
+			register_component<gfx::QuadComponent>("QuadComponent", "tint", &gfx::QuadComponent::tint, "size", &gfx::QuadComponent::size);
+			register_component<gfx::CircleComponent>("CircleComponent", "tint", &gfx::CircleComponent::tint, "radius", &gfx::CircleComponent::radius);
+		}
+
+		register_component<core::TransformComponent>("TransformComponent", "position", &core::TransformComponent::position, "scale", &core::TransformComponent::scale, "angleRadians", &core::TransformComponent::angleRadians);
 	}
 
-	void LuaScriptingModule::attach_script(core::EntityID ent, core::Scene &scene, const std::string &path) {
-		auto result = m_Lua.script_file(path);
+	void LuaScriptingModule::attach_script(core::Entity &ent, const std::filesystem::path &filepath) {
+		auto &script = ent.add_component<LuaScriptComponent>(core::Entity(ent.m_Scene, ent.m_ID));
+		script.filepath = filepath;
+		init_script(script);
+	}
 
+	void LuaScriptingModule::init_script(LuaScriptComponent &luaScript) {
+		luaScript.inited = false;
+		luaScript.hooks = {};
+		luaScript.self = {};
+
+		const sol::protected_function_result &result = m_Lua.safe_script_file(luaScript.filepath.string());
 		if(!result.valid()) {
 			sol::error err = result;
-			core::Logger::error("Failed to load lua script '%s': %s", path.c_str(), err.what());
+			core::Logger::error("Failed to load lua script '%s': %s", luaScript.filepath.stem().c_str(), err.what());
 			return;
 		}
 
-		auto &script = scene.add_component<LuaScriptComponent>(ent, result);
-		script.path = path;
+		luaScript.self = result;
 
-		// TODO: Move this to a init_script function once we have a runtime
-		script.hooks.update = script.self["update"];
-		script.hooks.render = script.self["render"];
+		luaScript.inited = true;
+		luaScript.hooks.update = luaScript.self["update"];
+		luaScript.hooks.render = luaScript.self["render"];
 
-		script.self["id"] = sol::readonly_property([ent] { return ent; });
+		luaScript.self["entity"] = &luaScript.entity;
 
-		auto init = script.self["init"];
-		if(init.valid())
-			init(script.self);
+		auto init = luaScript.self["init"];
+#ifdef FIF_DEBUG
+		if(init.valid()) {
+			const sol::protected_function_result result = init(luaScript.self);
+			if(!result.valid()) {
+				sol::error err(result);
+				core::Logger::error("Failed to init lua script(%s): %s", luaScript.filepath.c_str(), err.what());
+			}
+		}
+#endif
 	}
 
 	static void lua_script_update_system(const core::ApplicationStatus &status, entt::registry &registry, float dt) {
@@ -59,8 +96,15 @@ namespace fif::lua_scripting {
 			return;
 
 		registry.view<LuaScriptComponent>().each([&]([[maybe_unused]] core::EntityID entity, LuaScriptComponent &luaScript) {
-			if(luaScript.hooks.update.valid())
-				luaScript.hooks.update(luaScript.self, dt);
+			if(luaScript.hooks.update.valid()) {
+				const auto &result = luaScript.hooks.update(luaScript.self, dt);
+#ifdef FIF_DEBUG
+				if(!result.valid()) {
+					sol::error err(result);
+					core::Logger::error("Failed to update lua script(%s): %s", luaScript.filepath.c_str(), err.what());
+				}
+#endif
+			}
 		});
 	}
 

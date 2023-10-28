@@ -6,8 +6,8 @@
 
 namespace fif::gfx {
 	struct CircleVertex final {
-		glm::vec2 position;
-		glm::vec2 uv;
+		vec2 position;
+		vec2 uv;
 		Color color;
 	};
 

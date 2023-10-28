@@ -27,12 +27,12 @@ namespace fif::imgui {
 		ImGui::DestroyContext();
 	}
 
-	void ImGuiModule::on_start(core::Application &app) {
+	void ImGuiModule::on_start() {
 		ImGuiIO &io = ImGui::GetIO();
 		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
 		ImGui_ImplOpenGL3_Init(FIF_GLSL_VERSION);
-		ImGui_ImplGlfw_InitForOpenGL(app.get_window().get_glfw_window(), true);
+		ImGui_ImplGlfw_InitForOpenGL(mp_Application->get_window().get_glfw_window(), true);
 
 		apply_default_theme();
 	}

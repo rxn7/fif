@@ -11,7 +11,7 @@ namespace fifed {
 		OrthoCamera &cam = renderer2D.get_camera();
 
 		if(m_IsZooming) {
-			const glm::vec2 mouseWorldPositionBeforeZoom = cam.screen_to_world(m_StartMousePositionLocal);
+			const fif::vec2 mouseWorldPositionBeforeZoom = cam.screen_to_world(m_StartMousePositionLocal);
 
 			if(m_ZoomLerpDuration > 0) {
 				const f32 zoomLerpPercentage = m_ZoomTimer / m_ZoomLerpDuration;
@@ -34,8 +34,8 @@ namespace fifed {
 
 			cam.update_size();
 
-			const glm::vec2 mouseWorldPositionAfterZoom = cam.screen_to_world(m_StartMousePositionLocal);
-			const glm::vec2 mousePostionDelta = mouseWorldPositionBeforeZoom - mouseWorldPositionAfterZoom;
+			const fif::vec2 mouseWorldPositionAfterZoom = cam.screen_to_world(m_StartMousePositionLocal);
+			const fif::vec2 mousePostionDelta = mouseWorldPositionBeforeZoom - mouseWorldPositionAfterZoom;
 			cam.m_Position += mousePostionDelta;
 		}
 	}
@@ -49,8 +49,8 @@ namespace fifed {
 		Renderer2D &renderer2D = gfx->get_renderer2D();
 		OrthoCamera &cam = renderer2D.get_camera();
 
-		const glm::vec2 mousePosition = input->get_mouse_position();
-		const glm::vec2 mousePositionRelativeToViewport = gfx->get_point_relative_to_viewport(mousePosition);
+		const fif::vec2 mousePosition = input->get_mouse_position();
+		const fif::vec2 mousePositionRelativeToViewport = gfx->get_point_relative_to_viewport(mousePosition);
 		if(mousePositionRelativeToViewport.x < 0 || mousePositionRelativeToViewport.y < 0 ||
 		   mousePositionRelativeToViewport.x > gfx->get_viewport_size().x || mousePositionRelativeToViewport.y > gfx->get_viewport_size().y)
 			return;
@@ -74,9 +74,9 @@ namespace fifed {
 			if(!input->is_button_held(GLFW_MOUSE_BUTTON_RIGHT))
 				return false;
 
-			const glm::vec2 mouseWorldPosition = cam.screen_to_world(movedEvent.get_position());
-			const glm::vec2 lastMouseWorldPosition = cam.screen_to_world(input->get_last_mouse_position());
-			const glm::vec2 delta = mouseWorldPosition - lastMouseWorldPosition;
+			const fif::vec2 mouseWorldPosition = cam.screen_to_world(movedEvent.get_position());
+			const fif::vec2 lastMouseWorldPosition = cam.screen_to_world(input->get_last_mouse_position());
+			const fif::vec2 delta = mouseWorldPosition - lastMouseWorldPosition;
 
 			cam.m_Position -= delta;
 

@@ -12,7 +12,7 @@ static const ApplicationProperties APP_PROPS = {
 #else
 			.title = "Fif Editor",
 #endif
-			.size = glm::i16vec2(1280, 720),
+			.size = fif::i16vec2(1280, 720),
 			.iconPath = "assets/textures/logo.png",
 			.vsync = false,
 		},
@@ -21,7 +21,8 @@ static const ApplicationProperties APP_PROPS = {
 };
 
 namespace fifed {
-	Fifed::Fifed() : Application(APP_PROPS) {}
+	Fifed::Fifed() : Application(APP_PROPS) {
+	}
 
 	void Fifed::setup_modules() {
 		attach_module<InputModule>();

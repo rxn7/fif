@@ -1,16 +1,20 @@
 #pragma once
 
-#include "sol/sol.hpp"
+#include "ecs/entity.hpp"
+#include <sol/sol.hpp>
 
 namespace fif::lua_scripting {
 	struct LuaScriptComponent final {
-		sol::table self;
+		LuaScriptComponent(const core::Entity &ent) : entity(ent) {}
 
+		sol::table self;
 		struct {
 			sol::function update;
 			sol::function render;
 		} hooks;
 
-		std::string path;
+		std::filesystem::path filepath;
+		bool inited = false;
+		core::Entity entity;
 	};
 }// namespace fif::lua_scripting

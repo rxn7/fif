@@ -29,8 +29,10 @@ namespace fif::core {
 			std::free(buf);
 		}
 
-#define FIF_PRINT_FUNC(name, logType)                                                                                                                \
-	template<typename... Args> static void name(std::string_view msg, Args... args) { print<logType>(msg, std::forward<Args>(args)...); }
+#define FIF_PRINT_FUNC(name, logType)                                                                                                                                                                  \
+	template<typename... Args> static void name(std::string_view msg, Args... args) {                                                                                                                  \
+		print<logType>(msg, std::forward<Args>(args)...);                                                                                                                                              \
+	}
 
 		FIF_PRINT_FUNC(info, LogType::INFO)
 		FIF_PRINT_FUNC(warn, LogType::WARN)

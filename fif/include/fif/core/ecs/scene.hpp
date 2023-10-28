@@ -10,8 +10,12 @@ namespace fif::core {
 		EntityID create_entity(const char *name = "Entity");
 		EntityID duplicate_entity(EntityID source);
 
+		bool serialize(const std::string_view path);
+		bool deserialize(const std::string_view path);
+
 		inline void for_each(const std::function<void(EntityID &ent)> &func) { m_Registry.each(func); }
 		inline void delete_entity(EntityID entity) { m_Registry.destroy(entity); }
+		inline void clear() { m_Registry.clear(); }
 		inline u64 get_entity_count() const { return m_Registry.storage<EntityID>().in_use(); }
 		inline entt::registry &get_registry() { return m_Registry; }
 

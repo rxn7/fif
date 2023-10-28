@@ -1,6 +1,7 @@
 #pragma once
 
 #include "event/event.hpp"
+#include "icon_manager.hpp"
 #include "imgui.h"
 
 namespace fifed {
@@ -13,6 +14,9 @@ namespace fifed {
 
 	private:
 		virtual void on_render() {}
+
+	public:
+		IconManager *mp_IconManager;
 	};
 }// namespace fifed
 

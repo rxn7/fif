@@ -16,11 +16,11 @@ namespace fif::input {
 			core::Window *window = FIF_GET_WINDOW_FROM_GLFW_WINDOW(glfwWindow);
 			if(action == GLFW_PRESS) {
 				s_Instance->m_Keys[key] = true;
-				core::KeyPressedEvent event(key);
+				core::KeyPressedEvent event(key, mods);
 				window->get_application().on_event(event);
 			} else if(action == GLFW_RELEASE) {
 				s_Instance->m_Keys[key] = false;
-				core::KeyReleasedEvent event(key);
+				core::KeyReleasedEvent event(key, mods);
 				window->get_application().on_event(event);
 			}
 		});
@@ -51,7 +51,7 @@ namespace fif::input {
 
 			core::Window *window = FIF_GET_WINDOW_FROM_GLFW_WINDOW(glfwWindow);
 			input->m_MousePosition = {x, y};
-			const glm::vec2 delta = input->m_MousePosition - input->m_LastMousePosition;
+			const vec2 delta = input->m_MousePosition - input->m_LastMousePosition;
 
 			core::MouseMovedEvent event(input->m_MousePosition, delta);
 			window->get_application().on_event(event);
@@ -60,11 +60,11 @@ namespace fif::input {
 		});
 	}
 
-	glm::vec2 InputModule::get_mouse_position() {
+	vec2 InputModule::get_mouse_position() {
 		return m_MousePosition;
 	}
 
-	glm::vec2 InputModule::get_last_mouse_position() {
+	vec2 InputModule::get_last_mouse_position() {
 		return m_LastMousePosition;
 	}
 }// namespace fif::input

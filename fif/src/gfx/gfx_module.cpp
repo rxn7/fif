@@ -1,9 +1,14 @@
 #include "fif/gfx/gfx_module.hpp"
 
+#include "fif/core/ecs/serialization/scene_serializer.hpp"
 #include "fif/core/event/event_dispatcher.hpp"
 #include "fif/core/event/window_event.hpp"
 #include "fif/gfx/renderer2d.hpp"
-#include "systems/renderer_system.hpp"
+
+#include "./serialization/gfx_serializer.hpp"
+#include "./systems/renderer_system.hpp"
+
+#include <memory>
 
 namespace fif::gfx {
 	FIF_MODULE_INSTANCE_IMPL(GfxModule);
@@ -12,13 +17,15 @@ namespace fif::gfx {
 		FIF_MODULE_INIT_INSTANCE();
 	}
 
-	void GfxModule::on_start(core::Application &app) {
+	void GfxModule::on_start() {
 		core::Logger::info("OpenGL Version: %s", glGetString(GL_VERSION));
 		core::Logger::info("GLSL Version: %s", glGetString(GL_SHADING_LANGUAGE_VERSION));
 		core::Logger::info("OpenGL Renderer: %s", glGetString(GL_RENDERER));
 		core::Logger::info("OpenGL Vendor: %s", glGetString(GL_VENDOR));
 
-		app.add_render_system(&fif::gfx::renderer_system);
+		mp_Application->add_render_system(&fif::gfx::renderer_system);
+
+		core::SceneSerializer::add_serializer<GfxSerializer>();
 	}
 
 	void GfxModule::pre_render() {

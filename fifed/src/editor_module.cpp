@@ -7,10 +7,12 @@
 #include "panels/scene/scene_panel.hpp"
 #include "panels/settings/settings_panel.hpp"
 
+#include "fif/core/ecs/components/transform_component.hpp"
+#include "fif/core/ecs/serialization/scene_serializer.hpp"
 #include "fif/core/event/key_event.hpp"
-#include "fif/gfx/components/transform_component.hpp"
 
-#include "imgui.h"
+#include <imgui.h>
+#include <tinyfiledialogs.h>
 
 #include <fstream>
 #include <iterator>
@@ -19,16 +21,28 @@
 namespace fifed {
 	FIF_MODULE_INSTANCE_IMPL(EditorModule);
 
-	EditorModule::EditorModule() :
-		m_GithubIconTexture("assets/icons/github.png"), m_FrameBuffer({0, 0}), m_Grid(fif::gfx::GfxModule::get_instance()->get_renderer2D().get_camera(), m_FrameBuffer) {
+	EditorModule::EditorModule() : m_IconManager("assets/textures/icons.png"), m_FrameBuffer({0, 0}), m_Grid(fif::gfx::GfxModule::get_instance()->get_renderer2D().get_camera(), m_FrameBuffer) {
 		FIF_MODULE_INIT_INSTANCE();
+		add_panel<ConsolePanel>();
 	}
 
 	EditorModule::~EditorModule() {
 		ImGuiModule::get_instance()->delete_render_func(&EditorModule::on_render_im_gui);
 	}
 
-	void EditorModule::on_start([[maybe_unused]] Application &app) {
+	void EditorModule::on_start() {
+		set_runtime(false);
+
+		m_IconManager.add_icon(IconType::GITHUB, {{0.0f, 0.0f}, {230.0f, 225.0f}});
+		m_IconManager.add_icon(IconType::LOGO, {{0.0f, 225.0f}, {48.0f, 48.0f}});
+		m_IconManager.add_icon(IconType::PAUSE, {{48.0f, 225.0f}, {32.0f, 32.0f}});
+		m_IconManager.add_icon(IconType::UNPAUSE, {{80.0f, 225.0f}, {32.0f, 32.0f}});
+
+		m_Shortcuts.emplace_back(GLFW_KEY_O, GLFW_MOD_CONTROL, "Open a scene", std::bind(&EditorModule::open_scene_dialog, this));
+		m_Shortcuts.emplace_back(GLFW_KEY_S, GLFW_MOD_CONTROL, "Save current scene", std::bind(&EditorModule::save_scene, this));
+		m_Shortcuts.emplace_back(GLFW_KEY_F, 0, "Follow/focus selected entity", std::bind(&EditorModule::follow_selected_entity, this));
+		m_Shortcuts.emplace_back(GLFW_KEY_DELETE, 0, "Delete selected entity", std::bind(&EditorModule::delete_selected_entity, this));
+
 		if(!std::filesystem::exists("layout.ini"))
 			load_default_layout();
 
@@ -39,11 +53,10 @@ namespace fifed {
 		io.IniFilename = "layout.ini";
 
 		mp_ViewportPanel = add_panel<ViewportPanel>(m_FrameBuffer);
-		mp_InspectorPanel = add_panel<InspectorPanel>();
+		mp_InspectorPanel = add_panel<InspectorPanel>(mp_Application->get_scene());
 		add_panel<PerformancePanel>();
 		add_panel<SettingsPanel>(m_Grid, m_FrameBuffer, m_CameraController);
 		add_panel<ScenePanel>(*mp_InspectorPanel);
-		add_panel<ConsolePanel>();
 
 		ImGuiModule::get_instance()->add_render_func(&EditorModule::on_render_im_gui);
 	}
@@ -56,8 +69,17 @@ namespace fifed {
 		EditorModule *_this = EditorModule::get_instance();
 
 		if(ImGui::BeginMainMenuBar()) {
-			if(ImGui::Button("About")) {
+			if(ImGui::Button("About"))
 				_this->m_AboutWindowOpen = true;
+
+			if(ImGui::BeginMenu("Scene")) {
+				if(ImGui::MenuItem("Save"))
+					_this->save_scene();
+
+				if(ImGui::MenuItem("Load"))
+					_this->open_scene_dialog();
+
+				ImGui::EndMenu();
 			}
 
 			if(ImGui::BeginMenu("Layout")) {
@@ -70,18 +92,22 @@ namespace fifed {
 				ImGui::EndMenu();
 			}
 
+			if(ImGui::MenuItem("Shortcuts"))
+				_this->m_ShortcutsWindowOpen = true;
+
 			ImGui::EndMainMenuBar();
 		}
 
 		if(_this->m_AboutWindowOpen) {
+			ImGui::SetNextWindowSize(ImVec2(350, 200));
 			if(ImGui::Begin("About", &_this->m_AboutWindowOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoDocking)) {
 				ImGui::Text("Fif v%u.%u.%u", 0, 0, 0);// TODO: version(major,minor,patch)
 				if(ImGui::CollapsingHeader("License")) {
 					static std::ifstream stream("LICENSE", std::ios::in | std::ios::binary);
 					static std::string content(std::istreambuf_iterator<char>(stream), {});
-					ImGui::TextWrapped(content.c_str());
+					ImGui::TextWrapped("%s", content.c_str());
 				}
-				if(ImGui::ImageButton("Source", reinterpret_cast<ImTextureID>(_this->m_GithubIconTexture.get_id()), ImVec2{32.0f, 32.0f}, ImVec2{0.0f, 1.0f}, ImVec2(1.0f, 0.0f))) {
+				if(_this->m_IconManager.imgui_button("Source", IconType::GITHUB)) {
 #define GITHUB_URL "https://github.com/rxn7/fif"
 #ifdef _WIN32
 					system("start /b open " GITHUB_URL);
@@ -93,9 +119,20 @@ namespace fifed {
 			ImGui::End();
 		}
 
+		if(_this->m_ShortcutsWindowOpen) {
+			ImGui::SetNextWindowSize(ImVec2(300, 200), ImGuiCond_Once);
+			// TODO: scrollbar here
+			if(ImGui::Begin("Shortcuts", &_this->m_ShortcutsWindowOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoDocking))
+				for(const Shortcut &shortcut : _this->m_Shortcuts)
+					ImGui::TextWrapped("%s", shortcut.get_description().c_str());
+
+			ImGui::End();
+		}
+
 		if(ImGuiModule::get_instance()->begin_dockspace())
 			for(std::unique_ptr<EditorPanel> &panel : _this->m_Panels)
 				panel->render();
+
 		ImGui::End();
 	}
 
@@ -112,17 +149,88 @@ namespace fifed {
 		m_FrameBuffer.end();
 	}
 
+	void EditorModule::save_scene() {
+		if(m_CurrentScenePath.empty()) {
+			const char *filter = "*.yaml";
+			const char *result = tinyfd_saveFileDialog("Save scene", "scene.yaml", 1, &filter, "YAML file");
+
+			if(result == NULL) {
+				Logger::error("Failed to get path of the scene to save");
+				return;
+			}
+
+			m_CurrentScenePath = result;
+		}
+
+		SceneSerializer serializer(mp_Application->get_scene());
+		serializer.serialize(m_CurrentScenePath);
+		Logger::info("Scene saved to: %s", m_CurrentScenePath.c_str());
+	}
+
+	void EditorModule::open_scene_dialog() {
+		std::stringstream workingDirectorySs;
+		workingDirectorySs << std::filesystem::current_path() << "/";
+		const std::string workingDirectoryStr = workingDirectorySs.str();
+
+		const char *filter = "*.yaml";
+		const char *path = tinyfd_openFileDialog("Select scene", workingDirectoryStr.c_str(), 1, &filter, "YAML scene", false);
+
+		if(!path) {
+			Logger::error("Failed to get path of scene to open");
+			return;
+		}
+
+		m_CurrentScenePath = path;
+
+		open_scene(path);
+	}
+
+	void EditorModule::open_scene(const std::string_view path) {
+		if(!path.data()) {
+			Logger::error("Cannot open scene, invalid path!");
+			return;
+		}
+
+		Logger::info("Loading scene: %s...", path.data());
+		SceneSerializer serializer(mp_Application->get_scene());
+		serializer.deserialize(path.data());
+		Logger::info("Scene loaded: %s", path.data());
+	}
+
+	void EditorModule::set_runtime(bool runtime) {
+		m_Runtime = runtime;
+
+		if(!runtime) {
+			if(!m_CurrentScenePath.empty())
+				open_scene(m_CurrentScenePath);
+
+		} else
+			save_scene();
+
+		mp_Application->set_pause(!runtime);
+	}
+
+	void EditorModule::follow_selected_entity() {
+		if(TransformComponent *trans = mp_InspectorPanel->m_SelectedEntity.try_get_component<TransformComponent>())
+			GfxModule::get_instance()->get_renderer2D().get_camera().m_Position = trans->position;
+		else
+			GfxModule::get_instance()->get_renderer2D().get_camera().m_Position = vec2(0, 0);
+	}
+
+	void EditorModule::delete_selected_entity() {
+		if(mp_InspectorPanel->m_SelectedEntity)
+			mp_InspectorPanel->m_SelectedEntity.delete_self();
+	}
+
 	void EditorModule::on_event(Event &event) {
 		m_CameraController.on_event(event, mp_ViewportPanel->is_hovered());
-		EventDispatcher::dispatch<KeyPressedEvent>(event, [selectedEnt = mp_InspectorPanel->m_SelectedEntity](KeyPressedEvent &keyEvent) {
-			switch(keyEvent.get_key_code()) {
-			// Go to selected entity
-			case GLFW_KEY_F:
-				if(TransformComponent *trans = Application::get_instance()->get_scene().get_registry().try_get<TransformComponent>(selectedEnt)) {
-					GfxModule::get_instance()->get_renderer2D().get_camera().m_Position = trans->position;
+
+		EventDispatcher::dispatch<KeyPressedEvent>(event, [&](KeyPressedEvent &keyEvent) {
+			for(const Shortcut &shortcut : m_Shortcuts) {
+				if(keyEvent.get_key_code() == shortcut.get_key() && (shortcut.get_modifier_bits() == 0 || (keyEvent.get_modifier_bits() & shortcut.get_modifier_bits()))) {
+					shortcut.callback();
 					return true;
 				}
-				break;
 			}
 
 			return false;

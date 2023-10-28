@@ -71,7 +71,7 @@ namespace fif::gfx {
 		m_TextureIdx = 0;
 	}
 
-	void Renderer2D::render_sprite(const std::shared_ptr<Texture> &texture, const glm::vec2 &position, const glm::vec2 &size, f32 angle, const Color &color) {
+	void Renderer2D::render_sprite(const std::shared_ptr<Texture> &texture, const vec2 &position, const vec2 &size, f32 angle, const Color &color) {
 		FLUSH_IF_FULL(mp_SpriteBatch)
 
 		f32 textureSlot = -1.0f;
@@ -98,21 +98,21 @@ namespace fif::gfx {
 		if(glm::mod(angle, glm::two_pi<f32>())) {
 			m_TempStats.rotatedSpriteCount++;
 
-			glm::mat4 matrix(1.0f);
-			matrix = glm::translate(glm::mat4(1.0f), glm::vec3(position, 0.0f));
-			matrix = glm::rotate(matrix, -angle, {0, 0, 1});
-			matrix = glm::scale(matrix, glm::vec3(size, 1.0));
+			mat4 matrix(1.0f);
+			matrix = translate(mat4(1.0f), vec3(position, 0.0f));
+			matrix = rotate(matrix, -angle, {0, 0, 1});
+			matrix = scale(matrix, vec3(size, 1.0));
 
-			mp_SpriteBatch->add_vertex({glm::vec3(matrix * glm::vec4(-1.0f, -1.0f, 0.0f, 1.0f)), glm::vec2(0.0f, 0.0f), color, textureSlot});
-			mp_SpriteBatch->add_vertex({glm::vec3(matrix * glm::vec4(-1.0f, 1.0f, 0.0f, 1.0f)), glm::vec2(0.0f, 1.0f), color, textureSlot});
-			mp_SpriteBatch->add_vertex({glm::vec3(matrix * glm::vec4(1.0f, 1.0f, 0.0f, 1.0f)), glm::vec2(1.0f, 1.0f), color, textureSlot});
-			mp_SpriteBatch->add_vertex({glm::vec3(matrix * glm::vec4(1.0f, -1.0f, 0.0f, 1.0f)), glm::vec2(1.0f, 0.0f), color, textureSlot});
+			mp_SpriteBatch->add_vertex({vec3(matrix * vec4(-1.0f, -1.0f, 0.0f, 1.0f)), vec2(0.0f, 0.0f), color, textureSlot});
+			mp_SpriteBatch->add_vertex({vec3(matrix * vec4(-1.0f, 1.0f, 0.0f, 1.0f)), vec2(0.0f, 1.0f), color, textureSlot});
+			mp_SpriteBatch->add_vertex({vec3(matrix * vec4(1.0f, 1.0f, 0.0f, 1.0f)), vec2(1.0f, 1.0f), color, textureSlot});
+			mp_SpriteBatch->add_vertex({vec3(matrix * vec4(1.0f, -1.0f, 0.0f, 1.0f)), vec2(1.0f, 0.0f), color, textureSlot});
 		} else {
 			m_TempStats.spriteCount++;
-			mp_SpriteBatch->add_vertex({glm::vec2(position.x - size.x, position.y - size.y), glm::vec2(0.0f, 0.0f), color, textureSlot});
-			mp_SpriteBatch->add_vertex({glm::vec2(position.x - size.x, position.y + size.y), glm::vec2(0.0f, 1.0f), color, textureSlot});
-			mp_SpriteBatch->add_vertex({glm::vec2(position.x + size.x, position.y + size.y), glm::vec2(1.0f, 1.0f), color, textureSlot});
-			mp_SpriteBatch->add_vertex({glm::vec2(position.x + size.x, position.y - size.y), glm::vec2(1.0f, 0.0f), color, textureSlot});
+			mp_SpriteBatch->add_vertex({vec2(position.x - size.x, position.y - size.y), vec2(0.0f, 0.0f), color, textureSlot});
+			mp_SpriteBatch->add_vertex({vec2(position.x - size.x, position.y + size.y), vec2(0.0f, 1.0f), color, textureSlot});
+			mp_SpriteBatch->add_vertex({vec2(position.x + size.x, position.y + size.y), vec2(1.0f, 1.0f), color, textureSlot});
+			mp_SpriteBatch->add_vertex({vec2(position.x + size.x, position.y - size.y), vec2(1.0f, 0.0f), color, textureSlot});
 		}
 
 		mp_SpriteBatch->add_element(vertCount);
@@ -126,26 +126,26 @@ namespace fif::gfx {
 		m_TempStats.elementCount += 6;
 	}
 
-	void Renderer2D::render_quad(const glm::vec2 &position, const glm::vec2 &size, f32 angle, const Color &color) {
+	void Renderer2D::render_quad(const vec2 &position, const vec2 &size, f32 angle, const Color &color) {
 		FLUSH_IF_FULL(mp_QuadBatch)
 
 		const u32 vertCount = mp_QuadBatch->get_vertex_count();
 
 		if(glm::mod(angle, glm::two_pi<f32>())) {
-			glm::mat4 matrix(1.0f);
-			matrix = glm::translate(glm::mat4(1.0f), glm::vec3(position, 0.0f));
-			matrix = glm::rotate(matrix, -angle, {0, 0, 1});
-			matrix = glm::scale(matrix, glm::vec3(size, 1.0));
-			mp_QuadBatch->add_vertex({glm::vec2(matrix * glm::vec4(-1.0f, -1.0f, 0.0f, 1.0f)), color});
-			mp_QuadBatch->add_vertex({glm::vec2(matrix * glm::vec4(-1.0f, 1.0f, 0.0f, 1.0f)), color});
-			mp_QuadBatch->add_vertex({glm::vec2(matrix * glm::vec4(1.0f, 1.0f, 0.0f, 1.0f)), color});
-			mp_QuadBatch->add_vertex({glm::vec2(matrix * glm::vec4(1.0f, -1.0f, 0.0f, 1.0f)), color});
+			mat4 matrix(1.0f);
+			matrix = translate(mat4(1.0f), vec3(position, 0.0f));
+			matrix = rotate(matrix, -angle, {0, 0, 1});
+			matrix = scale(matrix, vec3(size, 1.0));
+			mp_QuadBatch->add_vertex({vec2(matrix * vec4(-1.0f, -1.0f, 0.0f, 1.0f)), color});
+			mp_QuadBatch->add_vertex({vec2(matrix * vec4(-1.0f, 1.0f, 0.0f, 1.0f)), color});
+			mp_QuadBatch->add_vertex({vec2(matrix * vec4(1.0f, 1.0f, 0.0f, 1.0f)), color});
+			mp_QuadBatch->add_vertex({vec2(matrix * vec4(1.0f, -1.0f, 0.0f, 1.0f)), color});
 			m_TempStats.rotatedQuadCount++;
 		} else {
-			mp_QuadBatch->add_vertex({glm::vec2(position.x - size.x, position.y - size.y), color});
-			mp_QuadBatch->add_vertex({glm::vec2(position.x - size.x, position.y + size.y), color});
-			mp_QuadBatch->add_vertex({glm::vec2(position.x + size.x, position.y + size.y), color});
-			mp_QuadBatch->add_vertex({glm::vec2(position.x + size.x, position.y - size.y), color});
+			mp_QuadBatch->add_vertex({vec2(position.x - size.x, position.y - size.y), color});
+			mp_QuadBatch->add_vertex({vec2(position.x - size.x, position.y + size.y), color});
+			mp_QuadBatch->add_vertex({vec2(position.x + size.x, position.y + size.y), color});
+			mp_QuadBatch->add_vertex({vec2(position.x + size.x, position.y - size.y), color});
 			m_TempStats.quadCount++;
 		}
 
@@ -160,15 +160,15 @@ namespace fif::gfx {
 		m_TempStats.elementCount += 6;
 	}
 
-	void Renderer2D::render_circle(const glm::vec2 &position, f32 radius, const Color &color) {
+	void Renderer2D::render_circle(const vec2 &position, f32 radius, const Color &color) {
 		FLUSH_IF_FULL(mp_CircleBatch)
 
 		const u32 vertCount = mp_CircleBatch->get_vertex_count();
 
-		mp_CircleBatch->add_vertex({glm::vec2(position.x - radius, position.y - radius), glm::vec2(0.0f, 0.0f), color});
-		mp_CircleBatch->add_vertex({glm::vec2(position.x - radius, position.y + radius), glm::vec2(0.0f, 1.0f), color});
-		mp_CircleBatch->add_vertex({glm::vec2(position.x + radius, position.y + radius), glm::vec2(1.0f, 1.0f), color});
-		mp_CircleBatch->add_vertex({glm::vec2(position.x + radius, position.y - radius), glm::vec2(1.0f, 0.0f), color});
+		mp_CircleBatch->add_vertex({vec2(position.x - radius, position.y - radius), vec2(0.0f, 0.0f), color});
+		mp_CircleBatch->add_vertex({vec2(position.x - radius, position.y + radius), vec2(0.0f, 1.0f), color});
+		mp_CircleBatch->add_vertex({vec2(position.x + radius, position.y + radius), vec2(1.0f, 1.0f), color});
+		mp_CircleBatch->add_vertex({vec2(position.x + radius, position.y - radius), vec2(1.0f, 0.0f), color});
 
 		mp_CircleBatch->add_element(vertCount);
 		mp_CircleBatch->add_element(vertCount + 1u);

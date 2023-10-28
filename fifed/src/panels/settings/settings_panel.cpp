@@ -18,13 +18,14 @@ namespace fifed {
 
 		if(ImGui::TreeNode("Grid")) {
 			ImGui::Checkbox("Enabled", &m_Grid.m_Enabled);
-			ImGui::SliderFloat("Line tickness", &m_Grid.m_LineThickness, 1.0f, 10.0f);
+			ImGui::SliderFloat("Line tickness", &m_Grid.m_LineThickness, 1.5f, 3.0f);
 			ImGui::SliderFloat("Cell size", &m_Grid.m_MinCellSize, 0.1f, 100.0f);
 
 			utils::imgui::draw_color3_picker("Line color", m_Grid.m_LineColor);
 
 			ImGui::TreePop();
 		}
+
 		if(ImGui::TreeNode("Camera controller")) {
 			OrthoCamera &cam = GfxModule::get_instance()->get_renderer2D().get_camera();
 			ImGui::SliderFloat("Zoom lerp duration", &m_CameraController.m_ZoomLerpDuration, 0.0f, 3.0f);

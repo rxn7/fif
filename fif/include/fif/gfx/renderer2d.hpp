@@ -49,9 +49,9 @@ namespace fif::gfx {
 		void start();
 		void end();
 
-		void render_quad(const glm::vec2 &position, const glm::vec2 &size, f32 angle = 0.0f, const Color &color = {255, 255, 255, 255});
-		void render_sprite(const std::shared_ptr<Texture> &texture, const glm::vec2 &position, const glm::vec2 &size, f32 angle = 0.0f, const Color &color = {255, 255, 255, 255});
-		void render_circle(const glm::vec2 &position, f32 radius, const Color &color = {255, 255, 255, 255});
+		void render_quad(const vec2 &position, const vec2 &size, f32 angle = 0.0f, const Color &color = {255, 255, 255, 255});
+		void render_sprite(const std::shared_ptr<Texture> &texture, const vec2 &position, const vec2 &size, f32 angle = 0.0f, const Color &color = {255, 255, 255, 255});
+		void render_circle(const vec2 &position, f32 radius, const Color &color = {255, 255, 255, 255});
 
 	private:
 		static constexpr u32 BATCH_SIZE = 1000;
