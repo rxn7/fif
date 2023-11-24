@@ -1,3 +1,4 @@
+#define MINIAUDIO_IMPLEMENTATION
 #include "fif/audio/audio_module.hpp"
 
 namespace fif::audio {
@@ -12,7 +13,7 @@ namespace fif::audio {
 			ma_device_uninit(&m_Device);
 	}
 
-	void AudioModule::on_start([[maybe_unused]] core::Application &app) {
+	void AudioModule::on_start() {
 		ma_device_config cfg = ma_device_config_init(ma_device_type_playback);
 		if(ma_device_init(NULL, &cfg, &m_Device) != MA_SUCCESS) {
 			core::Logger::error("Failed to initialize the miniaudio device.");
