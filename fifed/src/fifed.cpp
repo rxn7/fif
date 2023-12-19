@@ -25,12 +25,12 @@ namespace fifed {
 	}
 
 	void Fifed::setup_modules() {
+		attach_module<LuaScriptingModule>();
+		attach_module<NativeScriptingModule>();
 		attach_module<InputModule>();
 		attach_module<GfxModule>();
 		attach_module<EditorModule>();
 		attach_module<ImGuiModule>();
-		attach_module<LuaScriptingModule>();
-		attach_module<NativeScriptingModule>();
 	}
 }// namespace fifed
 
