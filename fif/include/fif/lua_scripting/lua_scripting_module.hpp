@@ -43,7 +43,7 @@ namespace fif::lua_scripting {
 	protected:
 		void on_start() override;
 
-	private:
+	public:
 		sol::state m_Lua;
 	};
 }// namespace fif::lua_scripting

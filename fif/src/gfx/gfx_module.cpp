@@ -5,6 +5,8 @@
 #include "fif/core/event/window_event.hpp"
 #include "fif/gfx/renderer2d.hpp"
 
+
+#include "./lua_register.hpp"
 #include "./serialization/gfx_serializer.hpp"
 #include "./systems/renderer_system.hpp"
 
@@ -18,6 +20,8 @@ namespace fif::gfx {
 	}
 
 	void GfxModule::on_start() {
+		register_lua_components();
+
 		core::Logger::info("OpenGL Version: %s", glGetString(GL_VERSION));
 		core::Logger::info("GLSL Version: %s", glGetString(GL_SHADING_LANGUAGE_VERSION));
 		core::Logger::info("OpenGL Renderer: %s", glGetString(GL_RENDERER));
