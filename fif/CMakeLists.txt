@@ -51,6 +51,7 @@ function(build_module target dir libs definitions)
   target_link_libraries(${target} PUBLIC ${libs})
   target_compile_definitions(${target} INTERFACE FIF_LUA_SCRIPTING ${definitions})
 
+
   if(NOT ${target} MATCHES fif-core)
     target_precompile_headers(${target} REUSE_FROM fif-core)
   endif()
