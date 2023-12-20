@@ -2,8 +2,8 @@
 
 namespace fifed {
 	EntityID EntityTemplate::create(Scene &scene) {
-		EntityID ent = scene.create_entity(get_name().data());
-		create_components(ent, scene);
-		return ent;
+		Entity ent = Entity(scene, scene.create_entity(get_name().data()));
+		create_components(ent);
+		return ent.m_ID;
 	}
 }// namespace fifed

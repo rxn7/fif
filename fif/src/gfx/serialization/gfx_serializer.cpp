@@ -26,7 +26,7 @@ namespace fif::gfx {
 
 	void GfxSerializer::deserialize(core::Entity &entity, const YAML::Node &entityNode) {
 		try_get_component_node<SpriteComponent>(entityNode, [&entity](const YAML::Node &spriteComponentNode) {
-			SpriteComponent &spriteComponent = entity.add_component<SpriteComponent>();
+			SpriteComponent &spriteComponent = entity.require_component<SpriteComponent>();
 			spriteComponent.size = spriteComponentNode["Size"].as<vec2>();
 			spriteComponent.tint = spriteComponentNode["Tint"].as<Color>();
 
@@ -36,13 +36,13 @@ namespace fif::gfx {
 		});
 
 		try_get_component_node<QuadComponent>(entityNode, [&entity](const YAML::Node &quadComponentNode) {
-			QuadComponent &quadComponent = entity.add_component<QuadComponent>();
+			QuadComponent &quadComponent = entity.require_component<QuadComponent>();
 			quadComponent.size = quadComponentNode["Size"].as<vec2>();
 			quadComponent.tint = quadComponentNode["Tint"].as<Color>();
 		});
 
 		try_get_component_node<CircleComponent>(entityNode, [&entity](const YAML::Node &circleComponentNode) {
-			CircleComponent &circleComponent = entity.add_component<CircleComponent>();
+			CircleComponent &circleComponent = entity.require_component<CircleComponent>();
 			circleComponent.tint = circleComponentNode["Tint"].as<Color>();
 			circleComponent.radius = circleComponentNode["Radius"].as<f32>();
 		});

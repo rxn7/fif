@@ -8,9 +8,11 @@ namespace fifed {
 		virtual std::string_view get_name() const = 0;
 
 	protected:
-		virtual void create_components(EntityID ent, Scene &scene) = 0;
+		virtual void create_components(Entity &ent) = 0;
 	};
 }// namespace fifed
 
-#define ENTITY_TEMPLATE_NAME(name)                                                                                                                   \
-	std::string_view get_name() const override { return name; }
+#define ENTITY_TEMPLATE_NAME(name)                                                                                                                                                                     \
+	std::string_view get_name() const override {                                                                                                                                                       \
+		return name;                                                                                                                                                                                   \
+	}

@@ -8,6 +8,6 @@ namespace fifed {
 		ENTITY_TEMPLATE_NAME("Sprite")
 
 	protected:
-		void create_components(EntityID ent, Scene &scene) override;
+		void create_components(Entity &ent) override;
 	};
 }// namespace fifed
