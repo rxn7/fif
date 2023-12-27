@@ -1,5 +1,6 @@
 #include "scene_panel.hpp"
 #include "entity_template/empty_template.hpp"
+#include "entity_template/label_template.hpp"
 #include "entity_template/sprite_template.hpp"
 
 #include "fif/core/ecs//components/transform_component.hpp"
@@ -16,6 +17,7 @@ namespace fifed {
 	ScenePanel::ScenePanel(InspectorPanel &inspector) : m_Inspector(inspector) {
 		m_Templates.push_back(std::make_unique<EmptyTemplate>());
 		m_Templates.push_back(std::make_unique<SpriteTemplate>());
+		m_Templates.push_back(std::make_unique<LabelTemplate>());
 	}
 
 	void ScenePanel::on_render() {

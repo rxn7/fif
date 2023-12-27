@@ -10,8 +10,8 @@
 
 #include <regex>
 
-#define FLUSH_IF_FULL(batch)                                                                                                                         \
-	if((batch)->is_full())                                                                                                                           \
+#define FLUSH_IF_FULL(batch)                                                                                                                                                                           \
+	if((batch)->is_full())                                                                                                                                                                             \
 		flush_batch(*batch);
 
 namespace fif::gfx {
@@ -180,5 +180,27 @@ namespace fif::gfx {
 		m_TempStats.circleCount++;
 		m_TempStats.vertexCount += 4u;
 		m_TempStats.elementCount += 6u;
+	}
+
+	void Renderer2D::render_text(const vec2 &position, f32 size, const std::string &text, const Color &color) {
+		FLUSH_IF_FULL(mp_QuadBatch)
+
+		const u32 vertCount = mp_QuadBatch->get_vertex_count();
+
+		mp_QuadBatch->add_vertex({vec2(position.x - size, position.y - size), color});
+		mp_QuadBatch->add_vertex({vec2(position.x - size, position.y + size), color});
+		mp_QuadBatch->add_vertex({vec2(position.x + size, position.y + size), color});
+		mp_QuadBatch->add_vertex({vec2(position.x + size, position.y - size), color});
+		m_TempStats.quadCount++;
+
+		mp_QuadBatch->add_element(vertCount);
+		mp_QuadBatch->add_element(vertCount + 1);
+		mp_QuadBatch->add_element(vertCount + 2);
+		mp_QuadBatch->add_element(vertCount + 2);
+		mp_QuadBatch->add_element(vertCount + 3);
+		mp_QuadBatch->add_element(vertCount);
+
+		m_TempStats.vertexCount += 4;
+		m_TempStats.elementCount += 6;
 	}
 }// namespace fif::gfx

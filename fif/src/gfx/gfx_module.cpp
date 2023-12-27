@@ -5,7 +5,6 @@
 #include "fif/core/event/window_event.hpp"
 #include "fif/gfx/renderer2d.hpp"
 
-
 #include "./lua_register.hpp"
 #include "./serialization/gfx_serializer.hpp"
 #include "./systems/renderer_system.hpp"

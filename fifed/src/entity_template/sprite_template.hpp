@@ -1,6 +1,8 @@
 #pragma once
 
 #include "entity_template.hpp"
+#include "fif/core/ecs/components/transform_component.hpp"
+#include "fif/gfx/components/sprite_component.hpp"
 
 namespace fifed {
 	class SpriteTemplate final : public EntityTemplate {
@@ -8,6 +10,9 @@ namespace fifed {
 		ENTITY_TEMPLATE_NAME("Sprite")
 
 	protected:
-		void create_components(Entity &ent) override;
+		inline void create_components(Entity &ent) override {
+			ent.add_component<TransformComponent>();
+			ent.add_component<SpriteComponent>();
+		}
 	};
 }// namespace fifed

@@ -28,8 +28,13 @@ namespace fif::gfx {
 	public:
 		Renderer2D();
 
-		inline OrthoCamera &get_camera() { return m_Camera; }
-		inline const Renderer2DStats &get_stats() const { return m_Stats; }
+		inline OrthoCamera &get_camera() {
+			return m_Camera;
+		}
+
+		inline const Renderer2DStats &get_stats() const {
+			return m_Stats;
+		}
 
 		template<typename Batch> void flush_batch(Batch &batch) {
 			if(batch.is_empty())
@@ -52,6 +57,7 @@ namespace fif::gfx {
 		void render_quad(const vec2 &position, const vec2 &size, f32 angle = 0.0f, const Color &color = {255, 255, 255, 255});
 		void render_sprite(const std::shared_ptr<Texture> &texture, const vec2 &position, const vec2 &size, f32 angle = 0.0f, const Color &color = {255, 255, 255, 255});
 		void render_circle(const vec2 &position, f32 radius, const Color &color = {255, 255, 255, 255});
+		void render_text(const vec2 &position, f32 size, const std::string &text, const Color &color);
 
 	private:
 		static constexpr u32 BATCH_SIZE = 1000;

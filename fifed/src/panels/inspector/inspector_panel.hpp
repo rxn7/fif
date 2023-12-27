@@ -58,6 +58,6 @@ namespace fifed {
 
 	public:
 		Entity m_SelectedEntity;
-		std::array<char, 100> m_TagBuffer;
+		std::array<char, 512> m_TextBuffer;
 	};
 }// namespace fifed
