@@ -6,6 +6,7 @@
 #include "fif/gfx/components/label_component.hpp"
 #include "fif/gfx/components/quad_component.hpp"
 #include "fif/gfx/components/sprite_component.hpp"
+#include "fif/gfx/text/font.hpp"
 #include "fif/lua_scripting/components/lua_script_component.hpp"
 #include "fif/lua_scripting/lua_scripting_module.hpp"
 #include "fif/native_scripting/components/native_script_component.hpp"
@@ -106,7 +107,9 @@ namespace fifed {
 			if(ImGui::InputText("Text", m_TextBuffer.data(), m_TextBuffer.size()))
 				label.text = m_TextBuffer.data();
 
-			ImGui::DragFloat("Size", &label.size, 1.0f, 0.0f, std::numeric_limits<float>::max());
+			ImGui::DragFloat("Size", &label.fontSize, 1.0f, 0.0f, std::numeric_limits<float>::max());
+			ImGui::DragFloat("Character Spacing Factor", &label.charSpacingFactor, 0.05f, 0.0f, std::numeric_limits<float>::max());
+			ImGui::DragFloat("Line Height Factor", &label.lineHeightFactor, 0.05f, 0.0f, std::numeric_limits<float>::max());
 			draw_color_selector(label.color);
 
 			{
@@ -118,6 +121,9 @@ namespace fifed {
 				static const char *items[] = {"Top", "Center", "Bottom"};
 				ImGui::Combo("Vertical Align", (int *)&label.verticalAlign, items, IM_ARRAYSIZE(items));
 			}
+
+			const vec2 textSize = label.calculate_text_size();
+			ImGui::LabelText("Size", "%f, %f", textSize.x, textSize.y);
 		});
 
 		draw_component<LuaScriptComponent>("Lua Script", [](LuaScriptComponent &script) {

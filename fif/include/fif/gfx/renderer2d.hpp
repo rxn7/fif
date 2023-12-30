@@ -2,8 +2,8 @@
 
 #include "fif/gfx/batch.hpp"
 #include "fif/gfx/ortho_camera.hpp"
+#include "fif/gfx/text/text_align.hpp"
 #include "fif/gfx/texture.hpp"
-#include "shader.hpp"
 #include "vertices/circle_vertex.hpp"
 #include "vertices/quad_vertex.hpp"
 #include "vertices/sprite_vertex.hpp"
@@ -56,8 +56,8 @@ namespace fif::gfx {
 
 		void render_quad(const vec2 &position, const vec2 &size, f32 angle = 0.0f, const Color &color = {255, 255, 255, 255});
 		void render_sprite(const std::shared_ptr<Texture> &texture, const vec2 &position, const vec2 &size, f32 angle = 0.0f, const Color &color = {255, 255, 255, 255});
-		void render_circle(const vec2 &position, f32 radius, const Color &color = {255, 255, 255, 255});
-		void render_text(const vec2 &position, f32 size, const std::string &text, const Color &color);
+		void render_circle(const vec2 &position, f32 radius, const Color &color = Colors::WHITE);
+		void render_text(const vec2 &position, f32 size, const std::string &text, const Color &color = Colors::BLACK, const VerticalTextAlign vAlign = VerticalTextAlign::CENTER, const HorizontalTextAlign hAlign = HorizontalTextAlign::LEFT, const f32 charSpacingFactor = 0.2f, const f32 lineHeightFactor = 1.1f);
 		f32 get_texture_slot(const std::shared_ptr<Texture> &texture);
 
 	private:

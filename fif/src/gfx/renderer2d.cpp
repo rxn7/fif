@@ -1,6 +1,7 @@
 #include "fif/gfx/renderer2d.hpp"
 #include "fif/gfx/batch.hpp"
 #include "fif/gfx/ortho_camera.hpp"
+#include "fif/gfx/text/font.hpp"
 #include "fif/gfx/vertex_buffer.hpp"
 #include "fif/gfx/vertices/circle_vertex.hpp"
 #include "fif/gfx/vertices/quad_vertex.hpp"
@@ -183,19 +184,79 @@ namespace fif::gfx {
 		m_TempStats.elementCount += 6u;
 	}
 
-	void Renderer2D::render_text(const vec2 &position, f32 size, const std::string &text, const Color &color) {
+	void Renderer2D::render_text(const vec2 &position, f32 fontSize, const std::string &text, const Color &color, const VerticalTextAlign vAlign, const HorizontalTextAlign hAlign, const f32 charSpacingFactor, const f32 lineHeightFactor) {
 		FLUSH_IF_FULL(mp_QuadBatch)
 
-		u32 vertCount = mp_QuadBatch->get_vertex_count();
-		vec2 pos = position;
-		const f32 halfSize = size * 0.5f;
+		const f32 halfFontSize = fontSize * 0.5f;
+		const f32 charSpacing = fontSize * charSpacingFactor;
+		const f32 lineHeight = fontSize * lineHeightFactor;
+		const vec2 textSize = Font::calculate_text_size(text, fontSize, lineHeight, charSpacing);
+		vec2 startPosition = position;
 
-		for(const char &c : text) {
-			if(c != ' ') {
-				mp_QuadBatch->add_vertex({vec2(pos.x - halfSize, pos.y - halfSize), color});
-				mp_QuadBatch->add_vertex({vec2(pos.x - halfSize, pos.y + halfSize), color});
-				mp_QuadBatch->add_vertex({vec2(pos.x + halfSize, pos.y + halfSize), color});
-				mp_QuadBatch->add_vertex({vec2(pos.x + halfSize, pos.y - halfSize), color});
+		switch(hAlign) {
+		case HorizontalTextAlign::CENTER:
+			startPosition.x -= textSize.x * 0.5f;
+			break;
+
+		case HorizontalTextAlign::RIGHT:
+			startPosition.x -= textSize.x;
+			break;
+
+		default:
+			break;
+		}
+
+		switch(vAlign) {
+		case VerticalTextAlign::TOP:
+			startPosition.y -= fontSize;
+			break;
+
+		case VerticalTextAlign::CENTER:
+			startPosition.y += textSize.y * 0.5f - fontSize;
+			break;
+
+		case VerticalTextAlign::BOTTOM:
+			startPosition.y += textSize.y - fontSize;
+			break;
+
+		default:
+			break;
+		}
+
+		u32 vertCount = mp_QuadBatch->get_vertex_count();
+		f32 x = startPosition.x;
+		f32 y = startPosition.y;
+
+		for(std::string::const_iterator it = text.begin(); it < text.end(); ++it) {
+			const bool isLastChar = it == text.end() - 1;
+
+			switch(*it) {
+			case ' ':
+				x += fontSize;
+				break;
+
+			case '\\':
+				if(isLastChar)
+					break;
+
+				switch(*(++it)) {
+				case 'n':
+					y -= lineHeight;
+					x = startPosition.x;
+					break;
+				case '\\':
+					goto nobreak;
+					break;
+				}
+
+				break;
+			nobreak:
+
+			default:
+				mp_QuadBatch->add_vertex({vec2(x, y), color});
+				mp_QuadBatch->add_vertex({vec2(x, y + fontSize), color});
+				mp_QuadBatch->add_vertex({vec2(x + fontSize, y + fontSize), color});
+				mp_QuadBatch->add_vertex({vec2(x + fontSize, y), color});
 
 				mp_QuadBatch->add_element(vertCount);
 				mp_QuadBatch->add_element(vertCount + 1);
@@ -208,9 +269,13 @@ namespace fif::gfx {
 				m_TempStats.elementCount += 6;
 				m_TempStats.quadCount++;
 				vertCount += 4;
-			}
 
-			pos.x += size * 1.2f;
+				x += fontSize;
+				if(!isLastChar)
+					x += charSpacing;
+
+				break;
+			}
 		}
 	}
 }// namespace fif::gfx

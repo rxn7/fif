@@ -27,7 +27,9 @@ namespace fif::gfx {
 
 		serialize_component<LabelComponent>(entity, emitter, [&emitter](LabelComponent &labelComponent) {
 			emitter << YAML::Key << "Text" << YAML::Value << labelComponent.text;
-			emitter << YAML::Key << "Size" << YAML::Value << labelComponent.size;
+			emitter << YAML::Key << "Size" << YAML::Value << labelComponent.fontSize;
+			emitter << YAML::Key << "CharSpacingFactor" << YAML::Value << labelComponent.charSpacingFactor;
+			emitter << YAML::Key << "LineHeightFactor" << YAML::Value << labelComponent.lineHeightFactor;
 			emitter << YAML::Key << "Color" << YAML::Value << labelComponent.color;
 			emitter << YAML::Key << "HorizontalAlign" << YAML::Value << (int)labelComponent.horizontalAlign;
 			emitter << YAML::Key << "VerticalAlign" << YAML::Value << (int)labelComponent.verticalAlign;
@@ -60,7 +62,9 @@ namespace fif::gfx {
 		try_get_component_node<LabelComponent>(entityNode, [&entity](const YAML::Node &labelComponentNode) {
 			LabelComponent &labelComponent = entity.require_component<LabelComponent>();
 			labelComponent.text = labelComponentNode["Text"].as<std::string>();
-			labelComponent.size = labelComponentNode["Size"].as<f32>();
+			labelComponent.fontSize = labelComponentNode["Size"].as<f32>();
+			labelComponent.charSpacingFactor = labelComponentNode["CharSpacingFactor"].as<f32>();
+			labelComponent.lineHeightFactor = labelComponentNode["LineHeightFactor"].as<f32>();
 			labelComponent.color = labelComponentNode["Color"].as<Color>();
 			labelComponent.horizontalAlign = static_cast<HorizontalTextAlign>(labelComponentNode["HorizontalAlign"].as<int>());
 			labelComponent.verticalAlign = static_cast<VerticalTextAlign>(labelComponentNode["VerticalAlign"].as<int>());

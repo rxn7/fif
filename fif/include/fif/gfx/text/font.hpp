@@ -1,13 +1,15 @@
+#pragma once
+
 #include "fif/gfx/texture.hpp"
 
 namespace fif::gfx {
 	class Font {// TODO: Extend resource ?
 	public:
-		Font(const std::shared_ptr<Texture> &texture, i32 filter = GL_LINEAR, f32 size = 2.0f);
+		Font(const std::shared_ptr<Texture> &texture, const f32 size = 2.0f);
 
 		virtual ~Font();
 		void get_char_uv(char c, vec2 &start, vec2 &end) const;
-		f32 calculate_text_width(u32 length, f32 scale = 1.0f) const;
+		static vec2 calculate_text_size(const std::string &text, const f32 size, const f32 lineHeight, const f32 charSpacing);
 
 		inline const Texture &get_texture() const {
 			return *mp_Texture;

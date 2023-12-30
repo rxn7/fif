@@ -29,7 +29,9 @@ namespace fif::gfx {
 			renderer.render_sprite(sprite.p_texture, trans.position, sprite.size * trans.scale, trans.angleRadians, sprite.tint);
 		});
 
-		registry.view<LabelComponent, core::TransformComponent>().each(
-			[&]([[maybe_unused]] core::EntityID entity, LabelComponent &label, core::TransformComponent &trans) { renderer.render_text(trans.position, label.size, label.text, label.color); });
+		registry.view<LabelComponent, core::TransformComponent>().each([&]([[maybe_unused]] core::EntityID entity, LabelComponent &label, core::TransformComponent &trans) {
+			// TODO: Add scale
+			renderer.render_text(trans.position, label.fontSize, label.text, label.color, label.verticalAlign, label.horizontalAlign, label.charSpacingFactor, label.lineHeightFactor);
+		});
 	}
 }// namespace fif::gfx
