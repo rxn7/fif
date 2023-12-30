@@ -191,37 +191,7 @@ namespace fif::gfx {
 		const f32 charSpacing = fontSize * charSpacingFactor;
 		const f32 lineHeight = fontSize * lineHeightFactor;
 		const vec2 textSize = Font::calculate_text_size(text, fontSize, lineHeight, charSpacing);
-		vec2 startPosition = position;
-
-		switch(hAlign) {
-		case HorizontalTextAlign::CENTER:
-			startPosition.x -= textSize.x * 0.5f;
-			break;
-
-		case HorizontalTextAlign::RIGHT:
-			startPosition.x -= textSize.x;
-			break;
-
-		default:
-			break;
-		}
-
-		switch(vAlign) {
-		case VerticalTextAlign::TOP:
-			startPosition.y -= fontSize;
-			break;
-
-		case VerticalTextAlign::CENTER:
-			startPosition.y += textSize.y * 0.5f - fontSize;
-			break;
-
-		case VerticalTextAlign::BOTTOM:
-			startPosition.y += textSize.y - fontSize;
-			break;
-
-		default:
-			break;
-		}
+		const vec2 startPosition = position + TextAlign::get_text_align_offset(hAlign, vAlign, textSize, fontSize);
 
 		u32 vertCount = mp_QuadBatch->get_vertex_count();
 		f32 x = startPosition.x;
@@ -233,6 +203,8 @@ namespace fif::gfx {
 			switch(*it) {
 			case ' ':
 				x += fontSize;
+				if(!isLastChar)
+					x += charSpacing;
 				break;
 
 			case '\\':
