@@ -71,28 +71,29 @@ namespace fif::gfx {
 		m_TextureIdx = 0;
 	}
 
+	f32 Renderer2D::get_texture_slot(const std::shared_ptr<Texture> &texture) {
+		for(i32 i = 0; i < m_TextureIdx; ++i) {
+			if(m_Textures[i]->get_id() == texture->get_id())
+				return static_cast<f32>(i);
+		}
+
+		// FLush the batch if it's full
+		if(m_TextureIdx == m_TextureSlotCount) {
+			flush_batch(*mp_SpriteBatch);
+			m_TextureIdx = 0;
+		}
+
+		f32 textureSlot = static_cast<f32>(m_TextureIdx);
+		m_Textures[m_TextureIdx++] = texture;
+		m_Textures[textureSlot]->bind_on_slot(textureSlot);
+
+		return textureSlot;
+	}
+
 	void Renderer2D::render_sprite(const std::shared_ptr<Texture> &texture, const vec2 &position, const vec2 &size, f32 angle, const Color &color) {
 		FLUSH_IF_FULL(mp_SpriteBatch)
 
-		f32 textureSlot = -1.0f;
-		for(i32 i = 0; i < m_TextureIdx; ++i) {
-			if(m_Textures[i]->get_id() == texture->get_id()) {
-				textureSlot = static_cast<f32>(i);
-				break;
-			}
-		}
-
-		if(textureSlot == -1.0f) {
-			if(m_TextureIdx == m_TextureSlotCount) {
-				flush_batch(*mp_SpriteBatch);
-				m_TextureIdx = 0;
-			}
-
-			textureSlot = static_cast<f32>(m_TextureIdx);
-			m_Textures[m_TextureIdx++] = texture;
-			m_Textures[textureSlot]->bind_on_slot(textureSlot);
-		}
-
+		f32 textureSlot = get_texture_slot(texture);
 		const u32 vertCount = mp_SpriteBatch->get_vertex_count();
 
 		if(glm::mod(angle, glm::two_pi<f32>())) {
@@ -185,22 +186,31 @@ namespace fif::gfx {
 	void Renderer2D::render_text(const vec2 &position, f32 size, const std::string &text, const Color &color) {
 		FLUSH_IF_FULL(mp_QuadBatch)
 
-		const u32 vertCount = mp_QuadBatch->get_vertex_count();
+		u32 vertCount = mp_QuadBatch->get_vertex_count();
+		vec2 pos = position;
+		const f32 halfSize = size * 0.5f;
 
-		mp_QuadBatch->add_vertex({vec2(position.x - size, position.y - size), color});
-		mp_QuadBatch->add_vertex({vec2(position.x - size, position.y + size), color});
-		mp_QuadBatch->add_vertex({vec2(position.x + size, position.y + size), color});
-		mp_QuadBatch->add_vertex({vec2(position.x + size, position.y - size), color});
-		m_TempStats.quadCount++;
+		for(const char &c : text) {
+			if(c != ' ') {
+				mp_QuadBatch->add_vertex({vec2(pos.x - halfSize, pos.y - halfSize), color});
+				mp_QuadBatch->add_vertex({vec2(pos.x - halfSize, pos.y + halfSize), color});
+				mp_QuadBatch->add_vertex({vec2(pos.x + halfSize, pos.y + halfSize), color});
+				mp_QuadBatch->add_vertex({vec2(pos.x + halfSize, pos.y - halfSize), color});
 
-		mp_QuadBatch->add_element(vertCount);
-		mp_QuadBatch->add_element(vertCount + 1);
-		mp_QuadBatch->add_element(vertCount + 2);
-		mp_QuadBatch->add_element(vertCount + 2);
-		mp_QuadBatch->add_element(vertCount + 3);
-		mp_QuadBatch->add_element(vertCount);
+				mp_QuadBatch->add_element(vertCount);
+				mp_QuadBatch->add_element(vertCount + 1);
+				mp_QuadBatch->add_element(vertCount + 2);
+				mp_QuadBatch->add_element(vertCount + 2);
+				mp_QuadBatch->add_element(vertCount + 3);
+				mp_QuadBatch->add_element(vertCount);
 
-		m_TempStats.vertexCount += 4;
-		m_TempStats.elementCount += 6;
+				m_TempStats.vertexCount += 4;
+				m_TempStats.elementCount += 6;
+				m_TempStats.quadCount++;
+				vertCount += 4;
+			}
+
+			pos.x += size * 1.2f;
+		}
 	}
 }// namespace fif::gfx

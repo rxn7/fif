@@ -102,12 +102,22 @@ namespace fifed {
 		});
 
 		draw_component<LabelComponent>("Label", [&](LabelComponent &label) {
-			draw_color_selector(label.color);
-			ImGui::DragFloat("Size", &label.size, 1.0f, 0.0f, std::numeric_limits<float>::max());
-
 			std::strncpy(m_TextBuffer.data(), label.text.c_str(), label.text.size() + 1);
 			if(ImGui::InputText("Text", m_TextBuffer.data(), m_TextBuffer.size()))
 				label.text = m_TextBuffer.data();
+
+			ImGui::DragFloat("Size", &label.size, 1.0f, 0.0f, std::numeric_limits<float>::max());
+			draw_color_selector(label.color);
+
+			{
+				static const char *items[] = {"Left", "Center", "Right"};
+				ImGui::Combo("Horizontal Align", (int *)&label.horizontalAlign, items, IM_ARRAYSIZE(items));
+			}
+
+			{
+				static const char *items[] = {"Top", "Center", "Bottom"};
+				ImGui::Combo("Vertical Align", (int *)&label.verticalAlign, items, IM_ARRAYSIZE(items));
+			}
 		});
 
 		draw_component<LuaScriptComponent>("Lua Script", [](LuaScriptComponent &script) {

@@ -1,9 +1,11 @@
 #include "./gfx_serializer.hpp"
 #include "fif/core/ecs/serialization/vec2_yaml.hpp"
 #include "fif/gfx/components/circle_component.hpp"
+#include "fif/gfx/components/label_component.hpp"
 #include "fif/gfx/components/quad_component.hpp"
 #include "fif/gfx/components/sprite_component.hpp"
 #include "fif/gfx/serialization/color_yaml.hpp"
+#include "text/text_align.hpp"
 
 namespace fif::gfx {
 	void GfxSerializer::serialize(const core::Entity &entity, YAML::Emitter &emitter) {
@@ -21,6 +23,14 @@ namespace fif::gfx {
 		serialize_component<CircleComponent>(entity, emitter, [&emitter](CircleComponent &circleComponent) {
 			emitter << YAML::Key << "Tint" << YAML::Value << circleComponent.tint;
 			emitter << YAML::Key << "Radius" << YAML::Value << circleComponent.radius;
+		});
+
+		serialize_component<LabelComponent>(entity, emitter, [&emitter](LabelComponent &labelComponent) {
+			emitter << YAML::Key << "Text" << YAML::Value << labelComponent.text;
+			emitter << YAML::Key << "Size" << YAML::Value << labelComponent.size;
+			emitter << YAML::Key << "Color" << YAML::Value << labelComponent.color;
+			emitter << YAML::Key << "HorizontalAlign" << YAML::Value << (int)labelComponent.horizontalAlign;
+			emitter << YAML::Key << "VerticalAlign" << YAML::Value << (int)labelComponent.verticalAlign;
 		});
 	}
 
@@ -45,6 +55,15 @@ namespace fif::gfx {
 			CircleComponent &circleComponent = entity.require_component<CircleComponent>();
 			circleComponent.tint = circleComponentNode["Tint"].as<Color>();
 			circleComponent.radius = circleComponentNode["Radius"].as<f32>();
+		});
+
+		try_get_component_node<LabelComponent>(entityNode, [&entity](const YAML::Node &labelComponentNode) {
+			LabelComponent &labelComponent = entity.require_component<LabelComponent>();
+			labelComponent.text = labelComponentNode["Text"].as<std::string>();
+			labelComponent.size = labelComponentNode["Size"].as<f32>();
+			labelComponent.color = labelComponentNode["Color"].as<Color>();
+			labelComponent.horizontalAlign = static_cast<HorizontalTextAlign>(labelComponentNode["HorizontalAlign"].as<int>());
+			labelComponent.verticalAlign = static_cast<VerticalTextAlign>(labelComponentNode["VerticalAlign"].as<int>());
 		});
 	}
 }// namespace fif::gfx
