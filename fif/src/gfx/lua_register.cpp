@@ -17,7 +17,7 @@ namespace fif::gfx {
 		lua_module->register_component<QuadComponent>("QuadComponent", "tint", &QuadComponent::tint, "size", &QuadComponent::size);
 		lua_module->register_component<CircleComponent>("CircleComponent", "tint", &CircleComponent::tint, "radius", &CircleComponent::radius);
 
-		lua_module->register_component<LabelComponent>("LabelComponent", "text", &LabelComponent::text, "size", &LabelComponent::fontSize, "charSpacingFactor", &LabelComponent::charSpacingFactor, "lineHeightFactor", &LabelComponent::lineHeightFactor, "color", &LabelComponent::color, "horizontalAlign", &LabelComponent::horizontalAlign, "verticalAlign", &LabelComponent::verticalAlign);
+		lua_module->register_component<LabelComponent>("LabelComponent", "text", &LabelComponent::text, "size", &LabelComponent::fontSize, "color", &LabelComponent::color, "horizontalAlign", &LabelComponent::horizontalAlign, "verticalAlign", &LabelComponent::verticalAlign);
 	}
 #else
 	void register_lua_components() {

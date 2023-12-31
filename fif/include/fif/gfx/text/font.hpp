@@ -1,32 +1,44 @@
 #pragma once
 
+#include "fif/gfx/text/glyph.hpp"
 #include "fif/gfx/texture.hpp"
+
+#include <array>
+
+#include <ft2build.h>
+#include FT_FREETYPE_H
 
 namespace fif::gfx {
 	class Font {// TODO: Extend resource ?
 	public:
-		Font(const std::shared_ptr<Texture> &texture, const f32 size = 2.0f);
-
+		Font(const std::string &path, const u32 size = 16u, const GLint filter = GL_LINEAR);
 		virtual ~Font();
-		void get_char_uv(char c, vec2 &start, vec2 &end) const;
-		static vec2 calculate_text_size(const std::string &text, const f32 size, const f32 lineHeight, const f32 charSpacing);
 
-		inline const Texture &get_texture() const {
-			return *mp_Texture;
+		vec2 calculate_text_size(const std::string &text, const f32 size) const;
+
+		inline const std::shared_ptr<Texture> &get_texture() const {
+			return mp_Texture;
 		}
 
-		inline f32 get_char_width() const {
-			return m_CharSize.x;
+		inline const Glyph &get_glyph(char c) const {
+			return m_Glyphs.at(c);
 		}
 
-		inline f32 get_char_height() const {
-			return m_CharSize.y;
+		inline f32 get_font_height() const {
+			return m_FontHeight;
+		}
+
+		inline u32 get_font_size() const {
+			return m_Size;
 		}
 
 	private:
+		FT_Face m_Face;
+
 		std::shared_ptr<Texture> mp_Texture;
-		f32 m_Size;
-		vec2 m_CharSize;
-		vec2 m_CharSizeNormalized;
+		std::unordered_map<char, Glyph> m_Glyphs;
+
+		u32 m_Size;
+		f32 m_FontHeight = 0;
 	};
 }// namespace fif::gfx

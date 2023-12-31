@@ -5,9 +5,9 @@
 #include <stb_image.h>
 
 namespace fif::gfx {
-	Texture::Texture(u16 width, u16 height, GLenum internalFormat, GLenum dataFormat, GLenum filter, GLenum wrap) {
+	Texture::Texture(const u16 width, const u16 height, const GLenum internalFormat, const GLenum dataFormat, const GLenum filter, const GLenum wrap, void *data) {
 		glGenTextures(1, &m_ID);
-		create(width, height, internalFormat, dataFormat, filter, wrap, nullptr);
+		create(width, height, internalFormat, dataFormat, filter, wrap, data);
 	}
 
 	Texture::~Texture() {
@@ -44,7 +44,7 @@ namespace fif::gfx {
 		stbi_image_free(data);
 	}
 
-	void Texture::create(u16 width, u16 height, GLenum internalFormat, GLenum dataFormat, GLenum filter, GLenum wrap, void *data) {
+	void Texture::create(const u16 width, const u16 height, const GLenum internalFormat, const GLenum dataFormat, const GLenum filter, const GLenum wrap, void *data) {
 		m_Width = width;
 		m_Height = height;
 		m_InternalFormat = internalFormat;
@@ -62,7 +62,7 @@ namespace fif::gfx {
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
-	void Texture::bind_on_slot(u32 slot) const {
+	void Texture::bind_on_slot(const u32 slot) const {
 		glActiveTexture(GL_TEXTURE0 + slot);
 		glBindTexture(GL_TEXTURE_2D, m_ID);
 	}

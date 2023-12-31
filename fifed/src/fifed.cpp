@@ -28,7 +28,7 @@ namespace fifed {
 		attach_module<LuaScriptingModule>();
 		attach_module<NativeScriptingModule>();
 		attach_module<InputModule>();
-		attach_module<GfxModule>();
+		attach_module<GfxModule>("./assets/fonts/iosevka-regular.ttf");
 		attach_module<EditorModule>();
 		attach_module<ImGuiModule>();
 	}

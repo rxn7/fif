@@ -1,7 +1,7 @@
 #include "fif/gfx/text/text_align.hpp"
 
 namespace fif::gfx {
-	vec2 TextAlign::get_text_align_offset(const HorizontalTextAlign hAlign, const VerticalTextAlign vAlign, const vec2 textSize, const f32 fontSize) {
+	vec2 TextAlign::get_text_align_offset(const HorizontalTextAlign hAlign, const VerticalTextAlign vAlign, const vec2 textSize, const f32 fontHeight) {
 		vec2 offset = {};
 
 		switch(hAlign) {
@@ -19,15 +19,15 @@ namespace fif::gfx {
 
 		switch(vAlign) {
 		case VerticalTextAlign::TOP:
-			offset.y -= fontSize;
+			offset.y -= fontHeight * 0.5f;
 			break;
 
 		case VerticalTextAlign::CENTER:
-			offset.y += textSize.y * 0.5f - fontSize;
+			offset.y += textSize.y * 0.5f - fontHeight * 0.75f;
 			break;
 
 		case VerticalTextAlign::BOTTOM:
-			offset.y += textSize.y - fontSize;
+			offset.y += textSize.y - fontHeight;
 			break;
 
 		default:

@@ -6,6 +6,7 @@
 #include "fif/gfx/vertices/circle_vertex.hpp"
 #include "fif/gfx/vertices/quad_vertex.hpp"
 #include "shaders/circle.hpp"
+#include "shaders/glyph.hpp"
 #include "shaders/quad.hpp"
 #include "shaders/sprite.hpp"
 
@@ -34,24 +35,27 @@ namespace fif::gfx {
 		mp_CircleBatch = std::make_unique<Batch<CircleVertex>>(4, 6, BATCH_SIZE, CIRCLE_VERTEX_BUFFER_LAYOUT, shaders::Circle::VERTEX, shaders::Circle::FRAGMENT);
 
 		{
-			std::vector<i32> textureIndicesUniform(m_TextureSlotCount);
+			// TODO: CLEAN THIS THE FUCK UP!!!!!!11
 			/*!
 				NOTE: textureSlotSwitch is a goofy ahh hack to avoid this error: sampler arrays indexed with non-constant expressions are forbidden in
 				GLSL 1.30 and later
 			*/
-			std::ostringstream textureSlotSwitchContent;
-			for(i32 i = 0; i < m_TextureSlotCount; ++i) {
-				textureIndicesUniform[i] = i;
-				textureSlotSwitchContent << "case " << i << ": f_Color = texture(u_Textures[" << i << "], v_UV); break;\n";
+			{
+				std::vector<i32> textureIndicesUniform(m_TextureSlotCount);
+				std::ostringstream textureSlotSwitchContent;
+				for(i32 i = 0; i < m_TextureSlotCount; ++i) {
+					textureIndicesUniform[i] = i;
+					textureSlotSwitchContent << "case " << i << ": f_Color = texture(u_Textures[" << i << "], v_UV); break;\n";
+				}
+
+				std::string spriteFrag = std::regex_replace(shaders::Sprite::FRAGMENT, std::regex("\\$textureSlotCount"), std::to_string(m_TextureSlotCount));
+				spriteFrag = std::regex_replace(spriteFrag, std::regex("\\$textureSlotSwitch"), textureSlotSwitchContent.str());
+
+				mp_SpriteBatch = std::make_unique<Batch<SpriteVertex>>(4, 6, BATCH_SIZE, SPRITE_VERTEX_BUFFER_LAYOUT, shaders::Sprite::VERTEX, spriteFrag);
+				mp_SpriteBatch->get_shader().bind();
+				mp_SpriteBatch->get_shader().set_uniform_i32_array("u_Textures", textureIndicesUniform.data(), m_TextureSlotCount);
+				mp_SpriteBatch->get_shader().unbind();
 			}
-
-			std::string spriteFrag = std::regex_replace(shaders::Sprite::FRAGMENT, std::regex("\\$textureSlotCount"), std::to_string(m_TextureSlotCount));
-			spriteFrag = std::regex_replace(spriteFrag, std::regex("\\$textureSlotSwitch"), textureSlotSwitchContent.str());
-
-			mp_SpriteBatch = std::make_unique<Batch<SpriteVertex>>(4, 6, BATCH_SIZE, SPRITE_VERTEX_BUFFER_LAYOUT, shaders::Sprite::VERTEX, spriteFrag);
-			mp_SpriteBatch->get_shader().bind();
-			mp_SpriteBatch->get_shader().set_uniform_i32_array("u_Textures", textureIndicesUniform.data(), m_TextureSlotCount);
-			mp_SpriteBatch->get_shader().unbind();
 		}
 	}
 
@@ -84,7 +88,7 @@ namespace fif::gfx {
 			m_TextureIdx = 0;
 		}
 
-		f32 textureSlot = static_cast<f32>(m_TextureIdx);
+		const f32 textureSlot = static_cast<f32>(m_TextureIdx);
 		m_Textures[m_TextureIdx++] = texture;
 		m_Textures[textureSlot]->bind_on_slot(textureSlot);
 
@@ -94,7 +98,7 @@ namespace fif::gfx {
 	void Renderer2D::render_sprite(const std::shared_ptr<Texture> &texture, const vec2 &position, const vec2 &size, f32 angle, const Color &color) {
 		FLUSH_IF_FULL(mp_SpriteBatch)
 
-		f32 textureSlot = get_texture_slot(texture);
+		const f32 textureSlot = get_texture_slot(texture);
 		const u32 vertCount = mp_SpriteBatch->get_vertex_count();
 
 		if(glm::mod(angle, glm::two_pi<f32>())) {
@@ -131,23 +135,24 @@ namespace fif::gfx {
 	void Renderer2D::render_quad(const vec2 &position, const vec2 &size, f32 angle, const Color &color) {
 		FLUSH_IF_FULL(mp_QuadBatch)
 
+		const vec2 halfSize = size * 0.5f;
 		const u32 vertCount = mp_QuadBatch->get_vertex_count();
 
 		if(glm::mod(angle, glm::two_pi<f32>())) {
 			mat4 matrix(1.0f);
 			matrix = translate(mat4(1.0f), vec3(position, 0.0f));
 			matrix = rotate(matrix, -angle, {0, 0, 1});
-			matrix = scale(matrix, vec3(size, 1.0));
+			matrix = scale(matrix, vec3(halfSize, 1.0));
 			mp_QuadBatch->add_vertex({vec2(matrix * vec4(-1.0f, -1.0f, 0.0f, 1.0f)), color});
 			mp_QuadBatch->add_vertex({vec2(matrix * vec4(-1.0f, 1.0f, 0.0f, 1.0f)), color});
 			mp_QuadBatch->add_vertex({vec2(matrix * vec4(1.0f, 1.0f, 0.0f, 1.0f)), color});
 			mp_QuadBatch->add_vertex({vec2(matrix * vec4(1.0f, -1.0f, 0.0f, 1.0f)), color});
 			m_TempStats.rotatedQuadCount++;
 		} else {
-			mp_QuadBatch->add_vertex({vec2(position.x - size.x, position.y - size.y), color});
-			mp_QuadBatch->add_vertex({vec2(position.x - size.x, position.y + size.y), color});
-			mp_QuadBatch->add_vertex({vec2(position.x + size.x, position.y + size.y), color});
-			mp_QuadBatch->add_vertex({vec2(position.x + size.x, position.y - size.y), color});
+			mp_QuadBatch->add_vertex({vec2(position.x - halfSize.x, position.y - halfSize.y), color});
+			mp_QuadBatch->add_vertex({vec2(position.x - halfSize.x, position.y + halfSize.y), color});
+			mp_QuadBatch->add_vertex({vec2(position.x + halfSize.x, position.y + halfSize.y), color});
+			mp_QuadBatch->add_vertex({vec2(position.x + halfSize.x, position.y - halfSize.y), color});
 			m_TempStats.quadCount++;
 		}
 
@@ -184,37 +189,28 @@ namespace fif::gfx {
 		m_TempStats.elementCount += 6u;
 	}
 
-	void Renderer2D::render_text(const vec2 &position, f32 fontSize, const std::string &text, const Color &color, const VerticalTextAlign vAlign, const HorizontalTextAlign hAlign, const f32 charSpacingFactor, const f32 lineHeightFactor) {
-		FLUSH_IF_FULL(mp_QuadBatch)
+	void Renderer2D::render_text(const std::shared_ptr<Font> &font, const vec2 &position, f32 fontSize, const std::string &text, const Color &color, const VerticalTextAlign vAlign, const HorizontalTextAlign hAlign) {
+		FLUSH_IF_FULL(mp_SpriteBatch)
 
-		const f32 halfFontSize = fontSize * 0.5f;
-		const f32 charSpacing = fontSize * charSpacingFactor;
-		const f32 lineHeight = fontSize * lineHeightFactor;
-		const vec2 textSize = Font::calculate_text_size(text, fontSize, lineHeight, charSpacing);
-		const vec2 startPosition = position + TextAlign::get_text_align_offset(hAlign, vAlign, textSize, fontSize);
+		const f32 textureSlot = get_texture_slot(font->get_texture());
+		const vec2 textSize = font->calculate_text_size(text, fontSize);
+		const vec2 origin = position + TextAlign::get_text_align_offset(hAlign, vAlign, textSize, font->get_font_height() * fontSize);
 
 		u32 vertCount = mp_QuadBatch->get_vertex_count();
-		f32 x = startPosition.x;
-		f32 y = startPosition.y;
+		vec2 currentPosition = origin;
 
 		for(std::string::const_iterator it = text.begin(); it < text.end(); ++it) {
 			const bool isLastChar = it == text.end() - 1;
 
 			switch(*it) {
-			case ' ':
-				x += fontSize;
-				if(!isLastChar)
-					x += charSpacing;
-				break;
-
 			case '\\':
 				if(isLastChar)
 					break;
 
 				switch(*(++it)) {
 				case 'n':
-					y -= lineHeight;
-					x = startPosition.x;
+					currentPosition.y -= font->get_font_height() * fontSize;
+					currentPosition.x = origin.x;
 					break;
 				case '\\':
 					goto nobreak;
@@ -225,28 +221,37 @@ namespace fif::gfx {
 			nobreak:
 
 			default:
-				mp_QuadBatch->add_vertex({vec2(x, y), color});
-				mp_QuadBatch->add_vertex({vec2(x, y + fontSize), color});
-				mp_QuadBatch->add_vertex({vec2(x + fontSize, y + fontSize), color});
-				mp_QuadBatch->add_vertex({vec2(x + fontSize, y), color});
+				if(*it < 32 || *it >= 127) {
+					core::Logger::error("Char '%c' (%i) is out of supported range (32-127)", *it, static_cast<int>(*it));
+					break;
+				}
 
-				mp_QuadBatch->add_element(vertCount);
-				mp_QuadBatch->add_element(vertCount + 1);
-				mp_QuadBatch->add_element(vertCount + 2);
-				mp_QuadBatch->add_element(vertCount + 2);
-				mp_QuadBatch->add_element(vertCount + 3);
-				mp_QuadBatch->add_element(vertCount);
+				const Glyph &glyph = font->get_glyph(*it);
+				const vec2 glyphSize = static_cast<vec2>(glyph.size) * fontSize;
+
+				f32 x = currentPosition.x + glyph.offset.x * fontSize;
+				f32 y = currentPosition.y - (glyph.size.y - glyph.offset.y) * fontSize;
+
+				mp_SpriteBatch->add_vertex({vec2(x, y), {glyph.startUv.x, glyph.endUv.y}, color, textureSlot});
+				mp_SpriteBatch->add_vertex({vec2(x, y + glyphSize.y), glyph.startUv, color, textureSlot});
+				mp_SpriteBatch->add_vertex({vec2(x + glyphSize.x, y + glyphSize.y), {glyph.endUv.x, glyph.startUv.y}, color, textureSlot});
+				mp_SpriteBatch->add_vertex({vec2(x + glyphSize.x, y), glyph.endUv, color, textureSlot});
+
+				mp_SpriteBatch->add_element(vertCount);
+				mp_SpriteBatch->add_element(vertCount + 1);
+				mp_SpriteBatch->add_element(vertCount + 2);
+				mp_SpriteBatch->add_element(vertCount + 2);
+				mp_SpriteBatch->add_element(vertCount + 3);
+				mp_SpriteBatch->add_element(vertCount);
 
 				m_TempStats.vertexCount += 4;
 				m_TempStats.elementCount += 6;
-				m_TempStats.quadCount++;
+				m_TempStats.glyphCount++;
 				vertCount += 4;
 
-				x += fontSize;
-				if(!isLastChar)
-					x += charSpacing;
+				currentPosition.x += glyph.advance.x * fontSize;
 
-				break;
+				// TODO: glyph batch
 			}
 		}
 	}

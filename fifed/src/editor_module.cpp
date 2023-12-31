@@ -1,5 +1,6 @@
 #include "editor_module.hpp"
 #include "camera_controller.hpp"
+#include "fif/gfx/gfx_module.hpp"
 #include "grid.hpp"
 
 #include "panels/console/console_panel.hpp"

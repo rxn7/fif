@@ -108,8 +108,6 @@ namespace fifed {
 				label.text = m_TextBuffer.data();
 
 			ImGui::DragFloat("Size", &label.fontSize, 1.0f, 0.0f, std::numeric_limits<float>::max());
-			ImGui::DragFloat("Character Spacing Factor", &label.charSpacingFactor, 0.05f, 0.0f, std::numeric_limits<float>::max());
-			ImGui::DragFloat("Line Height Factor", &label.lineHeightFactor, 0.05f, 0.0f, std::numeric_limits<float>::max());
 			draw_color_selector(label.color);
 
 			{
@@ -122,8 +120,12 @@ namespace fifed {
 				ImGui::Combo("Vertical Align", (int *)&label.verticalAlign, items, IM_ARRAYSIZE(items));
 			}
 
-			const vec2 textSize = label.calculate_text_size();
-			ImGui::LabelText("Size", "%f, %f", textSize.x, textSize.y);
+			const std::shared_ptr<Font> &font = GfxModule::get_instance()->get_default_font();
+			const vec2 size = font->calculate_text_size(label.text, label.fontSize);
+			ImGui::Text("Size: %f, %f", size.x, size.y);
+
+			ImGui::Text("Font: ");
+			ImGui::Image(reinterpret_cast<ImTextureID>(GfxModule::get_instance()->get_default_font()->get_texture()->get_id()), {256, 256});
 		});
 
 		draw_component<LuaScriptComponent>("Lua Script", [](LuaScriptComponent &script) {
