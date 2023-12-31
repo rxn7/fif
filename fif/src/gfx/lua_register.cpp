@@ -1,10 +1,13 @@
 #include "./lua_register.hpp"
-#include "components/label_component.hpp"
 #include "fif/gfx/color.hpp"
 #include "fif/gfx/components/circle_component.hpp"
+#include "fif/gfx/components/label_component.hpp"
 #include "fif/gfx/components/quad_component.hpp"
 #include "fif/gfx/components/sprite_component.hpp"
+
+#ifdef FIF_LUA_SCRIPTING
 #include "fif/lua_scripting/lua_scripting_module.hpp"
+#endif
 
 namespace fif::gfx {
 #ifdef FIF_LUA_SCRIPTING
