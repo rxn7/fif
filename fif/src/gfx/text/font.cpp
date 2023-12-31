@@ -15,7 +15,7 @@ namespace fif::gfx {
 		}
 
 		FT_Set_Pixel_Sizes(m_Face, 0, size);
-		const u32 glyphPadding = 2u;
+		constexpr u32 glyphPadding = 2u;
 		u32 row = 0;
 		u32 col = glyphPadding;
 		u32 textureSize = 512;
@@ -31,7 +31,7 @@ namespace fif::gfx {
 			// Move the glyph to the next row if it won't fix on this row.
 			if(col + m_Face->glyph->bitmap.width + glyphPadding >= textureSize) {
 				col = glyphPadding;
-				row += size;
+				row += size + glyphPadding;
 			}
 
 			m_FontHeight = std::max(m_FontHeight, static_cast<f32>((m_Face->size->metrics.ascender - m_Face->size->metrics.descender) >> 6));

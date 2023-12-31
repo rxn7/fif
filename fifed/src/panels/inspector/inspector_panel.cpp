@@ -107,7 +107,7 @@ namespace fifed {
 			if(ImGui::InputText("Text", m_TextBuffer.data(), m_TextBuffer.size()))
 				label.text = m_TextBuffer.data();
 
-			ImGui::DragFloat("Size", &label.fontSize, 1.0f, 0.0f, std::numeric_limits<float>::max());
+			ImGui::DragFloat("Size", &label.fontSize, 0.05f, 0.0f, std::numeric_limits<float>::max());
 			draw_color_selector(label.color);
 
 			{

@@ -6,7 +6,7 @@
 namespace fif::gfx {
 	struct LabelComponent final {
 		std::string text = "";
-		f32 fontSize = 12.0f;
+		f32 fontSize = 1.0f;
 		Color color = Colors::BLACK;
 		HorizontalTextAlign horizontalAlign = HorizontalTextAlign::LEFT;
 		VerticalTextAlign verticalAlign = VerticalTextAlign::CENTER;
