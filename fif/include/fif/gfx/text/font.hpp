@@ -14,7 +14,7 @@ namespace fif::gfx {
 		Font(const std::string &path, const u32 size = 16u, const GLint filter = GL_LINEAR);
 		virtual ~Font();
 
-		vec2 calculate_text_size(const std::string &text, const f32 size) const;
+		vec2 calculate_text_size(const std::string &text, const vec2 &size) const;
 
 		inline const std::shared_ptr<Texture> &get_texture() const {
 			return mp_Texture;

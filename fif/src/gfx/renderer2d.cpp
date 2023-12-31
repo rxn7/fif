@@ -33,30 +33,8 @@ namespace fif::gfx {
 
 		mp_QuadBatch = std::make_unique<Batch<QuadVertex>>(4, 6, BATCH_SIZE, QUAD_VERTEX_BUFFER_LAYOUT, shaders::Quad::VERTEX, shaders::Quad::FRAGMENT);
 		mp_CircleBatch = std::make_unique<Batch<CircleVertex>>(4, 6, BATCH_SIZE, CIRCLE_VERTEX_BUFFER_LAYOUT, shaders::Circle::VERTEX, shaders::Circle::FRAGMENT);
-
-		{
-			// TODO: CLEAN THIS THE FUCK UP!!!!!!11
-			/*!
-				NOTE: textureSlotSwitch is a goofy ahh hack to avoid this error: sampler arrays indexed with non-constant expressions are forbidden in
-				GLSL 1.30 and later
-			*/
-			{
-				std::vector<i32> textureIndicesUniform(m_TextureSlotCount);
-				std::ostringstream textureSlotSwitchContent;
-				for(i32 i = 0; i < m_TextureSlotCount; ++i) {
-					textureIndicesUniform[i] = i;
-					textureSlotSwitchContent << "case " << i << ": f_Color = texture(u_Textures[" << i << "], v_UV); break;\n";
-				}
-
-				std::string spriteFrag = std::regex_replace(shaders::Sprite::FRAGMENT, std::regex("\\$textureSlotCount"), std::to_string(m_TextureSlotCount));
-				spriteFrag = std::regex_replace(spriteFrag, std::regex("\\$textureSlotSwitch"), textureSlotSwitchContent.str());
-
-				mp_SpriteBatch = std::make_unique<Batch<SpriteVertex>>(4, 6, BATCH_SIZE, SPRITE_VERTEX_BUFFER_LAYOUT, shaders::Sprite::VERTEX, spriteFrag);
-				mp_SpriteBatch->get_shader().bind();
-				mp_SpriteBatch->get_shader().set_uniform_i32_array("u_Textures", textureIndicesUniform.data(), m_TextureSlotCount);
-				mp_SpriteBatch->get_shader().unbind();
-			}
-		}
+		mp_GlyphBatch = setup_textured_batch<SpriteVertex>(SPRITE_VERTEX_BUFFER_LAYOUT, shaders::Glyph::VERTEX, shaders::Glyph::FRAGMENT);
+		mp_SpriteBatch = setup_textured_batch<SpriteVertex>(SPRITE_VERTEX_BUFFER_LAYOUT, shaders::Glyph::VERTEX, shaders::Glyph::FRAGMENT);
 	}
 
 	void Renderer2D::start() {
@@ -68,15 +46,17 @@ namespace fif::gfx {
 		flush_batch(*mp_QuadBatch);
 		flush_batch(*mp_CircleBatch);
 		flush_batch(*mp_SpriteBatch);
+		flush_batch(*mp_GlyphBatch);
 
 		m_Stats = m_TempStats;
+		m_Stats.textures = m_TextureIdx;
 
 		// Clean up
 		m_TempStats = {0};
 		m_TextureIdx = 0;
 	}
 
-	f32 Renderer2D::get_texture_slot(const std::shared_ptr<Texture> &texture) {
+	f32 Renderer2D::assign_texture_slot(const std::shared_ptr<Texture> &texture) {
 		for(i32 i = 0; i < m_TextureIdx; ++i) {
 			if(m_Textures[i]->get_id() == texture->get_id())
 				return static_cast<f32>(i);
@@ -98,7 +78,7 @@ namespace fif::gfx {
 	void Renderer2D::render_sprite(const std::shared_ptr<Texture> &texture, const vec2 &position, const vec2 &size, f32 angle, const Color &color) {
 		FLUSH_IF_FULL(mp_SpriteBatch)
 
-		const f32 textureSlot = get_texture_slot(texture);
+		const f32 textureSlot = assign_texture_slot(texture);
 		const u32 vertCount = mp_SpriteBatch->get_vertex_count();
 
 		if(glm::mod(angle, glm::two_pi<f32>())) {
@@ -189,14 +169,14 @@ namespace fif::gfx {
 		m_TempStats.elementCount += 6u;
 	}
 
-	void Renderer2D::render_text(const std::shared_ptr<Font> &font, const vec2 &position, f32 fontSize, const std::string &text, const Color &color, const VerticalTextAlign vAlign, const HorizontalTextAlign hAlign) {
+	// TODO: Support rotations
+	void Renderer2D::render_text(const std::shared_ptr<Font> &font, const vec2 &position, const vec2 &scale, f32 fontSize, const std::string &text, const Color &color, const VerticalTextAlign vAlign, const HorizontalTextAlign hAlign) {
 		FLUSH_IF_FULL(mp_SpriteBatch)
 
-		const f32 textureSlot = get_texture_slot(font->get_texture());
-		const vec2 textSize = font->calculate_text_size(text, fontSize);
+		const f32 textureSlot = assign_texture_slot(font->get_texture());
+		const vec2 textSize = font->calculate_text_size(text, scale * fontSize);
 		const vec2 origin = position + TextAlign::get_text_align_offset(hAlign, vAlign, textSize, font->get_font_height() * fontSize);
 
-		u32 vertCount = mp_QuadBatch->get_vertex_count();
 		vec2 currentPosition = origin;
 
 		for(std::string::const_iterator it = text.begin(); it < text.end(); ++it) {
@@ -209,7 +189,7 @@ namespace fif::gfx {
 
 				switch(*(++it)) {
 				case 'n':
-					currentPosition.y -= font->get_font_height() * fontSize;
+					currentPosition.y -= font->get_font_height() * fontSize * scale.y;
 					currentPosition.x = origin.x;
 					break;
 				case '\\':
@@ -227,31 +207,29 @@ namespace fif::gfx {
 				}
 
 				const Glyph &glyph = font->get_glyph(*it);
-				const vec2 glyphSize = static_cast<vec2>(glyph.size) * fontSize;
+				const vec2 glyphSize = static_cast<vec2>(glyph.size) * fontSize * scale;
+				const u32 vertCount = mp_GlyphBatch->get_vertex_count();
 
 				f32 x = currentPosition.x + glyph.offset.x * fontSize;
 				f32 y = currentPosition.y - (glyph.size.y - glyph.offset.y) * fontSize;
 
-				mp_SpriteBatch->add_vertex({vec2(x, y), {glyph.startUv.x, glyph.endUv.y}, color, textureSlot});
-				mp_SpriteBatch->add_vertex({vec2(x, y + glyphSize.y), glyph.startUv, color, textureSlot});
-				mp_SpriteBatch->add_vertex({vec2(x + glyphSize.x, y + glyphSize.y), {glyph.endUv.x, glyph.startUv.y}, color, textureSlot});
-				mp_SpriteBatch->add_vertex({vec2(x + glyphSize.x, y), glyph.endUv, color, textureSlot});
+				mp_GlyphBatch->add_vertex({vec2(x, y), {glyph.startUv.x, glyph.endUv.y}, color, textureSlot});
+				mp_GlyphBatch->add_vertex({vec2(x, y + glyphSize.y), glyph.startUv, color, textureSlot});
+				mp_GlyphBatch->add_vertex({vec2(x + glyphSize.x, y + glyphSize.y), {glyph.endUv.x, glyph.startUv.y}, color, textureSlot});
+				mp_GlyphBatch->add_vertex({vec2(x + glyphSize.x, y), glyph.endUv, color, textureSlot});
 
-				mp_SpriteBatch->add_element(vertCount);
-				mp_SpriteBatch->add_element(vertCount + 1);
-				mp_SpriteBatch->add_element(vertCount + 2);
-				mp_SpriteBatch->add_element(vertCount + 2);
-				mp_SpriteBatch->add_element(vertCount + 3);
-				mp_SpriteBatch->add_element(vertCount);
+				mp_GlyphBatch->add_element(vertCount);
+				mp_GlyphBatch->add_element(vertCount + 1);
+				mp_GlyphBatch->add_element(vertCount + 2);
+				mp_GlyphBatch->add_element(vertCount + 2);
+				mp_GlyphBatch->add_element(vertCount + 3);
+				mp_GlyphBatch->add_element(vertCount);
 
 				m_TempStats.vertexCount += 4;
 				m_TempStats.elementCount += 6;
 				m_TempStats.glyphCount++;
-				vertCount += 4;
 
-				currentPosition.x += glyph.advance.x * fontSize;
-
-				// TODO: glyph batch
+				currentPosition.x += glyph.advance.x * fontSize * scale.x;
 			}
 		}
 	}

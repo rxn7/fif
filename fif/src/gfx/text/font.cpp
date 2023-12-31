@@ -65,8 +65,8 @@ namespace fif::gfx {
 	}
 
 	// TODO: Width should be calculated independetly for each line !!!
-	vec2 Font::calculate_text_size(const std::string &text, const f32 fontSize) const {
-		vec2 size = {0, m_FontHeight * fontSize};
+	vec2 Font::calculate_text_size(const std::string &text, const vec2 &size) const {
+		vec2 textSize = {0, m_FontHeight * size.y};
 		f32 tempWidth = 0.0f;
 
 		for(std::string::const_iterator it = text.begin(); it < text.end(); ++it) {
@@ -79,7 +79,7 @@ namespace fif::gfx {
 
 				switch(*(++it)) {
 				case 'n':
-					size.y += m_FontHeight * fontSize;
+					textSize.y += m_FontHeight * size.y;
 					tempWidth = 0.0f;
 					break;
 				}
@@ -88,15 +88,15 @@ namespace fif::gfx {
 
 			default:
 				const Glyph &glyph = get_glyph(*it);
-				tempWidth += glyph.advance.x * fontSize;
+				tempWidth += glyph.advance.x * size.x;
 
 				break;
 			}
 
-			if(tempWidth > size.x)
-				size.x = tempWidth;
+			if(tempWidth > textSize.x)
+				textSize.x = tempWidth;
 		}
 
-		return size;
+		return textSize;
 	}
 }// namespace fif::gfx

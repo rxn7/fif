@@ -121,11 +121,9 @@ namespace fifed {
 			}
 
 			const std::shared_ptr<Font> &font = GfxModule::get_instance()->get_default_font();
-			const vec2 size = font->calculate_text_size(label.text, label.fontSize);
-			ImGui::Text("Size: %f, %f", size.x, size.y);
 
 			ImGui::Text("Font: ");
-			ImGui::Image(reinterpret_cast<ImTextureID>(GfxModule::get_instance()->get_default_font()->get_texture()->get_id()), {256, 256});
+			ImGui::Image(reinterpret_cast<ImTextureID>(font->get_texture()->get_id()), {256, 256});
 		});
 
 		draw_component<LuaScriptComponent>("Lua Script", [](LuaScriptComponent &script) {
