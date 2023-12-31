@@ -8,7 +8,8 @@
 #include FT_FREETYPE_H
 
 namespace fif::gfx {
-	Font::Font(const std::string &path, const u32 size, const GLint filter) : m_Size(size) {
+	std::shared_ptr<Font> Font::sp_DefaultFont;
+	Font::Font(const std::string &path, const u32 size, const u32 textureSize, const GLenum filter) : m_Size(size) {
 		if(FT_Error error = FT_New_Face(GfxModule::get_instance()->m_FreeType, path.c_str(), 0, &m_Face)) {
 			core::Logger::error("Failed to load freetype font: %s", FT_Error_String(error));
 			return;
@@ -18,7 +19,6 @@ namespace fif::gfx {
 		constexpr u32 glyphPadding = 2u;
 		u32 row = 0;
 		u32 col = glyphPadding;
-		u32 textureSize = 512;
 		u8 *textureBuffer = new u8[textureSize * textureSize];
 
 		for(char c = 32; c < 127; ++c) {
@@ -35,6 +35,11 @@ namespace fif::gfx {
 			}
 
 			m_FontHeight = std::max(m_FontHeight, static_cast<f32>((m_Face->size->metrics.ascender - m_Face->size->metrics.descender) >> 6));
+
+			if((row + m_Face->glyph->bitmap.rows) * textureSize + col + m_Face->glyph->bitmap.width >= textureSize * textureSize) {
+				core::Logger::error("Glyph won't find into the font's texture!\nTexture size: %u\nGlyph: '%c'", textureSize, c);
+				break;
+			}
 
 			for(u32 y = 0; y < m_Face->glyph->bitmap.rows; ++y) {
 				for(u32 x = 0; x < m_Face->glyph->bitmap.width; ++x) {

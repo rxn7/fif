@@ -31,10 +31,6 @@ namespace fif::gfx {
 			return m_Renderer2D;
 		}
 
-		inline const std::shared_ptr<Font> &get_default_font() const {
-			return mp_DefaultFont;
-		}
-
 		inline void set_viewport(const vec2 &size, const vec2 &pos = {0, 0}) {
 			m_ViewportSize = size;
 			m_ViewportPosition = pos;
@@ -52,7 +48,6 @@ namespace fif::gfx {
 		FT_Library m_FreeType;
 
 	private:
-		std::shared_ptr<Font> mp_DefaultFont;
 		Renderer2D m_Renderer2D;
 	};
 }// namespace fif::gfx

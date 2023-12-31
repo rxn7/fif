@@ -120,10 +120,8 @@ namespace fifed {
 				ImGui::Combo("Vertical Align", (int *)&label.verticalAlign, items, IM_ARRAYSIZE(items));
 			}
 
-			const std::shared_ptr<Font> &font = GfxModule::get_instance()->get_default_font();
-
 			ImGui::Text("Font: ");
-			ImGui::Image(reinterpret_cast<ImTextureID>(font->get_texture()->get_id()), {256, 256});
+			ImGui::Image(reinterpret_cast<ImTextureID>(Font::get_default()->get_texture()->get_id()), {256, 256});
 		});
 
 		draw_component<LuaScriptComponent>("Lua Script", [](LuaScriptComponent &script) {

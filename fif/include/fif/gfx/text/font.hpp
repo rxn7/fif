@@ -11,7 +11,7 @@
 namespace fif::gfx {
 	class Font {// TODO: Extend resource ?
 	public:
-		Font(const std::string &path, const u32 size = 16u, const GLint filter = GL_LINEAR);
+		Font(const std::string &path, const u32 size = 16u, const u32 textureSize = 512, const GLenum filter = GL_LINEAR);
 		virtual ~Font();
 
 		vec2 calculate_text_size(const std::string &text, const vec2 &size) const;
@@ -21,7 +21,13 @@ namespace fif::gfx {
 		}
 
 		inline const Glyph &get_glyph(char c) const {
-			return m_Glyphs.at(c);
+			const auto it = m_Glyphs.find(c);
+
+			if(it != m_Glyphs.end())
+				return it->second;
+
+			// Return any glyph
+			return m_Glyphs.begin()->second;
 		}
 
 		inline f32 get_font_height() const {
@@ -32,7 +38,12 @@ namespace fif::gfx {
 			return m_Size;
 		}
 
+		static inline const std::shared_ptr<Font> &get_default() {
+			return sp_DefaultFont;
+		}
+
 	private:
+		static std::shared_ptr<Font> sp_DefaultFont;
 		FT_Face m_Face;
 
 		std::shared_ptr<Texture> mp_Texture;
@@ -40,5 +51,7 @@ namespace fif::gfx {
 
 		u32 m_Size;
 		f32 m_FontHeight = 0;
+
+		friend class GfxModule;
 	};
 }// namespace fif::gfx

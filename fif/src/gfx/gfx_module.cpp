@@ -19,7 +19,7 @@ namespace fif::gfx {
 
 		FIF_ASSERT(FT_Init_FreeType(&m_FreeType) == 0, "Failed to init freetype");
 
-		mp_DefaultFont = std::make_shared<Font>(defaultFontPath, 64);
+		Font::sp_DefaultFont = std::make_shared<Font>(defaultFontPath, 64, 512);
 	}
 
 	GfxModule::~GfxModule() {
