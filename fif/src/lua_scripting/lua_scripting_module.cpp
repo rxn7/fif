@@ -66,7 +66,6 @@ namespace fif::lua_scripting {
 		luaScript.self["entity"] = &luaScript.entity;
 
 		auto init = luaScript.self["init"];
-#ifdef FIF_DEBUG
 		if(init.valid()) {
 			const sol::protected_function_result result = init(luaScript.self);
 			if(!result.valid()) {
@@ -74,7 +73,6 @@ namespace fif::lua_scripting {
 				core::Logger::error("Failed to init lua script(%s): %s", luaScript.filepath.c_str(), err.what());
 			}
 		}
-#endif
 	}
 
 	static void lua_script_update_system(const core::ApplicationStatus &status, entt::registry &registry, float dt) {
@@ -84,12 +82,10 @@ namespace fif::lua_scripting {
 		registry.view<LuaScriptComponent>().each([&]([[maybe_unused]] core::EntityID entity, LuaScriptComponent &luaScript) {
 			if(luaScript.hooks.update.valid()) {
 				const auto &result = luaScript.hooks.update(luaScript.self, dt);
-#ifdef FIF_DEBUG
 				if(!result.valid()) {
 					sol::error err(result);
 					core::Logger::error("Failed to update lua script(%s): %s", luaScript.filepath.c_str(), err.what());
 				}
-#endif
 			}
 		});
 	}

@@ -44,6 +44,7 @@ The dependencies are used as submodules:
 - [stb_image](https://github.com/nothings/stb/blob/master/stb_image.h) ([Public Domain license](https://github.com/nothings/stb/blob/master/stb_image.h))
 - [tiny file dialogs](https://sourceforge.net/projects/tinyfiledialogs) ([zlib license](https://sourceforge.net/p/tinyfiledialogs/code/ci/master/tree/README.txt#l1))
 - [yaml-cpp](https://github.com/jbeder/yaml-cpp) ([MIT license](https://github.com/jbeder/yaml-cpp/blob/master/LICENSE))
+- [freetype](https://gitlab.freedesktop.org/freetype/freetype) ([FreeType Project LICENSE](https://gitlab.freedesktop.org/freetype/freetype/-/blob/master/docs/FTL.TXT))
 
 ## Fonts
 - [iosevka](https://github.com/be5invis/Iosevka) ([SIL Open Font License 1.1](https://github.com/be5invis/Iosevka/blob/main/LICENSE.md))

@@ -1,11 +1,13 @@
 #include "inspector_panel.hpp"
 
-#include "components/lua_script_component.hpp"
 #include "fif/core/ecs/components/tag_component.hpp"
 #include "fif/core/ecs/components/transform_component.hpp"
 #include "fif/gfx/components/circle_component.hpp"
+#include "fif/gfx/components/label_component.hpp"
 #include "fif/gfx/components/quad_component.hpp"
 #include "fif/gfx/components/sprite_component.hpp"
+#include "fif/gfx/text/font.hpp"
+#include "fif/lua_scripting/components/lua_script_component.hpp"
 #include "fif/lua_scripting/lua_scripting_module.hpp"
 #include "fif/native_scripting/components/native_script_component.hpp"
 
@@ -15,7 +17,8 @@
 #include <tinyfiledialogs.h>
 
 namespace fifed {
-	InspectorPanel::InspectorPanel(Scene &scene) : m_SelectedEntity(scene, entt::null) {}
+	InspectorPanel::InspectorPanel(Scene &scene) : m_SelectedEntity(scene, entt::null) {
+	}
 
 	void InspectorPanel::on_render() {
 		if(m_SelectedEntity.m_ID == entt::null)
@@ -36,6 +39,7 @@ namespace fifed {
 			draw_add_component_entry<SpriteComponent>("Sprite");
 			draw_add_component_entry<QuadComponent>("Quad");
 			draw_add_component_entry<CircleComponent>("Circle");
+			draw_add_component_entry<LabelComponent>("Label");
 			draw_add_component_entry<LuaScriptComponent>(
 				"Lua Script",
 				[&](auto &script) {
@@ -55,9 +59,9 @@ namespace fifed {
 		ImGui::Spacing();
 
 		if(TagComponent *tag = m_SelectedEntity.try_get_component<TagComponent>()) {
-			std::strncpy(m_TagBuffer.data(), tag->tag.c_str(), tag->tag.size() + 1);
-			if(ImGui::InputText("Tag", m_TagBuffer.data(), m_TagBuffer.size()))
-				tag->tag = m_TagBuffer.data();
+			std::strncpy(m_TextBuffer.data(), tag->tag.c_str(), tag->tag.size() + 1);
+			if(ImGui::InputText("Tag", m_TextBuffer.data(), m_TextBuffer.size()))
+				tag->tag = m_TextBuffer.data();
 		}
 
 		draw_component<TransformComponent>("Transform", [](TransformComponent &transform) {
@@ -96,6 +100,30 @@ namespace fifed {
 		draw_component<CircleComponent>("Circle", [](CircleComponent &circle) {
 			draw_color_selector(circle.tint);
 			ImGui::DragFloat("Radius", &circle.radius, 1.0f, 0.0f, std::numeric_limits<float>::max());
+		});
+
+		draw_component<LabelComponent>("Label", [&](LabelComponent &label) {
+			std::strncpy(m_TextBuffer.data(), label.text.c_str(), label.text.size() + 1);
+			if(ImGui::InputText("Text", m_TextBuffer.data(), m_TextBuffer.size()))
+				label.text = m_TextBuffer.data();
+
+			ImGui::DragFloat("Size", &label.fontSize, 1.0f, 0.0f, std::numeric_limits<float>::max());
+			draw_color_selector(label.color);
+
+			{
+				static const char *items[] = {"Left", "Center", "Right"};
+				ImGui::Combo("Horizontal Align", (int *)&label.horizontalAlign, items, IM_ARRAYSIZE(items));
+			}
+
+			{
+				static const char *items[] = {"Top", "Center", "Bottom"};
+				ImGui::Combo("Vertical Align", (int *)&label.verticalAlign, items, IM_ARRAYSIZE(items));
+			}
+
+			const std::shared_ptr<Font> &font = GfxModule::get_instance()->get_default_font();
+
+			ImGui::Text("Font: ");
+			ImGui::Image(reinterpret_cast<ImTextureID>(font->get_texture()->get_id()), {256, 256});
 		});
 
 		draw_component<LuaScriptComponent>("Lua Script", [](LuaScriptComponent &script) {

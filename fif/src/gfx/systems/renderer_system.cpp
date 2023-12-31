@@ -2,6 +2,7 @@
 #include "fif/core/ecs/components/transform_component.hpp"
 #include "fif/core/ecs/scene.hpp"
 #include "fif/gfx/components/circle_component.hpp"
+#include "fif/gfx/components/label_component.hpp"
 #include "fif/gfx/components/quad_component.hpp"
 #include "fif/gfx/components/sprite_component.hpp"
 #include "fif/gfx/gfx_module.hpp"
@@ -26,6 +27,11 @@ namespace fif::gfx {
 			}
 
 			renderer.render_sprite(sprite.p_texture, trans.position, sprite.size * trans.scale, trans.angleRadians, sprite.tint);
+		});
+
+		registry.view<LabelComponent, core::TransformComponent>().each([&]([[maybe_unused]] core::EntityID entity, LabelComponent &label, core::TransformComponent &trans) {
+			// TODO: Add scale
+			renderer.render_text(GfxModule::get_instance()->get_default_font(), trans.position, trans.scale, label.fontSize, label.text, label.color, label.verticalAlign, label.horizontalAlign);
 		});
 	}
 }// namespace fif::gfx
