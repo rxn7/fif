@@ -62,9 +62,17 @@ namespace fif::core {
 			return;
 
 		render();
+
+		for(auto &mod : m_Modules)
+			mod->end_frame();
+
+		mp_Window->end_frame();
 	}
 
 	void Application::update() {
+		for(auto &mod : m_Modules)
+			mod->pre_update();
+
 		for(auto &mod : m_Modules)
 			mod->on_update();
 
@@ -81,8 +89,6 @@ namespace fif::core {
 
 		for(auto &mod : m_Modules)
 			mod->on_render();
-
-		mp_Window->end_frame();
 	}
 
 	void Application::on_event(Event &event) {

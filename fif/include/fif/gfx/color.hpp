@@ -31,5 +31,9 @@ namespace fif::gfx {
 		DEFINE_COLOR(GREEN, 0, 255, 0);
 		DEFINE_COLOR(BLUE, 0, 0, 255);
 		DEFINE_COLOR(BLACK, 0, 0, 0);
+
+		inline Color get_random() {
+			return Color(rand() % 255, rand() % 255, rand() % 255, 255);
+		}
 	};// namespace Colors
 }// namespace fif::gfx

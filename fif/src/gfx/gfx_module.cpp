@@ -27,7 +27,7 @@ namespace fif::gfx {
 	}
 
 	void GfxModule::on_start() {
-		register_lua_components();
+		register_lua_types();
 
 		core::Logger::info("OpenGL Version: %s", glGetString(GL_VERSION));
 		core::Logger::info("GLSL Version: %s", glGetString(GL_SHADING_LANGUAGE_VERSION));

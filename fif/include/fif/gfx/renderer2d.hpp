@@ -87,7 +87,7 @@ namespace fif::gfx {
 		void render_quad(const vec2 &position, const vec2 &size, f32 angle = 0.0f, const Color &color = {255, 255, 255, 255});
 		void render_sprite(const std::shared_ptr<Texture> &texture, const vec2 &position, const vec2 &size, f32 angle = 0.0f, const Color &color = {255, 255, 255, 255});
 		void render_circle(const vec2 &position, f32 radius, const Color &color = Colors::WHITE);
-		void render_text(const std::shared_ptr<Font> &font, const vec2 &position, const vec2 &scale, f32 size, const std::string &text, const Color &color = Colors::BLACK, const VerticalTextAlign vAlign = VerticalTextAlign::CENTER, const HorizontalTextAlign hAlign = HorizontalTextAlign::LEFT);
+		void render_text(const std::shared_ptr<Font> &font, const vec2 &position, const vec2 &scale, f32 size, const std::string &text, const Color &color = Colors::BLACK, const VerticalTextAlign vAlign = VerticalTextAlign::Center, const HorizontalTextAlign hAlign = HorizontalTextAlign::Left);
 		f32 assign_texture_slot(const std::shared_ptr<Texture> &texture);
 
 	private:

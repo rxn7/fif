@@ -3,7 +3,7 @@
 namespace fif::core {
 	class Logger {
 	public:
-		enum class LogType : u8 { INFO, WARN, ERROR, DEBUG };
+		enum class LogType : u8 { Info, Warn, Error, Debug };
 
 		typedef void (*LoggerCallback)(LogType, const char *msg);
 
@@ -34,10 +34,10 @@ namespace fif::core {
 		print<logType>(msg, std::forward<Args>(args)...);                                                                                                                                              \
 	}
 
-		FIF_PRINT_FUNC(info, LogType::INFO)
-		FIF_PRINT_FUNC(warn, LogType::WARN)
-		FIF_PRINT_FUNC(error, LogType::ERROR)
-		FIF_PRINT_FUNC(debug, LogType::DEBUG)
+		FIF_PRINT_FUNC(info, LogType::Info)
+		FIF_PRINT_FUNC(warn, LogType::Warn)
+		FIF_PRINT_FUNC(error, LogType::Error)
+		FIF_PRINT_FUNC(debug, LogType::Debug)
 
 	public:
 		static std::vector<LoggerCallback> s_Callbacks;

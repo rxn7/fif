@@ -17,16 +17,16 @@ namespace fif::core {
 		s_Callbacks.erase(it);
 	}
 
-	template<> void Logger::print_prefix<Logger::LogType::INFO>() {
+	template<> void Logger::print_prefix<Logger::LogType::Info>() {
 		std::printf(ANSI_COLOR(37) "[INFO] ");
 	}
-	template<> void Logger::print_prefix<Logger::LogType::WARN>() {
+	template<> void Logger::print_prefix<Logger::LogType::Warn>() {
 		std::printf(ANSI_COLOR(33) "[WARN] ");
 	}
-	template<> void Logger::print_prefix<Logger::LogType::ERROR>() {
+	template<> void Logger::print_prefix<Logger::LogType::Error>() {
 		std::printf(ANSI_COLOR(31) "[ERROR] ");
 	}
-	template<> void Logger::print_prefix<Logger::LogType::DEBUG>() {
+	template<> void Logger::print_prefix<Logger::LogType::Debug>() {
 		std::printf(ANSI_COLOR(32) "[DEBUG] ");
 	}
 }// namespace fif::core

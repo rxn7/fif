@@ -5,11 +5,11 @@ namespace fif::gfx {
 		vec2 offset = {};
 
 		switch(hAlign) {
-		case HorizontalTextAlign::CENTER:
+		case HorizontalTextAlign::Center:
 			offset.x -= textSize.x * 0.5f;
 			break;
 
-		case HorizontalTextAlign::RIGHT:
+		case HorizontalTextAlign::Right:
 			offset.x -= textSize.x;
 			break;
 
@@ -18,15 +18,15 @@ namespace fif::gfx {
 		}
 
 		switch(vAlign) {
-		case VerticalTextAlign::TOP:
+		case VerticalTextAlign::Top:
 			offset.y -= fontHeight * 0.5f;
 			break;
 
-		case VerticalTextAlign::CENTER:
+		case VerticalTextAlign::Center:
 			offset.y += textSize.y * 0.5f - fontHeight * 0.75f;
 			break;
 
-		case VerticalTextAlign::BOTTOM:
+		case VerticalTextAlign::Bottom:
 			offset.y += textSize.y - fontHeight;
 			break;
 

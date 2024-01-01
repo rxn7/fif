@@ -1,4 +1,5 @@
 #include "fif/input/input_module.hpp"
+#include "./lua_register.hpp"
 #include "fif/core/event/key_event.hpp"
 #include "fif/core/event/mouse_event.hpp"
 
@@ -8,6 +9,8 @@ namespace fif::input {
 	InputModule::InputModule() {
 		FIF_MODULE_INIT_INSTANCE();
 
+		register_lua_types(*this);
+
 		GLFWwindow *glfwWindow = core::Application::get_instance()->get_window().get_glfw_window();
 
 		glfwSetKeyCallback(glfwWindow, []([[maybe_unused]] GLFWwindow *glfwWindow, int key, [[maybe_unused]] int scancode, int action, [[maybe_unused]] int mods) {
@@ -15,11 +18,11 @@ namespace fif::input {
 
 			core::Window *window = FIF_GET_WINDOW_FROM_GLFW_WINDOW(glfwWindow);
 			if(action == GLFW_PRESS) {
-				s_Instance->m_Keys[key] = true;
+				s_Instance->m_State.keys[key] = true;
 				core::KeyPressedEvent event(key, mods);
 				window->get_application().on_event(event);
 			} else if(action == GLFW_RELEASE) {
-				s_Instance->m_Keys[key] = false;
+				s_Instance->m_State.keys[key] = false;
 				core::KeyReleasedEvent event(key, mods);
 				window->get_application().on_event(event);
 			}
@@ -30,11 +33,11 @@ namespace fif::input {
 
 			core::Window *window = FIF_GET_WINDOW_FROM_GLFW_WINDOW(glfwWindow);
 			if(action == GLFW_PRESS) {
-				s_Instance->m_Buttons[button] = true;
+				s_Instance->m_State.buttons[button] = true;
 				core::MouseButtonPressedEvent event(button);
 				window->get_application().on_event(event);
 			} else if(action == GLFW_RELEASE) {
-				s_Instance->m_Buttons[button] = false;
+				s_Instance->m_State.buttons[button] = false;
 				core::MouseButtonReleasedEvent event(button);
 				window->get_application().on_event(event);
 			}
@@ -58,6 +61,10 @@ namespace fif::input {
 
 			input->m_LastMousePosition = input->m_MousePosition;
 		});
+	}
+
+	void InputModule::end_frame() {
+		m_LastState = m_State;
 	}
 
 	vec2 InputModule::get_mouse_position() {

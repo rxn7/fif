@@ -8,8 +8,8 @@ namespace fif::gfx {
 		std::string text = "";
 		f32 fontSize = 1.0f;
 		Color color = Colors::BLACK;
-		HorizontalTextAlign horizontalAlign = HorizontalTextAlign::LEFT;
-		VerticalTextAlign verticalAlign = VerticalTextAlign::CENTER;
+		HorizontalTextAlign horizontalAlign = HorizontalTextAlign::Left;
+		VerticalTextAlign verticalAlign = VerticalTextAlign::Center;
 
 		// TODO: Font resource.
 	};
