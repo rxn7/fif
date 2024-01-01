@@ -1,7 +1,8 @@
 #include "icon_manager.hpp"
 
 namespace fifed {
-	IconManager::IconManager(const std::string_view path) : m_Texture(path, GL_NEAREST) {}
+	IconManager::IconManager(const std::string_view path) : m_Texture(path, GL_NEAREST) {
+	}
 
 	void IconManager::add_icon(IconType type, const IconInfo &info) {
 		if(m_IconInfos.find(type) != m_IconInfos.end()) {

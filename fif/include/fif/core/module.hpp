@@ -9,7 +9,12 @@ namespace fif::core {
 	public:
 		virtual ~Module() {
 		}
+
 		virtual constexpr std::string_view get_name() const = 0;
+
+		Application *get_application() const {
+			return mp_Application;
+		}
 
 	protected:
 		Module() {

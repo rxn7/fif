@@ -21,9 +21,11 @@ namespace fifed {
 		virtual ~EditorModule();
 
 		void set_runtime(bool runtime);
+
 		inline bool is_runtime() const {
 			return m_Runtime;
 		}
+
 		inline FrameBuffer &get_frame_buffer() {
 			return m_FrameBuffer;
 		}
@@ -48,6 +50,7 @@ namespace fifed {
 		void open_scene(const std::string_view path);
 		void follow_selected_entity();
 		void delete_selected_entity();
+		void toggle_runtime();
 		static void on_render_im_gui();
 
 	private:

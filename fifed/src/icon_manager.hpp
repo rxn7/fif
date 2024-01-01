@@ -1,7 +1,7 @@
 #pragma once
 
 namespace fifed {
-	enum IconType : u8 { GITHUB, LOGO, PAUSE, UNPAUSE };
+	enum IconType : u8 { GITHUB, LOGO, PAUSE, UNPAUSE, STOP };
 
 	struct IconInfo {
 		vec2 offset;

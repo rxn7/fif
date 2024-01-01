@@ -10,7 +10,9 @@ namespace fifed {
 		ViewportPanel(FrameBuffer &frameBuffer);
 
 		void on_render() override;
-		inline bool is_hovered() const { return m_Hovered; }
+		inline bool is_hovered() const {
+			return m_Hovered;
+		}
 
 	private:
 		std::unique_ptr<Texture> mp_PauseTexture, mp_UnpauseTexture;

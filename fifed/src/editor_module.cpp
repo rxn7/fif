@@ -38,11 +38,13 @@ namespace fifed {
 		m_IconManager.add_icon(IconType::LOGO, {{0.0f, 225.0f}, {48.0f, 48.0f}});
 		m_IconManager.add_icon(IconType::PAUSE, {{48.0f, 225.0f}, {32.0f, 32.0f}});
 		m_IconManager.add_icon(IconType::UNPAUSE, {{80.0f, 225.0f}, {32.0f, 32.0f}});
+		m_IconManager.add_icon(IconType::STOP, {{80.0f, 225.0f}, {32.0f, 32.0f}});
 
 		m_Shortcuts.emplace_back(GLFW_KEY_O, GLFW_MOD_CONTROL, "Open a scene", std::bind(&EditorModule::open_scene_dialog, this));
 		m_Shortcuts.emplace_back(GLFW_KEY_S, GLFW_MOD_CONTROL, "Save current scene", std::bind(&EditorModule::save_scene, this));
 		m_Shortcuts.emplace_back(GLFW_KEY_F, 0, "Follow/focus selected entity", std::bind(&EditorModule::follow_selected_entity, this));
 		m_Shortcuts.emplace_back(GLFW_KEY_DELETE, 0, "Delete selected entity", std::bind(&EditorModule::delete_selected_entity, this));
+		m_Shortcuts.emplace_back(GLFW_KEY_F5, 0, "Start/Stop the game", std::bind(&EditorModule::toggle_runtime, this));
 
 		if(!std::filesystem::exists("layout.ini"))
 			load_default_layout();
@@ -221,6 +223,10 @@ namespace fifed {
 	void EditorModule::delete_selected_entity() {
 		if(mp_InspectorPanel->m_SelectedEntity)
 			mp_InspectorPanel->m_SelectedEntity.delete_self();
+	}
+
+	void EditorModule::toggle_runtime() {
+		set_runtime(!m_Runtime);
 	}
 
 	void EditorModule::on_event(Event &event) {

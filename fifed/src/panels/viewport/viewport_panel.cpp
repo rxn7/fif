@@ -3,7 +3,8 @@
 #include "editor_module.hpp"
 
 namespace fifed {
-	ViewportPanel::ViewportPanel(FrameBuffer &frameBuffer) : m_FrameBuffer(frameBuffer) {}
+	ViewportPanel::ViewportPanel(FrameBuffer &frameBuffer) : m_FrameBuffer(frameBuffer) {
+	}
 
 	void ViewportPanel::on_render() {
 		EditorModule *editor = EditorModule::get_instance();
@@ -11,10 +12,23 @@ namespace fifed {
 		ImGui::SameLine();
 		const f32 windowWidth = ImGui::GetWindowSize().x;
 
+		Application *app = editor->get_application();
 		const bool isRuntime = editor->is_runtime();
+		const bool isPaused = app->get_status().paused;
 		ImGui::SetCursorPosX((windowWidth - 32.0f) * 0.5f);
-		if(mp_IconManager->imgui_button("Pause", isRuntime ? IconType::PAUSE : IconType::UNPAUSE))
-			editor->set_runtime(!isRuntime);
+
+		if(isRuntime) {
+			if(mp_IconManager->imgui_button("Pause", isPaused ? IconType::UNPAUSE : IconType::PAUSE))
+				app->set_pause(!isPaused);
+
+			ImGui::SameLine();
+
+			if(ImGui::Button("Stop"))
+				editor->set_runtime(false);
+		} else {
+			if(ImGui::Button("Start"))
+				editor->set_runtime(true);
+		}
 
 		ImGui::BeginChild("FrameBuffer");
 
