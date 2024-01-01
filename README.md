@@ -11,6 +11,23 @@ Fif is a 2D game engine with an editor (fifed).
 - [Contributing](#contributing)  
 - [Dependencies](#dependencies)  
 
+# Features
+- Engine Editor (fifed)
+- ECS
+- Batched 2D renderer
+- Lua scripting
+- Native (C++) scripting (not supported in the editor yet)
+- Scene System (changes made in play mode will not be saved, like in unity)
+
+## Components
+- TransformComponent
+- SpriteComponent
+- CircleComponent
+- QuadComponent
+- LabelComponent
+- LuaScriptComponent
+- NativeScriptComponent (not supported in the editor yet)
+
 # Modules
 Fif is split into core module and other independent modules:
 - gfx
@@ -21,9 +38,10 @@ Fif is split into core module and other independent modules:
 
 # Building
 - ```./scripts/configure.sh``` - configure the build targets
+- ```./scripts/run-debug.sh``` - compile and run a debug build
+- ```./scripts/run-release.sh``` - compile and run  a release build
 - ```cmake --build build/debug``` - compile a debug build
 - ```cmake --build build/release``` - compile a release build
-- if you use nvim you can press `F4` to compile a debug build, `Shift+F4` to compile a release build, `F5` to run the debug build, `Shift+F5` to run the release build
 
 # Contributing
 Fif is open to contributions, make sure to format your code with clang-format before submitting a pull request though
