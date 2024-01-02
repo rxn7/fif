@@ -1,5 +1,5 @@
 Entities:
-  - UUID: 10485770
+  - UUID: 10
     fif::core::TagComponent:
       Tag: TTEEEEEST
     fif::core::TransformComponent:
@@ -10,7 +10,7 @@ Entities:
       Tint: [255, 6, 255, 255]
       Size: [48, 48]
       TexturePath: logo.png
-  - UUID: 10485769
+  - UUID: 9
     fif::core::TagComponent:
       Tag: Sprite
     fif::core::TransformComponent:
@@ -23,7 +23,7 @@ Entities:
       Tint: [255, 255, 255, 255]
       Size: [48, 48]
       TexturePath: logo.png
-  - UUID: 10485768
+  - UUID: 8
     fif::core::TagComponent:
       Tag: Sprite
     fif::core::TransformComponent:
@@ -36,7 +36,7 @@ Entities:
       Tint: [255, 255, 255, 255]
       Size: [48, 48]
       TexturePath: logo.png
-  - UUID: 10485767
+  - UUID: 7
     fif::core::TagComponent:
       Tag: Sprite
     fif::core::TransformComponent:
@@ -49,7 +49,7 @@ Entities:
       Tint: [255, 255, 255, 255]
       Size: [48, 48]
       TexturePath: logo.png
-  - UUID: 10485766
+  - UUID: 6
     fif::core::TagComponent:
       Tag: Sprite
     fif::core::TransformComponent:
@@ -62,7 +62,7 @@ Entities:
       Tint: [255, 255, 255, 255]
       Size: [48, 48]
       TexturePath: logo.png
-  - UUID: 10485765
+  - UUID: 5
     fif::core::TagComponent:
       Tag: Sprite
     fif::core::TransformComponent:
@@ -75,7 +75,7 @@ Entities:
       Tint: [255, 255, 255, 255]
       Size: [48, 48]
       TexturePath: logo.png
-  - UUID: 10485764
+  - UUID: 4
     fif::core::TagComponent:
       Tag: Sprite
     fif::core::TransformComponent:
@@ -88,7 +88,7 @@ Entities:
       Tint: [255, 255, 255, 255]
       Size: [48, 48]
       TexturePath: logo.png
-  - UUID: 10485763
+  - UUID: 3
     fif::core::TagComponent:
       Tag: Sprite
     fif::core::TransformComponent:
@@ -101,7 +101,7 @@ Entities:
       Tint: [255, 255, 255, 255]
       Size: [48, 48]
       TexturePath: logo.png
-  - UUID: 10485762
+  - UUID: 2
     fif::core::TagComponent:
       Tag: Sprite
     fif::core::TransformComponent:
@@ -114,7 +114,7 @@ Entities:
       Tint: [255, 255, 255, 255]
       Size: [48, 48]
       TexturePath: logo.png
-  - UUID: 10485761
+  - UUID: 1
     fif::core::TagComponent:
       Tag: Sprite
     fif::core::TransformComponent:
@@ -127,7 +127,7 @@ Entities:
       Tint: [255, 255, 255, 255]
       Size: [48, 48]
       TexturePath: logo.png
-  - UUID: 10485760
+  - UUID: 0
     fif::core::TagComponent:
       Tag: Sprite
     fif::core::TransformComponent:

@@ -277,7 +277,7 @@ namespace fifed {
 		}
 
 		if(Project::get_config().startingScene.empty()) {
-			Project::get_config().startingScene = path;
+			Project::get_config().startingScene = std::filesystem::relative(path, Project::get_root_dir());
 			Project::save();
 		}
 

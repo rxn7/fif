@@ -1,5 +1,5 @@
 Entities:
-  - UUID: 4
+  - UUID: 1048580
     fif::core::TagComponent:
       Tag: Label 5
     fif::core::TransformComponent:
@@ -14,7 +14,7 @@ Entities:
       Color: [0, 0, 0, 255]
       HorizontalAlign: 1
       VerticalAlign: 1
-  - UUID: 3
+  - UUID: 1048579
     fif::core::TagComponent:
       Tag: Label 4
     fif::core::TransformComponent:
@@ -29,7 +29,7 @@ Entities:
       Color: [0, 0, 0, 255]
       HorizontalAlign: 1
       VerticalAlign: 1
-  - UUID: 2
+  - UUID: 1048578
     fif::core::TagComponent:
       Tag: Label 3
     fif::core::TransformComponent:
@@ -44,7 +44,7 @@ Entities:
       Color: [0, 0, 0, 255]
       HorizontalAlign: 1
       VerticalAlign: 1
-  - UUID: 1
+  - UUID: 1048577
     fif::core::TagComponent:
       Tag: Label 2
     fif::core::TransformComponent:
@@ -59,7 +59,7 @@ Entities:
       Color: [0, 0, 0, 255]
       HorizontalAlign: 1
       VerticalAlign: 1
-  - UUID: 0
+  - UUID: 1048576
     fif::core::TagComponent:
       Tag: Label 1
     fif::core::TransformComponent:
