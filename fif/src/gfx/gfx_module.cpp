@@ -1,8 +1,8 @@
 #include "fif/gfx/gfx_module.hpp"
 
-#include "fif/core/ecs/serialization/scene_serializer.hpp"
 #include "fif/core/event/event_dispatcher.hpp"
 #include "fif/core/event/window_event.hpp"
+#include "fif/core/serialization/scene_serializer.hpp"
 #include "fif/gfx/renderer2d.hpp"
 
 #include "./lua_register.hpp"
@@ -23,6 +23,7 @@ namespace fif::gfx {
 	}
 
 	GfxModule::~GfxModule() {
+		Font::sp_DefaultFont.reset();
 		FT_Done_FreeType(m_FreeType);
 	}
 

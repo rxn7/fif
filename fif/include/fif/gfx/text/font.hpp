@@ -43,7 +43,7 @@ namespace fif::gfx {
 		}
 
 	private:
-		static std::shared_ptr<Font> sp_DefaultFont;
+		inline static std::shared_ptr<Font> sp_DefaultFont;
 		FT_Face m_Face;
 
 		std::shared_ptr<Texture> mp_Texture;

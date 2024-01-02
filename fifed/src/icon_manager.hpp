@@ -10,10 +10,10 @@ namespace fifed {
 
 	class IconManager final {
 	public:
-		IconManager(const std::string_view path);
+		IconManager(const std::filesystem::path &path);
 		void add_icon(IconType type, const IconInfo &info);
 		const IconInfo &get_icon(IconType type) const;
-		bool imgui_button(const std::string_view id_str, IconType type, const vec2 &size = {32.0f, 32.0f});
+		bool imgui_button(const std::string_view idStr, IconType type, const vec2 &size = {32.0f, 32.0f});
 
 	private:
 		std::unordered_map<IconType, IconInfo> m_IconInfos;

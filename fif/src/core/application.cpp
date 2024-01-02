@@ -1,8 +1,8 @@
 #include "fif/core/application.hpp"
-#include "./ecs/serialization/core_serializer.hpp"
-#include "fif/core/ecs/serialization/scene_serializer.hpp"
+#include "./serialization/core_serializer.hpp"
 #include "fif/core/event/event_dispatcher.hpp"
 #include "fif/core/event/window_event.hpp"
+#include "fif/core/serialization/scene_serializer.hpp"
 #include "fif/core/util/logger.hpp"
 
 namespace fif::core {

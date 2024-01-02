@@ -8,7 +8,6 @@
 #include FT_FREETYPE_H
 
 namespace fif::gfx {
-	std::shared_ptr<Font> Font::sp_DefaultFont;
 	Font::Font(const std::string &path, const u32 size, const u32 textureSize, const GLenum filter) : m_Size(size) {
 		if(FT_Error error = FT_New_Face(GfxModule::get_instance()->m_FreeType, path.c_str(), 0, &m_Face)) {
 			core::Logger::error("Failed to load freetype font: %s", FT_Error_String(error));

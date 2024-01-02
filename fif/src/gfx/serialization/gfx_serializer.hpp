@@ -1,6 +1,6 @@
 #pragma once
 
-#include "fif/core/ecs/serialization/serializer.hpp"
+#include "fif/core/serialization/serializer.hpp"
 
 namespace fif::gfx {
 	class GfxSerializer : public core::Serializer {

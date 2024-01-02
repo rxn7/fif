@@ -9,8 +9,9 @@
 #include "panels/settings/settings_panel.hpp"
 
 #include "fif/core/ecs/components/transform_component.hpp"
-#include "fif/core/ecs/serialization/scene_serializer.hpp"
 #include "fif/core/event/key_event.hpp"
+#include "fif/core/serialization/project_serializer.hpp"
+#include "fif/core/serialization/scene_serializer.hpp"
 
 #include <imgui.h>
 #include <tinyfiledialogs.h>
@@ -28,47 +29,56 @@ namespace fifed {
 	}
 
 	EditorModule::~EditorModule() {
-		ImGuiModule::get_instance()->delete_render_func(&EditorModule::on_render_im_gui);
+		if(m_ProjectLoaded) {
+			ImGuiModule::get_instance()->delete_render_func(&EditorModule::render_editor_imgui);
+		}
 	}
 
 	void EditorModule::on_start() {
-		set_runtime(false);
-
-		m_IconManager.add_icon(IconType::GITHUB, {{0.0f, 0.0f}, {230.0f, 225.0f}});
-		m_IconManager.add_icon(IconType::LOGO, {{0.0f, 225.0f}, {48.0f, 48.0f}});
-		m_IconManager.add_icon(IconType::PAUSE, {{48.0f, 225.0f}, {32.0f, 32.0f}});
-		m_IconManager.add_icon(IconType::UNPAUSE, {{80.0f, 225.0f}, {32.0f, 32.0f}});
-		m_IconManager.add_icon(IconType::STOP, {{80.0f, 225.0f}, {32.0f, 32.0f}});
-
-		m_Shortcuts.emplace_back(GLFW_KEY_O, GLFW_MOD_CONTROL, "Open a scene", std::bind(&EditorModule::open_scene_dialog, this));
-		m_Shortcuts.emplace_back(GLFW_KEY_S, GLFW_MOD_CONTROL, "Save current scene", std::bind(&EditorModule::save_scene, this));
-		m_Shortcuts.emplace_back(GLFW_KEY_F, 0, "Follow/focus selected entity", std::bind(&EditorModule::follow_selected_entity, this));
-		m_Shortcuts.emplace_back(GLFW_KEY_DELETE, 0, "Delete selected entity", std::bind(&EditorModule::delete_selected_entity, this));
-		m_Shortcuts.emplace_back(GLFW_KEY_F5, 0, "Start/Stop the game", std::bind(&EditorModule::toggle_runtime, this));
-
-		if(!std::filesystem::exists("layout.ini"))
-			load_default_layout();
+		set_play_mode(false);
 
 		static constexpr ImWchar ranges[] = {0x0020, 0x017f, 0};
-
 		ImGuiIO &io = ImGui::GetIO();
 		io.Fonts->AddFontFromFileTTF("assets/fonts/iosevka-regular.ttf", 18, nullptr, ranges);
 		io.IniFilename = "layout.ini";
 
-		mp_ViewportPanel = add_panel<ViewportPanel>(m_FrameBuffer);
-		mp_InspectorPanel = add_panel<InspectorPanel>(mp_Application->get_scene());
-		add_panel<PerformancePanel>();
-		add_panel<SettingsPanel>(m_Grid, m_FrameBuffer, m_CameraController);
-		add_panel<ScenePanel>(*mp_InspectorPanel);
-
-		ImGuiModule::get_instance()->add_render_func(&EditorModule::on_render_im_gui);
+		ImGuiModule::get_instance()->add_render_func(&EditorModule::render_project_manager_imgui);
 	}
 
 	void EditorModule::load_default_layout() {
 		ImGui::LoadIniSettingsFromDisk("default_layout.ini");
 	}
 
-	void EditorModule::on_render_im_gui() {
+	void EditorModule::render_project_manager_imgui() {
+		EditorModule *_this = EditorModule::get_instance();
+
+		ImGui::SetNextWindowPos(ImVec2(0.0f, 0.0f));
+		ImGui::SetNextWindowSize(ImGui::GetIO().DisplaySize);
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+
+		if(ImGui::Begin("Project Manager", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoResize)) {
+			constexpr ImVec2 BUTTON_SIZE{200, 100};
+
+			ImGui::SetCursorPosX(ImGui::GetWindowSize().x * 0.5f - BUTTON_SIZE.x);
+			ImGui::SetCursorPosY(ImGui::GetWindowSize().y * 0.5f - BUTTON_SIZE.y);
+
+			if(ImGui::Button("Create new project", BUTTON_SIZE)) {
+				_this->create_project_dialog();
+			}
+
+			ImGui::SameLine();
+
+			if(ImGui::Button("Open project", BUTTON_SIZE)) {
+				_this->open_project_dialog();
+			}
+
+			ImGui::End();
+		}
+
+		ImGui::PopStyleVar();
+	}
+
+	void EditorModule::render_editor_imgui() {
 		EditorModule *_this = EditorModule::get_instance();
 
 		if(ImGui::BeginMainMenuBar()) {
@@ -76,10 +86,10 @@ namespace fifed {
 				_this->m_AboutWindowOpen = true;
 
 			if(ImGui::BeginMenu("Scene")) {
-				if(ImGui::MenuItem("Save"))
+				if(ImGui::MenuItem("Save", "Ctrl+S"))
 					_this->save_scene();
 
-				if(ImGui::MenuItem("Load"))
+				if(ImGui::MenuItem("Load", "Ctrl+O"))
 					_this->open_scene_dialog();
 
 				ImGui::EndMenu();
@@ -133,7 +143,7 @@ namespace fifed {
 		}
 
 		if(ImGuiModule::get_instance()->begin_dockspace())
-			for(std::unique_ptr<EditorPanel> &panel : _this->m_Panels)
+			for(std::shared_ptr<EditorPanel> &panel : _this->m_Panels)
 				panel->render();
 
 		ImGui::End();
@@ -152,10 +162,90 @@ namespace fifed {
 		m_FrameBuffer.end();
 	}
 
+	bool EditorModule::create_project_dialog() {
+		const char *fileDialogResult = tinyfd_selectFolderDialog("Select directory", NULL);
+
+		if(!fileDialogResult)
+			return false;
+
+		const std::filesystem::path path = fileDialogResult;
+		if(!std::filesystem::is_directory(path) || !std::filesystem::is_empty(path)) {
+			Logger::error("Path '%s' is not an empty directory!", path.string().c_str());
+			return false;
+		}
+
+		// TODO: is this a memory leak?
+		std::string name = tinyfd_inputBox("New project name", "Type name for your new project", "New Project");
+		Project::create(name, path);
+		on_project_open();
+		return true;
+	}
+
+	bool EditorModule::open_project_dialog() {
+		static constexpr std::array<const char *, 1> filters = {"*.fifproj"};
+		const char *fileDialogResult = tinyfd_openFileDialog("Select fif project", NULL, filters.size(), filters.data(), "Fif project", false);
+
+		if(!fileDialogResult)
+			return false;
+
+		const std::filesystem::path path = std::filesystem::path(fileDialogResult).parent_path();
+		return open_project(path);
+	}
+
+	bool EditorModule::open_project(const std::filesystem::path &path) {
+		if(Project::load(path)) {
+			on_project_open();
+
+			if(!Project::get_config().startingScene.empty())
+				open_scene(Project::get_config().startingScene);
+
+			return true;
+		}
+
+		return false;
+	}
+
+	void EditorModule::on_project_open() {
+		m_ProjectLoaded = true;
+
+		mp_Application->get_window().set_title(Project::get_config().name + " | Fifed"
+#ifdef FIF_DEBUG
+											   + " [DEBUG]"
+#endif
+		);
+
+		ImGuiModule::get_instance()->delete_render_func(&EditorModule::render_project_manager_imgui);
+
+		m_IconManager.add_icon(IconType::GITHUB, {{0.0f, 0.0f}, {230.0f, 225.0f}});
+		m_IconManager.add_icon(IconType::LOGO, {{0.0f, 225.0f}, {48.0f, 48.0f}});
+		m_IconManager.add_icon(IconType::PAUSE, {{48.0f, 225.0f}, {32.0f, 32.0f}});
+		m_IconManager.add_icon(IconType::UNPAUSE, {{80.0f, 225.0f}, {32.0f, 32.0f}});
+		m_IconManager.add_icon(IconType::STOP, {{80.0f, 225.0f}, {32.0f, 32.0f}});
+
+		m_Shortcuts.emplace_back(GLFW_KEY_O, GLFW_MOD_CONTROL, "Open a scene", std::bind(&EditorModule::open_scene_dialog, this));
+		m_Shortcuts.emplace_back(GLFW_KEY_S, GLFW_MOD_CONTROL, "Save current scene", std::bind(&EditorModule::save_scene, this));
+		m_Shortcuts.emplace_back(GLFW_KEY_F, 0, "Follow/focus selected entity", std::bind(&EditorModule::follow_selected_entity, this));
+		m_Shortcuts.emplace_back(GLFW_KEY_DELETE, 0, "Delete selected entity", std::bind(&EditorModule::delete_selected_entity, this));
+		m_Shortcuts.emplace_back(GLFW_KEY_F5, 0, "Start/Stop the game", std::bind(&EditorModule::toggle_runtime, this));
+
+		if(!std::filesystem::exists("layout.ini"))
+			load_default_layout();
+
+		mp_ViewportPanel = add_panel<ViewportPanel>(m_FrameBuffer);
+		mp_InspectorPanel = add_panel<InspectorPanel>(mp_Application->get_scene());
+		add_panel<PerformancePanel>();
+		add_panel<SettingsPanel>(m_Grid, m_FrameBuffer, m_CameraController);
+		add_panel<ScenePanel>(*mp_InspectorPanel);
+
+		ImGuiModule::get_instance()->add_render_func(&EditorModule::render_editor_imgui);
+	}
+
 	void EditorModule::save_scene() {
+		// TODO: Confirmation prompt when in play mode
+
 		if(m_CurrentScenePath.empty()) {
 			const char *filter = "*.yaml";
-			const char *result = tinyfd_saveFileDialog("Save scene", "scene.yaml", 1, &filter, "YAML file");
+			const char *result = tinyfd_saveFileDialog("Save scene", (Project::get_absolute_path() + "scene.yaml").c_str(), 1, &filter, "YAML file");
 
 			if(result == NULL) {
 				Logger::error("Failed to get path of the scene to save");
@@ -171,46 +261,46 @@ namespace fifed {
 	}
 
 	void EditorModule::open_scene_dialog() {
-		std::stringstream workingDirectorySs;
-		workingDirectorySs << std::filesystem::current_path() << "/";
-		const std::string workingDirectoryStr = workingDirectorySs.str();
-
 		const char *filter = "*.yaml";
-		const char *path = tinyfd_openFileDialog("Select scene", workingDirectoryStr.c_str(), 1, &filter, "YAML scene", false);
+		const char *path = tinyfd_openFileDialog("Select scene", Project::get_absolute_path().c_str(), 1, &filter, "YAML scene", false);
 
-		if(!path) {
-			Logger::error("Failed to get path of scene to open");
+		if(!path)
 			return;
-		}
-
-		m_CurrentScenePath = path;
 
 		open_scene(path);
 	}
 
-	void EditorModule::open_scene(const std::string_view path) {
-		if(!path.data()) {
+	void EditorModule::open_scene(const std::filesystem::path &path) {
+		if(path.empty()) {
 			Logger::error("Cannot open scene, invalid path!");
 			return;
 		}
 
-		Logger::info("Loading scene: %s...", path.data());
+		if(Project::get_config().startingScene.empty()) {
+			Project::get_config().startingScene = path;
+			Project::save();
+		}
+
+		m_CurrentScenePath = path;
+
 		SceneSerializer serializer(mp_Application->get_scene());
-		serializer.deserialize(path.data());
-		Logger::info("Scene loaded: %s", path.data());
+		serializer.deserialize(path);
+
+		Logger::info("Scene loaded: %s", path.c_str());
 	}
 
-	void EditorModule::set_runtime(bool runtime) {
-		m_Runtime = runtime;
+	void EditorModule::set_play_mode(const bool playMode) {
+		m_PlayMode = playMode;
 
-		if(!runtime) {
+		// Load the scene if play mode has ended
+		if(!playMode) {
 			if(!m_CurrentScenePath.empty())
 				open_scene(m_CurrentScenePath);
 
 		} else
-			save_scene();
+			save_scene();// Save the scene if play mode has been entered
 
-		mp_Application->set_pause(!runtime);
+		mp_Application->set_pause(!playMode);
 	}
 
 	void EditorModule::follow_selected_entity() {
@@ -226,11 +316,13 @@ namespace fifed {
 	}
 
 	void EditorModule::toggle_runtime() {
-		set_runtime(!m_Runtime);
+		set_play_mode(!m_PlayMode);
 	}
 
 	void EditorModule::on_event(Event &event) {
-		m_CameraController.on_event(event, mp_ViewportPanel->is_hovered());
+		if(mp_ViewportPanel) {
+			m_CameraController.on_event(event, mp_ViewportPanel->is_hovered());
+		}
 
 		EventDispatcher::dispatch<KeyPressedEvent>(event, [&](KeyPressedEvent &keyEvent) {
 			for(const Shortcut &shortcut : m_Shortcuts) {

@@ -15,7 +15,7 @@ namespace fif::lua_scripting {
 			sol::function render;
 		} hooks;
 
-		std::filesystem::path filepath;
+		std::string path;
 		bool inited = false;
 		bool firstFrame = true;
 		core::Entity entity;

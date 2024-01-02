@@ -1,8 +1,8 @@
 #include "fifed.hpp"
 #include "editor_module.hpp"
 
+#include "fif/core/project.hpp"
 #include "fif/fif.hpp"
-#include "fif/native_scripting/native_scripting_module.hpp"
 
 static const ApplicationProperties APP_PROPS = {
 	.windowProps =
@@ -26,7 +26,6 @@ namespace fifed {
 
 	void Fifed::setup_modules() {
 		attach_module<LuaScriptingModule>();
-		attach_module<NativeScriptingModule>();
 		attach_module<InputModule>();
 		attach_module<GfxModule>("./assets/fonts/iosevka-regular.ttf");
 		attach_module<EditorModule>();

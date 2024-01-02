@@ -40,7 +40,8 @@ namespace fifed {
 	};
 
 	Grid::Grid(const OrthoCamera &cam, const FrameBuffer &frameBuffer) :
-		m_VertexBuffer(VERTICES.data(), VERTICES.size(), ELEMENTS.data(), ELEMENTS.size(), sizeof(GridVertex), VERTEX_LAYOUT), m_Shader(shaders::Grid::VERTEX, shaders::Grid::FRAGMENT), m_Camera(cam), m_FrameBuffer(frameBuffer) {}
+		m_VertexBuffer(VERTICES.data(), VERTICES.size(), ELEMENTS.data(), ELEMENTS.size(), sizeof(GridVertex), VERTEX_LAYOUT), m_Shader(shaders::Grid::VERTEX, shaders::Grid::FRAGMENT), m_Camera(cam), m_FrameBuffer(frameBuffer) {
+	}
 
 	void Grid::render() {
 		if(!m_Enabled)

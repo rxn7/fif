@@ -1,18 +1,21 @@
 #include "./gfx_serializer.hpp"
-#include "fif/core/ecs/serialization/vec2_yaml.hpp"
+#include "fif/core/project.hpp"
+#include "fif/core/serialization/vec2_yaml.hpp"
 #include "fif/gfx/components/circle_component.hpp"
 #include "fif/gfx/components/label_component.hpp"
 #include "fif/gfx/components/quad_component.hpp"
 #include "fif/gfx/components/sprite_component.hpp"
 #include "fif/gfx/serialization/color_yaml.hpp"
-#include "text/text_align.hpp"
+#include "fif/gfx/text/text_align.hpp"
+
+#include <filesystem>
 
 namespace fif::gfx {
 	void GfxSerializer::serialize(const core::Entity &entity, YAML::Emitter &emitter) {
 		serialize_component<SpriteComponent>(entity, emitter, [&emitter](SpriteComponent &spriteComponent) {
 			emitter << YAML::Key << "Tint" << YAML::Value << spriteComponent.tint;
 			emitter << YAML::Key << "Size" << YAML::Value << spriteComponent.size;
-			emitter << YAML::Key << "TexturePath" << YAML::Value << (spriteComponent.p_texture != nullptr ? spriteComponent.p_texture->m_Path : "");
+			emitter << YAML::Key << "TexturePath" << YAML::Value << (spriteComponent.p_texture != nullptr ? spriteComponent.p_texture->get_path() : "");
 		});
 
 		serialize_component<QuadComponent>(entity, emitter, [&emitter](QuadComponent &quadComponent) {
@@ -42,7 +45,7 @@ namespace fif::gfx {
 
 			const std::string texturePath = spriteComponentNode["TexturePath"].as<std::string>();
 			if(!texturePath.empty())
-				spriteComponent.set_texture(std::make_shared<Texture>(texturePath));
+				spriteComponent.set_texture(std::make_shared<Texture>(false, texturePath));
 		});
 
 		try_get_component_node<QuadComponent>(entityNode, [&entity](const YAML::Node &quadComponentNode) {

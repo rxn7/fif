@@ -21,13 +21,24 @@ namespace fif::core {
 		Window(Application &app, const WindowProperties &props);
 		~Window();
 
-		inline i16vec2 get_size() const { return m_Size; }
-		inline bool should_close() const { return static_cast<bool>(glfwWindowShouldClose(mp_GlfwWindow)); }
-		void close(bool value);
-		void set_icon(std::string_view path);
+		inline i16vec2 get_size() const {
+			return m_Size;
+		}
 
-		inline GLFWwindow *get_glfw_window() const { return mp_GlfwWindow; }
-		inline Application &get_application() const { return m_App; }
+		inline bool should_close() const {
+			return static_cast<bool>(glfwWindowShouldClose(mp_GlfwWindow));
+		}
+
+		void close(const bool value);
+		void set_icon(const std::string &path);
+		void set_title(const std::string &title);
+
+		inline GLFWwindow *get_glfw_window() const {
+			return mp_GlfwWindow;
+		}
+		inline Application &get_application() const {
+			return m_App;
+		}
 
 	private:
 		void end_frame();

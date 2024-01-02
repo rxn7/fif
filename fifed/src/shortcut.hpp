@@ -5,10 +5,18 @@ namespace fifed {
 	public:
 		Shortcut(i32 key, i32 modifierBits, const std::string_view &description, const std::function<void()> &callback);
 
-		inline void callback() const { m_Callback(); }
-		inline i32 get_key() const { return m_Key; }
-		inline i32 get_modifier_bits() const { return m_ModifierBits; }
-		const std::string &get_description() const { return m_Description; }
+		inline void callback() const {
+			m_Callback();
+		}
+		inline i32 get_key() const {
+			return m_Key;
+		}
+		inline i32 get_modifier_bits() const {
+			return m_ModifierBits;
+		}
+		const std::string &get_description() const {
+			return m_Description;
+		}
 
 	private:
 		i32 m_Key;

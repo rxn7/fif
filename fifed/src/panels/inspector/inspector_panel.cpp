@@ -2,6 +2,7 @@
 
 #include "fif/core/ecs/components/tag_component.hpp"
 #include "fif/core/ecs/components/transform_component.hpp"
+#include "fif/core/project.hpp"
 #include "fif/gfx/components/circle_component.hpp"
 #include "fif/gfx/components/label_component.hpp"
 #include "fif/gfx/components/quad_component.hpp"
@@ -26,10 +27,6 @@ namespace fifed {
 
 		Scene &scene = Application::get_instance()->get_scene();
 
-		std::stringstream workingDirectorySs;
-		workingDirectorySs << std::filesystem::current_path() << "/";
-		const std::string workingDirectoryStr = workingDirectorySs.str();
-
 		if(ImGui::Button("Add Component"))
 			ImGui::OpenPopup("AddComponent");
 
@@ -40,19 +37,7 @@ namespace fifed {
 			draw_add_component_entry<QuadComponent>("Quad");
 			draw_add_component_entry<CircleComponent>("Circle");
 			draw_add_component_entry<LabelComponent>("Label");
-			draw_add_component_entry<LuaScriptComponent>(
-				"Lua Script",
-				[&](auto &script) {
-					const char *filter = "*.lua";
-					char *path = tinyfd_openFileDialog("Select lua script", workingDirectoryStr.c_str(), 1, &filter, "Lua script", false);
-
-					if(path) {
-						script.filepath = path;
-						LuaScriptingModule::get_instance()->init_script(script);
-					}
-				},
-				m_SelectedEntity);
-
+			draw_add_component_entry<LuaScriptComponent>("LuaScript", nullptr, m_SelectedEntity);
 			ImGui::EndPopup();
 		}
 
@@ -78,7 +63,7 @@ namespace fifed {
 			ImGui::DragFloat2("Size", glm::value_ptr(quad.size));
 		});
 
-		draw_component<SpriteComponent>("Sprite", [&workingDirectoryStr](SpriteComponent &sprite) {
+		draw_component<SpriteComponent>("Sprite", [](SpriteComponent &sprite) {
 			draw_color_selector(sprite.tint);
 			ImGui::DragFloat2("Size", glm::value_ptr(sprite.size), 1.0f, 0.0f, std::numeric_limits<float>::max());
 
@@ -89,11 +74,14 @@ namespace fifed {
 				ImGui::Text("Texture is not loaded!");
 
 			if(ImGui::Button("Load texture")) {
-				constexpr std::array<const char *, 3> filterPatterns = {"*.png", "*.jpg", "*.gif"};
-				char *path = tinyfd_openFileDialog("Select texture", workingDirectoryStr.c_str(), filterPatterns.size(), filterPatterns.data(), "Image", false);
+				static constexpr std::array<const char *, 3> filters = {"*.png", "*.jpg", "*.gif"};
 
-				if(path)
-					sprite.set_texture(std::make_shared<Texture>(path, GL_NEAREST));
+				const char *fileDialogResult = tinyfd_openFileDialog("Select tetxure", Project::get_absolute_path().c_str(), filters.size(), filters.data(), "Texture", false);
+				if(!fileDialogResult)
+					return;
+
+				const std::filesystem::path path = std::filesystem::relative(fileDialogResult, Project::get_root_dir());
+				sprite.set_texture(std::make_shared<Texture>(false, path, GL_NEAREST));
 			}
 		});
 
@@ -125,7 +113,21 @@ namespace fifed {
 		});
 
 		draw_component<LuaScriptComponent>("Lua Script", [](LuaScriptComponent &script) {
-			ImGui::Text("Script: %s", script.filepath.stem().c_str());
+			if(!script.inited) {
+				if(ImGui::Button("Choose script")) {
+					static constexpr std::array<const char *, 1> filters = {"*.lua"};
+					const char *fileDialogResult = tinyfd_openFileDialog("Select lua script", Project::get_absolute_path().c_str(), filters.size(), filters.data(), "Lua script", false);
+					if(!fileDialogResult)
+						return;
+
+					script.path = std::filesystem::relative(fileDialogResult, Project::get_root_dir());
+					LuaScriptingModule::get_instance()->init_script(script);
+				}
+
+				return;
+			}
+
+			ImGui::Text("Script: %s", script.path.c_str());
 
 			if(ImGui::CollapsingHeader("Properties")) {
 				script.self.for_each([](const sol::object &key, const sol::object &value) {
@@ -147,6 +149,7 @@ namespace fifed {
 				});
 			}
 
+			// TODO: reload all scripts on playmode enter!!!!
 			if(ImGui::Button("Reload"))
 				LuaScriptingModule::get_instance()->init_script(script);
 		});

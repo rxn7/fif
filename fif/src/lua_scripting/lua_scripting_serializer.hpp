@@ -1,6 +1,6 @@
 #pragma once
 
-#include "fif/core/ecs/serialization/serializer.hpp"
+#include "fif/core/serialization/serializer.hpp"
 
 namespace fif::lua_scripting {
 	class LuaScriptingSerializer : public core::Serializer {

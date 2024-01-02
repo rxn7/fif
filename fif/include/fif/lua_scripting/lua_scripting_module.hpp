@@ -37,7 +37,7 @@ namespace fif::lua_scripting {
 		inline u32 get_lua_memory_usage() const {
 			return m_Lua.memory_used();
 		}
-		void attach_script(core::Entity &ent, const std::filesystem::path &filepath);
+		void attach_script(core::Entity &ent, const std::string &path);
 		void init_script(LuaScriptComponent &luaScript);
 
 	protected:

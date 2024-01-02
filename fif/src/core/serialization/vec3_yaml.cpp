@@ -1,4 +1,4 @@
-#include "fif/core/ecs/serialization/vec3_yaml.hpp"
+#include "fif/core/serialization/vec3_yaml.hpp"
 #include "yaml-cpp/emitter.h"
 
 namespace YAML {

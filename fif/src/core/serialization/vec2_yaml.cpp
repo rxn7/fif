@@ -1,4 +1,4 @@
-#include "fif/core/ecs/serialization/vec2_yaml.hpp"
+#include "fif/core/serialization/vec2_yaml.hpp"
 
 namespace YAML {
 	Emitter &operator<<(Emitter &out, const fif::vec2 &v) {

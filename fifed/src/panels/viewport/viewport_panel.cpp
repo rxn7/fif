@@ -24,10 +24,10 @@ namespace fifed {
 			ImGui::SameLine();
 
 			if(ImGui::Button("Stop"))
-				editor->set_runtime(false);
+				editor->set_play_mode(false);
 		} else {
 			if(ImGui::Button("Start"))
-				editor->set_runtime(true);
+				editor->set_play_mode(true);
 		}
 
 		ImGui::BeginChild("FrameBuffer");

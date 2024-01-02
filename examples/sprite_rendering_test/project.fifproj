@@ -1,0 +1,3 @@
+Config:
+  Name: Sprite Rendering Test
+  StartingScene: /home/rxn/dev/cpp/fif/examples/sprite_rendering_test/scene.yaml

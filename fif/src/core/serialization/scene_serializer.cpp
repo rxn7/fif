@@ -1,4 +1,5 @@
-#include "fif/core/ecs/serialization/scene_serializer.hpp"
+#include "fif/core/serialization/scene_serializer.hpp"
+#include "project.hpp"
 
 #include <fstream>
 #include <sstream>
@@ -9,7 +10,8 @@ namespace fif::core {
 	SceneSerializer::SceneSerializer(Scene &scene) : m_Scene(scene) {
 	}
 
-	void SceneSerializer::serialize(const std::string &path) {
+	void SceneSerializer::serialize(std::filesystem::path path) {
+		path = Project::get_resource_path(path);
 		Logger::info("Serializing scene: %s", path.c_str());
 
 		YAML::Emitter yaml;
@@ -36,9 +38,11 @@ namespace fif::core {
 		fileStream << yaml.c_str();
 	}
 
-	void SceneSerializer::deserialize(const std::string &path) {
-		m_Scene.clear();
+	void SceneSerializer::deserialize(std::filesystem::path path) {
+		path = Project::get_resource_path(path);
 		Logger::info("Deserializing scene: %s", path.c_str());
+
+		m_Scene.clear();
 
 		std::ifstream fileStream(path);
 		std::stringstream ss;

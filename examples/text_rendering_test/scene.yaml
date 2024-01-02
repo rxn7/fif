@@ -1,61 +1,76 @@
 Entities:
+  - UUID: 4
+    fif::core::TagComponent:
+      Tag: Label 5
+    fif::core::TransformComponent:
+      Position: [0, -200]
+      Scale: [1, 1]
+      AngleRadians: 0
+    fif::lua_scripting::LuaScriptComponent:
+      Path: random_text.lua
+    fif::gfx::LabelComponent:
+      Text: test
+      Size: 1
+      Color: [0, 0, 0, 255]
+      HorizontalAlign: 1
+      VerticalAlign: 1
   - UUID: 3
     fif::core::TagComponent:
-      Tag: Empty
+      Tag: Label 4
     fif::core::TransformComponent:
-      Position: [0, -75]
+      Position: [0, -150]
       Scale: [1, 1]
       AngleRadians: 0
     fif::lua_scripting::LuaScriptComponent:
-      Path: /home/rxn/dev/cpp/fif/build/debug/fifed/assets/scripts/random_text.lua
+      Path: random_text.lua
     fif::gfx::LabelComponent:
       Text: test
       Size: 1
       Color: [0, 0, 0, 255]
       HorizontalAlign: 1
-      VerticalAlign: 0
-  - UUID: 1048578
-    fif::core::TagComponent:
-      Tag: Empty
-    fif::core::TransformComponent:
-      Position: [-76, 0]
-      Scale: [1, 1]
-      AngleRadians: 0
-    fif::lua_scripting::LuaScriptComponent:
-      Path: /home/rxn/dev/cpp/fif/build/debug/fifed/assets/scripts/random_text.lua
-    fif::gfx::LabelComponent:
-      Text: test
-      Size: 1
-      Color: [0, 0, 0, 255]
-      HorizontalAlign: 2
       VerticalAlign: 1
-  - UUID: 1048577
+  - UUID: 2
     fif::core::TagComponent:
-      Tag: Empty
+      Tag: Label 3
     fif::core::TransformComponent:
-      Position: [0, 75]
+      Position: [0, -100]
       Scale: [1, 1]
       AngleRadians: 0
     fif::lua_scripting::LuaScriptComponent:
-      Path: /home/rxn/dev/cpp/fif/build/debug/fifed/assets/scripts/random_text.lua
+      Path: random_text.lua
     fif::gfx::LabelComponent:
       Text: test
       Size: 1
       Color: [0, 0, 0, 255]
       HorizontalAlign: 1
-      VerticalAlign: 2
-  - UUID: 1048576
+      VerticalAlign: 1
+  - UUID: 1
     fif::core::TagComponent:
-      Tag: Empty
+      Tag: Label 2
     fif::core::TransformComponent:
-      Position: [75, 0]
+      Position: [0, -50]
       Scale: [1, 1]
       AngleRadians: 0
     fif::lua_scripting::LuaScriptComponent:
-      Path: /home/rxn/dev/cpp/fif/build/debug/fifed/assets/scripts/random_text.lua
+      Path: random_text.lua
     fif::gfx::LabelComponent:
       Text: test
       Size: 1
       Color: [0, 0, 0, 255]
-      HorizontalAlign: 0
+      HorizontalAlign: 1
+      VerticalAlign: 1
+  - UUID: 0
+    fif::core::TagComponent:
+      Tag: Label 1
+    fif::core::TransformComponent:
+      Position: [0, 0]
+      Scale: [1, 1]
+      AngleRadians: 0
+    fif::lua_scripting::LuaScriptComponent:
+      Path: random_text.lua
+    fif::gfx::LabelComponent:
+      Text: test
+      Size: 1
+      Color: [0, 0, 0, 255]
+      HorizontalAlign: 1
       VerticalAlign: 1

@@ -48,13 +48,13 @@ namespace fif::core {
 		glfwPollEvents();
 	}
 
-	void Window::close(bool value) {
+	void Window::close(const bool value) {
 		glfwSetWindowShouldClose(mp_GlfwWindow, value);
 	}
 
-	void Window::set_icon(std::string_view path) {
+	void Window::set_icon(const std::string &path) {
 		GLFWimage icon;
-		icon.pixels = stbi_load(path.data(), &icon.width, &icon.height, nullptr, 4);
+		icon.pixels = stbi_load(path.c_str(), &icon.width, &icon.height, nullptr, 4);
 
 		if(icon.pixels)
 			glfwSetWindowIcon(mp_GlfwWindow, 1, &icon);
@@ -62,5 +62,9 @@ namespace fif::core {
 			Logger::error("Failed to open window icon '%s'", path.data());
 
 		stbi_image_free(icon.pixels);
+	}
+
+	void Window::set_title(const std::string &title) {
+		glfwSetWindowTitle(mp_GlfwWindow, title.c_str());
 	}
 }// namespace fif::core

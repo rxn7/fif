@@ -51,7 +51,6 @@ function(build_module target dir libs definitions)
   target_link_libraries(${target} PUBLIC ${libs})
   target_compile_definitions(${target} INTERFACE FIF_LUA_SCRIPTING ${definitions})
 
-
   if(NOT ${target} MATCHES fif-core)
     target_precompile_headers(${target} REUSE_FROM fif-core)
   endif()
@@ -69,7 +68,6 @@ if(FIF_BUILD_CORE)
 endif()
 
 if(FIF_BUILD_LUA_SCRIPTING)
-  add_compile_definitions(SOL_NO_EXCEPTIONS)
   add_subdirectory(${LIB_DIR}/lua)
   add_subdirectory(${LIB_DIR}/sol2)
   build_module(fif-lua_scripting lua_scripting "fif-core;lua::lib;sol2" "FIF_LUA_SCRIPTING")
@@ -78,6 +76,7 @@ endif()
 if(FIF_BUILD_NATIVE_SCRIPTING)
   build_module(fif-native_scripting native_scripting "fif-core" "FIF_NATIVE_SCRIPTING")
 endif()
+
 if(FIF_BUILD_GFX)
   include_directories(SYSTEM ${LIB_DIR}/stb)
   add_subdirectory(${LIB_DIR}/freetype)

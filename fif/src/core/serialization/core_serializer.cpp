@@ -2,7 +2,7 @@
 
 #include "fif/core/ecs/components/tag_component.hpp"
 #include "fif/core/ecs/components/transform_component.hpp"
-#include "fif/core/ecs/serialization/vec2_yaml.hpp"
+#include "fif/core/serialization/vec2_yaml.hpp"
 
 namespace fif::core {
 	void CoreSerializer::serialize(const core::Entity &entity, YAML::Emitter &emitter) {
