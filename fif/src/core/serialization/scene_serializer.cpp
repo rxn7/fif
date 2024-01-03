@@ -5,13 +5,11 @@
 #include <sstream>
 
 namespace fif::core {
-	std::vector<std::unique_ptr<Serializer>> SceneSerializer::s_Serializers;
-
 	SceneSerializer::SceneSerializer(Scene &scene) : m_Scene(scene) {
 	}
 
-	void SceneSerializer::serialize(std::filesystem::path path) {
-		path = Project::get_resource_path(path);
+	void SceneSerializer::serialize(const std::filesystem::path &path) {
+		const std::filesystem::path resourcePath = Project::get_resource_path(path);
 		Logger::info("Serializing scene: %s", path.c_str());
 
 		YAML::Emitter yaml;
@@ -22,11 +20,9 @@ namespace fif::core {
 			Entity entity(m_Scene, id);
 
 			yaml << YAML::BeginMap;
-			yaml << YAML::Key << "UUID" << YAML::Value << static_cast<u32>(id);// TODO: UUID
 
-			for(const auto &serializer : s_Serializers) {
+			for(const auto &serializer : s_Serializers)
 				serializer->serialize(entity, yaml);
-			}
 
 			yaml << YAML::EndMap;
 		});
@@ -34,17 +30,17 @@ namespace fif::core {
 		yaml << YAML::EndSeq;
 		yaml << YAML::EndMap;
 
-		std::ofstream fileStream(path);
+		std::ofstream fileStream(resourcePath);
 		fileStream << yaml.c_str();
 	}
 
-	void SceneSerializer::deserialize(std::filesystem::path path) {
-		path = Project::get_resource_path(path);
+	void SceneSerializer::deserialize(const std::filesystem::path &path) {
+		const std::filesystem::path resourcePath = Project::get_resource_path(path);
 		Logger::info("Deserializing scene: %s", path.c_str());
 
 		m_Scene.clear();
 
-		std::ifstream fileStream(path);
+		std::ifstream fileStream(resourcePath);
 		std::stringstream ss;
 		ss << fileStream.rdbuf();
 
@@ -57,9 +53,8 @@ namespace fif::core {
 		for(const YAML::Node &entityNode : entitiesNode) {
 			Entity entity(m_Scene, m_Scene.get_registry().create());
 
-			for(const auto &serializer : s_Serializers) {
+			for(const auto &serializer : s_Serializers)
 				serializer->deserialize(entity, entityNode);
-			}
 		}
 	}
 }// namespace fif::core

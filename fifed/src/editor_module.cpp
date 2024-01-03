@@ -62,15 +62,13 @@ namespace fifed {
 			ImGui::SetCursorPosX(ImGui::GetWindowSize().x * 0.5f - BUTTON_SIZE.x);
 			ImGui::SetCursorPosY(ImGui::GetWindowSize().y * 0.5f - BUTTON_SIZE.y);
 
-			if(ImGui::Button("Create new project", BUTTON_SIZE)) {
+			if(ImGui::Button("Create new project", BUTTON_SIZE))
 				_this->create_project_dialog();
-			}
 
 			ImGui::SameLine();
 
-			if(ImGui::Button("Open project", BUTTON_SIZE)) {
+			if(ImGui::Button("Open project", BUTTON_SIZE))
 				_this->open_project_dialog();
-			}
 
 			ImGui::End();
 		}

@@ -1,12 +1,17 @@
-#include ".//core_serializer.hpp"
+#include "./core_entity_serializer.hpp"
 
+#include "ecs/components/uuid_component.hpp"
 #include "fif/core/ecs/components/tag_component.hpp"
 #include "fif/core/ecs/components/transform_component.hpp"
 #include "fif/core/serialization/vec2_yaml.hpp"
 
 namespace fif::core {
-	void CoreSerializer::serialize(const core::Entity &entity, YAML::Emitter &emitter) {
-		serialize_component<TagComponent>(entity, emitter, [&emitter](TagComponent &tagComponent) { emitter << YAML::Key << "Tag" << YAML::Value << tagComponent.tag; });
+	void CoreEntitySerializer::serialize(core::Entity &entity, YAML::Emitter &emitter) {
+		const UUIDComponent &uuidComponent = entity.require_component<UUIDComponent>();
+		emitter << YAML::Key << "UUID" << YAML::Value << uuidComponent.uuid;
+
+		if(TagComponent *tagComponent = entity.try_get_component<TagComponent>())
+			emitter << YAML::Key << "Tag" << YAML::Value << tagComponent->tag;
 
 		serialize_component<TransformComponent>(entity, emitter, [&emitter](TransformComponent &transformComponent) {
 			emitter << YAML::Key << "Position" << YAML::Value << transformComponent.position;
@@ -15,8 +20,13 @@ namespace fif::core {
 		});
 	}
 
-	void CoreSerializer::deserialize(core::Entity &entity, const YAML::Node &entityNode) {
-		try_get_component_node<TagComponent>(entityNode, [&entity](const YAML::Node &tagComponentNode) { entity.add_component<TagComponent>().tag = tagComponentNode["Tag"].as<std::string>(); });
+	void CoreEntitySerializer::deserialize(core::Entity &entity, const YAML::Node &entityNode) {
+		if(const YAML::Node uuidNode = entityNode["UUID"])
+			entity.add_component<UUIDComponent>().uuid = uuidNode.as<u64>();
+
+		if(const YAML::Node tagNode = entityNode["Tag"])
+			entity.add_component<TagComponent>().tag = tagNode.as<std::string>();
+
 		try_get_component_node<TransformComponent>(entityNode, [&entity](const YAML::Node &transformComponentNode) {
 			TransformComponent &transform = entity.add_component<TransformComponent>();
 			transform.position = transformComponentNode["Position"].as<vec2>();

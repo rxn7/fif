@@ -2,14 +2,13 @@
 
 #include "fif/core/ecs/entity.hpp"
 
-#include "util/logger.hpp"
 #include "yaml-cpp/emitter.h"
 #include "yaml-cpp/node/node.h"
 
 namespace fif::core {
-	class Serializer {
+	class EntitySerializer {
 	public:
-		virtual void serialize(const Entity &entity, YAML::Emitter &yaml) = 0;
+		virtual void serialize(Entity &entity, YAML::Emitter &yaml) = 0;
 		virtual void deserialize(Entity &entity, const YAML::Node &entityNode) = 0;
 
 	protected:

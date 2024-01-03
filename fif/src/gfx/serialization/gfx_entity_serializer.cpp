@@ -1,4 +1,4 @@
-#include "./gfx_serializer.hpp"
+#include "./gfx_entity_serializer.hpp"
 #include "fif/core/project.hpp"
 #include "fif/core/serialization/vec2_yaml.hpp"
 #include "fif/gfx/components/circle_component.hpp"
@@ -11,7 +11,7 @@
 #include <filesystem>
 
 namespace fif::gfx {
-	void GfxSerializer::serialize(const core::Entity &entity, YAML::Emitter &emitter) {
+	void GfxEntitySerializer::serialize(core::Entity &entity, YAML::Emitter &emitter) {
 		serialize_component<SpriteComponent>(entity, emitter, [&emitter](SpriteComponent &spriteComponent) {
 			emitter << YAML::Key << "Tint" << YAML::Value << spriteComponent.tint;
 			emitter << YAML::Key << "Size" << YAML::Value << spriteComponent.size;
@@ -37,7 +37,7 @@ namespace fif::gfx {
 		});
 	}
 
-	void GfxSerializer::deserialize(core::Entity &entity, const YAML::Node &entityNode) {
+	void GfxEntitySerializer::deserialize(core::Entity &entity, const YAML::Node &entityNode) {
 		try_get_component_node<SpriteComponent>(entityNode, [&entity](const YAML::Node &spriteComponentNode) {
 			SpriteComponent &spriteComponent = entity.require_component<SpriteComponent>();
 			spriteComponent.size = spriteComponentNode["Size"].as<vec2>();

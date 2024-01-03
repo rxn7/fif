@@ -1,57 +1,18 @@
 Entities:
-  - UUID: 10
-    fif::core::TagComponent:
-      Tag: TTEEEEEST
+  - UUID: 13107889042404489802
+    Tag: Sprite1
     fif::core::TransformComponent:
-      Position: [-268, 0]
-      Scale: [1, 1]
-      AngleRadians: 0
-    fif::gfx::SpriteComponent:
-      Tint: [255, 6, 255, 255]
-      Size: [48, 48]
-      TexturePath: logo.png
-  - UUID: 9
-    fif::core::TagComponent:
-      Tag: Sprite
-    fif::core::TransformComponent:
-      Position: [0, 400]
+      Position: [0, -100]
       Scale: [1, 1]
       AngleRadians: 0
     fif::lua_scripting::LuaScriptComponent:
       Path: movement.lua
     fif::gfx::SpriteComponent:
-      Tint: [255, 255, 255, 255]
+      Tint: [0, 255, 255, 255]
       Size: [48, 48]
       TexturePath: logo.png
-  - UUID: 8
-    fif::core::TagComponent:
-      Tag: Sprite
-    fif::core::TransformComponent:
-      Position: [0, 300]
-      Scale: [1, 1]
-      AngleRadians: 0
-    fif::lua_scripting::LuaScriptComponent:
-      Path: movement.lua
-    fif::gfx::SpriteComponent:
-      Tint: [255, 255, 255, 255]
-      Size: [48, 48]
-      TexturePath: logo.png
-  - UUID: 7
-    fif::core::TagComponent:
-      Tag: Sprite
-    fif::core::TransformComponent:
-      Position: [0, 200]
-      Scale: [1, 1]
-      AngleRadians: 0
-    fif::lua_scripting::LuaScriptComponent:
-      Path: movement.lua
-    fif::gfx::SpriteComponent:
-      Tint: [255, 255, 255, 255]
-      Size: [48, 48]
-      TexturePath: logo.png
-  - UUID: 6
-    fif::core::TagComponent:
-      Tag: Sprite
+  - UUID: 18446744073709551615
+    Tag: Sprite2
     fif::core::TransformComponent:
       Position: [0, 100]
       Scale: [1, 1]
@@ -59,82 +20,6 @@ Entities:
     fif::lua_scripting::LuaScriptComponent:
       Path: movement.lua
     fif::gfx::SpriteComponent:
-      Tint: [255, 255, 255, 255]
+      Tint: [255, 0, 255, 255]
       Size: [48, 48]
       TexturePath: logo.png
-  - UUID: 5
-    fif::core::TagComponent:
-      Tag: Sprite
-    fif::core::TransformComponent:
-      Position: [0, 0]
-      Scale: [1, 1]
-      AngleRadians: 0
-    fif::lua_scripting::LuaScriptComponent:
-      Path: movement.lua
-    fif::gfx::SpriteComponent:
-      Tint: [255, 255, 255, 255]
-      Size: [48, 48]
-      TexturePath: logo.png
-  - UUID: 4
-    fif::core::TagComponent:
-      Tag: Sprite
-    fif::core::TransformComponent:
-      Position: [100, 0]
-      Scale: [1, 1]
-      AngleRadians: 0
-    fif::lua_scripting::LuaScriptComponent:
-      Path: movement.lua
-    fif::gfx::SpriteComponent:
-      Tint: [255, 255, 255, 255]
-      Size: [48, 48]
-      TexturePath: logo.png
-  - UUID: 3
-    fif::core::TagComponent:
-      Tag: Sprite
-    fif::core::TransformComponent:
-      Position: [200, 0]
-      Scale: [1, 1]
-      AngleRadians: 0
-    fif::lua_scripting::LuaScriptComponent:
-      Path: movement.lua
-    fif::gfx::SpriteComponent:
-      Tint: [255, 255, 255, 255]
-      Size: [48, 48]
-      TexturePath: logo.png
-  - UUID: 2
-    fif::core::TagComponent:
-      Tag: Sprite
-    fif::core::TransformComponent:
-      Position: [300, 0]
-      Scale: [1, 1]
-      AngleRadians: 0
-    fif::lua_scripting::LuaScriptComponent:
-      Path: movement.lua
-    fif::gfx::SpriteComponent:
-      Tint: [255, 255, 255, 255]
-      Size: [48, 48]
-      TexturePath: logo.png
-  - UUID: 1
-    fif::core::TagComponent:
-      Tag: Sprite
-    fif::core::TransformComponent:
-      Position: [400, 0]
-      Scale: [1, 1]
-      AngleRadians: 0
-    fif::lua_scripting::LuaScriptComponent:
-      Path: movement.lua
-    fif::gfx::SpriteComponent:
-      Tint: [255, 255, 255, 255]
-      Size: [48, 48]
-      TexturePath: logo.png
-  - UUID: 0
-    fif::core::TagComponent:
-      Tag: Sprite
-    fif::core::TransformComponent:
-      Position: [0, 0]
-      Scale: [1, 1]
-      AngleRadians: 0
-    fif::gfx::SpriteComponent:
-      Tint: [255, 255, 255, 255]
-      Size: [230, 273]
-      TexturePath: ../../fifed/assets/textures/icons.png

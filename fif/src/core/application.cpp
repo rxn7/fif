@@ -1,5 +1,5 @@
 #include "fif/core/application.hpp"
-#include "./serialization/core_serializer.hpp"
+#include "./serialization/core_entity_serializer.hpp"
 #include "fif/core/event/event_dispatcher.hpp"
 #include "fif/core/event/window_event.hpp"
 #include "fif/core/serialization/scene_serializer.hpp"
@@ -30,7 +30,7 @@ namespace fif::core {
 
 		setup_modules();
 
-		SceneSerializer::add_serializer<CoreSerializer>();
+		SceneSerializer::add_serializer<CoreEntitySerializer>();
 
 		for(const auto &mod : m_Modules) {
 			Logger::info("Module '%s' started", mod->get_name().data());

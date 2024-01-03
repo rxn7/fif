@@ -1,4 +1,4 @@
-#include "./lua_scripting_serializer.hpp"
+#include "./lua_scripting_entity_serializer.hpp"
 
 #include "fif/core/ecs/components/transform_component.hpp"
 #include "fif/core/ecs/entity.hpp"
@@ -24,7 +24,7 @@ namespace fif::lua_scripting {
 	void LuaScriptingModule::on_start() {
 		mp_Application->add_update_system(lua_script_update_system);
 		mp_Application->add_render_system(lua_script_render_system);
-		core::SceneSerializer::add_serializer<LuaScriptingSerializer>();
+		core::SceneSerializer::add_serializer<LuaScriptingEntitySerializer>();
 
 		m_Lua.open_libraries(sol::lib::base, sol::lib::math, sol::lib::string);
 

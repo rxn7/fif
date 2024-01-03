@@ -1,9 +1,8 @@
 Entities:
-  - UUID: 1048580
-    fif::core::TagComponent:
-      Tag: Label 5
+  - UUID: 13064834528086897634
+    Tag: Label
     fif::core::TransformComponent:
-      Position: [0, -200]
+      Position: [0, 100]
       Scale: [1, 1]
       AngleRadians: 0
     fif::lua_scripting::LuaScriptComponent:
@@ -14,11 +13,10 @@ Entities:
       Color: [0, 0, 0, 255]
       HorizontalAlign: 1
       VerticalAlign: 1
-  - UUID: 1048579
-    fif::core::TagComponent:
-      Tag: Label 4
+  - UUID: 13064834528086897635
+    Tag: Label
     fif::core::TransformComponent:
-      Position: [0, -150]
+      Position: [0, 200]
       Scale: [1, 1]
       AngleRadians: 0
     fif::lua_scripting::LuaScriptComponent:
@@ -29,11 +27,10 @@ Entities:
       Color: [0, 0, 0, 255]
       HorizontalAlign: 1
       VerticalAlign: 1
-  - UUID: 1048578
-    fif::core::TagComponent:
-      Tag: Label 3
+  - UUID: 13064834528086897636
+    Tag: Label
     fif::core::TransformComponent:
-      Position: [0, -100]
+      Position: [0, 300]
       Scale: [1, 1]
       AngleRadians: 0
     fif::lua_scripting::LuaScriptComponent:
@@ -44,11 +41,10 @@ Entities:
       Color: [0, 0, 0, 255]
       HorizontalAlign: 1
       VerticalAlign: 1
-  - UUID: 1048577
-    fif::core::TagComponent:
-      Tag: Label 2
+  - UUID: 13064834528086897637
+    Tag: Label
     fif::core::TransformComponent:
-      Position: [0, -50]
+      Position: [0, 400]
       Scale: [1, 1]
       AngleRadians: 0
     fif::lua_scripting::LuaScriptComponent:
@@ -59,11 +55,66 @@ Entities:
       Color: [0, 0, 0, 255]
       HorizontalAlign: 1
       VerticalAlign: 1
-  - UUID: 1048576
-    fif::core::TagComponent:
-      Tag: Label 1
+  - UUID: 13064834528086897638
+    Tag: Label
     fif::core::TransformComponent:
-      Position: [0, 0]
+      Position: [0, 500]
+      Scale: [1, 1]
+      AngleRadians: 0
+    fif::lua_scripting::LuaScriptComponent:
+      Path: random_text.lua
+    fif::gfx::LabelComponent:
+      Text: test
+      Size: 1
+      Color: [0, 0, 0, 255]
+      HorizontalAlign: 1
+      VerticalAlign: 1
+  - UUID: 13064834528086897639
+    Tag: Label
+    fif::core::TransformComponent:
+      Position: [0, 600]
+      Scale: [1, 1]
+      AngleRadians: 0
+    fif::lua_scripting::LuaScriptComponent:
+      Path: random_text.lua
+    fif::gfx::LabelComponent:
+      Text: test
+      Size: 1
+      Color: [0, 0, 0, 255]
+      HorizontalAlign: 1
+      VerticalAlign: 1
+  - UUID: 13064834528086897640
+    Tag: Label
+    fif::core::TransformComponent:
+      Position: [0, 700]
+      Scale: [1, 1]
+      AngleRadians: 0
+    fif::lua_scripting::LuaScriptComponent:
+      Path: random_text.lua
+    fif::gfx::LabelComponent:
+      Text: test
+      Size: 1
+      Color: [0, 0, 0, 255]
+      HorizontalAlign: 1
+      VerticalAlign: 1
+  - UUID: 13064834528086897641
+    Tag: Label
+    fif::core::TransformComponent:
+      Position: [0, 800]
+      Scale: [1, 1]
+      AngleRadians: 0
+    fif::lua_scripting::LuaScriptComponent:
+      Path: random_text.lua
+    fif::gfx::LabelComponent:
+      Text: test
+      Size: 1
+      Color: [0, 0, 0, 255]
+      HorizontalAlign: 1
+      VerticalAlign: 1
+  - UUID: 13064834528086897642
+    Tag: Label
+    fif::core::TransformComponent:
+      Position: [0, 900]
       Scale: [1, 1]
       AngleRadians: 0
     fif::lua_scripting::LuaScriptComponent:

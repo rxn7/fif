@@ -6,7 +6,7 @@
 #include "fif/gfx/renderer2d.hpp"
 
 #include "./lua_register.hpp"
-#include "./serialization/gfx_serializer.hpp"
+#include "./serialization/gfx_entity_serializer.hpp"
 #include "./systems/renderer_system.hpp"
 
 #include <memory>
@@ -37,7 +37,7 @@ namespace fif::gfx {
 
 		mp_Application->add_render_system(&fif::gfx::renderer_system);
 
-		core::SceneSerializer::add_serializer<GfxSerializer>();
+		core::SceneSerializer::add_serializer<GfxEntitySerializer>();
 	}
 
 	void GfxModule::pre_render() {
