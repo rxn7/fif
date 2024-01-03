@@ -62,7 +62,13 @@ namespace fif::lua_scripting {
 		luaScript.hooks = {};
 		luaScript.self = {};
 
-		const sol::protected_function_result &result = m_Lua.safe_script_file(core::Project::get_resource_path(luaScript.path));
+		std::filesystem::path path = core::Project::get_resource_path(luaScript.path);
+		if(!std::filesystem::exists(path)) {
+			core::Logger::error("Failed to load lua script '%s': file does not exist!", path.string().c_str());
+			return;
+		}
+
+		const sol::protected_function_result &result = m_Lua.safe_script_file(path);
 		if(!result.valid()) {
 			sol::error err = result;
 			core::Logger::error("Failed to load lua script '%s': %s", luaScript.path.c_str(), err.what());

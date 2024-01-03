@@ -3,18 +3,15 @@
 #include "entity_template/label_template.hpp"
 #include "entity_template/sprite_template.hpp"
 
-#include "fif/core/ecs//components/transform_component.hpp"
-#include "fif/core/ecs/components/tag_component.hpp"
-#include "fif/gfx/components/quad_component.hpp"
-#include "fif/native_scripting/components/native_script_component.hpp"
-
-#include "imgui.h"
-#include "lua_scripting_module.hpp"
+#include <fif/core/ecs//components/transform_component.hpp>
+#include <fif/core/ecs/components/tag_component.hpp>
+#include <fif/gfx/components/quad_component.hpp>
+#include <fif/native_scripting/components/native_script_component.hpp>
 
 namespace fifed {
 	template<typename T> static void draw_component(const std::string &name, EntityID ent, Scene &scene, std::function<void(T &)> drawFunc);
 
-	ScenePanel::ScenePanel(InspectorPanel &inspector) : m_Inspector(inspector) {
+	ScenePanel::ScenePanel(Editor &editor, InspectorPanel &inspector) : EditorPanel(editor), m_Inspector(inspector) {
 		m_Templates.push_back(std::make_unique<EmptyTemplate>());
 		m_Templates.push_back(std::make_unique<SpriteTemplate>());
 		m_Templates.push_back(std::make_unique<LabelTemplate>());

@@ -6,6 +6,7 @@
 namespace fifed {
 	class EmptyTemplate final : public EntityTemplate {
 	public:
+		EmptyTemplate() = default;
 		ENTITY_TEMPLATE_NAME("Empty")
 
 	protected:

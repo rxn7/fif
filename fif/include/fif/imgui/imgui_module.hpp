@@ -3,9 +3,10 @@
 #include "fif/core/module.hpp"
 
 #include "imgui.h"
+#include "invokable.hpp"
 
 namespace fif::imgui {
-	typedef void (*ImGuiRenderFunc)();
+	typedef std::function<void(void)> ImGuiRenderFunc;
 
 	class ImGuiModule final : public core::Module {
 	public:
@@ -14,11 +15,10 @@ namespace fif::imgui {
 		ImGuiModule();
 		virtual ~ImGuiModule();
 
-		inline void add_render_func(ImGuiRenderFunc renderFunc) {
-			m_RenderFunctions.push_back(renderFunc);
-		}
-		void delete_render_func(ImGuiRenderFunc renderFunc);
 		bool begin_dockspace() const;
+		inline Invokable<> &get_render_hook() {
+			return m_RenderHook;
+		}
 
 	protected:
 		void on_start() override;
@@ -29,6 +29,6 @@ namespace fif::imgui {
 		void apply_default_theme() const;
 
 	private:
-		std::vector<ImGuiRenderFunc> m_RenderFunctions;
+		Invokable<> m_RenderHook;
 	};
 }// namespace fif::imgui

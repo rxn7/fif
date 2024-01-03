@@ -42,8 +42,7 @@ namespace fif::imgui {
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 
-		for(const auto &renderFunc : m_RenderFunctions)
-			renderFunc();
+		m_RenderHook.invoke();
 
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -67,16 +66,6 @@ namespace fif::imgui {
 		default:
 			break;
 		}
-	}
-
-	void ImGuiModule::delete_render_func(ImGuiRenderFunc renderFunc) {
-		const auto it = std::find(m_RenderFunctions.begin(), m_RenderFunctions.end(), renderFunc);
-		if(it == m_RenderFunctions.end()) {
-			core::Logger::error("Cannot remove ImGuiRenderFunc that doesn't exist in m_RenderFunctions");
-			return;
-		}
-
-		m_RenderFunctions.erase(it);
 	}
 
 	bool ImGuiModule::begin_dockspace() const {

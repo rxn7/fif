@@ -9,8 +9,9 @@
 namespace fifed {
 	class SettingsPanel final : public EditorPanel {
 	public:
-		SettingsPanel(Grid &grid, FrameBuffer &frameBuffer, CameraController &cameraController);
+		SettingsPanel(Editor &editor, Grid &grid, FrameBuffer &frameBuffer, CameraController &cameraController);
 		PANEL_NAME("Settings")
+
 		void on_render() override;
 
 	private:

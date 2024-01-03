@@ -15,8 +15,12 @@ else
 fi
 
 if command -v bear &> /dev/null ; then
-	echo "bear found. compile_commands.json will be created"
-	bear -- cmake --build build/debug --clean-first
+	read -r -p "bear found. Do you want to create compile_commands.json (it might take a few minutes) (y/n)" choice
+	choice=${choice,,} # to lower
+
+	if [[ $choice =~ ^(y| ) ]] || [[ -z $choice ]]; then
+		bear -- cmake --build build/debug --clean-first
+	fi
 else
 	echo "bear not found. compile_commands.json will not be created"
 fi

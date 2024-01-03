@@ -1,33 +1,32 @@
 #include "viewport_panel.hpp"
 #include "application.hpp"
-#include "editor_module.hpp"
+#include "editor.hpp"
+#include "fifed_module.hpp"
 
 namespace fifed {
-	ViewportPanel::ViewportPanel(FrameBuffer &frameBuffer) : m_FrameBuffer(frameBuffer) {
+	ViewportPanel::ViewportPanel(Editor &editor, FrameBuffer &frameBuffer) : EditorPanel(editor), m_FrameBuffer(frameBuffer) {
 	}
 
 	void ViewportPanel::on_render() {
-		EditorModule *editor = EditorModule::get_instance();
-
 		ImGui::SameLine();
 		const f32 windowWidth = ImGui::GetWindowSize().x;
 
-		Application *app = editor->get_application();
-		const bool isRuntime = editor->is_runtime();
+		Application *app = FifedModule::get_instance()->get_application();
+		const bool isPlayMode = m_Editor.is_play_mode();
 		const bool isPaused = app->get_status().paused;
 		ImGui::SetCursorPosX((windowWidth - 32.0f) * 0.5f);
 
-		if(isRuntime) {
-			if(mp_IconManager->imgui_button("Pause", isPaused ? IconType::UNPAUSE : IconType::PAUSE))
+		if(isPlayMode) {
+			if(m_Editor.get_icon_manager().imgui_button("Pause", isPaused ? IconType::UNPAUSE : IconType::PAUSE))
 				app->set_pause(!isPaused);
 
 			ImGui::SameLine();
 
 			if(ImGui::Button("Stop"))
-				editor->set_play_mode(false);
+				m_Editor.set_play_mode(false);
 		} else {
 			if(ImGui::Button("Start"))
-				editor->set_play_mode(true);
+				m_Editor.set_play_mode(true);
 		}
 
 		ImGui::BeginChild("FrameBuffer");

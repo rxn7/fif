@@ -7,6 +7,7 @@
 namespace fifed {
 	class SpriteTemplate final : public EntityTemplate {
 	public:
+		SpriteTemplate() = default;
 		ENTITY_TEMPLATE_NAME("Sprite")
 
 	protected:

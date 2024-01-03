@@ -1,14 +1,13 @@
 #pragma once
 
+#include "fif/core/invokable.hpp"
+
 namespace fif::core {
 	class Logger {
 	public:
 		enum class LogType : u8 { Info, Warn, Error, Debug };
 
 		typedef void (*LoggerCallback)(LogType, const char *msg);
-
-		static void add_callback(LoggerCallback callback);
-		static void delete_callback(LoggerCallback callback);
 
 		template<LogType> static void print_prefix();
 
@@ -23,8 +22,7 @@ namespace fif::core {
 			std::fputs(buf, stdout);
 			std::puts("\033[0m");
 
-			for(LoggerCallback &callback : s_Callbacks)
-				callback(T, buf);
+			s_LoggerHook.invoke(T, buf);
 
 			std::free(buf);
 		}
@@ -40,6 +38,6 @@ namespace fif::core {
 		FIF_PRINT_FUNC(debug, LogType::Debug)
 
 	public:
-		static std::vector<LoggerCallback> s_Callbacks;
+		inline static Invokable<LogType, const char *> s_LoggerHook;
 	};
 };// namespace fif::core

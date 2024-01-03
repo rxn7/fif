@@ -7,6 +7,7 @@
 namespace fifed {
 	class LabelTemplate final : public EntityTemplate {
 	public:
+		LabelTemplate() = default;
 		ENTITY_TEMPLATE_NAME("Label")
 
 	protected:

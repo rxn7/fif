@@ -1,5 +1,5 @@
 #include "fifed.hpp"
-#include "editor_module.hpp"
+#include "fifed_module.hpp"
 
 #include "fif/core/project.hpp"
 #include "fif/fif.hpp"
@@ -28,7 +28,7 @@ namespace fifed {
 		attach_module<LuaScriptingModule>();
 		attach_module<InputModule>();
 		attach_module<GfxModule>("./assets/fonts/iosevka-regular.ttf");
-		attach_module<EditorModule>();
+		attach_module<FifedModule>();
 		attach_module<ImGuiModule>();
 	}
 }// namespace fifed

@@ -5,9 +5,8 @@
 namespace fifed {
 	class ViewportPanel final : public EditorPanel {
 	public:
+		ViewportPanel(Editor &editor, FrameBuffer &frameBuffer);
 		PANEL_NAME("Viewport")
-
-		ViewportPanel(FrameBuffer &frameBuffer);
 
 		void on_render() override;
 		inline bool is_hovered() const {

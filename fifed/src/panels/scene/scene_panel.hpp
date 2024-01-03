@@ -7,9 +7,8 @@
 namespace fifed {
 	class ScenePanel final : public EditorPanel {
 	public:
+		ScenePanel(Editor &editor, InspectorPanel &inspector);
 		PANEL_NAME("Scene")
-
-		ScenePanel(InspectorPanel &inspector);
 
 		void on_render() override;
 

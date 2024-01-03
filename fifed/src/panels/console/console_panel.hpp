@@ -1,6 +1,9 @@
 #pragma once
 
 #include "../editor_panel.hpp"
+
+#include <fif/core/invokable.hpp>
+
 #include <deque>
 #include <format>
 
@@ -18,18 +21,18 @@ namespace fifed {
 		const std::string message;
 	};
 
-	class ConsolePanel : public EditorPanel {
+	class ConsolePanel final : public EditorPanel {
 	public:
 		PANEL_NAME("Console")
-		ConsolePanel();
+		ConsolePanel(Editor &editor);
 		~ConsolePanel();
 		void on_render() override;
 
 	private:
-		static void logger_callback(Logger::LogType logType, const char *msg);
+		void logger_callback(Logger::LogType logType, const char *msg);
 
 	private:
-		static constexpr u32 MAX_LINES = 50;
+		Callback<Logger::LogType, const char *> m_LoggerCallback;
 		std::deque<ConsolePanelEntry> m_Output;
 		u32 m_LineIdx;
 	};

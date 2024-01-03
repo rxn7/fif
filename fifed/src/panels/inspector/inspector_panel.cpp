@@ -1,16 +1,16 @@
 #include "inspector_panel.hpp"
 
-#include "fif/core/ecs/components/tag_component.hpp"
-#include "fif/core/ecs/components/transform_component.hpp"
-#include "fif/core/project.hpp"
-#include "fif/gfx/components/circle_component.hpp"
-#include "fif/gfx/components/label_component.hpp"
-#include "fif/gfx/components/quad_component.hpp"
-#include "fif/gfx/components/sprite_component.hpp"
-#include "fif/gfx/text/font.hpp"
-#include "fif/lua_scripting/components/lua_script_component.hpp"
-#include "fif/lua_scripting/lua_scripting_module.hpp"
-#include "fif/native_scripting/components/native_script_component.hpp"
+#include <fif/core/ecs/components/tag_component.hpp>
+#include <fif/core/ecs/components/transform_component.hpp>
+#include <fif/core/project.hpp>
+#include <fif/gfx/components/circle_component.hpp>
+#include <fif/gfx/components/label_component.hpp>
+#include <fif/gfx/components/quad_component.hpp>
+#include <fif/gfx/components/sprite_component.hpp>
+#include <fif/gfx/text/font.hpp>
+#include <fif/lua_scripting/components/lua_script_component.hpp>
+#include <fif/lua_scripting/lua_scripting_module.hpp>
+#include <fif/native_scripting/components/native_script_component.hpp>
 
 #include <filesystem>
 #include <imgui.h>
@@ -18,7 +18,7 @@
 #include <tinyfiledialogs.h>
 
 namespace fifed {
-	InspectorPanel::InspectorPanel(Scene &scene) : m_SelectedEntity(scene, entt::null) {
+	InspectorPanel::InspectorPanel(Editor &editor, Scene &scene) : EditorPanel(editor), m_SelectedEntity(scene, entt::null) {
 	}
 
 	void InspectorPanel::on_render() {

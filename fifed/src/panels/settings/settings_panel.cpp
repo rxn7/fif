@@ -1,14 +1,15 @@
 #include "settings_panel.hpp"
 #include "../../camera_controller.hpp"
 #include "../../grid.hpp"
-#include "editor_module.hpp"
+#include "fifed_module.hpp"
 
-#include "fif/gfx/gfx_module.hpp"
-#include "fif/gfx/ortho_camera.hpp"
+#include <fif/gfx/gfx_module.hpp>
+#include <fif/gfx/ortho_camera.hpp>
 
 namespace fifed {
-	SettingsPanel::SettingsPanel(Grid &grid, FrameBuffer &frameBuffer, CameraController &cameraController) :
-		m_Grid(grid), m_FrameBuffer(frameBuffer), m_CameraController(cameraController) {}
+	SettingsPanel::SettingsPanel(Editor &editor, Grid &grid, FrameBuffer &frameBuffer, CameraController &cameraController) :
+		EditorPanel(editor), m_Grid(grid), m_FrameBuffer(frameBuffer), m_CameraController(cameraController) {
+	}
 
 	void SettingsPanel::on_render() {
 		if(ImGui::TreeNode("Viewport")) {

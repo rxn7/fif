@@ -4,6 +4,9 @@
 #include "gfx_module.hpp"
 
 namespace fifed {
+	PerformancePanel::PerformancePanel(Editor &editor) : EditorPanel(editor) {
+	}
+
 	void PerformancePanel::on_render() {
 		const PerformanceStats &stats = Application::get_instance()->get_performance_stats();
 		ImGui::Text("Frame time: %f ms", stats.frameTimeMs);

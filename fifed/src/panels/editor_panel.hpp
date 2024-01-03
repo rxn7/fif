@@ -1,24 +1,32 @@
 #pragma once
 
-#include "event/event.hpp"
-#include "icon_manager.hpp"
-#include "imgui.h"
+#include <fif/core/event/event.hpp>
 
 namespace fifed {
+	class Editor;
+
 	class EditorPanel {
 	public:
 		virtual std::string_view get_title() const = 0;
-		virtual void on_update([[maybe_unused]] float dt) {}
-		virtual void on_event([[maybe_unused]] Event &event) {}
+		virtual void on_update([[maybe_unused]] float dt) {
+		}
+		virtual void on_event([[maybe_unused]] Event &event) {
+		}
 		void render();
 
-	private:
-		virtual void on_render() {}
+	protected:
+		EditorPanel(Editor &editor);
 
-	public:
-		IconManager *mp_IconManager;
+	private:
+		virtual void on_render() {
+		}
+
+	protected:
+		Editor &m_Editor;
 	};
 }// namespace fifed
 
-#define PANEL_NAME(x)                                                                                                                                \
-	std::string_view get_title() const override { return x; }
+#define PANEL_NAME(x)                                                                                                                                                                                  \
+	std::string_view get_title() const override {                                                                                                                                                      \
+		return x;                                                                                                                                                                                      \
+	}
