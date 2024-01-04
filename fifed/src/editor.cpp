@@ -20,8 +20,9 @@ namespace fifed {
 	Editor::Editor(FifedModule &fifedModule) : Stage(fifedModule), m_FrameBuffer({0, 0}), m_Grid(fif::gfx::GfxModule::get_instance()->get_renderer2D().get_camera(), m_FrameBuffer) {
 		m_FifedModule.get_application()->get_window().set_title(Project::get_config().name + " | Fifed"
 #ifdef FIF_DEBUG
-																+ " [DEBUG]");
+																+ " [DEBUG]"
 #endif
+		);
 
 		init_shortcuts();
 		init_panels();
