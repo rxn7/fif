@@ -4,6 +4,8 @@
 
 namespace fif::core {
 	void Project::create(const std::string &name, const std::filesystem::path &projectPath) {
+		Application::get_instance()->get_scene().clear();
+
 		s_ActiveProject = std::make_shared<Project>();
 		s_ActiveProject->m_RootDir = projectPath;
 		s_ActiveProject->m_AbsolutePath = std::filesystem::absolute(Project::get_root_dir()).string() + "/";
@@ -13,6 +15,8 @@ namespace fif::core {
 	}
 
 	bool Project::load(const std::filesystem::path &rootDirectory) {
+		Application::get_instance()->get_scene().clear();
+
 		s_ActiveProject = std::make_shared<Project>();
 		s_ActiveProject->m_RootDir = rootDirectory;
 		s_ActiveProject->m_AbsolutePath = std::filesystem::absolute(Project::get_root_dir()).string() + "/";

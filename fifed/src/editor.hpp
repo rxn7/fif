@@ -2,7 +2,6 @@
 
 #include "camera_controller.hpp"
 #include "grid.hpp"
-#include "icon_manager.hpp"
 #include "invokable.hpp"
 #include "panels/editor_panel.hpp"
 #include "panels/inspector/inspector_panel.hpp"
@@ -33,10 +32,6 @@ namespace fifed {
 			set_play_mode(!m_PlayMode);
 		}
 
-		inline IconManager &get_icon_manager() {
-			return m_IconManager;
-		}
-
 	private:
 		template<class T, class... Args> std::shared_ptr<T> add_panel(Args &&...args) {
 			std::shared_ptr<EditorPanel> &panel = m_Panels.emplace_back(std::make_shared<T>(std::forward<Args>(args)...));
@@ -56,7 +51,6 @@ namespace fifed {
 	private:
 		std::filesystem::path m_CurrentScenePath = "";
 
-		IconManager m_IconManager;
 		FrameBuffer m_FrameBuffer;
 		Grid m_Grid;
 		CameraController m_CameraController;

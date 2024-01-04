@@ -11,13 +11,14 @@ namespace fifed {
 		ImGui::SameLine();
 		const f32 windowWidth = ImGui::GetWindowSize().x;
 
-		Application *app = FifedModule::get_instance()->get_application();
+		FifedModule *fifedModule = FifedModule::get_instance();
+		Application *app = fifedModule->get_application();
 		const bool isPlayMode = m_Editor.is_play_mode();
 		const bool isPaused = app->get_status().paused;
 		ImGui::SetCursorPosX((windowWidth - 32.0f) * 0.5f);
 
 		if(isPlayMode) {
-			if(m_Editor.get_icon_manager().imgui_button("Pause", isPaused ? IconType::UNPAUSE : IconType::PAUSE))
+			if(fifedModule->get_icon_manager().imgui_button("Pause", isPaused ? IconType::UNPAUSE : IconType::PAUSE))
 				app->set_pause(!isPaused);
 
 			ImGui::SameLine();

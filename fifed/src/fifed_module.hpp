@@ -1,6 +1,7 @@
 #pragma once
 
 #include "./stage.hpp"
+#include "icon_manager.hpp"
 #include <memory>
 
 namespace fifed {
@@ -14,6 +15,10 @@ namespace fifed {
 		void load_default_layout();
 		void on_project_open();
 
+		inline IconManager &get_icon_manager() {
+			return m_IconManager;
+		}
+
 	protected:
 		void on_start() override;
 		void on_render() override;
@@ -24,10 +29,12 @@ namespace fifed {
 	private:
 		void render_imgui();
 
-	private:
-		Callback<> m_ImGuiRenderCallback;
+	public:
 		std::unique_ptr<Stage> mp_Stage = nullptr;
 
+	private:
+		IconManager m_IconManager;
+		Callback<> m_ImGuiRenderCallback;
 		friend Stage;
 	};
 }// namespace fifed

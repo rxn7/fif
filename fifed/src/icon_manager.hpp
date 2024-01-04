@@ -1,7 +1,7 @@
 #pragma once
 
 namespace fifed {
-	enum IconType : u8 { GITHUB, LOGO, PAUSE, UNPAUSE, STOP };
+	enum IconType : u8 { GITHUB, LOGO, PAUSE, UNPAUSE, DELETE };
 
 	struct IconInfo {
 		vec2 offset;
@@ -11,7 +11,6 @@ namespace fifed {
 	class IconManager final {
 	public:
 		IconManager(const std::filesystem::path &path);
-		void add_icon(IconType type, const IconInfo &info);
 		const IconInfo &get_icon(IconType type) const;
 		bool imgui_button(const std::string_view idStr, IconType type, const vec2 &size = {32.0f, 32.0f});
 

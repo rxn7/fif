@@ -13,7 +13,7 @@ namespace fif::core {
 		static bool load(const std::filesystem::path &rootDirectory);
 		static void save();
 
-		inline static const std::shared_ptr<Project> &get_active() {
+		inline static std::shared_ptr<Project> &get_active() {
 			return s_ActiveProject;
 		}
 
@@ -31,6 +31,10 @@ namespace fif::core {
 
 		static inline const std::string &get_absolute_path() {
 			return s_ActiveProject->m_AbsolutePath;
+		}
+
+		static constexpr std::string_view project_filename() {
+			return "project.fifproj";
 		}
 
 		static inline std::filesystem::path get_project_file_path() {

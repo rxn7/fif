@@ -5,28 +5,22 @@
 #include "panels/performance/performance_panel.hpp"
 #include "panels/scene/scene_panel.hpp"
 #include "panels/settings/settings_panel.hpp"
-#include "serialization/scene_serializer.hpp"
+#include "project_manager.hpp"
 
 #include <fif/core/ecs/components/transform_component.hpp>
 #include <fif/core/event/key_event.hpp>
 #include <fif/core/project.hpp>
+#include <fif/core/serialization/scene_serializer.hpp>
 
 #include <fstream>
 #include <tinyfiledialogs.h>
 
 namespace fifed {
-	Editor::Editor(FifedModule &fifedModule) :
-		Stage(fifedModule), m_IconManager("assets/textures/icons.png"), m_FrameBuffer({0, 0}), m_Grid(fif::gfx::GfxModule::get_instance()->get_renderer2D().get_camera(), m_FrameBuffer) {
+	Editor::Editor(FifedModule &fifedModule) : Stage(fifedModule), m_FrameBuffer({0, 0}), m_Grid(fif::gfx::GfxModule::get_instance()->get_renderer2D().get_camera(), m_FrameBuffer) {
 		m_FifedModule.get_application()->get_window().set_title(Project::get_config().name + " | Fifed"
 #ifdef FIF_DEBUG
 																+ " [DEBUG]");
 #endif
-
-		m_IconManager.add_icon(IconType::GITHUB, {{0.0f, 0.0f}, {230.0f, 225.0f}});
-		m_IconManager.add_icon(IconType::LOGO, {{0.0f, 225.0f}, {48.0f, 48.0f}});
-		m_IconManager.add_icon(IconType::PAUSE, {{48.0f, 225.0f}, {32.0f, 32.0f}});
-		m_IconManager.add_icon(IconType::UNPAUSE, {{80.0f, 225.0f}, {32.0f, 32.0f}});
-		m_IconManager.add_icon(IconType::STOP, {{80.0f, 225.0f}, {32.0f, 32.0f}});
 
 		m_Shortcuts.emplace_back(GLFW_KEY_O, GLFW_MOD_CONTROL, "Open a scene", std::bind(&Editor::open_scene_dialog, this));
 		m_Shortcuts.emplace_back(GLFW_KEY_S, GLFW_MOD_CONTROL, "Save current scene", std::bind(&Editor::save_scene, this));
@@ -75,17 +69,17 @@ namespace fifed {
 		SceneSerializer serializer(m_FifedModule.get_application()->get_scene());
 		serializer.serialize(m_CurrentScenePath);
 		Logger::info("Scene saved to: %s", m_CurrentScenePath.c_str());
+
+		if(Project::get_config().startingScene.empty()) {
+			Project::get_config().startingScene = std::filesystem::relative(m_CurrentScenePath, Project::get_root_dir());
+			Project::save();
+		}
 	}
 
 	void Editor::open_scene(const std::filesystem::path &path) {
 		if(path.empty()) {
 			Logger::error("Cannot open scene, invalid path!");
 			return;
-		}
-
-		if(Project::get_config().startingScene.empty()) {
-			Project::get_config().startingScene = std::filesystem::relative(path, Project::get_root_dir());
-			Project::save();
 		}
 
 		m_CurrentScenePath = path;
@@ -164,6 +158,17 @@ namespace fifed {
 				ImGui::EndMenu();
 			}
 
+			if(ImGui::BeginMenu("Project")) {
+				if(ImGui::MenuItem("Save"))
+					Project::save();
+
+				if(ImGui::MenuItem("Open Project Manager")) {
+					m_FifedModule.mp_Stage = std::make_unique<ProjectManager>(m_FifedModule);
+				}
+
+				ImGui::EndMenu();
+			}
+
 			if(ImGui::BeginMenu("Layout")) {
 				if(ImGui::MenuItem("Load Default"))
 					m_FifedModule.load_default_layout();
@@ -189,7 +194,7 @@ namespace fifed {
 					static std::string content(std::istreambuf_iterator<char>(fileStream), {});
 					ImGui::TextWrapped("%s", content.c_str());
 				}
-				if(m_IconManager.imgui_button("Source", IconType::GITHUB)) {
+				if(FifedModule::get_instance()->get_icon_manager().imgui_button("Source", IconType::GITHUB)) {
 #define GITHUB_URL "https://github.com/rxn7/fif"
 #ifdef _WIN32
 					system("start /b open " GITHUB_URL);

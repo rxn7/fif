@@ -13,7 +13,7 @@
 namespace fifed {
 	FIF_MODULE_INSTANCE_IMPL(FifedModule);
 
-	FifedModule::FifedModule() : m_ImGuiRenderCallback(std::bind(&FifedModule::render_imgui, this)) {
+	FifedModule::FifedModule() : m_IconManager("assets/textures/icons.png"), m_ImGuiRenderCallback(std::bind(&FifedModule::render_imgui, this)) {
 		FIF_MODULE_INIT_INSTANCE();
 	}
 
@@ -22,6 +22,8 @@ namespace fifed {
 	}
 
 	void FifedModule::on_start() {
+		mp_Application->set_pause(true);
+
 		static constexpr ImWchar ranges[] = {0x0020, 0x017f, 0};
 		ImGuiIO &io = ImGui::GetIO();
 		io.Fonts->AddFontFromFileTTF("assets/fonts/iosevka-regular.ttf", 18, nullptr, ranges);
@@ -31,7 +33,6 @@ namespace fifed {
 			load_default_layout();
 
 		ImGuiModule::get_instance()->get_render_hook().hook(m_ImGuiRenderCallback);
-
 		mp_Stage = std::make_unique<ProjectManager>(*this);
 	}
 

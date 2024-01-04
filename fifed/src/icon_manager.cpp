@@ -2,15 +2,11 @@
 
 namespace fifed {
 	IconManager::IconManager(const std::filesystem::path &path) : m_Texture(true, path, GL_NEAREST) {
-	}
-
-	void IconManager::add_icon(IconType type, const IconInfo &info) {
-		if(m_IconInfos.find(type) != m_IconInfos.end()) {
-			Logger::error("Tried to add icon that exists: %i!", type);
-			return;
-		}
-
-		m_IconInfos.emplace(type, info);
+		m_IconInfos.emplace(IconType::GITHUB, IconInfo{{0.0f, 0.0f}, {230.0f, 225.0f}});
+		m_IconInfos.emplace(IconType::LOGO, IconInfo{{0.0f, 225.0f}, {48.0f, 48.0f}});
+		m_IconInfos.emplace(IconType::PAUSE, IconInfo{{48.0f, 225.0f}, {32.0f, 32.0f}});
+		m_IconInfos.emplace(IconType::UNPAUSE, IconInfo{{80.0f, 225.0f}, {32.0f, 32.0f}});
+		m_IconInfos.emplace(IconType::DELETE, IconInfo{{112.0f, 225.0f}, {32.0f, 32.0f}});
 	}
 
 	const IconInfo &IconManager::get_icon(IconType type) const {
