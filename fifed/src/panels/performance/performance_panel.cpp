@@ -1,7 +1,7 @@
 #include "performance_panel.hpp"
 
-#include "fif/gfx/renderer2d.hpp"
-#include "gfx_module.hpp"
+#include <fif/gfx/gfx_module.hpp>
+#include <fif/gfx/renderer2d.hpp>
 
 namespace fifed {
 	PerformancePanel::PerformancePanel(Editor &editor) : EditorPanel(editor) {

@@ -4,7 +4,7 @@ namespace fif::core {
 	// This is serialized to project file
 	struct ProjectConfig {
 		std::string name = "New Project";
-		std::filesystem::path startingScene = "";
+		std::filesystem::path startingScenePath = "";
 	};
 
 	class Project {

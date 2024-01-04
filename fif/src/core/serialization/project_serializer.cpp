@@ -14,7 +14,7 @@ namespace fif::core {
 		yaml << YAML::BeginMap;
 		yaml << YAML::Key << "Config" << YAML::Value << YAML::BeginMap;
 		yaml << YAML::Key << "Name" << YAML::Value << m_Project->m_Config.name;
-		yaml << YAML::Key << "StartingScene" << YAML::Value << m_Project->m_Config.startingScene;
+		yaml << YAML::Key << "StartingScene" << YAML::Value << m_Project->m_Config.startingScenePath;
 		yaml << YAML::EndMap;
 		yaml << YAML::EndMap;
 
@@ -41,7 +41,7 @@ namespace fif::core {
 		FIF_ASSERT(static_cast<bool>(configNode), "Project file is invalid, Config map is missing!");
 
 		m_Project->m_Config.name = configNode["Name"].as<std::string>();
-		m_Project->m_Config.startingScene = configNode["StartingScene"].as<std::string>();
+		m_Project->m_Config.startingScenePath = configNode["StartingScene"].as<std::string>();
 
 		return true;
 	}

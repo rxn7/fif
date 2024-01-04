@@ -1,8 +1,8 @@
 #include "editor.hpp"
 #include "fifed_module.hpp"
-
 #include "panels/console/console_panel.hpp"
 #include "panels/performance/performance_panel.hpp"
+#include "panels/resource_browser/resource_browser.hpp"
 #include "panels/scene/scene_panel.hpp"
 #include "panels/settings/settings_panel.hpp"
 #include "project_manager.hpp"
@@ -11,6 +11,7 @@
 #include <fif/core/event/key_event.hpp>
 #include <fif/core/project.hpp>
 #include <fif/core/serialization/scene_serializer.hpp>
+#include <fif/core/system.hpp>
 
 #include <fstream>
 #include <tinyfiledialogs.h>
@@ -22,20 +23,30 @@ namespace fifed {
 																+ " [DEBUG]");
 #endif
 
+		init_shortcuts();
+		init_panels();
+
+		const std::filesystem::path startingScenePath = Project::get_config().startingScenePath;
+		if(!startingScenePath.empty())
+			open_scene(startingScenePath);
+	}
+
+	void Editor::init_shortcuts() {
 		m_Shortcuts.emplace_back(GLFW_KEY_O, GLFW_MOD_CONTROL, "Open a scene", std::bind(&Editor::open_scene_dialog, this));
 		m_Shortcuts.emplace_back(GLFW_KEY_S, GLFW_MOD_CONTROL, "Save current scene", std::bind(&Editor::save_scene, this));
 		m_Shortcuts.emplace_back(GLFW_KEY_F, 0, "Follow/focus selected entity", std::bind(&Editor::follow_selected_entity, this));
 		m_Shortcuts.emplace_back(GLFW_KEY_DELETE, 0, "Delete selected entity", std::bind(&Editor::delete_selected_entity, this));
 		m_Shortcuts.emplace_back(GLFW_KEY_F5, 0, "Toggle play mode", std::bind(&Editor::toggle_play_mode, this));
+	}
 
+	void Editor::init_panels() {
 		mp_ViewportPanel = add_panel<ViewportPanel>(*this, m_FrameBuffer);
 		mp_InspectorPanel = add_panel<InspectorPanel>(*this, m_FifedModule.get_application()->get_scene());
 		add_panel<PerformancePanel>(*this);
 		add_panel<SettingsPanel>(*this, m_Grid, m_FrameBuffer, m_CameraController);
 		add_panel<ScenePanel>(*this, *mp_InspectorPanel);
-
-		if(!Project::get_config().startingScene.empty())
-			open_scene(Project::get_config().startingScene);
+		add_panel<ResourceBrowserPanel>(*this);
+		add_panel<ConsolePanel>(*this);
 	}
 
 	void Editor::update() {
@@ -70,8 +81,10 @@ namespace fifed {
 		serializer.serialize(m_CurrentScenePath);
 		Logger::info("Scene saved to: %s", m_CurrentScenePath.c_str());
 
-		if(Project::get_config().startingScene.empty()) {
-			Project::get_config().startingScene = std::filesystem::relative(m_CurrentScenePath, Project::get_root_dir());
+		std::filesystem::path &startingScenePath = Project::get_config().startingScenePath;
+
+		if(startingScenePath.empty() || !std::filesystem::exists(Project::get_resource_path(startingScenePath))) {
+			startingScenePath = std::filesystem::relative(m_CurrentScenePath, Project::get_root_dir());
 			Project::save();
 		}
 	}
@@ -162,9 +175,8 @@ namespace fifed {
 				if(ImGui::MenuItem("Save"))
 					Project::save();
 
-				if(ImGui::MenuItem("Open Project Manager")) {
+				if(ImGui::MenuItem("Open Project Manager"))
 					m_FifedModule.mp_Stage = std::make_unique<ProjectManager>(m_FifedModule);
-				}
 
 				ImGui::EndMenu();
 			}
@@ -194,21 +206,24 @@ namespace fifed {
 					static std::string content(std::istreambuf_iterator<char>(fileStream), {});
 					ImGui::TextWrapped("%s", content.c_str());
 				}
-				if(FifedModule::get_instance()->get_icon_manager().imgui_button("Source", IconType::GITHUB)) {
-#define GITHUB_URL "https://github.com/rxn7/fif"
-#ifdef _WIN32
-					system("start /b open " GITHUB_URL);
-#elif defined(__linux__)
-					system("xdg-open " GITHUB_URL "&");
-#endif
-				}
+
+				ImGui::Text("Author: ");
+				ImGui::SameLine();
+				if(ImGui::Button("Maciej Niziołek###authorBtn"))
+					System::open_url("https://maciejniziolek.xyz");
+
+				ImGui::Text("Source: ");
+				ImGui::SameLine();
+				if(FifedModule::get_instance()->get_icon_manager().imgui_button("sourceBtn", IconType::GITHUB))
+					System::open_url("https://github.com/rxn7/fif");
 			}
 			ImGui::End();
 		}
 
 		if(m_ShortcutsWindowOpen) {
 			ImGui::SetNextWindowSize(ImVec2(300, 200), ImGuiCond_Once);
-			// TODO: scrollbar here
+
+			// TODO: Use clipper to render only visible entries
 			if(ImGui::Begin("Shortcuts", &m_ShortcutsWindowOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoDocking))
 				for(const Shortcut &shortcut : m_Shortcuts)
 					ImGui::TextWrapped("%s", shortcut.get_description().c_str());
@@ -216,9 +231,10 @@ namespace fifed {
 			ImGui::End();
 		}
 
-		if(ImGuiModule::get_instance()->begin_dockspace())
+		if(ImGuiModule::get_instance()->begin_dockspace()) {
 			for(std::shared_ptr<EditorPanel> &panel : m_Panels)
 				panel->render();
+		}
 
 		ImGui::End();
 	}

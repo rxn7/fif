@@ -33,19 +33,22 @@ namespace fifed {
 		}
 
 	private:
-		template<class T, class... Args> std::shared_ptr<T> add_panel(Args &&...args) {
-			std::shared_ptr<EditorPanel> &panel = m_Panels.emplace_back(std::make_shared<T>(std::forward<Args>(args)...));
-			return std::static_pointer_cast<T, EditorPanel>(panel);
-		}
-
 		void save_scene();
 		void open_scene_dialog();
 		void open_scene(const std::filesystem::path &path);
 		void follow_selected_entity();
 		void delete_selected_entity();
 
+		void init_shortcuts();
+		void init_panels();
+
 		inline FrameBuffer &get_frame_buffer() {
 			return m_FrameBuffer;
+		}
+
+		template<class T, class... Args> std::shared_ptr<T> add_panel(Args &&...args) {
+			std::shared_ptr<EditorPanel> &panel = m_Panels.emplace_back(std::make_shared<T>(std::forward<Args>(args)...));
+			return std::static_pointer_cast<T, EditorPanel>(panel);
 		}
 
 	private:

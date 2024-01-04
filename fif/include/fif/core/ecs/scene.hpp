@@ -13,8 +13,10 @@ namespace fif::core {
 
 		EntityID duplicate_entity(EntityID source);
 
-		inline void for_each(const std::function<void(EntityID &ent)> &func) {
-			m_Registry.each(func);
+		inline void for_each(const std::function<void(EntityID entityID)> &func) {
+			for(EntityID entityID : m_Registry.view<EntityID>()) {
+				func(entityID);
+			}
 		}
 
 		inline void delete_entity(EntityID entity) {
@@ -26,7 +28,7 @@ namespace fif::core {
 		}
 
 		inline u64 get_entity_count() const {
-			return m_Registry.storage<EntityID>().in_use();
+			return m_Registry.storage<EntityID>()->free_list();
 		}
 
 		inline entt::registry &get_registry() {

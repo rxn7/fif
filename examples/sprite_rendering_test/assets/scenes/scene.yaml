@@ -1,0 +1,25 @@
+Entities:
+  - UUID: 13107889042404489802
+    Tag: Sprite1
+    fif::core::TransformComponent:
+      Position: [-113.5, -273.5]
+      Scale: [1, 1]
+      AngleRadians: -0.00149607006
+    fif::lua_scripting::LuaScriptComponent:
+      Path: assets/scripts/movement.lua
+    fif::gfx::SpriteComponent:
+      Tint: [0, 255, 255, 255]
+      Size: [48, 48]
+      TexturePath: assets/textures/logo.png
+  - UUID: 18446744073709551615
+    Tag: Sprite2
+    fif::core::TransformComponent:
+      Position: [-113.5, -73.5]
+      Scale: [1, 1]
+      AngleRadians: -0.00149607006
+    fif::lua_scripting::LuaScriptComponent:
+      Path: assets/scripts/movement.lua
+    fif::gfx::SpriteComponent:
+      Tint: [255, 0, 255, 255]
+      Size: [48, 48]
+      TexturePath: assets/textures/logo.png

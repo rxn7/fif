@@ -26,7 +26,7 @@ namespace fifed {
 
 		static constexpr ImWchar ranges[] = {0x0020, 0x017f, 0};
 		ImGuiIO &io = ImGui::GetIO();
-		io.Fonts->AddFontFromFileTTF("assets/fonts/iosevka-regular.ttf", 18, nullptr, ranges);
+		io.Fonts->AddFontFromFileTTF("assets/fonts/iosevka-regular.ttf", 20, nullptr, ranges);
 		io.IniFilename = "layout.ini";
 
 		if(!std::filesystem::exists("layout.ini"))
