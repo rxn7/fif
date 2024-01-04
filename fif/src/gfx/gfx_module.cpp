@@ -14,12 +14,12 @@
 namespace fif::gfx {
 	FIF_MODULE_INSTANCE_IMPL(GfxModule);
 
-	GfxModule::GfxModule(const std::string &defaultFontPath) {
+	GfxModule::GfxModule(const std::filesystem::path &defaultFontPath) {
 		FIF_MODULE_INIT_INSTANCE();
 
 		FIF_ASSERT(FT_Init_FreeType(&m_FreeType) == 0, "Failed to init freetype");
 
-		Font::sp_DefaultFont = std::make_shared<Font>(defaultFontPath, 64, 512);
+		Font::sp_DefaultFont = std::make_shared<Font>(true, defaultFontPath, 64, 512);
 	}
 
 	GfxModule::~GfxModule() {

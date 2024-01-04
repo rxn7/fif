@@ -25,6 +25,7 @@
 
 // clang-format off
 #include "fif/core/types.hpp"
+#include "fif/version.hpp"
 #include "fif/core/event/event.hpp"
 #include "fif/core/event/event_dispatcher.hpp"
 #include "fif/core/opengl.hpp"

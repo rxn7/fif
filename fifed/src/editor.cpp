@@ -200,7 +200,7 @@ namespace fifed {
 		if(m_AboutWindowOpen) {
 			ImGui::SetNextWindowSize(ImVec2(350, 200));
 			if(ImGui::Begin("About", &m_AboutWindowOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoDocking)) {
-				ImGui::Text("Fif v%u.%u.%u", 0, 0, 0);// TODO: version(major,minor,patch)
+				ImGui::Text("Fif v%u.%u.%u", fif::VERSION_MAJOR, fif::VERSION_MINOR, fif::VERSION_PATCH);
 				if(ImGui::CollapsingHeader("License")) {
 					static std::ifstream fileStream("LICENSE", std::ios::in | std::ios::binary);
 					static std::string content(std::istreambuf_iterator<char>(fileStream), {});

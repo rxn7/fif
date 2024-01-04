@@ -13,7 +13,7 @@ namespace fif::gfx {
 	public:
 		FIF_MODULE(GfxModule)
 
-		GfxModule(const std::string &defaultFontPath);
+		GfxModule(const std::filesystem::path &defaultFontPath);
 		~GfxModule();
 
 		inline vec2 get_viewport_size() {

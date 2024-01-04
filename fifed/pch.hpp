@@ -1,6 +1,7 @@
 #pragma once
 
 #include "fif/pch.hpp"
+#include "fif/version.hpp"
 
 #include "fif/gfx/color.hpp"
 #include "fif/gfx/gfx_module.hpp"
