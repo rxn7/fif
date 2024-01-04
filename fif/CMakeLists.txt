@@ -17,20 +17,7 @@ set(INC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 add_compile_options(-fPIC)
 add_compile_options(-ffast-math)
-
-set(GLFW_BUILD_EXAMPLES OFF CACHE INTERNAL "Build GLFW examples")
-set(GLFW_BUILD_TESTS OFF CACHE INTERNAL "Build GLFW tests")
-set(GLFW_BUILD_DOCS OFF CACHE INTERNAL "Build GLFW docs")
-set(GLFW_INSTALL OFF CACHE INTERNAL "Install GLFW")
-
-add_subdirectory(${LIB_DIR}/glfw)
-
-add_subdirectory(${LIB_DIR}/glad)
-add_subdirectory(${LIB_DIR}/glm)
-
-add_compile_definitions(ENTT_DISABLE_ASSERT)
-add_subdirectory(${LIB_DIR}/entt)
-add_subdirectory(${LIB_DIR}/yaml-cpp)
+add_compile_options(-fno-stack-protector)
 
 if(FIF_RELEASE)
   if(MSVC)
@@ -41,6 +28,19 @@ if(FIF_RELEASE)
 else()
   add_compile_options(-g3)
 endif()
+
+set(GLFW_BUILD_EXAMPLES OFF CACHE INTERNAL "Build GLFW examples")
+set(GLFW_BUILD_TESTS OFF CACHE INTERNAL "Build GLFW tests")
+set(GLFW_BUILD_DOCS OFF CACHE INTERNAL "Build GLFW docs")
+set(GLFW_INSTALL OFF CACHE INTERNAL "Install GLFW")
+add_subdirectory(${LIB_DIR}/glfw)
+
+add_subdirectory(${LIB_DIR}/glad)
+add_subdirectory(${LIB_DIR}/glm)
+
+add_compile_definitions(ENTT_DISABLE_ASSERT)
+add_subdirectory(${LIB_DIR}/entt)
+add_subdirectory(${LIB_DIR}/yaml-cpp)
 
 function(build_module target dir libs definitions)
   file(GLOB_RECURSE SOURCES ${SRC_DIR}/${dir}/*.cpp)
@@ -86,8 +86,10 @@ if(FIF_BUILD_NATIVE_SCRIPTING)
 endif()
 
 if(FIF_BUILD_GFX)
-  include_directories(SYSTEM ${LIB_DIR}/stb)
+  set(FT_DISABLE_HARFBUZZ ON)
   add_subdirectory(${LIB_DIR}/freetype)
+
+  include_directories(SYSTEM ${LIB_DIR}/stb)
   build_module(fif-gfx gfx "fif-core;freetype" "FIF_GFX")
 endif()
 
