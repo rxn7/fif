@@ -68,7 +68,7 @@ namespace fif::lua_scripting {
 			return;
 		}
 
-		const sol::protected_function_result &result = m_Lua.safe_script_file(path);
+		const sol::protected_function_result &result = m_Lua.safe_script_file(path.string());
 		if(!result.valid()) {
 			sol::error err = result;
 			core::Logger::error("Failed to load lua script '%s': %s", luaScript.path.c_str(), err.what());

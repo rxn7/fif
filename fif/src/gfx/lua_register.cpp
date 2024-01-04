@@ -26,7 +26,7 @@ namespace fif::gfx {
 		luaModule->register_component<LabelComponent>("LabelComponent", "text", &LabelComponent::text, "size", &LabelComponent::fontSize, "color", &LabelComponent::color, "horizontalAlign", &LabelComponent::horizontalAlign, "verticalAlign", &LabelComponent::verticalAlign);
 	}
 #else
-	void register_lua_components() {
+	void register_lua_types() {
 	}
 #endif
 }// namespace fif::gfx

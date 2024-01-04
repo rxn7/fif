@@ -10,7 +10,7 @@ namespace fifed {
 		const bool isInRoot = m_CurrentDirectory == m_RootDirectory;
 
 		if(!isInRoot) {
-			const std::string relativePath = std::filesystem::relative(m_CurrentDirectory, m_RootDirectory);
+			const std::string relativePath = std::filesystem::relative(m_CurrentDirectory, m_RootDirectory).string();
 			if(ImGui::Button(("<-- " + relativePath + "###resourceBrowserGoBack").c_str())) {
 				current_directory_go_back();
 			}
@@ -20,7 +20,7 @@ namespace fifed {
 		// TODO: Call filesystem api on interval or when something changes in the directory.
 
 		for(const std::filesystem::directory_entry &entry : std::filesystem::directory_iterator(m_CurrentDirectory)) {
-			const std::string entryFileName = entry.path().filename();
+			const std::string entryFileName = entry.path().filename().string();
 			const std::string buttonId = entryFileName + "##resourceBrowserEntry";
 
 			if(entry.is_directory()) {

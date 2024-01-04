@@ -15,7 +15,7 @@ namespace fif::gfx {
 		serialize_component<SpriteComponent>(entity, emitter, [&emitter](SpriteComponent &spriteComponent) {
 			emitter << YAML::Key << "Tint" << YAML::Value << spriteComponent.tint;
 			emitter << YAML::Key << "Size" << YAML::Value << spriteComponent.size;
-			emitter << YAML::Key << "TexturePath" << YAML::Value << (spriteComponent.p_texture != nullptr ? spriteComponent.p_texture->get_path() : "");
+			emitter << YAML::Key << "TexturePath" << YAML::Value << (spriteComponent.p_texture != nullptr ? spriteComponent.p_texture->get_path().string() : "");
 		});
 
 		serialize_component<QuadComponent>(entity, emitter, [&emitter](QuadComponent &quadComponent) {

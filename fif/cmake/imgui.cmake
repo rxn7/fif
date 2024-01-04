@@ -23,3 +23,4 @@ file(GLOB IMGUI_SOURCES
 
 add_library(${PROJECT_NAME} STATIC ${IMGUI_SOURCES})
 target_include_directories(${PROJECT_NAME} PUBLIC ${IMGUI_PATH} PRIVATE ${GLFW_DIR}/include)
+target_link_libraries(${PROJECT_NAME} INTERFACE glfw)

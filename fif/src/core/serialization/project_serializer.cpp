@@ -14,7 +14,7 @@ namespace fif::core {
 		yaml << YAML::BeginMap;
 		yaml << YAML::Key << "Config" << YAML::Value << YAML::BeginMap;
 		yaml << YAML::Key << "Name" << YAML::Value << m_Project->m_Config.name;
-		yaml << YAML::Key << "StartingScene" << YAML::Value << m_Project->m_Config.startingScenePath;
+		yaml << YAML::Key << "StartingScene" << YAML::Value << m_Project->m_Config.startingScenePath.string();
 		yaml << YAML::EndMap;
 		yaml << YAML::EndMap;
 

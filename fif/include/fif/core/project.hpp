@@ -25,7 +25,7 @@ namespace fif::core {
 			return s_ActiveProject->m_RootDir;
 		}
 
-		static inline std::filesystem::path get_resource_path(const std::string &path) {
+		static inline std::filesystem::path get_resource_path(const std::filesystem::path &path) {
 			return s_ActiveProject->m_RootDir / path;
 		}
 

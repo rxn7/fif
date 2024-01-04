@@ -22,6 +22,7 @@ set(GLFW_BUILD_EXAMPLES OFF CACHE INTERNAL "Build GLFW examples")
 set(GLFW_BUILD_TESTS OFF CACHE INTERNAL "Build GLFW tests")
 set(GLFW_BUILD_DOCS OFF CACHE INTERNAL "Build GLFW docs")
 set(GLFW_INSTALL OFF CACHE INTERNAL "Install GLFW")
+
 add_subdirectory(${LIB_DIR}/glfw)
 
 add_subdirectory(${LIB_DIR}/glad)
@@ -45,11 +46,18 @@ function(build_module target dir libs definitions)
   file(GLOB_RECURSE SOURCES ${SRC_DIR}/${dir}/*.cpp)
   add_library(${target} STATIC ${SOURCES})
 
+  # TODO: This is terrible
+  if(FIF_BUILD_LUA_SCRIPTING)
+    set(definitions "${definitions};FIF_LUA_SCRIPTING")
+    set(libs "${libs};lua::lib;sol2")
+  endif()
+
   set_target_properties(${target} PROPERTIES PUBLIC_HEADER ${INC_DIR}/fif/${dir})
 
   target_include_directories(${target} PUBLIC ${INC_DIR} ${INC_DIR}/fif/${dir} ${SRC_DIR}/${dir})
   target_link_libraries(${target} PUBLIC ${libs})
-  target_compile_definitions(${target} INTERFACE FIF_LUA_SCRIPTING ${definitions})
+
+  target_compile_definitions(${target} INTERFACE ${definitions})
 
   if(NOT ${target} MATCHES fif-core)
     target_precompile_headers(${target} REUSE_FROM fif-core)

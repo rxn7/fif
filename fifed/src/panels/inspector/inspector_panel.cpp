@@ -120,7 +120,7 @@ namespace fifed {
 					if(!fileDialogResult)
 						return;
 
-					script.path = std::filesystem::relative(fileDialogResult, Project::get_root_dir());
+					script.path = std::filesystem::relative(fileDialogResult, Project::get_root_dir()).string();
 					LuaScriptingModule::get_instance()->init_script(script);
 				}
 
