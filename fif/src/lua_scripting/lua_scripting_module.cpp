@@ -39,10 +39,17 @@ namespace fif::lua_scripting {
 			"Vec2", sol::call_constructor, sol::factories([](f32 x, f32 y) { return vec2(x, y); }), 
 			"x", &vec2::x, 
 			"y", &vec2::y, 
-			sol::meta_function::addition, [](vec2 a, vec2 b) { return vec2(a.x + b.x, a.y + b.y); }, 
-			sol::meta_function::multiplication, [](vec2 a, float v) { return vec2(a.x * v, a.y * v); },
-			sol::meta_function::division, [](vec2 a, float v) { return vec2(a.x / v, a.y / v); }, 
-			sol::meta_function::subtraction, [](vec2 a, vec2 b) { return vec2(a.x - b.x, a.y - b.y); });
+			sol::meta_function::addition, [](const vec2 &a, const vec2 &b) { return vec2(a.x + b.x, a.y + b.y); }, 
+			sol::meta_function::multiplication, [](const vec2 &a, float v) { return vec2(a.x * v, a.y * v); },
+			sol::meta_function::division, [](const vec2 &a, float v) { return vec2(a.x / v, a.y / v); }, 
+			sol::meta_function::subtraction, [](const vec2 &a, const vec2 &b) { return vec2(a.x - b.x, a.y - b.y); },
+
+			"normalize", [](vec2 &v) { 
+				// NOTE: Without the check glm tries to divide by 0
+				if(v.x != 0 && v.y != 0)
+					v = glm::normalize(v);
+			}
+		);
 		// clang-format on
 
 		register_component<core::TransformComponent>("TransformComponent", "position", &core::TransformComponent::position, "scale", &core::TransformComponent::scale, "angleRadians", &core::TransformComponent::angleRadians);
