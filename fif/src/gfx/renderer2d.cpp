@@ -1,14 +1,15 @@
-#include "fif/gfx/renderer2d.hpp"
-#include "fif/gfx/batch.hpp"
-#include "fif/gfx/ortho_camera.hpp"
-#include "fif/gfx/text/font.hpp"
-#include "fif/gfx/vertex_buffer.hpp"
-#include "fif/gfx/vertices/circle_vertex.hpp"
-#include "fif/gfx/vertices/quad_vertex.hpp"
 #include "shaders/circle.hpp"
 #include "shaders/glyph.hpp"
 #include "shaders/quad.hpp"
 #include "shaders/sprite.hpp"
+
+#include "fif/gfx/batch.hpp"
+#include "fif/gfx/ortho_camera.hpp"
+#include "fif/gfx/renderer2d.hpp"
+#include "fif/gfx/text/font.hpp"
+#include "fif/gfx/vertex_buffer.hpp"
+#include "fif/gfx/vertices/circle_vertex.hpp"
+#include "fif/gfx/vertices/quad_vertex.hpp"
 
 #include <regex>
 

@@ -40,29 +40,19 @@ namespace fif::core {
 	};
 }// namespace fif::core
 
-#define FIF_MODULE(x)                                                                                                                                                                                  \
-	FIF_MODULE_NAME_DECL(x)                                                                                                                                                                            \
-	FIF_MODULE_INSTANCE_FUNC_DECL(x)                                                                                                                                                                   \
-	FIF_MODULE_EXISTS_DECL(x)
-
-#define FIF_MODULE_NAME_DECL(x)                                                                                                                                                                        \
-	constexpr std::string_view get_name() const override {                                                                                                                                             \
-		return #x;                                                                                                                                                                                     \
+#define FIF_MODULE(T)                                                                                                                                                                                  \
+	constexpr inline std::string_view get_name() const override {                                                                                                                                      \
+		return #T;                                                                                                                                                                                     \
+	}                                                                                                                                                                                                  \
+	static inline T *sp_Instance;                                                                                                                                                                      \
+	static inline T &get_instance() {                                                                                                                                                                  \
+		FIF_ASSERT(sp_Instance != nullptr, "There is no instance of " #T);                                                                                                                             \
+		return *sp_Instance;                                                                                                                                                                           \
+	}                                                                                                                                                                                                  \
+	static inline bool exists() {                                                                                                                                                                      \
+		return sp_Instance != nullptr;                                                                                                                                                                 \
 	}
 
-#define FIF_MODULE_EXISTS_DECL(x)                                                                                                                                                                      \
-	static bool exists() {                                                                                                                                                                             \
-		return get_instance() != nullptr;                                                                                                                                                              \
-	}
-
-#define FIF_MODULE_INSTANCE_FUNC_DECL(c) static c *get_instance();
-#define FIF_MODULE_INSTANCE_IMPL(c)                                                                                                                                                                    \
-	c *s_Instance = nullptr;                                                                                                                                                                           \
-	c *c::get_instance() {                                                                                                                                                                             \
-		FIF_ASSERT(s_Instance != nullptr, "There is no instance of " #c);                                                                                                                              \
-		return s_Instance;                                                                                                                                                                             \
-	}
-
-#define FIF_MODULE_INIT_INSTANCE()                                                                                                                                                                     \
-	FIF_ASSERT(s_Instance == nullptr, "There can only one instance of this module");                                                                                                                   \
-	s_Instance = this;
+#define FIF_MODULE_INIT()                                                                                                                                                                              \
+	FIF_ASSERT(sp_Instance == nullptr, "There can only one instance of this module");                                                                                                                  \
+	sp_Instance = this;

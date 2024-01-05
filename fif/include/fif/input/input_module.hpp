@@ -7,7 +7,7 @@ namespace fif::input {
 	constexpr i32 BUTTON_COUNT = GLFW_MOUSE_BUTTON_LAST + 1;
 	constexpr i32 KEY_COUNT = GLFW_KEY_LAST + 1;
 
-	struct InputState {
+	struct InputState final {
 		InputState() {
 			reset();
 		}

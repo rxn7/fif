@@ -1,5 +1,4 @@
 #include "fif/gfx/shader.hpp"
-#include "util/logger.hpp"
 
 namespace fif::gfx {
 	Shader::Shader(const std::string &vertexSrc, const std::string &fragmentSrc) : m_ID(glCreateProgram()) {
@@ -36,7 +35,7 @@ namespace fif::gfx {
 		glUseProgram(0);
 	}
 
-	u32 Shader::compile(GLenum type, const char *src) {
+	u32 Shader::compile(const GLenum type, const char *src) {
 		FIF_ASSERT(type == GL_FRAGMENT_SHADER || type == GL_VERTEX_SHADER, "Only fragment and vertex shaders are supported");
 		const u32 id = glCreateShader(type);
 
@@ -47,7 +46,7 @@ namespace fif::gfx {
 		return id;
 	}
 
-	i32 Shader::get_uniform_location(std::string_view name) {
+	i32 Shader::get_uniform_location(const std::string &name) {
 		const auto it = m_UniformLocations.find(name);
 
 		if(it == m_UniformLocations.end()) {
@@ -63,7 +62,7 @@ namespace fif::gfx {
 		return it->second;
 	}
 
-	bool Shader::check_status(u32 id, GLenum type, bool program) {
+	bool Shader::check_status(const u32 id, const GLenum type, const bool program) {
 		i32 status;
 
 		if(program)
@@ -77,7 +76,7 @@ namespace fif::gfx {
 		return static_cast<bool>(status);
 	}
 
-	void Shader::print_info_log(u32 id, bool program) {
+	void Shader::print_info_log(const u32 id, const bool program) {
 		int logLength;
 
 		if(program)

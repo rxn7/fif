@@ -1,11 +1,13 @@
 #pragma once
 
+#include "fif/gfx/color.hpp"
 #include "fif/gfx/texture.hpp"
 
 namespace fif::gfx {
 	struct SpriteComponent final {
 		SpriteComponent() {
 		}
+
 		SpriteComponent(const std::shared_ptr<Texture> &texture) {
 			set_texture(texture);
 		}

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "./stage.hpp"
 #include "icon_manager.hpp"
+#include "stage.hpp"
 #include <memory>
 
 namespace fifed {
@@ -10,12 +10,12 @@ namespace fifed {
 		FIF_MODULE(FifedModule)
 
 		FifedModule();
-		virtual ~FifedModule();
+		~FifedModule();
 
 		void load_default_layout();
 		void on_project_open();
 
-		inline IconManager &get_icon_manager() {
+		inline const IconManager &get_icon_manager() const {
 			return m_IconManager;
 		}
 

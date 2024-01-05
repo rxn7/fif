@@ -13,7 +13,6 @@
 #include <fif/native_scripting/components/native_script_component.hpp>
 
 #include <filesystem>
-#include <imgui.h>
 #include <optional>
 #include <tinyfiledialogs.h>
 
@@ -25,7 +24,7 @@ namespace fifed {
 		if(m_SelectedEntity.m_ID == entt::null)
 			return;
 
-		Scene &scene = Application::get_instance()->get_scene();
+		Scene &scene = Application::get_instance().get_scene();
 
 		if(ImGui::Button("Add Component"))
 			ImGui::OpenPopup("AddComponent");
@@ -121,7 +120,7 @@ namespace fifed {
 						return;
 
 					script.path = std::filesystem::relative(fileDialogResult, Project::get_root_dir()).string();
-					LuaScriptingModule::get_instance()->init_script(script);
+					LuaScriptingModule::get_instance().init_script(script);
 				}
 
 				return;
@@ -151,7 +150,7 @@ namespace fifed {
 
 			// TODO: reload all scripts on playmode enter!!!!
 			if(ImGui::Button("Reload"))
-				LuaScriptingModule::get_instance()->init_script(script);
+				LuaScriptingModule::get_instance().init_script(script);
 		});
 
 		draw_component<NativeScriptComponent>("Native Script", [](NativeScriptComponent &script) { ImGui::Text("Loaded script: %s", script.scriptName.c_str()); });

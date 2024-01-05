@@ -8,7 +8,7 @@
 #include <yaml-cpp/yaml.h>
 
 namespace fif::core {
-	class SceneSerializer {
+	class SceneSerializer final {
 	public:
 		SceneSerializer(Scene &scene);
 		void deserialize(const std::filesystem::path &path);

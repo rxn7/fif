@@ -1,7 +1,7 @@
 #pragma once
 
 namespace fif::core {
-	struct ApplicationStatus {
+	struct ApplicationStatus final {
 		bool paused = false;
 		bool running = false;
 	};

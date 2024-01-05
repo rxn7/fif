@@ -1,6 +1,6 @@
 #pragma once
 
-#include "fif/gfx/shader.hpp"
+#include <fif/gfx/shader.hpp>
 
 namespace fifed::shaders::Grid {
 	const std::string VERTEX = FIF_GLSL_VERSION FIF_GLSL_PRECISION

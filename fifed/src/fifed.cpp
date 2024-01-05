@@ -1,8 +1,8 @@
 #include "fifed.hpp"
 #include "fifed_module.hpp"
 
-#include "fif/core/project.hpp"
-#include "fif/fif.hpp"
+#include <fif/core/project.hpp>
+#include <fif/fif.hpp>
 
 static const ApplicationProperties APP_PROPS = {
 	.windowProps =

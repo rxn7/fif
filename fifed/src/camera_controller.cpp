@@ -1,17 +1,17 @@
 #include "camera_controller.hpp"
 
-#include "event/mouse_event.hpp"
-#include "fif/gfx/ortho_camera.hpp"
-#include "fif/gfx/renderer2d.hpp"
-#include "gfx_module.hpp"
+#include <fif/core/event/mouse_event.hpp>
+#include <fif/gfx/gfx_module.hpp>
+#include <fif/gfx/ortho_camera.hpp>
+#include <fif/gfx/renderer2d.hpp>
 
 namespace fifed {
 	void CameraController::update() {
-		Renderer2D &renderer2D = GfxModule::get_instance()->get_renderer2D();
+		Renderer2D &renderer2D = GfxModule::get_instance().get_renderer2D();
 		OrthoCamera &cam = renderer2D.get_camera();
 
 		if(m_IsZooming) {
-			const fif::vec2 mouseWorldPositionBeforeZoom = cam.screen_to_world(m_StartMousePositionLocal);
+			const vec2 mouseWorldPositionBeforeZoom = cam.screen_to_world(m_StartMousePositionLocal);
 
 			if(m_ZoomLerpDuration > 0) {
 				const f32 zoomLerpPercentage = m_ZoomTimer / m_ZoomLerpDuration;
@@ -34,8 +34,8 @@ namespace fifed {
 
 			cam.update_size();
 
-			const fif::vec2 mouseWorldPositionAfterZoom = cam.screen_to_world(m_StartMousePositionLocal);
-			const fif::vec2 mousePostionDelta = mouseWorldPositionBeforeZoom - mouseWorldPositionAfterZoom;
+			const vec2 mouseWorldPositionAfterZoom = cam.screen_to_world(m_StartMousePositionLocal);
+			const vec2 mousePostionDelta = mouseWorldPositionBeforeZoom - mouseWorldPositionAfterZoom;
 			cam.m_Position += mousePostionDelta;
 		}
 	}
@@ -44,15 +44,15 @@ namespace fifed {
 		if(event.m_Handled || !viewportHovered)
 			return;
 
-		GfxModule *gfx = GfxModule::get_instance();
-		InputModule *input = InputModule::get_instance();
-		Renderer2D &renderer2D = gfx->get_renderer2D();
+		GfxModule &gfx = GfxModule::get_instance();
+		InputModule &input = InputModule::get_instance();
+		Renderer2D &renderer2D = gfx.get_renderer2D();
 		OrthoCamera &cam = renderer2D.get_camera();
 
-		const fif::vec2 mousePosition = input->get_mouse_position();
-		const fif::vec2 mousePositionRelativeToViewport = gfx->get_point_relative_to_viewport(mousePosition);
-		if(mousePositionRelativeToViewport.x < 0 || mousePositionRelativeToViewport.y < 0 ||
-		   mousePositionRelativeToViewport.x > gfx->get_viewport_size().x || mousePositionRelativeToViewport.y > gfx->get_viewport_size().y)
+		const vec2 mousePosition = input.get_mouse_position();
+		const vec2 mousePositionRelativeToViewport = gfx.get_point_relative_to_viewport(mousePosition);
+		if(mousePositionRelativeToViewport.x < 0 || mousePositionRelativeToViewport.y < 0 || mousePositionRelativeToViewport.x > gfx.get_viewport_size().x ||
+		   mousePositionRelativeToViewport.y > gfx.get_viewport_size().y)
 			return;
 
 		EventDispatcher::dispatch<MouseScrolledEvent>(event, [&](MouseScrolledEvent &scrollEvent) {
@@ -71,12 +71,12 @@ namespace fifed {
 		});
 
 		EventDispatcher::dispatch<MouseMovedEvent>(event, [&](MouseMovedEvent &movedEvent) {
-			if(!input->is_button_held(GLFW_MOUSE_BUTTON_RIGHT))
+			if(!input.is_button_held(GLFW_MOUSE_BUTTON_RIGHT))
 				return false;
 
-			const fif::vec2 mouseWorldPosition = cam.screen_to_world(movedEvent.get_position());
-			const fif::vec2 lastMouseWorldPosition = cam.screen_to_world(input->get_last_mouse_position());
-			const fif::vec2 delta = mouseWorldPosition - lastMouseWorldPosition;
+			const vec2 mouseWorldPosition = cam.screen_to_world(movedEvent.get_position());
+			const vec2 lastMouseWorldPosition = cam.screen_to_world(input.get_last_mouse_position());
+			const vec2 delta = mouseWorldPosition - lastMouseWorldPosition;
 
 			cam.m_Position -= delta;
 

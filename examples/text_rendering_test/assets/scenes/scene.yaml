@@ -8,9 +8,9 @@ Entities:
     fif::lua_scripting::LuaScriptComponent:
       Path: assets/scripts/random_text.lua
     fif::gfx::LabelComponent:
-      Text: test
+      Text: RCf-VbX/h=
       Size: 1
-      Color: [0, 0, 0, 255]
+      Color: [130, 82, 208, 255]
       HorizontalAlign: 1
       VerticalAlign: 1
   - UUID: 13064834528086897641
@@ -22,9 +22,9 @@ Entities:
     fif::lua_scripting::LuaScriptComponent:
       Path: assets/scripts/random_text.lua
     fif::gfx::LabelComponent:
-      Text: test
+      Text: dktjBx}wV"
       Size: 1
-      Color: [0, 0, 0, 255]
+      Color: [226, 61, 50, 255]
       HorizontalAlign: 1
       VerticalAlign: 1
   - UUID: 13064834528086897640
@@ -36,9 +36,9 @@ Entities:
     fif::lua_scripting::LuaScriptComponent:
       Path: assets/scripts/random_text.lua
     fif::gfx::LabelComponent:
-      Text: test
+      Text: U=E5tZ#^_7
       Size: 1
-      Color: [0, 0, 0, 255]
+      Color: [184, 209, 206, 255]
       HorizontalAlign: 1
       VerticalAlign: 1
   - UUID: 13064834528086897639
@@ -50,9 +50,9 @@ Entities:
     fif::lua_scripting::LuaScriptComponent:
       Path: assets/scripts/random_text.lua
     fif::gfx::LabelComponent:
-      Text: test
+      Text: k>s+9H(p*X
       Size: 1
-      Color: [0, 0, 0, 255]
+      Color: [104, 214, 104, 255]
       HorizontalAlign: 1
       VerticalAlign: 1
   - UUID: 13064834528086897638
@@ -64,9 +64,9 @@ Entities:
     fif::lua_scripting::LuaScriptComponent:
       Path: assets/scripts/random_text.lua
     fif::gfx::LabelComponent:
-      Text: test
+      Text: ;~y)Jxg|fr
       Size: 1
-      Color: [0, 0, 0, 255]
+      Color: [185, 193, 108, 255]
       HorizontalAlign: 1
       VerticalAlign: 1
   - UUID: 13064834528086897637
@@ -78,9 +78,9 @@ Entities:
     fif::lua_scripting::LuaScriptComponent:
       Path: assets/scripts/random_text.lua
     fif::gfx::LabelComponent:
-      Text: test
+      Text: K>@*.F4a6A
       Size: 1
-      Color: [0, 0, 0, 255]
+      Color: [106, 69, 10, 255]
       HorizontalAlign: 1
       VerticalAlign: 1
   - UUID: 13064834528086897636
@@ -92,9 +92,9 @@ Entities:
     fif::lua_scripting::LuaScriptComponent:
       Path: assets/scripts/random_text.lua
     fif::gfx::LabelComponent:
-      Text: test
+      Text: G)3pzElz~N
       Size: 1
-      Color: [0, 0, 0, 255]
+      Color: [13, 229, 100, 255]
       HorizontalAlign: 1
       VerticalAlign: 1
   - UUID: 13064834528086897635
@@ -106,9 +106,9 @@ Entities:
     fif::lua_scripting::LuaScriptComponent:
       Path: assets/scripts/random_text.lua
     fif::gfx::LabelComponent:
-      Text: test
+      Text: ",/;>D[}Vn#"
       Size: 1
-      Color: [0, 0, 0, 255]
+      Color: [11, 38, 244, 255]
       HorizontalAlign: 1
       VerticalAlign: 1
   - UUID: 13064834528086897634
@@ -120,8 +120,8 @@ Entities:
     fif::lua_scripting::LuaScriptComponent:
       Path: assets/scripts/random_text.lua
     fif::gfx::LabelComponent:
-      Text: test
+      Text: soCJFV8Rxv
       Size: 1
-      Color: [0, 0, 0, 255]
+      Color: [209, 42, 177, 255]
       HorizontalAlign: 1
       VerticalAlign: 1

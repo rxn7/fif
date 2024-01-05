@@ -8,12 +8,12 @@ namespace fifed {
 	}
 
 	void PerformancePanel::on_render() {
-		const PerformanceStats &stats = Application::get_instance()->get_performance_stats();
+		const PerformanceStats &stats = Application::get_instance().get_performance_stats();
 		ImGui::Text("Frame time: %f ms", stats.frameTimeMs);
 		ImGui::Text("FPS: %u", stats.fps);
 
 		if(ImGui::TreeNode("Renderer2D")) {
-			const Renderer2DStats &rendererStats = GfxModule::get_instance()->get_renderer2D().get_stats();
+			const Renderer2DStats &rendererStats = GfxModule::get_instance().get_renderer2D().get_stats();
 
 			ImGui::SeparatorText("Details");
 			ImGui::Text("Draw Calls: %u", rendererStats.drawCallCount);
@@ -34,7 +34,7 @@ namespace fifed {
 		}
 
 		if(ImGui::TreeNode("Lua")) {
-			ImGui::Text("Memory used: %g kb", static_cast<float>(LuaScriptingModule::get_instance()->get_lua_memory_usage()) * 0.001f);
+			ImGui::Text("Memory used: %g kb", static_cast<f32>(LuaScriptingModule::get_instance().get_lua_memory_usage()) * 0.001f);
 			ImGui::TreePop();
 		}
 	}

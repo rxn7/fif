@@ -9,16 +9,16 @@ namespace fifed {
 
 	void ViewportPanel::on_render() {
 		ImGui::SameLine();
-		const f32 windowWidth = ImGui::GetWindowSize().x;
 
-		FifedModule *fifedModule = FifedModule::get_instance();
-		Application *app = fifedModule->get_application();
+		Application *app = FifedModule::get_instance().get_application();
 		const bool isPlayMode = m_Editor.is_play_mode();
 		const bool isPaused = app->get_status().paused;
+		const f32 windowWidth = ImGui::GetWindowSize().x;
+
 		ImGui::SetCursorPosX((windowWidth - 32.0f) * 0.5f);
 
 		if(isPlayMode) {
-			if(fifedModule->get_icon_manager().imgui_button("Pause", isPaused ? IconType::UNPAUSE : IconType::PAUSE))
+			if(FifedModule::get_instance().get_icon_manager().imgui_button("Pause", isPaused ? IconType::UNPAUSE : IconType::PAUSE))
 				app->set_pause(!isPaused);
 
 			ImGui::SameLine();
@@ -32,12 +32,14 @@ namespace fifed {
 
 		ImGui::BeginChild("FrameBuffer");
 
-		const ImVec2 pos = ImGui::GetWindowPos();
-		const ImVec2 size = ImGui::GetWindowSize();
+		const vec2 pos = ImGui::GetWindowPos();
+		const vec2 size = ImGui::GetWindowSize();
 
-		// TODO: Change size only if it changed.
-		m_FrameBuffer.set_size(glm::vec2(size.x, size.y));
-		GfxModule::get_instance()->set_viewport(glm::vec2(size.x, size.y), glm::vec2(pos.x, pos.y));
+		if(m_LastSize != size) {
+			m_FrameBuffer.set_size(size);
+			GfxModule::get_instance().set_viewport(size, pos);
+		}
+		m_LastSize = size;
 
 		ImGui::Image(reinterpret_cast<ImTextureID>(m_FrameBuffer.get_texture().get_id()), size, ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f));
 		m_Hovered = ImGui::IsItemHovered();

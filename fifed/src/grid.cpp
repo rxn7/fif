@@ -3,9 +3,9 @@
 #include "frame_buffer.hpp"
 #include "shaders/grid.hpp"
 
-#include "fif/gfx/renderer2d.hpp"
-#include "fif/gfx/shader.hpp"
-#include "fif/gfx/vertex_buffer.hpp"
+#include <fif/gfx/renderer2d.hpp>
+#include <fif/gfx/shader.hpp>
+#include <fif/gfx/vertex_buffer.hpp>
 
 namespace fifed {
 	struct GridVertex {

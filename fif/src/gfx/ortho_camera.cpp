@@ -2,7 +2,8 @@
 #include "fif/gfx/gfx_module.hpp"
 
 namespace fif::gfx {
-	OrthoCamera::~OrthoCamera() {}
+	OrthoCamera::~OrthoCamera() {
+	}
 
 	void OrthoCamera::update() {
 		update_size();
@@ -10,14 +11,14 @@ namespace fif::gfx {
 	}
 
 	void OrthoCamera::update_size() {
-		const vec2 viewportSize = GfxModule::get_instance()->get_viewport_size();
+		const vec2 viewportSize = GfxModule::get_instance().get_viewport_size();
 		const f32 aspect = static_cast<f32>(viewportSize.y) / static_cast<f32>(viewportSize.x);
 		m_Size = vec2(1.0f, aspect) * m_Zoom * BASE_ZOOM;
 	}
 
 	vec2 OrthoCamera::screen_to_world(const vec2 &position) const {
-		const vec2 viewportSize = GfxModule::get_instance()->get_viewport_size();
-		const vec2 relativePosition = position - GfxModule::get_instance()->get_viewport_position();
+		const vec2 viewportSize = GfxModule::get_instance().get_viewport_size();
+		const vec2 relativePosition = position - GfxModule::get_instance().get_viewport_position();
 		const vec2 normalizedPosition((relativePosition.x * 2.0f) / viewportSize.x - 1.0f, 1.0f - (2.0f * relativePosition.y) / viewportSize.y);
 
 		return normalizedPosition * m_Size + m_Position;

@@ -4,7 +4,7 @@
 #include "camera_controller.hpp"
 #include "grid.hpp"
 
-#include "fif/gfx/frame_buffer.hpp"
+#include <fif/gfx/frame_buffer.hpp>
 
 namespace fifed {
 	class SettingsPanel final : public EditorPanel {

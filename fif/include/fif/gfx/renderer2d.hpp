@@ -31,7 +31,7 @@ namespace fif::gfx {
 		u32 textures = 0;
 	};
 
-	class Renderer2D {
+	class Renderer2D final {
 	public:
 		Renderer2D();
 

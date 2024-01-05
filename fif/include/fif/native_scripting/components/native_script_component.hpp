@@ -3,7 +3,7 @@
 #include "fif/native_scripting/native_script.hpp"
 
 namespace fif::native_scripting {
-	struct NativeScriptComponent {
+	struct NativeScriptComponent final {
 		std::string scriptName;
 		std::unique_ptr<NativeScript> p_script;
 	};

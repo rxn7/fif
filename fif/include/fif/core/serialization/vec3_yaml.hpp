@@ -1,7 +1,7 @@
 #pragma once
 
-#include "yaml-cpp/emitter.h"
-#include "yaml-cpp/node/node.h"
+#include <yaml-cpp/emitter.h>
+#include <yaml-cpp/node/node.h>
 
 namespace YAML {
 	Emitter &operator<<(Emitter &out, const fif::vec3 &v);

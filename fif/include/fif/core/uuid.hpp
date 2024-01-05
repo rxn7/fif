@@ -1,7 +1,7 @@
 #pragma once
 
 namespace fif::core {
-	class UUID {
+	class UUID final {
 	public:
 		UUID();
 		UUID(const u64 value);

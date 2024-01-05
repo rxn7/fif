@@ -3,6 +3,7 @@
 #include "editor.hpp"
 #include "grid.hpp"
 #include "project_manager.hpp"
+#include "stage.hpp"
 
 #include "fif/core/ecs/components/transform_component.hpp"
 #include "fif/core/event/key_event.hpp"
@@ -11,14 +12,12 @@
 #include "fif/gfx/gfx_module.hpp"
 
 namespace fifed {
-	FIF_MODULE_INSTANCE_IMPL(FifedModule);
-
 	FifedModule::FifedModule() : m_IconManager("assets/textures/icons.png"), m_ImGuiRenderCallback(std::bind(&FifedModule::render_imgui, this)) {
-		FIF_MODULE_INIT_INSTANCE();
+		FIF_MODULE_INIT();
 	}
 
 	FifedModule::~FifedModule() {
-		ImGuiModule::get_instance()->get_render_hook().unhook(m_ImGuiRenderCallback);
+		ImGuiModule::get_instance().get_render_hook().unhook(m_ImGuiRenderCallback);
 	}
 
 	void FifedModule::on_start() {
@@ -32,7 +31,7 @@ namespace fifed {
 		if(!std::filesystem::exists("layout.ini"))
 			load_default_layout();
 
-		ImGuiModule::get_instance()->get_render_hook().hook(m_ImGuiRenderCallback);
+		ImGuiModule::get_instance().get_render_hook().hook(m_ImGuiRenderCallback);
 		mp_Stage = std::make_unique<ProjectManager>(*this);
 	}
 

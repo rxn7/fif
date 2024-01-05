@@ -2,12 +2,12 @@
 
 namespace fif::core {
 	// This is serialized to project file
-	struct ProjectConfig {
+	struct ProjectConfig final {
 		std::string name = "New Project";
 		std::filesystem::path startingScenePath = "";
 	};
 
-	class Project {
+	class Project final {
 	public:
 		static void create(const std::string &name, const std::filesystem::path &projectPath);
 		static bool load(const std::filesystem::path &rootDirectory);

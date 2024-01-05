@@ -9,13 +9,11 @@
 #include "fif/lua_scripting/lua_scripting_module.hpp"
 
 namespace fif::lua_scripting {
-	FIF_MODULE_INSTANCE_IMPL(LuaScriptingModule);
-
-	static void lua_script_update_system(const core::ApplicationStatus &status, entt::registry &registry, float dt);
+	static void lua_script_update_system(const core::ApplicationStatus &status, entt::registry &registry, const f32 dt);
 	static void lua_script_render_system([[maybe_unused]] const core::ApplicationStatus &status, entt::registry &registry);
 
 	LuaScriptingModule::LuaScriptingModule() {
-		FIF_MODULE_INIT_INSTANCE();
+		FIF_MODULE_INIT();
 	}
 
 	LuaScriptingModule::~LuaScriptingModule() {
@@ -99,7 +97,7 @@ namespace fif::lua_scripting {
 		}
 	}
 
-	static void lua_script_update_system(const core::ApplicationStatus &status, entt::registry &registry, float dt) {
+	static void lua_script_update_system(const core::ApplicationStatus &status, entt::registry &registry, const f32 dt) {
 		if(status.paused)
 			return;
 

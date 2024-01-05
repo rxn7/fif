@@ -32,8 +32,8 @@ namespace fif::gfx {
 			emitter << YAML::Key << "Text" << YAML::Value << labelComponent.text;
 			emitter << YAML::Key << "Size" << YAML::Value << labelComponent.fontSize;
 			emitter << YAML::Key << "Color" << YAML::Value << labelComponent.color;
-			emitter << YAML::Key << "HorizontalAlign" << YAML::Value << (int)labelComponent.horizontalAlign;
-			emitter << YAML::Key << "VerticalAlign" << YAML::Value << (int)labelComponent.verticalAlign;
+			emitter << YAML::Key << "HorizontalAlign" << YAML::Value << static_cast<int>(labelComponent.horizontalAlign);
+			emitter << YAML::Key << "VerticalAlign" << YAML::Value << static_cast<int>(labelComponent.verticalAlign);
 		});
 	}
 

@@ -15,8 +15,6 @@ namespace fif::core {
 	};
 
 	class Window final {
-		friend class Application;
-
 	public:
 		Window(Application &app, const WindowProperties &props);
 		~Window();
@@ -36,6 +34,7 @@ namespace fif::core {
 		inline GLFWwindow *get_glfw_window() const {
 			return mp_GlfwWindow;
 		}
+
 		inline Application &get_application() const {
 			return m_App;
 		}
@@ -47,5 +46,7 @@ namespace fif::core {
 		i16vec2 m_Size;
 		Application &m_App;
 		GLFWwindow *mp_GlfwWindow = nullptr;
+
+		friend class Application;
 	};
 }// namespace fif::core

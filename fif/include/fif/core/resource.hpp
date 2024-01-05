@@ -1,5 +1,7 @@
 #pragma once
 
+#include <filesystem>
+
 namespace fif::core {
 	class Resource {
 	public:

@@ -1,19 +1,20 @@
 #pragma once
 
 namespace fif::core {
-	struct TimerResult {
+	struct TimerResult final {
 		std::string name;
-		float durationMs;
+		f32 durationMs;
 	};
 
-	class ScopeTimer {
+	class ScopeTimer final {
 	public:
 		typedef std::function<void(const TimerResult &result)> CallbackFunc;
 
-		ScopeTimer(const std::string &name, CallbackFunc callback) : m_Name(name), m_BeginTime(Clock::now()), m_Callback(callback) {}
+		ScopeTimer(const std::string &name, CallbackFunc callback) : m_Name(name), m_BeginTime(Clock::now()), m_Callback(callback) {
+		}
 
 		~ScopeTimer() {
-			const float durationMs = std::chrono::duration_cast<std::chrono::duration<float, std::milli>>((Clock::now() - m_BeginTime)).count();
+			const f32 durationMs = std::chrono::duration_cast<std::chrono::duration<f32, std::milli>>((Clock::now() - m_BeginTime)).count();
 			m_Callback(TimerResult{m_Name, durationMs});
 		}
 

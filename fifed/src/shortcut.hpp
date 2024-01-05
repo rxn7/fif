@@ -1,7 +1,7 @@
 #pragma once
 
 namespace fifed {
-	class Shortcut {
+	class Shortcut final {
 	public:
 		Shortcut(i32 key, i32 modifierBits, const std::string_view &description, const std::function<void()> &callback);
 

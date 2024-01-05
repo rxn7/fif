@@ -9,8 +9,6 @@
 #include <fif/native_scripting/components/native_script_component.hpp>
 
 namespace fifed {
-	template<typename T> static void draw_component(const std::string &name, EntityID ent, Scene &scene, std::function<void(T &)> drawFunc);
-
 	ScenePanel::ScenePanel(Editor &editor, InspectorPanel &inspector) : EditorPanel(editor), m_Inspector(inspector) {
 		m_Templates.push_back(std::make_unique<EmptyTemplate>());
 		m_Templates.push_back(std::make_unique<SpriteTemplate>());
@@ -18,7 +16,7 @@ namespace fifed {
 	}
 
 	void ScenePanel::on_render() {
-		Scene &scene = Application::get_instance()->get_scene();
+		Scene &scene = Application::get_instance().get_scene();
 
 		const u32 entCount = scene.get_entity_count();
 		ImGui::Text("Count: %u", entCount);

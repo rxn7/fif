@@ -1,11 +1,13 @@
 #pragma once
 
-#include "project.hpp"
 #include "stage.hpp"
+
+#include <fif/core/project.hpp>
+
 namespace fifed {
 	class FifedModule;
 
-	struct ProjectListItem {
+	struct ProjectListItem final {
 		std::string name;
 		std::filesystem::path path;
 	};

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "fif/gfx/color.hpp"
+
 namespace fif::gfx {
 	struct CircleComponent final {
 		Color tint = Colors::WHITE;

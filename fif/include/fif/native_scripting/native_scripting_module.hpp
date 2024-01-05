@@ -7,7 +7,7 @@
 #endif
 
 namespace fif::native_scripting {
-	class NativeScriptingModule : public fif::core::Module {
+	class NativeScriptingModule final : public fif::core::Module {
 	public:
 		FIF_MODULE(NativeScriptingModule)
 
@@ -17,8 +17,7 @@ namespace fif::native_scripting {
 			static_assert(std::is_base_of<NativeScript, T>().value);
 
 			NativeScriptComponent &nativeScriptComponent = scene.add_component<NativeScriptComponent>(ent);
-			nativeScriptComponent.p_script = std::make_unique<T>();
-			nativeScriptComponent.p_script->m_Entity = core::Entity(&scene, ent);
+			nativeScriptComponent.p_script = std::make_unique<T>(scene, ent);
 
 #ifdef _WIN32
 			nativeScriptComponent.scriptName = typeid(T).name();

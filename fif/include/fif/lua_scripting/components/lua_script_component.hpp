@@ -1,6 +1,7 @@
 #pragma once
 
-#include "ecs/entity.hpp"
+#include "fif/core/ecs/entity.hpp"
+
 #include <sol/sol.hpp>
 
 namespace fif::lua_scripting {

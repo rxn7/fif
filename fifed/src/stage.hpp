@@ -4,7 +4,6 @@
 
 namespace fifed {
 	class FifedModule;
-
 	class Stage {
 	public:
 		virtual void update() {

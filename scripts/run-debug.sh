@@ -5,4 +5,4 @@ pushd ${SCRIPT_DIR}/.. >/dev/null
 
 cmake --build build/debug && pushd build/debug/fifed ; ./fifed ; popd
 
-popd
+popd >/dev/null

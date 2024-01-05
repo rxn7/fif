@@ -1,8 +1,8 @@
-#include "./core_entity_serializer.hpp"
+#include "core_entity_serializer.hpp"
 
-#include "ecs/components/uuid_component.hpp"
 #include "fif/core/ecs/components/tag_component.hpp"
 #include "fif/core/ecs/components/transform_component.hpp"
+#include "fif/core/ecs/components/uuid_component.hpp"
 #include "fif/core/serialization/vec2_yaml.hpp"
 
 namespace fif::core {

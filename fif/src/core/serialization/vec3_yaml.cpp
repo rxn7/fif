@@ -1,5 +1,4 @@
 #include "fif/core/serialization/vec3_yaml.hpp"
-#include "yaml-cpp/emitter.h"
 
 namespace YAML {
 	Emitter &operator<<(Emitter &out, const fif::vec3 &v) {

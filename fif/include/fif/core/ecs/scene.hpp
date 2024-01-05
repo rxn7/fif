@@ -1,12 +1,14 @@
 #pragma once
 
-#include "entt/entity/registry.hpp"
-#include "uuid.hpp"
+#include "fif/core/uuid.hpp"
+
+#include <entt/entity/registry.hpp>
 
 namespace fif::core {
 	typedef entt::entity EntityID;
 
-	class Scene {
+	// TODO: Inherit resource probably?
+	class Scene final {
 	public:
 		EntityID create_entity(const char *name = "Entity");
 		EntityID create_entity_with_uuid(UUID uuid, const char *name = "Entity");

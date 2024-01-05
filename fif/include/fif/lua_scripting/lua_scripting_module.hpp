@@ -2,7 +2,6 @@
 
 #include "fif/core/module.hpp"
 #include "fif/lua_scripting/components/lua_script_component.hpp"
-#include "util/logger.hpp"
 
 namespace fif::lua_scripting {
 	class LuaScriptingModule final : public core::Module {

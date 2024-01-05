@@ -1,21 +1,18 @@
-#include "fif/gfx/gfx_module.hpp"
-
-#include "fif/core/event/event_dispatcher.hpp"
-#include "fif/core/event/window_event.hpp"
-#include "fif/core/serialization/scene_serializer.hpp"
-#include "fif/gfx/renderer2d.hpp"
-
 #include "./lua_register.hpp"
 #include "./serialization/gfx_entity_serializer.hpp"
 #include "./systems/renderer_system.hpp"
 
+#include "fif/core/event/event_dispatcher.hpp"
+#include "fif/core/event/window_event.hpp"
+#include "fif/core/serialization/scene_serializer.hpp"
+#include "fif/gfx/gfx_module.hpp"
+#include "fif/gfx/renderer2d.hpp"
+
 #include <memory>
 
 namespace fif::gfx {
-	FIF_MODULE_INSTANCE_IMPL(GfxModule);
-
 	GfxModule::GfxModule(const std::filesystem::path &defaultFontPath) {
-		FIF_MODULE_INIT_INSTANCE();
+		FIF_MODULE_INIT();
 
 		FIF_ASSERT(FT_Init_FreeType(&m_FreeType) == 0, "Failed to init freetype");
 
@@ -23,7 +20,9 @@ namespace fif::gfx {
 	}
 
 	GfxModule::~GfxModule() {
+		// NOTE: We need to delete it now, or else the font's texture will be deleted after the OpenGL context is destroyed, which causes a segfault.
 		Font::sp_DefaultFont.reset();
+
 		FT_Done_FreeType(m_FreeType);
 	}
 

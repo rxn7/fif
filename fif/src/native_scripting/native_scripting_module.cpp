@@ -1,14 +1,12 @@
 #include "fif/native_scripting/native_scripting_module.hpp"
-#include "module.hpp"
+#include "fif/core/module.hpp"
 
 namespace fif::native_scripting {
-	FIF_MODULE_INSTANCE_IMPL(NativeScriptingModule)
-
 	NativeScriptingModule::NativeScriptingModule() {
-		FIF_MODULE_INIT_INSTANCE()
+		FIF_MODULE_INIT()
 	}
 
-	static void native_scripting_update_system(const core::ApplicationStatus &status, entt::registry &registry, float dt) {
+	static void native_scripting_update_system(const core::ApplicationStatus &status, entt::registry &registry, const f32 dt) {
 		if(status.paused)
 			return;
 

@@ -17,7 +17,7 @@
 #include <tinyfiledialogs.h>
 
 namespace fifed {
-	Editor::Editor(FifedModule &fifedModule) : Stage(fifedModule), m_FrameBuffer({0, 0}), m_Grid(fif::gfx::GfxModule::get_instance()->get_renderer2D().get_camera(), m_FrameBuffer) {
+	Editor::Editor(FifedModule &fifedModule) : Stage(fifedModule), m_FrameBuffer({0, 0}), m_Grid(fif::gfx::GfxModule::get_instance().get_renderer2D().get_camera(), m_FrameBuffer) {
 		m_FifedModule.get_application()->get_window().set_title(Project::get_config().name + " | Fifed"
 #ifdef FIF_DEBUG
 																+ " [DEBUG]"
@@ -130,9 +130,9 @@ namespace fifed {
 
 	void Editor::follow_selected_entity() {
 		if(TransformComponent *trans = mp_InspectorPanel->m_SelectedEntity.try_get_component<TransformComponent>())
-			GfxModule::get_instance()->get_renderer2D().get_camera().m_Position = trans->position;
+			GfxModule::get_instance().get_renderer2D().get_camera().m_Position = trans->position;
 		else
-			GfxModule::get_instance()->get_renderer2D().get_camera().m_Position = vec2(0, 0);
+			GfxModule::get_instance().get_renderer2D().get_camera().m_Position = vec2(0, 0);
 	}
 
 	void Editor::delete_selected_entity() {
@@ -215,7 +215,7 @@ namespace fifed {
 
 				ImGui::Text("Source: ");
 				ImGui::SameLine();
-				if(FifedModule::get_instance()->get_icon_manager().imgui_button("sourceBtn", IconType::GITHUB))
+				if(m_FifedModule.get_icon_manager().imgui_button("sourceBtn", IconType::GITHUB))
 					System::open_url("https://github.com/rxn7/fif");
 			}
 			ImGui::End();
@@ -232,7 +232,7 @@ namespace fifed {
 			ImGui::End();
 		}
 
-		if(ImGuiModule::get_instance()->begin_dockspace()) {
+		if(ImGuiModule::get_instance().begin_dockspace()) {
 			for(std::shared_ptr<EditorPanel> &panel : m_Panels)
 				panel->render();
 		}

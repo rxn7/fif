@@ -1,5 +1,7 @@
 #pragma once
 
+#include "fif/gfx/color.hpp"
+
 namespace fif::gfx {
 	struct QuadComponent final {
 		Color tint = Colors::WHITE;

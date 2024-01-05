@@ -3,7 +3,7 @@
 #include "fif/core/invokable.hpp"
 
 namespace fif::core {
-	class Logger {
+	class Logger final {
 	public:
 		enum class LogType : u8 { Info, Warn, Error, Debug };
 

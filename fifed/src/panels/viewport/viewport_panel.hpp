@@ -14,8 +14,8 @@ namespace fifed {
 		}
 
 	private:
-		std::unique_ptr<Texture> mp_PauseTexture, mp_UnpauseTexture;
 		FrameBuffer &m_FrameBuffer;
+		vec2 m_LastSize{0, 0};
 		bool m_Hovered = false;
 	};
 }// namespace fifed

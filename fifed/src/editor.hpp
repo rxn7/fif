@@ -2,13 +2,13 @@
 
 #include "camera_controller.hpp"
 #include "grid.hpp"
-#include "invokable.hpp"
 #include "panels/editor_panel.hpp"
 #include "panels/inspector/inspector_panel.hpp"
 #include "panels/viewport/viewport_panel.hpp"
 #include "shortcut.hpp"
 #include "stage.hpp"
 
+#include <fif/core/invokable.hpp>
 #include <fif/gfx/frame_buffer.hpp>
 #include <fif/gfx/texture.hpp>
 

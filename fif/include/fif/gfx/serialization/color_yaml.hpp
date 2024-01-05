@@ -1,7 +1,9 @@
 #pragma once
 
-#include "yaml-cpp/emitter.h"
-#include "yaml-cpp/node/node.h"
+#include "fif/gfx/color.hpp"
+
+#include <yaml-cpp/emitter.h>
+#include <yaml-cpp/node/node.h>
 
 namespace YAML {
 	Emitter &operator<<(Emitter &out, const fif::gfx::Color &v);

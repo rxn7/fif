@@ -1,9 +1,8 @@
 #include "fif/imgui/imgui_module.hpp"
 
-#include "backends/imgui_impl_glfw.h"
-#include "backends/imgui_impl_opengl3.h"
-#include "imconfig.h"
-#include "imgui.h"
+#include <backends/imgui_impl_glfw.h>
+#include <backends/imgui_impl_opengl3.h>
+#include <imconfig.h>
 
 #ifdef FIF_GFX
 #include "fif/gfx/shader.hpp"
@@ -12,10 +11,8 @@
 #endif
 
 namespace fif::imgui {
-	FIF_MODULE_INSTANCE_IMPL(ImGuiModule);
-
 	ImGuiModule::ImGuiModule() {
-		FIF_MODULE_INIT_INSTANCE();
+		FIF_MODULE_INIT();
 		IMGUI_CHECKVERSION();
 
 		ImGui::CreateContext();
@@ -84,7 +81,7 @@ namespace fif::imgui {
 			ImGui::PopStyleVar(3);
 
 			const u32 &dockspaceId = ImGui::GetID("DockSpace");
-			ImGui::DockSpace(dockspaceId, ImVec2(0.0f, 0.0f));
+			ImGui::DockSpace(dockspaceId, vec2(0.0f, 0.0f));
 
 			return true;
 		}

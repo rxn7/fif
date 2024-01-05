@@ -1,4 +1,5 @@
 #include "renderer_system.hpp"
+
 #include "fif/core/ecs/components/transform_component.hpp"
 #include "fif/core/ecs/scene.hpp"
 #include "fif/gfx/components/circle_component.hpp"
@@ -9,7 +10,7 @@
 
 namespace fif::gfx {
 	void renderer_system([[maybe_unused]] const core::ApplicationStatus &status, entt::registry &registry) {
-		Renderer2D &renderer = GfxModule::get_instance()->get_renderer2D();
+		Renderer2D &renderer = GfxModule::get_instance().get_renderer2D();
 
 		registry.view<CircleComponent, core::TransformComponent>().each([&]([[maybe_unused]] core::EntityID entity, CircleComponent &circle, core::TransformComponent &trans) {
 			// TODO: Should the radius be scaled by trans.scale.x or trans.scale.y or not at all?

@@ -7,7 +7,7 @@
 #include <vector>
 
 namespace fif {
-	template<typename... A> class Callback {
+	template<typename... A> class Callback final {
 	public:
 		Callback(std::function<void(A...)> func) : m_Hash(func.target_type().hash_code()), m_Bound(std::move(func)) {
 		}
@@ -38,7 +38,7 @@ namespace fif {
 		std::function<void(A...)> m_Bound;
 	};
 
-	template<typename... A> class Invokable {
+	template<typename... A> class Invokable final {
 	public:
 		Invokable<A...> &hook(const Callback<A...> cb) {
 			std::lock_guard<std::mutex> g(m_Mutex);

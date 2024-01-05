@@ -1,28 +1,27 @@
-#include "fif/input/input_module.hpp"
 #include "./lua_register.hpp"
+
 #include "fif/core/event/key_event.hpp"
 #include "fif/core/event/mouse_event.hpp"
+#include "fif/input/input_module.hpp"
 
 namespace fif::input {
-	FIF_MODULE_INSTANCE_IMPL(InputModule);
-
 	InputModule::InputModule() {
-		FIF_MODULE_INIT_INSTANCE();
+		FIF_MODULE_INIT();
 
 		register_lua_types(*this);
 
-		GLFWwindow *glfwWindow = core::Application::get_instance()->get_window().get_glfw_window();
+		GLFWwindow *glfwWindow = core::Application::get_instance().get_window().get_glfw_window();
 
 		glfwSetKeyCallback(glfwWindow, []([[maybe_unused]] GLFWwindow *glfwWindow, int key, [[maybe_unused]] int scancode, int action, [[maybe_unused]] int mods) {
 			FIF_ASSERT(key >= 0 && key <= KEY_COUNT, "The key %d is out of range", key);
 
 			core::Window *window = FIF_GET_WINDOW_FROM_GLFW_WINDOW(glfwWindow);
 			if(action == GLFW_PRESS) {
-				s_Instance->m_State.keys[key] = true;
+				sp_Instance->m_State.keys[key] = true;
 				core::KeyPressedEvent event(key, mods);
 				window->get_application().on_event(event);
 			} else if(action == GLFW_RELEASE) {
-				s_Instance->m_State.keys[key] = false;
+				sp_Instance->m_State.keys[key] = false;
 				core::KeyReleasedEvent event(key, mods);
 				window->get_application().on_event(event);
 			}
@@ -33,11 +32,11 @@ namespace fif::input {
 
 			core::Window *window = FIF_GET_WINDOW_FROM_GLFW_WINDOW(glfwWindow);
 			if(action == GLFW_PRESS) {
-				s_Instance->m_State.buttons[button] = true;
+				sp_Instance->m_State.buttons[button] = true;
 				core::MouseButtonPressedEvent event(button);
 				window->get_application().on_event(event);
 			} else if(action == GLFW_RELEASE) {
-				s_Instance->m_State.buttons[button] = false;
+				sp_Instance->m_State.buttons[button] = false;
 				core::MouseButtonReleasedEvent event(button);
 				window->get_application().on_event(event);
 			}
@@ -50,16 +49,16 @@ namespace fif::input {
 		});
 
 		glfwSetCursorPosCallback(glfwWindow, []([[maybe_unused]] GLFWwindow *glfwWindow, double x, double y) {
-			InputModule *input = InputModule::get_instance();
+			InputModule &input = InputModule::get_instance();
 
 			core::Window *window = FIF_GET_WINDOW_FROM_GLFW_WINDOW(glfwWindow);
-			input->m_MousePosition = {x, y};
-			const vec2 delta = input->m_MousePosition - input->m_LastMousePosition;
+			input.m_MousePosition = {x, y};
+			const vec2 delta = input.m_MousePosition - input.m_LastMousePosition;
 
-			core::MouseMovedEvent event(input->m_MousePosition, delta);
+			core::MouseMovedEvent event(input.m_MousePosition, delta);
 			window->get_application().on_event(event);
 
-			input->m_LastMousePosition = input->m_MousePosition;
+			input.m_LastMousePosition = input.m_MousePosition;
 		});
 	}
 

@@ -2,8 +2,8 @@
 
 #include "fif/core/ecs/entity.hpp"
 
-#include "yaml-cpp/emitter.h"
-#include "yaml-cpp/node/node.h"
+#include <yaml-cpp/emitter.h>
+#include <yaml-cpp/node/node.h>
 
 namespace fif::core {
 	class EntitySerializer {

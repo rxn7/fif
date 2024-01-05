@@ -1,7 +1,8 @@
 #pragma once
 
 #include "entity_template.hpp"
-#include "fif/core/ecs/components/transform_component.hpp"
+
+#include <fif/core/ecs/components/transform_component.hpp>
 
 namespace fifed {
 	class EmptyTemplate final : public EntityTemplate {

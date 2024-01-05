@@ -9,7 +9,7 @@
 #include "fif/core/window.hpp"
 
 namespace fif::core {
-	struct ApplicationProperties {
+	struct ApplicationProperties final {
 		WindowProperties windowProps;
 		bool createDefaultScene = true;
 	};
@@ -39,8 +39,8 @@ namespace fif::core {
 			m_EventSystems.push_back(system);
 		}
 
-		inline static Application *get_instance() {
-			return s_Instance;
+		inline static Application &get_instance() {
+			return *sp_Instance;
 		}
 		inline const PerformanceStats &get_performance_stats() const {
 			return m_PerformanceStats;
@@ -81,6 +81,6 @@ namespace fif::core {
 
 		PerformanceStats m_PerformanceStats;
 		ApplicationStatus m_Status;
-		static Application *s_Instance;
+		static inline Application *sp_Instance;
 	};
 }// namespace fif::core

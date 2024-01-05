@@ -4,7 +4,7 @@ end
 
 return {
     transform = nil,
-    move_speed = 0.5,
+    move_speed = 300,
 
     init = function(self)
         self.transform = self.entity:require_transform_component()
@@ -19,6 +19,6 @@ return {
         if Input.is_key_held(Input.Key.S) then move.y = move.y - 1 end
 
         self.transform.angleRadians = lerp(self.transform.angleRadians, move.x * math.pi * 0.25, dt * 50)
-        self.transform.position = self.transform.position + move * self.move_speed
+        self.transform.position = self.transform.position + move * self.move_speed * dt
     end,
 }

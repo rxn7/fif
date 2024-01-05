@@ -1,13 +1,13 @@
 #pragma once
 
 namespace fifed {
-	class CameraController {
+	class CameraController final {
 	public:
 		void update();
 		void on_event(Event &event, bool viewportHovered);
 
 	private:
-		fif::vec2 m_StartMousePositionLocal;
+		vec2 m_StartMousePositionLocal;
 		f32 m_MaxZoom = 1000.0f;
 		f32 m_MinZoom = 0.01f;
 		f32 m_ZoomLerpDuration = 0.05f;

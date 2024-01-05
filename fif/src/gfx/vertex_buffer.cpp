@@ -1,9 +1,9 @@
 #include "fif/gfx/vertex_buffer.hpp"
-#include "glsl_data_type.hpp"
-#include "vertex_buffer_layout.hpp"
+#include "fif/gfx/glsl_data_type.hpp"
+#include "fif/gfx/vertex_buffer_layout.hpp"
 
 namespace fif::gfx {
-	VertexBuffer::VertexBuffer(u32 vertexCount, u32 elementCount, u32 vertexSize, const VertexBufferLayout &layout) :
+	VertexBuffer::VertexBuffer(const u32 vertexCount, const u32 elementCount, const u32 vertexSize, const VertexBufferLayout &layout) :
 		m_Layout(layout), m_VertexCount(vertexCount), m_ElementCount(elementCount), m_VertexSize(vertexSize) {
 		glGenVertexArrays(1, &m_Vao);
 		glBindVertexArray(m_Vao);
@@ -21,7 +21,7 @@ namespace fif::gfx {
 		glBindVertexArray(0);
 	}
 
-	VertexBuffer::VertexBuffer(const void *vertices, u32 vertexCount, const u16 *elements, u32 elementCount, u32 vertexSize, const VertexBufferLayout &layout) :
+	VertexBuffer::VertexBuffer(const void *vertices, const u32 vertexCount, const u16 *elements, const u32 elementCount, const u32 vertexSize, const VertexBufferLayout &layout) :
 		m_Layout(layout), m_VertexCount(vertexCount), m_ElementCount(elementCount), m_VertexSize(vertexSize) {
 		glGenVertexArrays(1, &m_Vao);
 		glBindVertexArray(m_Vao);
@@ -55,7 +55,7 @@ namespace fif::gfx {
 		}
 	}
 
-	void VertexBuffer::set_vertices_and_elements(const void *vertices, u32 vertexCount, const u16 *elements, u32 elementCount) {
+	void VertexBuffer::set_vertices_and_elements(const void *vertices, const u32 vertexCount, const u16 *elements, const u32 elementCount) {
 		m_VertexCount = vertexCount;
 		m_ElementCount = elementCount;
 		glBindVertexArray(m_Vao);

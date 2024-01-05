@@ -1,16 +1,15 @@
-#include "fif/core/application.hpp"
 #include "./serialization/core_entity_serializer.hpp"
+
+#include "fif/core/application.hpp"
 #include "fif/core/event/event_dispatcher.hpp"
 #include "fif/core/event/window_event.hpp"
 #include "fif/core/serialization/scene_serializer.hpp"
 #include "fif/core/util/logger.hpp"
 
 namespace fif::core {
-	Application *fif::core::Application::s_Instance = nullptr;
-
 	Application::Application(const ApplicationProperties &appProperties) {
-		FIF_ASSERT(s_Instance == nullptr, "Only 1 instance of fif::core::Application can exist!");
-		s_Instance = this;
+		FIF_ASSERT(sp_Instance == nullptr, "Only 1 instance of fif::core::Application can exist!");
+		sp_Instance = this;
 
 		mp_Window = std::make_unique<Window>(*this, appProperties.windowProps);
 		gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress));

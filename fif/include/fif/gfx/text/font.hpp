@@ -9,10 +9,10 @@
 #include FT_FREETYPE_H
 
 namespace fif::gfx {
-	class Font : public core::Resource {
+	class Font final : public core::Resource {
 	public:
 		Font(const bool isEditorResource, const std::filesystem::path &path, const u32 size = 16u, const u32 textureSize = 512, const GLenum filter = GL_LINEAR);
-		virtual ~Font();
+		~Font();
 
 		vec2 calculate_text_size(const std::string &text, const vec2 &size) const;
 

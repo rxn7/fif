@@ -3,7 +3,7 @@
 #include "fif/core/project.hpp"
 
 namespace fif::core {
-	class ProjectSerializer {
+	class ProjectSerializer final {
 	public:
 		ProjectSerializer(const std::shared_ptr<Project> &project);
 

@@ -1,7 +1,7 @@
 #pragma once
 
 namespace fif::gfx {
-	struct Glyph {
+	struct Glyph final {
 		vec2 offset;
 		vec2 advance;
 		vec2 startUv;

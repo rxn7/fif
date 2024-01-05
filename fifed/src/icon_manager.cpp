@@ -20,7 +20,7 @@ namespace fifed {
 		return it->second;
 	}
 
-	bool IconManager::imgui_button(const std::string_view idStr, IconType type, const vec2 &size) {
+	bool IconManager::imgui_button(const std::string_view idStr, IconType type, const vec2 &size) const {
 		const IconInfo &info = get_icon(type);
 		const vec2 uv0 = vec2(info.offset.x / m_Texture.get_width(), 1.0f - info.offset.y / m_Texture.get_height());
 		const vec2 uv1 = vec2((info.offset.x + info.size.x) / m_Texture.get_width(), 1.0f - (info.offset.y + info.size.y) / m_Texture.get_height());

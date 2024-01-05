@@ -1,5 +1,5 @@
 #include "fif/core/serialization/scene_serializer.hpp"
-#include "project.hpp"
+#include "fif/core/project.hpp"
 
 #include <fstream>
 #include <sstream>

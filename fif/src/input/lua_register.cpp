@@ -9,9 +9,7 @@
 namespace fif::input {
 #ifdef FIF_LUA_SCRIPTING
 	void register_lua_types(InputModule &inputModule) {
-		lua_scripting::LuaScriptingModule *luaModule = lua_scripting::LuaScriptingModule::get_instance();
-
-		sol::table inputTable = luaModule->m_Lua.create_named_table("Input");
+		sol::table inputTable = lua_scripting::LuaScriptingModule::get_instance().m_Lua.create_named_table("Input");
 		inputTable.set_function("is_key_held", [&inputModule](const i32 key) { return inputModule.is_key_held(key); });
 		inputTable.set_function("is_key_just_pressed", [&inputModule](const i32 key) { return inputModule.is_key_just_pressed(key); });
 		inputTable.set_function("get_mouse_position", [&inputModule]() { return inputModule.get_mouse_position(); });

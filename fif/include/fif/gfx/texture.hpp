@@ -4,7 +4,7 @@
 #include "fif/core/resource.hpp"
 
 namespace fif::gfx {
-	class Texture : public core::Resource {
+	class Texture final : public core::Resource {
 	public:
 		Texture();
 
