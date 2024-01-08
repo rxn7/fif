@@ -171,7 +171,7 @@ namespace fif::gfx {
 
 	// TODO: Support rotations
 	void Renderer2D::render_text(const Font &font, const vec2 &position, const vec2 &scale, f32 fontSize, const std::string &text, const Color &color, const VerticalTextAlign vAlign, const HorizontalTextAlign hAlign) {
-		FLUSH_IF_FULL(mp_SpriteBatch)
+		FLUSH_IF_FULL(mp_GlyphBatch)
 
 		const f32 textureSlot = assign_texture_slot(font.get_texture());
 		const vec2 textSize = font.calculate_text_size(text, scale * fontSize);
