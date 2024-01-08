@@ -1,5 +1,4 @@
-#include "fif/gfx/text/font.hpp"
-#include "fif/core/util/logger.hpp"
+#include "fif/gfx/resource/font.hpp"
 #include "fif/gfx/gfx_module.hpp"
 
 #include <algorithm>
@@ -8,8 +7,8 @@
 #include FT_FREETYPE_H
 
 namespace fif::gfx {
-	Font::Font(const bool isEditorResource, const std::filesystem::path &path, const u32 size, const u32 textureSize, const GLenum filter) : core::Resource(isEditorResource, path), m_Size(size) {
-		if(FT_Error error = FT_New_Face(GfxModule::get_instance().m_FreeType, get_working_directory_relative_path().string().c_str(), 0, &m_Face)) {
+	Font::Font(const std::filesystem::path &path, const u32 size, const u32 textureSize, const GLenum filter) : core::Resource(path) {
+		if(FT_Error error = FT_New_Face(GfxModule::get_instance().m_FreeType, get_path_relative().string().c_str(), 0, &m_Face)) {
 			core::Logger::error("Failed to load freetype font: %s", FT_Error_String(error));
 			return;
 		}
@@ -18,7 +17,9 @@ namespace fif::gfx {
 		constexpr u32 glyphPadding = 2u;
 		u32 row = 0;
 		u32 col = glyphPadding;
+
 		u8 *textureBuffer = new u8[textureSize * textureSize];
+		std::fill_n(textureBuffer, textureSize * textureSize, 0);
 
 		for(char c = 32; c < 127; ++c) {
 			const u32 glyphIdx = FT_Get_Char_Index(m_Face, c);
@@ -59,7 +60,7 @@ namespace fif::gfx {
 
 		FT_Done_Face(m_Face);
 
-		mp_Texture = std::make_shared<Texture>(textureSize, textureSize, GL_R8, GL_RED, filter, GL_REPEAT, textureBuffer);
+		mp_Texture = std::make_shared<Texture>(textureSize, textureSize, GL_R8, GL_RED, filter, GL_CLAMP_TO_BORDER, textureBuffer);
 		delete[] textureBuffer;
 
 		core::Logger::info("Font %s has been loaded", path.c_str());

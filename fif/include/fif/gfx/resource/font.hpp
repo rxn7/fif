@@ -1,7 +1,7 @@
 #pragma once
 
+#include "fif/gfx/resource/texture.hpp"
 #include "fif/gfx/text/glyph.hpp"
-#include "fif/gfx/texture.hpp"
 
 #include <array>
 
@@ -11,7 +11,8 @@
 namespace fif::gfx {
 	class Font final : public core::Resource {
 	public:
-		Font(const bool isEditorResource, const std::filesystem::path &path, const u32 size = 16u, const u32 textureSize = 512, const GLenum filter = GL_LINEAR);
+		FIF_RESOURCE("Font");
+		Font(const std::filesystem::path &path, const u32 size = 38u, const u32 textureSize = 512, const GLenum filter = GL_LINEAR);
 		~Font();
 
 		vec2 calculate_text_size(const std::string &text, const vec2 &size) const;
@@ -53,5 +54,6 @@ namespace fif::gfx {
 		f32 m_FontHeight = 0;
 
 		friend class GfxModule;
+		friend class FontLoader;
 	};
 }// namespace fif::gfx

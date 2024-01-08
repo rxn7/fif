@@ -4,19 +4,28 @@
 
 #include "fif/core/event/event_dispatcher.hpp"
 #include "fif/core/event/window_event.hpp"
+#include "fif/core/resource/resource_manager.hpp"
 #include "fif/core/serialization/scene_serializer.hpp"
 #include "fif/gfx/gfx_module.hpp"
 #include "fif/gfx/renderer2d.hpp"
+#include "fif/gfx/resource/font.hpp"
 
 #include <memory>
 
 namespace fif::gfx {
 	GfxModule::GfxModule(const std::filesystem::path &defaultFontPath) {
 		FIF_MODULE_INIT();
-
 		FIF_ASSERT(FT_Init_FreeType(&m_FreeType) == 0, "Failed to init freetype");
 
-		Font::sp_DefaultFont = std::make_shared<Font>(true, defaultFontPath, 64, 512);
+		// Texture loader
+		core::ResourceManager::add_loader_func(
+			Texture::get_type_static(), [](const std::filesystem::path &path) -> std::shared_ptr<core::Resource> { return std::dynamic_pointer_cast<core::Resource>(std::make_shared<Texture>(path)); });
+
+		// Font loader
+		core::ResourceManager::add_loader_func(
+			Font::get_type_static(), [](const std::filesystem::path &path) -> std::shared_ptr<core::Resource> { return std::dynamic_pointer_cast<core::Resource>(std::make_shared<Font>(path)); });
+
+		Font::sp_DefaultFont = std::make_shared<Font>(defaultFontPath, 64, 512);
 	}
 
 	GfxModule::~GfxModule() {

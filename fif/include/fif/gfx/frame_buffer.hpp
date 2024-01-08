@@ -2,7 +2,7 @@
 
 #include "fif/core/types.hpp"
 #include "fif/gfx/color.hpp"
-#include "fif/gfx/texture.hpp"
+#include "fif/gfx/resource/texture.hpp"
 
 namespace fif::gfx {
 	class FrameBuffer final {

@@ -1,3 +1,7 @@
 Config:
   Name: Sprite Rendering Test
   StartingScene: assets/scenes/scene.yaml
+Resources:
+  - UUID: 12176293295089256961
+    Path: assets/textures/logo.png
+    Type: Texture

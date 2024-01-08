@@ -7,7 +7,7 @@
 #include <fif/gfx/components/label_component.hpp>
 #include <fif/gfx/components/quad_component.hpp>
 #include <fif/gfx/components/sprite_component.hpp>
-#include <fif/gfx/text/font.hpp>
+#include <fif/gfx/resource/font.hpp>
 #include <fif/lua_scripting/components/lua_script_component.hpp>
 #include <fif/lua_scripting/lua_scripting_module.hpp>
 #include <fif/native_scripting/components/native_script_component.hpp>
@@ -66,13 +66,17 @@ namespace fifed {
 			draw_color_selector(sprite.tint);
 			ImGui::DragFloat2("Size", glm::value_ptr(sprite.size), 1.0f, 0.0f, std::numeric_limits<float>::max());
 
-			if(sprite.p_texture) {
-				ImGui::Text("Texture");
-				ImGui::Image(reinterpret_cast<ImTextureID>(sprite.p_texture->get_id()), ImVec2(100, 100), ImVec2(0, 1), ImVec2(1, 0));
-			} else
-				ImGui::Text("Texture is not loaded!");
+			ImGui::Separator();
 
-			if(ImGui::Button("Load texture")) {
+			ImGui::Text("Texture: ");
+			if(sprite.p_texture) {
+				ImGui::Image(reinterpret_cast<ImTextureID>(sprite.p_texture->get_id()), ImVec2(100, 100), ImVec2(0, 1), ImVec2(1, 0));
+			} else {
+				ImGui::SameLine();
+				ImGui::Text("No texture is selected");
+			}
+
+			if(ImGui::Button("Change texture")) {
 				static constexpr std::array<const char *, 3> filters = {"*.png", "*.jpg", "*.gif"};
 
 				const char *fileDialogResult = tinyfd_openFileDialog("Select tetxure", Project::get_absolute_path().c_str(), filters.size(), filters.data(), "Texture", false);
@@ -80,7 +84,13 @@ namespace fifed {
 					return;
 
 				const std::filesystem::path path = std::filesystem::relative(fileDialogResult, Project::get_root_dir());
-				sprite.set_texture(std::make_shared<Texture>(false, path, GL_NEAREST));
+
+				std::shared_ptr<Texture> texture = Project::get_resource_manager().add_resource<Texture>(path);
+				if(!texture)
+					return;
+
+				sprite.p_texture = texture;
+				sprite.size = texture->get_size();
 			}
 		});
 
@@ -107,8 +117,31 @@ namespace fifed {
 				ImGui::Combo("Vertical Align", (int *)&label.verticalAlign, items, IM_ARRAYSIZE(items));
 			}
 
+			ImGui::Separator();
+
 			ImGui::Text("Font: ");
-			ImGui::Image(reinterpret_cast<ImTextureID>(Font::get_default()->get_texture()->get_id()), {256, 256});
+			if(label.p_font) {
+				ImGui::Image(reinterpret_cast<ImTextureID>(label.p_font->get_texture()->get_id()), {256, 256});
+			} else {
+				ImGui::SameLine();
+				ImGui::Text("Font is not selected");
+			}
+
+			if(ImGui::Button("Change font")) {
+				static constexpr std::array<const char *, 1> filters = {"*.ttf"};
+
+				const char *fileDialogResult = tinyfd_openFileDialog("Select font", Project::get_absolute_path().c_str(), filters.size(), filters.data(), "Font", false);
+				if(!fileDialogResult)
+					return;
+
+				const std::filesystem::path path = std::filesystem::relative(fileDialogResult, Project::get_root_dir());
+
+				std::shared_ptr<Font> font = Project::get_resource_manager().add_resource<Font>(path);
+				if(!font)
+					return;
+
+				label.p_font = font;
+			}
 		});
 
 		draw_component<LuaScriptComponent>("Lua Script", [](LuaScriptComponent &script) {

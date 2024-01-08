@@ -1,5 +1,7 @@
 #pragma once
 
+#include "fif/core/resource/resource_manager.hpp"
+
 namespace fif::core {
 	// This is serialized to project file
 	struct ProjectConfig final {
@@ -26,6 +28,9 @@ namespace fif::core {
 		}
 
 		static inline std::filesystem::path get_resource_path(const std::filesystem::path &path) {
+			if(!s_ActiveProject)
+				return path;
+
 			return s_ActiveProject->m_RootDir / path;
 		}
 
@@ -44,8 +49,13 @@ namespace fif::core {
 			return projectFilePath;
 		}
 
+		static inline ResourceManager &get_resource_manager() {
+			return s_ActiveProject->m_ResourceManager;
+		}
+
 	private:
 		ProjectConfig m_Config;
+		ResourceManager m_ResourceManager;
 		std::filesystem::path m_RootDir;
 		std::string m_AbsolutePath;
 

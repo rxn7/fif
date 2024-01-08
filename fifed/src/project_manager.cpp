@@ -141,6 +141,8 @@ namespace fifed {
 			return;
 		}
 
+		// TODO: Read only Config part of .fifproj?
+
 		std::ifstream fileStream(projectFilePath);
 		std::stringstream ss;
 		ss << fileStream.rdbuf();

@@ -13,10 +13,17 @@ namespace fif::core {
 
 		YAML::Emitter yaml;
 		yaml << YAML::BeginMap;
-		yaml << YAML::Key << "Config" << YAML::Value << YAML::BeginMap;
-		yaml << YAML::Key << "Name" << YAML::Value << m_Project->m_Config.name;
-		yaml << YAML::Key << "StartingScene" << YAML::Value << m_Project->m_Config.startingScenePath.string();
-		yaml << YAML::EndMap;
+		{
+			{
+				yaml << YAML::Key << "Config" << YAML::Value << YAML::BeginMap;
+				yaml << YAML::Key << "Name" << YAML::Value << m_Project->m_Config.name;
+				yaml << YAML::Key << "StartingScene" << YAML::Value << m_Project->m_Config.startingScenePath.string();
+				yaml << YAML::EndMap;
+			}
+
+			m_Project->get_resource_manager().serialize(yaml);
+		}
+
 		yaml << YAML::EndMap;
 
 		std::ofstream fileStream(projectFilePath);
@@ -37,12 +44,18 @@ namespace fif::core {
 		ss << fileStream.rdbuf();
 
 		const YAML::Node rootNode = YAML::Load(ss.str());
+		FIF_ASSERT(static_cast<bool>(rootNode), "Project file is invalid!");
+
 		const YAML::Node configNode = rootNode["Config"];
+		if(configNode) {
+			m_Project->m_Config.name = configNode["Name"].as<std::string>();
+			m_Project->m_Config.startingScenePath = configNode["StartingScene"].as<std::string>();
+		}
 
-		FIF_ASSERT(static_cast<bool>(configNode), "Project file is invalid, Config map is missing!");
-
-		m_Project->m_Config.name = configNode["Name"].as<std::string>();
-		m_Project->m_Config.startingScenePath = configNode["StartingScene"].as<std::string>();
+		const YAML::Node resourcesNode = rootNode["Resources"];
+		if(resourcesNode) {
+			m_Project->get_resource_manager().deserialize(resourcesNode);
+		}
 
 		return true;
 	}

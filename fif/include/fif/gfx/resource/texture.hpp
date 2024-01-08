@@ -1,15 +1,16 @@
 #pragma once
 
 #include "fif/core/opengl.hpp"
-#include "fif/core/resource.hpp"
+#include "fif/core/resource/resource.hpp"
 
 namespace fif::gfx {
 	class Texture final : public core::Resource {
 	public:
+		FIF_RESOURCE("Texture");
 		Texture();
 
 		Texture(u16 width, u16 height, const GLenum internalFormat = GL_RGBA8, const GLenum dataFormat = GL_RGBA, const GLenum filter = GL_LINEAR, const GLenum wrap = GL_CLAMP_TO_EDGE, void *data = nullptr);
-		Texture(const bool isEditorResource, const std::filesystem::path &path, const GLenum filter = GL_LINEAR, const GLenum wrap = GL_CLAMP_TO_EDGE);
+		Texture(const std::filesystem::path &path, GLenum filter = GL_LINEAR, GLenum wrap = GL_CLAMP_TO_EDGE);
 
 		~Texture();
 

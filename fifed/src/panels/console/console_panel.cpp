@@ -16,11 +16,11 @@ namespace fifed {
 	}
 
 	ConsolePanel::ConsolePanel(Editor &editor) : EditorPanel(editor), m_LoggerCallback(std::bind(&ConsolePanel::logger_callback, this, std::placeholders::_1, std::placeholders::_2)) {
-		Logger::s_LoggerHook.unhook(m_LoggerCallback);
+		Logger::s_LoggerHook.hook(m_LoggerCallback);
 	}
 
 	ConsolePanel::~ConsolePanel() {
-		Logger::s_LoggerHook.hook(m_LoggerCallback);
+		Logger::s_LoggerHook.unhook(m_LoggerCallback);
 	}
 
 	void ConsolePanel::logger_callback(Logger::LogType logType, const char *msg) {

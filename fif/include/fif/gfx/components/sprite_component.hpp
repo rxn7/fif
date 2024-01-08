@@ -1,20 +1,11 @@
 #pragma once
 
 #include "fif/gfx/color.hpp"
-#include "fif/gfx/texture.hpp"
+#include "fif/gfx/resource/texture.hpp"
 
 namespace fif::gfx {
 	struct SpriteComponent final {
 		SpriteComponent() {
-		}
-
-		SpriteComponent(const std::shared_ptr<Texture> &texture) {
-			set_texture(texture);
-		}
-
-		void set_texture(const std::shared_ptr<Texture> &texture) {
-			p_texture = texture;
-			size = texture->get_size();
 		}
 
 		Color tint = Colors::WHITE;
