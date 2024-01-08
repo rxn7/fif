@@ -1,7 +1,6 @@
 #pragma once
 
 #include "fif/gfx/color.hpp"
-#include "fif/gfx/text/font.hpp"
 #include "fif/gfx/text/text_align.hpp"
 
 namespace fif::gfx {

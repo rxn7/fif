@@ -15,7 +15,7 @@ namespace fif::gfx {
 		serialize_component<SpriteComponent>(entity, emitter, [&emitter](SpriteComponent &spriteComponent) {
 			emitter << YAML::Key << "Tint" << YAML::Value << spriteComponent.tint;
 			emitter << YAML::Key << "Size" << YAML::Value << spriteComponent.size;
-			emitter << YAML::Key << "TexturePath" << YAML::Value << (spriteComponent.p_texture != nullptr ? spriteComponent.p_texture->get_path().string() : "");
+			emitter << YAML::Key << "TextureUUID" << YAML::Value << (spriteComponent.p_texture ? static_cast<u64>(spriteComponent.p_texture->get_uuid()) : 0u);
 		});
 
 		serialize_component<QuadComponent>(entity, emitter, [&emitter](QuadComponent &quadComponent) {
@@ -43,9 +43,10 @@ namespace fif::gfx {
 			spriteComponent.size = spriteComponentNode["Size"].as<vec2>();
 			spriteComponent.tint = spriteComponentNode["Tint"].as<Color>();
 
-			const std::string texturePath = spriteComponentNode["TexturePath"].as<std::string>();
-			if(!texturePath.empty())
-				spriteComponent.set_texture(std::make_shared<Texture>(false, texturePath));
+			const core::UUID textureUUID = spriteComponentNode["TextureUUID"].as<u64>();
+			core::Logger::debug("%llu", textureUUID.get_value());
+			if(textureUUID != 0u)
+				spriteComponent.p_texture = core::Project::get_resource_manager().get_resource<Texture>(textureUUID);
 		});
 
 		try_get_component_node<QuadComponent>(entityNode, [&entity](const YAML::Node &quadComponentNode) {

@@ -2,6 +2,7 @@
 
 #include "fif/core/event/event_type.hpp"
 
+namespace fif::core {
 #define FIF_EVENT(T)                                                                                                                                                                                   \
 	static inline constexpr std::string_view get_name() {                                                                                                                                              \
 		return #T;                                                                                                                                                                                     \
@@ -13,7 +14,6 @@
 		return get_type_static();                                                                                                                                                                      \
 	}
 
-namespace fif::core {
 	class Event {
 	public:
 		virtual EventType get_type() const = 0;

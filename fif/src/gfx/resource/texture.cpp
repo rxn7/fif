@@ -1,4 +1,4 @@
-#include "fif/gfx/texture.hpp"
+#include "fif/gfx/resource/texture.hpp"
 #include "fif/core/project.hpp"
 
 #define STB_IMAGE_IMPLEMENTATION
@@ -11,17 +11,15 @@ namespace fif::gfx {
 		create(width, height, internalFormat, dataFormat, filter, wrap, data);
 	}
 
-	Texture::~Texture() {
-		glDeleteTextures(1, &m_ID);
-	}
+	Texture::Texture(const std::filesystem::path &path, GLenum filter, GLenum wrap) {
+		m_Path = path;
 
-	Texture::Texture(const bool isEditorResource, const std::filesystem::path &path, GLenum filter, GLenum wrap) : core::Resource(isEditorResource, path) {
 		i32 width, height, channels;
 		stbi_set_flip_vertically_on_load(true);
-		stbi_uc *data = stbi_load(get_working_directory_relative_path().string().c_str(), &width, &height, &channels, 0);
+		stbi_uc *data = stbi_load(path.string().c_str(), &width, &height, &channels, 0);
 
 		if(!data) {
-			core::Logger::error("Failed to load texture: %s", get_working_directory_relative_path().string().c_str());
+			core::Logger::error("Failed to load texture: %s", get_path().string().c_str());
 			return;
 		}
 
@@ -43,6 +41,10 @@ namespace fif::gfx {
 
 		create(static_cast<u16>(width), static_cast<u16>(height), internalFormat, dataFormat, filter, wrap, data);
 		stbi_image_free(data);
+	}
+
+	Texture::~Texture() {
+		glDeleteTextures(1, &m_ID);
 	}
 
 	void Texture::create(const u16 width, const u16 height, const GLenum internalFormat, const GLenum dataFormat, const GLenum filter, const GLenum wrap, void *data) {

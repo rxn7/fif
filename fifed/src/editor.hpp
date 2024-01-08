@@ -10,7 +10,6 @@
 
 #include <fif/core/invokable.hpp>
 #include <fif/gfx/frame_buffer.hpp>
-#include <fif/gfx/texture.hpp>
 
 namespace fifed {
 	class Editor final : public Stage {
@@ -33,7 +32,7 @@ namespace fifed {
 		}
 
 	private:
-		void save_scene();
+		void save_project();
 		void open_scene_dialog();
 		void open_scene(const std::filesystem::path &path);
 		void follow_selected_entity();

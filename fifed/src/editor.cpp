@@ -34,7 +34,7 @@ namespace fifed {
 
 	void Editor::init_shortcuts() {
 		m_Shortcuts.emplace_back(GLFW_KEY_O, GLFW_MOD_CONTROL, "Open a scene", std::bind(&Editor::open_scene_dialog, this));
-		m_Shortcuts.emplace_back(GLFW_KEY_S, GLFW_MOD_CONTROL, "Save current scene", std::bind(&Editor::save_scene, this));
+		m_Shortcuts.emplace_back(GLFW_KEY_S, GLFW_MOD_CONTROL, "Save project", std::bind(&Editor::save_project, this));
 		m_Shortcuts.emplace_back(GLFW_KEY_F, 0, "Follow/focus selected entity", std::bind(&Editor::follow_selected_entity, this));
 		m_Shortcuts.emplace_back(GLFW_KEY_DELETE, 0, "Delete selected entity", std::bind(&Editor::delete_selected_entity, this));
 		m_Shortcuts.emplace_back(GLFW_KEY_F5, 0, "Toggle play mode", std::bind(&Editor::toggle_play_mode, this));
@@ -63,7 +63,7 @@ namespace fifed {
 		m_FrameBuffer.end();
 	}
 
-	void Editor::save_scene() {
+	void Editor::save_project() {
 		// TODO: Confirmation prompt when in play mode
 
 		if(m_CurrentScenePath.empty()) {
@@ -84,10 +84,10 @@ namespace fifed {
 
 		std::filesystem::path &startingScenePath = Project::get_config().startingScenePath;
 
-		if(startingScenePath.empty() || !std::filesystem::exists(Project::get_resource_path(startingScenePath))) {
+		if(startingScenePath.empty() || !std::filesystem::exists(Project::get_resource_path(startingScenePath)))
 			startingScenePath = std::filesystem::relative(m_CurrentScenePath, Project::get_root_dir());
-			Project::save();
-		}
+
+		Project::save();
 	}
 
 	void Editor::open_scene(const std::filesystem::path &path) {
@@ -123,7 +123,7 @@ namespace fifed {
 				open_scene(m_CurrentScenePath);
 
 		} else
-			save_scene();// Save the scene if play mode has been entered
+			save_project();// Save the scene if play mode has been entered
 
 		m_FifedModule.get_application()->set_pause(!playMode);
 	}
@@ -164,7 +164,7 @@ namespace fifed {
 
 			if(ImGui::BeginMenu("Scene")) {
 				if(ImGui::MenuItem("Save", "Ctrl+S"))
-					save_scene();
+					save_project();
 
 				if(ImGui::MenuItem("Load", "Ctrl+O"))
 					open_scene_dialog();

@@ -2,9 +2,10 @@
 
 #include "fif/gfx/batch.hpp"
 #include "fif/gfx/ortho_camera.hpp"
-#include "fif/gfx/text/font.hpp"
+#include "fif/gfx/resource/font.hpp"
+#include "fif/gfx/resource/texture.hpp"
 #include "fif/gfx/text/text_align.hpp"
-#include "fif/gfx/texture.hpp"
+
 #include "vertices/circle_vertex.hpp"
 #include "vertices/quad_vertex.hpp"
 #include "vertices/sprite_vertex.hpp"

@@ -2,6 +2,9 @@
 
 #include "icon_manager.hpp"
 #include "stage.hpp"
+
+#include <fif/core/resource/resource_manager.hpp>
+
 #include <memory>
 
 namespace fifed {

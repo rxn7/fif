@@ -1,5 +1,4 @@
-#include "fif/gfx/text/font.hpp"
-#include "fif/core/util/logger.hpp"
+#include "fif/gfx/resource/font.hpp"
 #include "fif/gfx/gfx_module.hpp"
 
 #include <algorithm>
@@ -8,8 +7,10 @@
 #include FT_FREETYPE_H
 
 namespace fif::gfx {
-	Font::Font(const bool isEditorResource, const std::filesystem::path &path, const u32 size, const u32 textureSize, const GLenum filter) : core::Resource(isEditorResource, path), m_Size(size) {
-		if(FT_Error error = FT_New_Face(GfxModule::get_instance().m_FreeType, get_working_directory_relative_path().string().c_str(), 0, &m_Face)) {
+	Font::Font(const std::filesystem::path &path, const u32 size, const u32 textureSize, const GLenum filter) {
+		m_Path = path;
+
+		if(FT_Error error = FT_New_Face(GfxModule::get_instance().m_FreeType, path.string().c_str(), 0, &m_Face)) {
 			core::Logger::error("Failed to load freetype font: %s", FT_Error_String(error));
 			return;
 		}

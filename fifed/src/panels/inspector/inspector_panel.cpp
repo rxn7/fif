@@ -7,7 +7,7 @@
 #include <fif/gfx/components/label_component.hpp>
 #include <fif/gfx/components/quad_component.hpp>
 #include <fif/gfx/components/sprite_component.hpp>
-#include <fif/gfx/text/font.hpp>
+#include <fif/gfx/resource/font.hpp>
 #include <fif/lua_scripting/components/lua_script_component.hpp>
 #include <fif/lua_scripting/lua_scripting_module.hpp>
 #include <fif/native_scripting/components/native_script_component.hpp>
@@ -80,7 +80,13 @@ namespace fifed {
 					return;
 
 				const std::filesystem::path path = std::filesystem::relative(fileDialogResult, Project::get_root_dir());
-				sprite.set_texture(std::make_shared<Texture>(false, path, GL_NEAREST));
+
+				std::shared_ptr<Texture> texture = Project::get_resource_manager().add_resource<Texture>(path);
+				if(!texture)
+					return;
+
+				sprite.p_texture = texture;
+				sprite.size = texture->get_size();
 			}
 		});
 
