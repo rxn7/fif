@@ -69,7 +69,12 @@ namespace fif::lua_scripting {
 
 		std::filesystem::path path = core::Project::get_resource_path(luaScript.path);
 		if(!std::filesystem::exists(path)) {
-			core::Logger::error("Failed to load lua script '%s': file does not exist!", path.string().c_str());
+			core::Logger::error("Failed to load lua script '%s': file does not exist", path.string().c_str());
+			return;
+		}
+
+		if(path.extension() != ".lua") {
+			core::Logger::error("Failed to load lua script '%s': file has invalid extension", path.string().c_str());
 			return;
 		}
 

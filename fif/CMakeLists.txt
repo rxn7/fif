@@ -48,6 +48,7 @@ function(build_module target dir libs definitions)
 
   # TODO: This is terrible
   if(FIF_BUILD_LUA_SCRIPTING)
+    add_compile_definitions(SOL_ALL_SAFETIES_ON)
     set(definitions "${definitions};FIF_LUA_SCRIPTING")
     set(libs "${libs};lua::lib;sol2")
   endif()

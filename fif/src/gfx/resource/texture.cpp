@@ -14,10 +14,10 @@ namespace fif::gfx {
 	Texture::Texture(const std::filesystem::path &path, GLenum filter, GLenum wrap) : core::Resource(path) {
 		i32 width, height, channels;
 		stbi_set_flip_vertically_on_load(true);
-		stbi_uc *data = stbi_load(path.string().c_str(), &width, &height, &channels, 0);
+		stbi_uc *data = stbi_load(get_path_relative().string().c_str(), &width, &height, &channels, 0);
 
 		if(!data) {
-			core::Logger::error("Failed to load texture: %s", get_path().string().c_str());
+			core::Logger::error("Failed to load texture '%s': %s", get_path_relative().string().c_str(), stbi_failure_reason());
 			return;
 		}
 
