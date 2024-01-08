@@ -1,49 +1,4 @@
 Entities:
-  - UUID: 7504281144021107597
-    Tag: Public Pixel
-    fif::core::TransformComponent:
-      Position: [0, -79]
-      Scale: [1, 1]
-      AngleRadians: 0
-    fif::lua_scripting::LuaScriptComponent:
-      Path: assets/scripts/random_text.lua
-    fif::gfx::LabelComponent:
-      Text: "k%X%&_bski"
-      Size: 1.10000002
-      Color: [19, 67, 165, 255]
-      HorizontalAlign: 0
-      VerticalAlign: 0
-      FontUUID: 7374029712310856549
-  - UUID: 18177811006792117037
-    Tag: Iosevka
-    fif::core::TransformComponent:
-      Position: [0, 0]
-      Scale: [1, 1]
-      AngleRadians: 0
-    fif::lua_scripting::LuaScriptComponent:
-      Path: assets/scripts/random_text.lua
-    fif::gfx::LabelComponent:
-      Text: _"~KH}~3.3
-      Size: 1.79999995
-      Color: [175, 57, 103, 255]
-      HorizontalAlign: 0
-      VerticalAlign: 1
-      FontUUID: 0
-  - UUID: 5700002487300014532
-    Tag: Crayon Libre
-    fif::core::TransformComponent:
-      Position: [0, -152]
-      Scale: [1, 1]
-      AngleRadians: 0
-    fif::lua_scripting::LuaScriptComponent:
-      Path: assets/scripts/random_text.lua
-    fif::gfx::LabelComponent:
-      Text: O^HLXYi5yh
-      Size: 2
-      Color: [231, 164, 3, 255]
-      HorizontalAlign: 0
-      VerticalAlign: 1
-      FontUUID: 1255678113681594063
   - UUID: 8651380981943241587
     Tag: Novem
     fif::core::TransformComponent:
@@ -59,3 +14,48 @@ Entities:
       HorizontalAlign: 0
       VerticalAlign: 1
       FontUUID: 3168012614176207954
+  - UUID: 5700002487300014532
+    Tag: Crayon Libre
+    fif::core::TransformComponent:
+      Position: [0, -152]
+      Scale: [1, 1]
+      AngleRadians: 0
+    fif::lua_scripting::LuaScriptComponent:
+      Path: assets/scripts/random_text.lua
+    fif::gfx::LabelComponent:
+      Text: O^HLXYi5yh
+      Size: 2
+      Color: [231, 164, 3, 255]
+      HorizontalAlign: 0
+      VerticalAlign: 1
+      FontUUID: 1255678113681594063
+  - UUID: 18177811006792117037
+    Tag: Iosevka
+    fif::core::TransformComponent:
+      Position: [0, 0]
+      Scale: [1, 1]
+      AngleRadians: 0
+    fif::lua_scripting::LuaScriptComponent:
+      Path: assets/scripts/random_text.lua
+    fif::gfx::LabelComponent:
+      Text: _"~KH}~3.3
+      Size: 1.79999995
+      Color: [175, 57, 103, 255]
+      HorizontalAlign: 0
+      VerticalAlign: 1
+      FontUUID: 0
+  - UUID: 7504281144021107597
+    Tag: Public Pixel
+    fif::core::TransformComponent:
+      Position: [0, -79]
+      Scale: [1, 1]
+      AngleRadians: 0
+    fif::lua_scripting::LuaScriptComponent:
+      Path: assets/scripts/random_text.lua
+    fif::gfx::LabelComponent:
+      Text: "k%X%&_bski"
+      Size: 1.10000002
+      Color: [19, 67, 165, 255]
+      HorizontalAlign: 0
+      VerticalAlign: 0
+      FontUUID: 7374029712310856549

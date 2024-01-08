@@ -11,11 +11,16 @@ namespace fif::lua_scripting {
 		LuaScriptingModule();
 		~LuaScriptingModule();
 
+		void attach_script(core::Entity &ent, const std::string &path);
+		void init_script(LuaScriptComponent &luaScript);
+
 		template<typename T, typename... Args> void register_component(std::string_view name, Args &&...args) {
 			m_Lua.new_usertype<T>(name, std::forward<Args>(args)...);
 
 			std::string nameSnakeCase;
+			nameSnakeCase.reserve(name.length());
 			nameSnakeCase += std::tolower(name[0]);
+
 			for(u8 i = 1; i < name.length(); ++i) {
 				const char c = name[i];
 				if(std::isupper(c)) {
@@ -36,13 +41,14 @@ namespace fif::lua_scripting {
 		inline u32 get_lua_memory_usage() const {
 			return m_Lua.memory_used();
 		}
-		void attach_script(core::Entity &ent, const std::string &path);
-		void init_script(LuaScriptComponent &luaScript);
 
-	protected:
-		void on_start() override;
+	private:
+		void on_start();
 
 	public:
 		sol::state m_Lua;
+
+	private:
+		Callback<> m_StartCallback;
 	};
 }// namespace fif::lua_scripting

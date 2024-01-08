@@ -38,11 +38,24 @@ namespace fif::gfx {
 	}
 
 	void Renderer2D::start() {
-		m_Camera.update();
 		m_BeginTime = core::Clock::now();
 	}
 
 	void Renderer2D::end() {
+		m_Camera.update();
+
+		flush_batch(*mp_QuadBatch);
+		flush_batch(*mp_CircleBatch);
+		flush_batch(*mp_SpriteBatch);
+		flush_batch(*mp_GlyphBatch);
+	}
+
+	void Renderer2D::start_ui() {
+	}
+
+	void Renderer2D::end_ui() {
+		m_UICamera.update();
+
 		flush_batch(*mp_QuadBatch);
 		flush_batch(*mp_CircleBatch);
 		flush_batch(*mp_SpriteBatch);

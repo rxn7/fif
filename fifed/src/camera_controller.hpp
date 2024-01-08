@@ -8,8 +8,8 @@ namespace fifed {
 
 	private:
 		vec2 m_StartMousePositionLocal;
-		f32 m_MaxZoom = 1000.0f;
-		f32 m_MinZoom = 0.01f;
+		f32 m_MaxZoom = 10000.0f;
+		f32 m_MinZoom = 0.001f;
 		f32 m_ZoomLerpDuration = 0.05f;
 		bool m_IsZooming = false;
 		f32 m_ZoomTimer = 0.0f;

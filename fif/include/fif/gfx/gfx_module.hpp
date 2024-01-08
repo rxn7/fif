@@ -1,5 +1,6 @@
 #pragma once
 
+#include "fif/core/invokable.hpp"
 #include "fif/core/module.hpp"
 #include "fif/gfx/camera.hpp"
 #include "fif/gfx/frame_buffer.hpp"
@@ -36,11 +37,12 @@ namespace fif::gfx {
 			m_ViewportPosition = pos;
 		}
 
-	protected:
-		void on_start() override;
-		void on_render() override;
-		void pre_render() override;
-		void on_event(core::Event &event) override;
+	private:
+		void on_start();
+		void pre_render();
+		void on_render();
+		void end_frame();
+		void on_event(core::Event &event);
 
 	public:
 		vec2 m_ViewportSize;
@@ -48,6 +50,13 @@ namespace fif::gfx {
 		FT_Library m_FreeType;
 
 	private:
+		Invokable<> m_UIRenderCallback;
+		Callback<> m_StartCallback;
+		Callback<> m_PreRenderCallback;
+		Callback<> m_RenderCallback;
+		Callback<> m_EndFrameCallback;
+		Callback<core::Event &> m_EventCallback;
+
 		Renderer2D m_Renderer2D;
 	};
 }// namespace fif::gfx

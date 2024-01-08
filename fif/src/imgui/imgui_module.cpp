@@ -11,14 +11,23 @@
 #endif
 
 namespace fif::imgui {
-	ImGuiModule::ImGuiModule() {
+	ImGuiModule::ImGuiModule() :
+		m_StartCallback(std::bind(&ImGuiModule::on_start, this)), m_RenderCallback(std::bind(&ImGuiModule::on_render, this)), m_EventCallback(std::bind(&ImGuiModule::on_event, this, std::placeholders::_1)) {
 		FIF_MODULE_INIT();
-		IMGUI_CHECKVERSION();
 
+		core::Application::get_instance().m_StartHook.hook(m_StartCallback);
+		core::Application::get_instance().m_RenderHook.hook(m_RenderCallback);
+		core::Application::get_instance().m_EventHook.hook(m_EventCallback);
+
+		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
 	}
 
 	ImGuiModule::~ImGuiModule() {
+		mp_Application->m_StartHook.unhook(m_StartCallback);
+		mp_Application->m_RenderHook.unhook(m_RenderCallback);
+		mp_Application->m_EventHook.unhook(m_EventCallback);
+
 		ImGui_ImplOpenGL3_Shutdown();
 		ImGui_ImplGlfw_Shutdown();
 		ImGui::DestroyContext();

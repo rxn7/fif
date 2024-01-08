@@ -39,6 +39,7 @@ namespace fif::input {
 		FIF_MODULE(InputModule)
 
 		InputModule();
+		~InputModule();
 
 		vec2 get_mouse_position();
 		vec2 get_last_mouse_position();
@@ -59,10 +60,12 @@ namespace fif::input {
 			return m_State.keys[key] && !m_LastState.keys[key];
 		}
 
-	protected:
-		void end_frame() override;
+	private:
+		void end_frame();
 
 	private:
+		Callback<> m_EndFrameCallback;
+
 		InputState m_State;
 		InputState m_LastState;
 

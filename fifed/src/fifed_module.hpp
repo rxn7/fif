@@ -22,22 +22,27 @@ namespace fifed {
 			return m_IconManager;
 		}
 
-	protected:
-		void on_start() override;
-		void on_render() override;
-		void pre_render() override;
-		void on_update() override;
-		void on_event(Event &event) override;
+		void open_project_manager();
+		void open_editor();
 
 	private:
-		void render_imgui();
-
-	public:
-		std::unique_ptr<Stage> mp_Stage = nullptr;
+		void on_start();
+		void on_update();
+		void pre_render();
+		void on_render();
+		void on_render_imgui();
+		void on_event(Event &event);
 
 	private:
-		IconManager m_IconManager;
+		Callback<> m_StartCallback;
+		Callback<> m_UpdateCallback;
+		Callback<> m_PreRenderCallback;
+		Callback<> m_RenderCallback;
+		Callback<Event &> m_EventCallback;
 		Callback<> m_ImGuiRenderCallback;
+
+		std::unique_ptr<Stage> mp_Stage = nullptr;
+		IconManager m_IconManager;
 		friend Stage;
 	};
 }// namespace fifed

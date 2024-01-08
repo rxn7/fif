@@ -51,6 +51,11 @@ namespace fifed {
 	}
 
 	void Editor::update() {
+		if(m_OpenProjectManager) {
+			m_FifedModule.open_project_manager();
+			return;
+		}
+
 		m_CameraController.update();
 	}
 
@@ -177,7 +182,7 @@ namespace fifed {
 					Project::save();
 
 				if(ImGui::MenuItem("Open Project Manager"))
-					m_FifedModule.mp_Stage = std::make_unique<ProjectManager>(m_FifedModule);
+					m_OpenProjectManager = true;
 
 				ImGui::EndMenu();
 			}

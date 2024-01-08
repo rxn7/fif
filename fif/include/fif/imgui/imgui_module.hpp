@@ -30,19 +30,19 @@ namespace fif::imgui {
 		virtual ~ImGuiModule();
 
 		bool begin_dockspace() const;
-		inline Invokable<> &get_render_hook() {
-			return m_RenderHook;
-		}
 
-	protected:
-		void on_start() override;
-		void on_render() override;
-		void on_event(core::Event &event) override;
+	public:
+		Invokable<> m_RenderHook;
 
 	private:
 		void apply_default_theme() const;
+		void on_start();
+		void on_render();
+		void on_event(core::Event &event);
 
 	private:
-		Invokable<> m_RenderHook;
+		Callback<> m_StartCallback;
+		Callback<> m_RenderCallback;
+		Callback<core::Event &> m_EventCallback;
 	};
 }// namespace fif::imgui

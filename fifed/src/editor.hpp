@@ -63,6 +63,7 @@ namespace fifed {
 		std::shared_ptr<ViewportPanel> mp_ViewportPanel = nullptr;
 		std::shared_ptr<InspectorPanel> mp_InspectorPanel = nullptr;
 
+		bool m_OpenProjectManager = false;
 		bool m_PlayMode = false;
 		bool m_AboutWindowOpen = false;
 		bool m_ShortcutsWindowOpen = false;

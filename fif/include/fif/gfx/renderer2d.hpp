@@ -85,6 +85,9 @@ namespace fif::gfx {
 		void start();
 		void end();
 
+		void start_ui();
+		void end_ui();
+
 		void render_quad(const vec2 &position, const vec2 &size, f32 angle = 0.0f, const Color &color = {255, 255, 255, 255});
 		void render_sprite(const std::shared_ptr<Texture> &texture, const vec2 &position, const vec2 &size, f32 angle = 0.0f, const Color &color = {255, 255, 255, 255});
 		void render_circle(const vec2 &position, f32 radius, const Color &color = Colors::WHITE);
@@ -100,6 +103,7 @@ namespace fif::gfx {
 		std::unique_ptr<Batch<SpriteVertex>> mp_GlyphBatch;
 
 		OrthoCamera m_Camera;
+		OrthoCamera m_UICamera;
 
 		std::array<std::shared_ptr<Texture>, 32> m_Textures;
 		i32 m_TextureIdx = 0;

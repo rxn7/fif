@@ -19,20 +19,6 @@ namespace fif::core {
 	protected:
 		Module() {
 		}
-		virtual void on_start() {
-		}
-		virtual void on_event([[maybe_unused]] Event &event) {
-		}
-		virtual void pre_update() {
-		}
-		virtual void on_update() {
-		}
-		virtual void pre_render() {
-		}
-		virtual void on_render() {
-		}
-		virtual void end_frame() {
-		}
 
 	protected:
 		Application *mp_Application;

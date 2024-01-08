@@ -31,8 +31,5 @@ namespace fif::native_scripting {
 
 			return *static_cast<T *>(nativeScriptComponent.p_script.get());
 		}
-
-	protected:
-		void on_start() override;
 	};
 }// namespace fif::native_scripting

@@ -40,7 +40,7 @@ namespace fif::core {
 		}
 
 		std::ifstream fileStream(projectFilePath);
-		std::stringstream ss;
+		std::ostringstream ss;
 		ss << fileStream.rdbuf();
 
 		const YAML::Node rootNode = YAML::Load(ss.str());

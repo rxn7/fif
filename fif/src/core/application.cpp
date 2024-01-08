@@ -31,10 +31,7 @@ namespace fif::core {
 
 		SceneSerializer::add_serializer<CoreEntitySerializer>();
 
-		for(const auto &mod : m_Modules) {
-			Logger::info("Module '%s' started", mod->get_name().data());
-			mod->on_start();
-		}
+		m_StartHook.invoke();
 
 		while(m_Status.running)
 			game_loop();
@@ -62,32 +59,26 @@ namespace fif::core {
 
 		render();
 
-		for(auto &mod : m_Modules)
-			mod->end_frame();
+		m_EndFrameHook.invoke();
 
 		mp_Window->end_frame();
 	}
 
 	void Application::update() {
-		for(auto &mod : m_Modules)
-			mod->pre_update();
-
-		for(auto &mod : m_Modules)
-			mod->on_update();
+		m_PreUpdateHook.invoke();
+		m_UpdateHook.invoke();
 
 		for(auto &updateSystem : m_UpdateSystems)
 			updateSystem(m_Status, mp_Scene->get_registry(), Timing::get_delta_time());
 	}
 
 	void Application::render() {
-		for(auto &mod : m_Modules)
-			mod->pre_render();
+		m_PreRenderHook.invoke();
 
 		for(auto &renderSystem : m_RenderSystems)
 			renderSystem(m_Status, mp_Scene->get_registry());
 
-		for(auto &mod : m_Modules)
-			mod->on_render();
+		m_RenderHook.invoke();
 	}
 
 	void Application::on_event(Event &event) {
@@ -97,8 +88,7 @@ namespace fif::core {
 			return true;
 		});
 
-		for(auto &mod : m_Modules)
-			mod->on_event(event);
+		m_EventHook.invoke(event);
 
 		for(auto &eventSystem : m_EventSystems)
 			eventSystem(m_Status, mp_Scene->get_registry(), event);

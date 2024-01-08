@@ -41,7 +41,7 @@ namespace fif::core {
 		m_Scene.clear();
 
 		std::ifstream fileStream(resourcePath);
-		std::stringstream ss;
+		std::ostringstream ss;
 		ss << fileStream.rdbuf();
 
 		const YAML::Node rootNode = YAML::Load(ss.str());

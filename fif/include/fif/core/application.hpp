@@ -68,6 +68,15 @@ namespace fif::core {
 		void update();
 		void render();
 
+	public:
+		Invokable<> m_StartHook;
+		Invokable<Event &> m_EventHook;
+		Invokable<> m_PreUpdateHook;
+		Invokable<> m_UpdateHook;
+		Invokable<> m_PreRenderHook;
+		Invokable<> m_RenderHook;
+		Invokable<> m_EndFrameHook;
+
 	protected:
 		std::unique_ptr<Window> mp_Window;
 

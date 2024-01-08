@@ -41,33 +41,27 @@ namespace fif {
 	template<typename... A> class Invokable final {
 	public:
 		Invokable<A...> &hook(const Callback<A...> cb) {
-			std::lock_guard<std::mutex> g(m_Mutex);
 			m_Callbacks.push_back(cb);
 			return (*this);
 		}
 
 		Invokable<A...> &unhook(const Callback<A...> cb) {
-			std::lock_guard<std::mutex> g(m_Mutex);
 			std::erase_if(m_Callbacks, [cb](Callback<A...> c) { return cb.hash_code() == c.hash_code(); });
 			return (*this);
 		}
 
 		Invokable<A...> &rehook(const Callback<A...> cb) {
-			std::lock_guard<std::mutex> g(m_Mutex);
 			m_Callbacks.clear();
 			m_Callbacks.push_back(cb);
 			return (*this);
 		}
 
 		Invokable<A...> &clear() {
-			std::lock_guard<std::mutex> g(m_Mutex);
 			m_Callbacks.clear();
 			return (*this);
 		}
 
 		Invokable<A...> &invoke(A... args) {
-			std::lock_guard<std::mutex> g(m_Mutex);
-
 			for(Callback<A...> cb : m_Callbacks)
 				cb.invoke(static_cast<A &&>(args)...);
 
@@ -75,7 +69,6 @@ namespace fif {
 		}
 
 	protected:
-		std::mutex m_Mutex;
 		std::vector<Callback<A...>> m_Callbacks;
 	};
 }// namespace fif

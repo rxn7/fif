@@ -13,6 +13,9 @@ namespace fifed {
 			return m_Hovered;
 		}
 
+	public:
+		bool m_Resize = false;
+
 	private:
 		FrameBuffer &m_FrameBuffer;
 		vec2 m_LastSize{0, 0};

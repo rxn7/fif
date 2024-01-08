@@ -5,12 +5,13 @@
 #include "fif/input/input_module.hpp"
 
 namespace fif::input {
-	InputModule::InputModule() {
+	InputModule::InputModule() : m_EndFrameCallback(std::bind(&InputModule::end_frame, this)) {
 		FIF_MODULE_INIT();
 
-		register_lua_types(*this);
+		core::Application &app = core::Application::get_instance();
+		app.m_EndFrameHook.hook(m_EndFrameCallback);
 
-		GLFWwindow *glfwWindow = core::Application::get_instance().get_window().get_glfw_window();
+		GLFWwindow *glfwWindow = app.get_window().get_glfw_window();
 
 		glfwSetKeyCallback(glfwWindow, []([[maybe_unused]] GLFWwindow *glfwWindow, int key, [[maybe_unused]] int scancode, int action, [[maybe_unused]] int mods) {
 			FIF_ASSERT(key >= 0 && key <= KEY_COUNT, "The key %d is out of range", key);
@@ -60,6 +61,12 @@ namespace fif::input {
 
 			input.m_LastMousePosition = input.m_MousePosition;
 		});
+
+		register_lua_types(*this);
+	}
+
+	InputModule::~InputModule() {
+		mp_Application->m_EndFrameHook.unhook(m_EndFrameCallback);
 	}
 
 	void InputModule::end_frame() {

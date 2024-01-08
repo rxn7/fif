@@ -12,11 +12,13 @@ namespace fif::lua_scripting {
 	static void lua_script_update_system(const core::ApplicationStatus &status, entt::registry &registry, const f32 dt);
 	static void lua_script_render_system([[maybe_unused]] const core::ApplicationStatus &status, entt::registry &registry);
 
-	LuaScriptingModule::LuaScriptingModule() {
+	LuaScriptingModule::LuaScriptingModule() : m_StartCallback(std::bind(&LuaScriptingModule::on_start, this)) {
 		FIF_MODULE_INIT();
+		core::Application::get_instance().m_StartHook.hook(m_StartCallback);
 	}
 
 	LuaScriptingModule::~LuaScriptingModule() {
+		core::Application::get_instance().m_StartHook.unhook(m_StartCallback);
 	}
 
 	void LuaScriptingModule::on_start() {

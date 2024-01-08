@@ -13,8 +13,17 @@
 #include <memory>
 
 namespace fif::gfx {
-	GfxModule::GfxModule(const std::filesystem::path &defaultFontPath) {
+	GfxModule::GfxModule(const std::filesystem::path &defaultFontPath) :
+		m_StartCallback(std::bind(&GfxModule::on_start, this)), m_PreRenderCallback(std::bind(&GfxModule::pre_render, this)), m_RenderCallback(std::bind(&GfxModule::on_render, this)), m_EndFrameCallback(std::bind(&GfxModule::end_frame, this)), m_EventCallback(std::bind(&GfxModule::on_event, this, std::placeholders::_1)) {
 		FIF_MODULE_INIT();
+
+		core::Application &app = core::Application::get_instance();
+		app.m_StartHook.hook(m_StartCallback);
+		app.m_PreRenderHook.hook(m_PreRenderCallback);
+		app.m_RenderHook.hook(m_RenderCallback);
+		app.m_EndFrameHook.hook(m_EndFrameCallback);
+		app.m_EventHook.hook(m_EventCallback);
+
 		FIF_ASSERT(FT_Init_FreeType(&m_FreeType) == 0, "Failed to init freetype");
 
 		// Texture loader
@@ -29,6 +38,12 @@ namespace fif::gfx {
 	}
 
 	GfxModule::~GfxModule() {
+		mp_Application->m_StartHook.unhook(m_StartCallback);
+		mp_Application->m_PreRenderHook.unhook(m_PreRenderCallback);
+		mp_Application->m_RenderHook.unhook(m_RenderCallback);
+		mp_Application->m_EndFrameHook.hook(m_EndFrameCallback);
+		mp_Application->m_EventHook.unhook(m_EventCallback);
+
 		// NOTE: We need to delete it now, or else the font's texture will be deleted after the OpenGL context is destroyed, which causes a segfault.
 		Font::sp_DefaultFont.reset();
 
@@ -55,6 +70,12 @@ namespace fif::gfx {
 
 	void GfxModule::on_render() {
 		m_Renderer2D.end();
+		m_Renderer2D.start_ui();
+		m_UIRenderCallback.invoke();
+	}
+
+	void GfxModule::end_frame() {
+		m_Renderer2D.end_ui();
 	}
 
 	void GfxModule::on_event(fif::core::Event &event) {

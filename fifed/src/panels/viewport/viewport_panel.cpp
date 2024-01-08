@@ -35,7 +35,9 @@ namespace fifed {
 		const vec2 pos = ImGui::GetWindowPos();
 		const vec2 size = ImGui::GetWindowSize();
 
-		if(m_LastSize != size) {
+		if(m_LastSize != size || m_Resize) {
+			m_Resize = false;
+
 			m_FrameBuffer.set_size(size);
 			GfxModule::get_instance().set_viewport(size, pos);
 		}
