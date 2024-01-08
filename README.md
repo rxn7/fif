@@ -5,7 +5,7 @@
 Fif is a 2D game engine with an editor (fifed).
 
 # Table of contents
-- [To do](#to-do)  
+- [Features](#features)  
 - [Modules](#modules)  
 - [Building](#building)  
 - [Contributing](#contributing)  
@@ -16,8 +16,9 @@ Fif is a 2D game engine with an editor (fifed).
 - ECS
 - Batched 2D renderer
 - Lua scripting
-- Native (C++) scripting (not supported in the editor yet)
 - Scene System (changes made in play mode will not be saved, like in unity)
+- Resource Manager (UUID based)
+- Native (C++) scripting (not supported in the editor yet)
 
 ## Components
 - TransformComponent
