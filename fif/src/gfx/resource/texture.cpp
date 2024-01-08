@@ -41,9 +41,7 @@ namespace fif::gfx {
 		stbi_image_free(data);
 	}
 
-	Texture::~Texture() {
-		glDeleteTextures(1, &m_ID);
-	}
+	Texture::~Texture() { glDeleteTextures(1, &m_ID); }
 
 	void Texture::create(const u16 width, const u16 height, const GLenum internalFormat, const GLenum dataFormat, const GLenum filter, const GLenum wrap, void *data) {
 		m_Width = width;

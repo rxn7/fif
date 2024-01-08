@@ -3,8 +3,7 @@
 #include <fif/core/project.hpp>
 
 namespace fifed {
-	ResourceBrowserPanel::ResourceBrowserPanel(Editor &editor) : EditorPanel(editor), m_RootDirectory(Project::get_root_dir()), m_CurrentDirectory(m_RootDirectory) {
-	}
+	ResourceBrowserPanel::ResourceBrowserPanel(Editor &editor) : EditorPanel(editor), m_RootDirectory(Project::get_root_dir()), m_CurrentDirectory(m_RootDirectory) {}
 
 	void ResourceBrowserPanel::on_render() {
 		const bool isInRoot = m_CurrentDirectory == m_RootDirectory;
@@ -34,7 +33,5 @@ namespace fifed {
 		}
 	}
 
-	void ResourceBrowserPanel::current_directory_go_back() {
-		m_CurrentDirectory = m_CurrentDirectory.parent_path();
-	}
+	void ResourceBrowserPanel::current_directory_go_back() { m_CurrentDirectory = m_CurrentDirectory.parent_path(); }
 }// namespace fifed

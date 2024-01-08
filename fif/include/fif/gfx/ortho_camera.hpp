@@ -11,9 +11,7 @@ namespace fif::gfx {
 		vec2 screen_to_world(const vec2 &position) const;
 		void update_size();
 
-		inline const vec2 &get_size() const {
-			return m_Size;
-		}
+		inline const vec2 &get_size() const { return m_Size; }
 
 	public:
 		static constexpr f32 BASE_ZOOM = 500.0f;

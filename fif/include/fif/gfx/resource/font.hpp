@@ -17,9 +17,7 @@ namespace fif::gfx {
 
 		vec2 calculate_text_size(const std::string &text, const vec2 &size) const;
 
-		inline const std::shared_ptr<Texture> &get_texture() const {
-			return mp_Texture;
-		}
+		inline const std::shared_ptr<Texture> &get_texture() const { return mp_Texture; }
 
 		inline const Glyph &get_glyph(char c) const {
 			const auto it = m_Glyphs.find(c);
@@ -31,17 +29,11 @@ namespace fif::gfx {
 			return m_Glyphs.begin()->second;
 		}
 
-		inline f32 get_font_height() const {
-			return m_FontHeight;
-		}
+		inline f32 get_font_height() const { return m_FontHeight; }
 
-		inline u32 get_font_size() const {
-			return m_Size;
-		}
+		inline u32 get_font_size() const { return m_Size; }
 
-		static inline const Font &get_default() {
-			return *sp_DefaultFont;
-		}
+		static inline const Font &get_default() { return *sp_DefaultFont; }
 
 	private:
 		inline static std::unique_ptr<Font> sp_DefaultFont;

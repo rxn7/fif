@@ -48,9 +48,7 @@ namespace fif::core {
 		glfwPollEvents();
 	}
 
-	void Window::close(const bool value) {
-		glfwSetWindowShouldClose(mp_GlfwWindow, value);
-	}
+	void Window::close(const bool value) { glfwSetWindowShouldClose(mp_GlfwWindow, value); }
 
 	void Window::set_icon(const std::string &path) {
 		GLFWimage icon;
@@ -64,7 +62,5 @@ namespace fif::core {
 		stbi_image_free(icon.pixels);
 	}
 
-	void Window::set_title(const std::string &title) {
-		glfwSetWindowTitle(mp_GlfwWindow, title.c_str());
-	}
+	void Window::set_title(const std::string &title) { glfwSetWindowTitle(mp_GlfwWindow, title.c_str()); }
 }// namespace fif::core

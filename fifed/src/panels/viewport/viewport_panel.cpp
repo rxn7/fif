@@ -4,8 +4,7 @@
 #include "fifed_module.hpp"
 
 namespace fifed {
-	ViewportPanel::ViewportPanel(Editor &editor, FrameBuffer &frameBuffer) : EditorPanel(editor), m_FrameBuffer(frameBuffer) {
-	}
+	ViewportPanel::ViewportPanel(Editor &editor, FrameBuffer &frameBuffer) : EditorPanel(editor), m_FrameBuffer(frameBuffer) {}
 
 	void ViewportPanel::on_render() {
 		ImGui::SameLine();

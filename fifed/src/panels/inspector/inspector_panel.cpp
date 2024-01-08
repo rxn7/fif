@@ -17,8 +17,7 @@
 #include <tinyfiledialogs.h>
 
 namespace fifed {
-	InspectorPanel::InspectorPanel(Editor &editor, Scene &scene) : EditorPanel(editor), m_SelectedEntity(scene, entt::null) {
-	}
+	InspectorPanel::InspectorPanel(Editor &editor, Scene &scene) : EditorPanel(editor), m_SelectedEntity(scene, entt::null) {}
 
 	void InspectorPanel::on_render() {
 		if(m_SelectedEntity.m_ID == entt::null)

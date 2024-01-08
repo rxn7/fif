@@ -11,8 +11,6 @@ namespace fifed {
 		ENTITY_TEMPLATE_NAME("Empty")
 
 	protected:
-		inline void create_components(Entity &ent) override {
-			ent.add_component<TransformComponent>();
-		}
+		inline void create_components(Entity &ent) override { ent.add_component<TransformComponent>(); }
 	};
 }// namespace fifed

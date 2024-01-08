@@ -13,6 +13,4 @@ namespace fifed {
 }// namespace fifed
 
 #define ENTITY_TEMPLATE_NAME(name)                                                                                                                                                                     \
-	inline constexpr std::string_view get_name() const override {                                                                                                                                      \
-		return name;                                                                                                                                                                                   \
-	}
+	inline constexpr std::string_view get_name() const override { return name; }

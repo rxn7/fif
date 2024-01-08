@@ -4,8 +4,7 @@
 #include <sstream>
 
 namespace fif::core {
-	ProjectSerializer::ProjectSerializer(const std::shared_ptr<Project> &project) : m_Project(project) {
-	}
+	ProjectSerializer::ProjectSerializer(const std::shared_ptr<Project> &project) : m_Project(project) {}
 
 	void ProjectSerializer::serialize() {
 		const std::filesystem::path projectFilePath = m_Project->get_project_file_path();

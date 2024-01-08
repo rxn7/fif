@@ -67,7 +67,6 @@ namespace fif::input {
 		// clang-format on
 	}
 #else
-	void register_lua_types([[maybe_unused]] InputModule &inputModule) {
-	}
+	void register_lua_types([[maybe_unused]] InputModule &inputModule) {}
 #endif
 }// namespace fif::input

@@ -9,9 +9,7 @@
 namespace fifed {
 	static const std::filesystem::path s_ProjectListPath = "./recent_projects.txt";
 
-	ProjectManager::ProjectManager(FifedModule &fifedModule) : Stage(fifedModule) {
-		load_project_list();
-	}
+	ProjectManager::ProjectManager(FifedModule &fifedModule) : Stage(fifedModule) { load_project_list(); }
 
 	void ProjectManager::update() {
 		if(m_ProjectLoaded) {
@@ -201,7 +199,5 @@ namespace fifed {
 		return open_project(path);
 	}
 
-	bool ProjectManager::open_project(const std::filesystem::path &path) {
-		return Project::load(path);
-	}
+	bool ProjectManager::open_project(const std::filesystem::path &path) { return Project::load(path); }
 }// namespace fifed

@@ -17,20 +17,12 @@ namespace fif::gfx {
 		GfxModule(const std::filesystem::path &defaultFontPath);
 		~GfxModule();
 
-		inline vec2 get_viewport_size() {
-			return m_ViewportSize;
-		}
-		inline vec2 get_viewport_position() {
-			return m_ViewportPosition;
-		}
+		inline vec2 get_viewport_size() { return m_ViewportSize; }
+		inline vec2 get_viewport_position() { return m_ViewportPosition; }
 
-		inline vec2 get_point_relative_to_viewport(const vec2 &point) {
-			return point - m_ViewportPosition;
-		}
+		inline vec2 get_point_relative_to_viewport(const vec2 &point) { return point - m_ViewportPosition; }
 
-		inline Renderer2D &get_renderer2D() {
-			return m_Renderer2D;
-		}
+		inline Renderer2D &get_renderer2D() { return m_Renderer2D; }
 
 		inline void set_viewport(const vec2 &size, const vec2 &pos = {0, 0}) {
 			m_ViewportSize = size;

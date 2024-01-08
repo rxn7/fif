@@ -3,9 +3,7 @@
 #include "fif/core/ecs/components/uuid_component.hpp"
 
 namespace fif::core {
-	EntityID Scene::create_entity(const char *name) {
-		return create_entity_with_uuid(UUID(), name);
-	}
+	EntityID Scene::create_entity(const char *name) { return create_entity_with_uuid(UUID(), name); }
 
 	EntityID Scene::create_entity_with_uuid(UUID uuid, const char *name) {
 		EntityID ent = m_Registry.create();

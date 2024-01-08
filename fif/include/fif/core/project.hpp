@@ -15,17 +15,11 @@ namespace fif::core {
 		static bool load(const std::filesystem::path &rootDirectory);
 		static void save();
 
-		inline static std::shared_ptr<Project> &get_active() {
-			return s_ActiveProject;
-		}
+		inline static std::shared_ptr<Project> &get_active() { return s_ActiveProject; }
 
-		static inline ProjectConfig &get_config() {
-			return s_ActiveProject->m_Config;
-		}
+		static inline ProjectConfig &get_config() { return s_ActiveProject->m_Config; }
 
-		static inline const std::filesystem::path &get_root_dir() {
-			return s_ActiveProject->m_RootDir;
-		}
+		static inline const std::filesystem::path &get_root_dir() { return s_ActiveProject->m_RootDir; }
 
 		static inline std::filesystem::path get_resource_path(const std::filesystem::path &path) {
 			if(!s_ActiveProject)
@@ -34,13 +28,9 @@ namespace fif::core {
 			return s_ActiveProject->m_RootDir / path;
 		}
 
-		static inline const std::string &get_absolute_path() {
-			return s_ActiveProject->m_AbsolutePath;
-		}
+		static inline const std::string &get_absolute_path() { return s_ActiveProject->m_AbsolutePath; }
 
-		static constexpr std::string_view project_filename() {
-			return "project.fifproj";
-		}
+		static constexpr std::string_view project_filename() { return "project.fifproj"; }
 
 		static inline std::filesystem::path get_project_file_path() {
 			std::filesystem::path projectFilePath = s_ActiveProject->m_RootDir;
@@ -49,9 +39,7 @@ namespace fif::core {
 			return projectFilePath;
 		}
 
-		static inline ResourceManager &get_resource_manager() {
-			return s_ActiveProject->m_ResourceManager;
-		}
+		static inline ResourceManager &get_resource_manager() { return s_ActiveProject->m_ResourceManager; }
 
 	private:
 		ProjectConfig m_Config;

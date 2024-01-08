@@ -2,8 +2,7 @@
 #include "fif/core/project.hpp"
 
 namespace fif::core {
-	Resource::Resource(const std::filesystem::path &path) : m_Path(path) {
-	}
+	Resource::Resource(const std::filesystem::path &path) : m_Path(path) {}
 
 	std::filesystem::path Resource::get_path_relative() const {
 		if(m_IsEditorResource)

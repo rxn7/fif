@@ -23,13 +23,9 @@ namespace fifed {
 		void on_event(Event &event) override;
 		void set_play_mode(const bool playMode);
 
-		inline bool is_play_mode() const {
-			return m_PlayMode;
-		}
+		inline bool is_play_mode() const { return m_PlayMode; }
 
-		inline void toggle_play_mode() {
-			set_play_mode(!m_PlayMode);
-		}
+		inline void toggle_play_mode() { set_play_mode(!m_PlayMode); }
 
 	private:
 		void save_project();
@@ -41,9 +37,7 @@ namespace fifed {
 		void init_shortcuts();
 		void init_panels();
 
-		inline FrameBuffer &get_frame_buffer() {
-			return m_FrameBuffer;
-		}
+		inline FrameBuffer &get_frame_buffer() { return m_FrameBuffer; }
 
 		template<class T, class... Args> std::shared_ptr<T> add_panel(Args &&...args) {
 			std::shared_ptr<EditorPanel> &panel = m_Panels.emplace_back(std::make_shared<T>(std::forward<Args>(args)...));

@@ -64,9 +64,7 @@ namespace fifed {
 		m_Grid.render();
 	}
 
-	void Editor::render() {
-		m_FrameBuffer.end();
-	}
+	void Editor::render() { m_FrameBuffer.end(); }
 
 	void Editor::save_project() {
 		if(m_PlayMode) {

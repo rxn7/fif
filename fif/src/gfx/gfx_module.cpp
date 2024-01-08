@@ -74,9 +74,7 @@ namespace fif::gfx {
 		m_UIRenderCallback.invoke();
 	}
 
-	void GfxModule::end_frame() {
-		m_Renderer2D.end_ui();
-	}
+	void GfxModule::end_frame() { m_Renderer2D.end_ui(); }
 
 	void GfxModule::on_event(fif::core::Event &event) {
 		fif::core::EventDispatcher::dispatch<fif::core::WindowResizeEvent>(event, [&](fif::core::WindowResizeEvent &resizeEvent) {

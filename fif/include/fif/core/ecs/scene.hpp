@@ -21,25 +21,15 @@ namespace fif::core {
 			}
 		}
 
-		inline void delete_entity(EntityID entity) {
-			m_Registry.destroy(entity);
-		}
+		inline void delete_entity(EntityID entity) { m_Registry.destroy(entity); }
 
-		inline void clear() {
-			m_Registry.clear();
-		}
+		inline void clear() { m_Registry.clear(); }
 
-		inline u64 get_entity_count() const {
-			return m_Registry.storage<EntityID>()->free_list();
-		}
+		inline u64 get_entity_count() const { return m_Registry.storage<EntityID>()->free_list(); }
 
-		inline entt::registry &get_registry() {
-			return m_Registry;
-		}
+		inline entt::registry &get_registry() { return m_Registry; }
 
-		template<typename T> inline bool has_component(EntityID entity) {
-			return m_Registry.any_of<T>(entity);
-		}
+		template<typename T> inline bool has_component(EntityID entity) { return m_Registry.any_of<T>(entity); }
 
 		template<typename T> inline T &get_component(EntityID entity) {
 			FIF_ASSERT(has_component<T>(entity), "This entity doesn't have a component of this type (%s)!", typeid(T).name());

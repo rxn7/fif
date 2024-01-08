@@ -5,8 +5,7 @@
 #include <sstream>
 
 namespace fif::core {
-	SceneSerializer::SceneSerializer(Scene &scene) : m_Scene(scene) {
-	}
+	SceneSerializer::SceneSerializer(Scene &scene) : m_Scene(scene) {}
 
 	void SceneSerializer::serialize(const std::filesystem::path &path) {
 		const std::filesystem::path resourcePath = Project::get_resource_path(path);

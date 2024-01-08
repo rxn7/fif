@@ -5,9 +5,7 @@ using namespace std::chrono;
 namespace fif::core {
 	static Clock::time_point m_LastFrameTime;
 
-	void Timing::init() {
-		m_LastFrameTime = Clock::now();
-	}
+	void Timing::init() { m_LastFrameTime = Clock::now(); }
 
 	void Timing::update() {
 		const auto now = Clock::now();

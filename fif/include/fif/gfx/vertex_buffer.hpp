@@ -13,9 +13,7 @@ namespace fif::gfx {
 		void set_vertices_and_elements(const void *vertices, const u32 vertexCount, const u16 *elements, const u32 elementCount);
 		void set_layout(const VertexBufferLayout &layout);
 
-		const VertexBufferLayout &get_layout() const {
-			return m_Layout;
-		}
+		const VertexBufferLayout &get_layout() const { return m_Layout; }
 
 	private:
 		void setup_vertex_attributes();

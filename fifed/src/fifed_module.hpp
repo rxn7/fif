@@ -18,9 +18,7 @@ namespace fifed {
 		void load_default_layout();
 		void on_project_open();
 
-		inline const IconManager &get_icon_manager() const {
-			return m_IconManager;
-		}
+		inline const IconManager &get_icon_manager() const { return m_IconManager; }
 
 		void open_project_manager();
 		void open_editor();

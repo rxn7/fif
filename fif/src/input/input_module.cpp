@@ -65,19 +65,11 @@ namespace fif::input {
 		register_lua_types(*this);
 	}
 
-	InputModule::~InputModule() {
-		mp_Application->m_EndFrameHook.unhook(m_EndFrameCallback);
-	}
+	InputModule::~InputModule() { mp_Application->m_EndFrameHook.unhook(m_EndFrameCallback); }
 
-	void InputModule::end_frame() {
-		m_LastState = m_State;
-	}
+	void InputModule::end_frame() { m_LastState = m_State; }
 
-	vec2 InputModule::get_mouse_position() {
-		return m_MousePosition;
-	}
+	vec2 InputModule::get_mouse_position() { return m_MousePosition; }
 
-	vec2 InputModule::get_last_mouse_position() {
-		return m_LastMousePosition;
-	}
+	vec2 InputModule::get_last_mouse_position() { return m_LastMousePosition; }
 }// namespace fif::input

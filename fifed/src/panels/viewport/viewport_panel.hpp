@@ -9,9 +9,7 @@ namespace fifed {
 		PANEL_NAME("Viewport")
 
 		void on_render() override;
-		inline bool is_hovered() const {
-			return m_Hovered;
-		}
+		inline bool is_hovered() const { return m_Hovered; }
 
 	public:
 		bool m_Resize = false;

@@ -4,8 +4,7 @@
 #include <fif/gfx/renderer2d.hpp>
 
 namespace fifed {
-	PerformancePanel::PerformancePanel(Editor &editor) : EditorPanel(editor) {
-	}
+	PerformancePanel::PerformancePanel(Editor &editor) : EditorPanel(editor) {}
 
 	void PerformancePanel::on_render() {
 		const PerformanceStats &stats = Application::get_instance().get_performance_stats();

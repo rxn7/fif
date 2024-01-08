@@ -8,8 +8,7 @@
 
 namespace fifed {
 	SettingsPanel::SettingsPanel(Editor &editor, Grid &grid, FrameBuffer &frameBuffer, CameraController &cameraController) :
-		EditorPanel(editor), m_Grid(grid), m_FrameBuffer(frameBuffer), m_CameraController(cameraController) {
-	}
+		EditorPanel(editor), m_Grid(grid), m_FrameBuffer(frameBuffer), m_CameraController(cameraController) {}
 
 	void SettingsPanel::on_render() {
 		if(ImGui::TreeNode("Viewport")) {

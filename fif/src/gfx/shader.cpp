@@ -23,17 +23,11 @@ namespace fif::gfx {
 		}
 	}
 
-	Shader::~Shader() {
-		glDeleteProgram(m_ID);
-	}
+	Shader::~Shader() { glDeleteProgram(m_ID); }
 
-	void Shader::bind() const {
-		glUseProgram(m_ID);
-	}
+	void Shader::bind() const { glUseProgram(m_ID); }
 
-	void Shader::unbind() {
-		glUseProgram(0);
-	}
+	void Shader::unbind() { glUseProgram(0); }
 
 	u32 Shader::compile(const GLenum type, const char *src) {
 		FIF_ASSERT(type == GL_FRAGMENT_SHADER || type == GL_VERTEX_SHADER, "Only fragment and vertex shaders are supported");

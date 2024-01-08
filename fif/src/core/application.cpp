@@ -21,8 +21,7 @@ namespace fif::core {
 			mp_Scene = std::make_unique<Scene>();
 	}
 
-	Application::~Application() {
-	}
+	Application::~Application() {}
 
 	void Application::start() {
 		m_Status.running = true;

@@ -8,9 +8,7 @@ namespace fif::input {
 	constexpr i32 KEY_COUNT = GLFW_KEY_LAST + 1;
 
 	struct InputState final {
-		InputState() {
-			reset();
-		}
+		InputState() { reset(); }
 
 		InputState &operator=(const InputState &other) {
 			for(u32 i = 0; i < BUTTON_COUNT; ++i)
@@ -44,21 +42,13 @@ namespace fif::input {
 		vec2 get_mouse_position();
 		vec2 get_last_mouse_position();
 
-		inline bool is_key_held(i32 key) const {
-			return m_State.keys[key];
-		}
+		inline bool is_key_held(i32 key) const { return m_State.keys[key]; }
 
-		inline bool is_button_held(i32 btn) const {
-			return m_State.buttons[btn];
-		}
+		inline bool is_button_held(i32 btn) const { return m_State.buttons[btn]; }
 
-		inline bool is_button_just_pressed(i32 btn) const {
-			return m_State.buttons[btn] && !m_LastState.buttons[btn];
-		}
+		inline bool is_button_just_pressed(i32 btn) const { return m_State.buttons[btn] && !m_LastState.buttons[btn]; }
 
-		inline bool is_key_just_pressed(i32 key) const {
-			return m_State.keys[key] && !m_LastState.keys[key];
-		}
+		inline bool is_key_just_pressed(i32 key) const { return m_State.keys[key] && !m_LastState.keys[key]; }
 
 	private:
 		void end_frame();

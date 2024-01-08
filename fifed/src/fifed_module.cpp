@@ -33,21 +33,13 @@ namespace fifed {
 		ImGuiModule::get_instance().m_RenderHook.unhook(m_ImGuiRenderCallback);
 	}
 
-	void FifedModule::load_default_layout() {
-		ImGui::LoadIniSettingsFromDisk("default_layout.ini");
-	}
+	void FifedModule::load_default_layout() { ImGui::LoadIniSettingsFromDisk("default_layout.ini"); }
 
-	void FifedModule::on_project_open() {
-		open_editor();
-	}
+	void FifedModule::on_project_open() { open_editor(); }
 
-	void FifedModule::open_project_manager() {
-		mp_Stage = std::make_unique<ProjectManager>(*this);
-	}
+	void FifedModule::open_project_manager() { mp_Stage = std::make_unique<ProjectManager>(*this); }
 
-	void FifedModule::open_editor() {
-		mp_Stage = std::make_unique<Editor>(*this);
-	}
+	void FifedModule::open_editor() { mp_Stage = std::make_unique<Editor>(*this); }
 
 	void FifedModule::on_start() {
 		ImGuiModule::get_instance().m_RenderHook.hook(m_ImGuiRenderCallback);
@@ -65,23 +57,13 @@ namespace fifed {
 		mp_Stage = std::make_unique<ProjectManager>(*this);
 	}
 
-	void FifedModule::on_update() {
-		mp_Stage->update();
-	}
+	void FifedModule::on_update() { mp_Stage->update(); }
 
-	void FifedModule::pre_render() {
-		mp_Stage->pre_render();
-	}
+	void FifedModule::pre_render() { mp_Stage->pre_render(); }
 
-	void FifedModule::on_render() {
-		mp_Stage->render();
-	}
+	void FifedModule::on_render() { mp_Stage->render(); }
 
-	void FifedModule::on_render_imgui() {
-		mp_Stage->render_imgui();
-	}
+	void FifedModule::on_render_imgui() { mp_Stage->render_imgui(); }
 
-	void FifedModule::on_event(Event &event) {
-		mp_Stage->on_event(event);
-	}
+	void FifedModule::on_event(Event &event) { mp_Stage->on_event(event); }
 }// namespace fifed

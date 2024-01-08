@@ -5,21 +5,14 @@
 namespace fif::core {
 	class MouseMovedEvent final : public Event {
 	public:
-		MouseMovedEvent(const vec2 &position, const vec2 &delta) : m_Position(position), m_Delta(delta) {
-		}
+		MouseMovedEvent(const vec2 &position, const vec2 &delta) : m_Position(position), m_Delta(delta) {}
 		FIF_EVENT(EventType::MouseMoved);
 
-		EventCategory get_category() const override {
-			return EventCategory::Mouse;
-		}
+		EventCategory get_category() const override { return EventCategory::Mouse; }
 
-		inline const vec2 &get_position() const {
-			return m_Position;
-		}
+		inline const vec2 &get_position() const { return m_Position; }
 
-		inline const vec2 &get_delta() const {
-			return m_Delta;
-		}
+		inline const vec2 &get_delta() const { return m_Delta; }
 
 	protected:
 		vec2 m_Position;
@@ -28,16 +21,11 @@ namespace fif::core {
 
 	class MouseScrolledEvent final : public Event {
 	public:
-		MouseScrolledEvent(const vec2 &value) : m_Value(value) {
-		}
+		MouseScrolledEvent(const vec2 &value) : m_Value(value) {}
 		FIF_EVENT(EventType::MouseScrolled);
 
-		EventCategory get_category() const override {
-			return EventCategory::Mouse;
-		}
-		inline const vec2 &get_value() const {
-			return m_Value;
-		}
+		EventCategory get_category() const override { return EventCategory::Mouse; }
+		inline const vec2 &get_value() const { return m_Value; }
 
 	protected:
 		vec2 m_Value;
@@ -45,16 +33,11 @@ namespace fif::core {
 
 	class MouseButtonEvent : public Event {
 	public:
-		inline u32 get_button() const {
-			return m_Button;
-		}
-		EventCategory get_category() const override {
-			return EventCategory::Mouse;
-		}
+		inline u32 get_button() const { return m_Button; }
+		EventCategory get_category() const override { return EventCategory::Mouse; }
 
 	protected:
-		MouseButtonEvent(u32 btn) : m_Button(btn) {
-		}
+		MouseButtonEvent(u32 btn) : m_Button(btn) {}
 
 	protected:
 		u32 m_Button;
@@ -62,15 +45,13 @@ namespace fif::core {
 
 	class MouseButtonPressedEvent final : public MouseButtonEvent {
 	public:
-		MouseButtonPressedEvent(u32 btn) : MouseButtonEvent(btn) {
-		}
+		MouseButtonPressedEvent(u32 btn) : MouseButtonEvent(btn) {}
 		FIF_EVENT(EventType::MouseButtonPressed);
 	};
 
 	class MouseButtonReleasedEvent final : public MouseButtonEvent {
 	public:
-		MouseButtonReleasedEvent(u32 btn) : MouseButtonEvent(btn) {
-		}
+		MouseButtonReleasedEvent(u32 btn) : MouseButtonEvent(btn) {}
 		FIF_EVENT(EventType::MouseButtonReleased);
 	};
 }// namespace fif::core

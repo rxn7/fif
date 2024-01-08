@@ -37,9 +37,7 @@ namespace fif::gfx {
 		mp_SpriteBatch = setup_textured_batch<SpriteVertex>(SPRITE_VERTEX_BUFFER_LAYOUT, shaders::Sprite::VERTEX, shaders::Sprite::FRAGMENT);
 	}
 
-	void Renderer2D::start() {
-		m_BeginTime = core::Clock::now();
-	}
+	void Renderer2D::start() { m_BeginTime = core::Clock::now(); }
 
 	void Renderer2D::end() {
 		m_Camera.update();
@@ -50,8 +48,7 @@ namespace fif::gfx {
 		flush_batch(*mp_GlyphBatch);
 	}
 
-	void Renderer2D::start_ui() {
-	}
+	void Renderer2D::start_ui() {}
 
 	void Renderer2D::end_ui() {
 		m_UICamera.update();

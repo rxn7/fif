@@ -2,8 +2,7 @@
 #include "fif/gfx/gfx_module.hpp"
 
 namespace fif::gfx {
-	OrthoCamera::~OrthoCamera() {
-	}
+	OrthoCamera::~OrthoCamera() {}
 
 	void OrthoCamera::update() {
 		update_size();

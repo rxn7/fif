@@ -19,9 +19,7 @@ namespace fifed {
 		Logger::s_LoggerHook.hook(m_LoggerCallback);
 	}
 
-	ConsolePanel::~ConsolePanel() {
-		Logger::s_LoggerHook.unhook(m_LoggerCallback);
-	}
+	ConsolePanel::~ConsolePanel() { Logger::s_LoggerHook.unhook(m_LoggerCallback); }
 
 	void ConsolePanel::logger_callback(Logger::LogType logType, const char *msg) {
 		if(m_Output.size() >= MAX_LINES)

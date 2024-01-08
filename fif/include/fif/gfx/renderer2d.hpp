@@ -36,13 +36,9 @@ namespace fif::gfx {
 	public:
 		Renderer2D();
 
-		inline OrthoCamera &get_camera() {
-			return m_Camera;
-		}
+		inline OrthoCamera &get_camera() { return m_Camera; }
 
-		inline const Renderer2DStats &get_stats() const {
-			return m_Stats;
-		}
+		inline const Renderer2DStats &get_stats() const { return m_Stats; }
 
 		template<typename Batch> void flush_batch(Batch &batch) {
 			if(batch.is_empty())

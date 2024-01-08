@@ -38,9 +38,7 @@ namespace fif::lua_scripting {
 			m_Lua["Entity"]["require_" + nameSnakeCase] = &core::Entity::require_component<T>;
 		}
 
-		inline u32 get_lua_memory_usage() const {
-			return m_Lua.memory_used();
-		}
+		inline u32 get_lua_memory_usage() const { return m_Lua.memory_used(); }
 
 	private:
 		void on_start();

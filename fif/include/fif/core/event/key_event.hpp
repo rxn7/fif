@@ -5,20 +5,13 @@
 namespace fif::core {
 	class KeyEvent : public Event {
 	public:
-		KeyEvent(i32 keyCode, i32 modifierBits) : m_KeyCode(keyCode), m_ModifierBits(modifierBits) {
-		}
+		KeyEvent(i32 keyCode, i32 modifierBits) : m_KeyCode(keyCode), m_ModifierBits(modifierBits) {}
 
-		EventCategory get_category() const override {
-			return EventCategory::Keyboard;
-		}
+		EventCategory get_category() const override { return EventCategory::Keyboard; }
 
-		inline i32 get_key_code() const {
-			return m_KeyCode;
-		}
+		inline i32 get_key_code() const { return m_KeyCode; }
 
-		inline i32 get_modifier_bits() const {
-			return m_ModifierBits;
-		}
+		inline i32 get_modifier_bits() const { return m_ModifierBits; }
 
 	protected:
 		i32 m_KeyCode;

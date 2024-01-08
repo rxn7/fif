@@ -1,6 +1,6 @@
 ﻿---
 AccessModifierOffset: '-4'
-AllowShortFunctionsOnASingleLine: 'false'
+AllowShortFunctionsOnASingleLine: 'true'
 ColumnLimit: '200'
 CompactNamespaces: 'false'
 IndentWidth: '4'
@@ -31,5 +31,6 @@ UseTab: Always
 BreakConstructorInitializersBeforeComma: false
 BreakConstructorInitializers: AfterColon
 ConstructorInitializerAllOnOneLineOrOnePerLine: true
+PackConstructorInitializers: NextLine
 
 ...

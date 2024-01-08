@@ -1,9 +1,7 @@
 #include "fif/gfx/vertex_buffer_layout.hpp"
 
 namespace fif::gfx {
-	VertexBufferLayout::VertexBufferLayout(std::initializer_list<VertexBufferElement> elements) : m_Elements(elements) {
-		recalculate();
-	}
+	VertexBufferLayout::VertexBufferLayout(std::initializer_list<VertexBufferElement> elements) : m_Elements(elements) { recalculate(); }
 
 	void VertexBufferLayout::recalculate() {
 		u32 offset = 0;

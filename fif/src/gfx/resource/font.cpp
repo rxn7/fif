@@ -66,8 +66,7 @@ namespace fif::gfx {
 		core::Logger::info("Font %s has been loaded", path.c_str());
 	}
 
-	Font::~Font() {
-	}
+	Font::~Font() {}
 
 	// TODO: Width should be calculated independetly for each line !!!
 	vec2 Font::calculate_text_size(const std::string &text, const vec2 &size) const {

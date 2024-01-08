@@ -1,6 +1,5 @@
 #include "stage.hpp"
 
 namespace fifed {
-	Stage::Stage(FifedModule &fifedModule) : m_FifedModule(fifedModule) {
-	}
+	Stage::Stage(FifedModule &fifedModule) : m_FifedModule(fifedModule) {}
 }// namespace fifed

@@ -11,9 +11,7 @@ namespace fif::gfx {
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 
-	FrameBuffer::~FrameBuffer() {
-		glDeleteFramebuffers(1, &m_FboID);
-	}
+	FrameBuffer::~FrameBuffer() { glDeleteFramebuffers(1, &m_FboID); }
 
 	void FrameBuffer::start() {
 		bind();
@@ -22,9 +20,7 @@ namespace fif::gfx {
 		glClear(GL_COLOR_BUFFER_BIT);
 	}
 
-	void FrameBuffer::end() {
-		unbind();
-	}
+	void FrameBuffer::end() { unbind(); }
 
 	void FrameBuffer::set_size(const vec2 &size) {
 		m_Size = size;
@@ -40,11 +36,7 @@ namespace fif::gfx {
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 
-	void FrameBuffer::bind() {
-		glBindFramebuffer(GL_FRAMEBUFFER, m_FboID);
-	}
+	void FrameBuffer::bind() { glBindFramebuffer(GL_FRAMEBUFFER, m_FboID); }
 
-	void FrameBuffer::unbind() {
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	}
+	void FrameBuffer::unbind() { glBindFramebuffer(GL_FRAMEBUFFER, 0); }
 }// namespace fif::gfx

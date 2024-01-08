@@ -9,29 +9,20 @@
 namespace fif {
 	template<typename... A> class Callback final {
 	public:
-		Callback(std::function<void(A...)> func) : m_Hash(func.target_type().hash_code()), m_Bound(std::move(func)) {
-		}
+		Callback(std::function<void(A...)> func) : m_Hash(func.target_type().hash_code()), m_Bound(std::move(func)) {}
 
-		bool operator==(const Callback<A...> &cb) {
-			return m_Hash == cb.m_Hash;
-		}
+		bool operator==(const Callback<A...> &cb) { return m_Hash == cb.m_Hash; }
 
-		bool operator!=(const Callback<A...> &cb) {
-			return m_Hash != cb.m_Hash;
-		}
+		bool operator!=(const Callback<A...> &cb) { return m_Hash != cb.m_Hash; }
 
-		constexpr size_t hash_code() const {
-			return m_Hash;
-		}
+		constexpr size_t hash_code() const { return m_Hash; }
 
 		Callback<A...> &invoke(A... args) {
 			m_Bound(static_cast<A &&>(args)...);
 			return (*this);
 		}
 
-		void operator()(A... args) {
-			m_Bound(static_cast<A &&>(args)...);
-		}
+		void operator()(A... args) { m_Bound(static_cast<A &&>(args)...); }
 
 	protected:
 		size_t m_Hash;

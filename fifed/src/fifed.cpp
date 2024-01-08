@@ -21,8 +21,7 @@ static const ApplicationProperties APP_PROPS = {
 };
 
 namespace fifed {
-	Fifed::Fifed() : Application(APP_PROPS) {
-	}
+	Fifed::Fifed() : Application(APP_PROPS) {}
 
 	void Fifed::setup_modules() {
 		attach_module<LuaScriptingModule>();
@@ -33,6 +32,4 @@ namespace fifed {
 	}
 }// namespace fifed
 
-Application *get_application() {
-	return reinterpret_cast<Application *>(new fifed::Fifed());
-}
+Application *get_application() { return reinterpret_cast<Application *>(new fifed::Fifed()); }

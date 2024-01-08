@@ -5,9 +5,7 @@
 namespace fif::core {
 	class Timing final {
 	public:
-		static inline f32 get_delta_time() {
-			return s_DeltaTime;
-		}
+		static inline f32 get_delta_time() { return s_DeltaTime; }
 
 	private:
 		static void init();

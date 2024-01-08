@@ -17,9 +17,7 @@ namespace fif::lua_scripting {
 		core::Application::get_instance().m_StartHook.hook(m_StartCallback);
 	}
 
-	LuaScriptingModule::~LuaScriptingModule() {
-		core::Application::get_instance().m_StartHook.unhook(m_StartCallback);
-	}
+	LuaScriptingModule::~LuaScriptingModule() { core::Application::get_instance().m_StartHook.unhook(m_StartCallback); }
 
 	void LuaScriptingModule::on_start() {
 		mp_Application->add_update_system(lua_script_update_system);
