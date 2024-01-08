@@ -34,6 +34,7 @@ namespace fif::gfx {
 			emitter << YAML::Key << "Color" << YAML::Value << labelComponent.color;
 			emitter << YAML::Key << "HorizontalAlign" << YAML::Value << static_cast<int>(labelComponent.horizontalAlign);
 			emitter << YAML::Key << "VerticalAlign" << YAML::Value << static_cast<int>(labelComponent.verticalAlign);
+			emitter << YAML::Key << "FontUUID" << YAML::Value << (labelComponent.p_font ? static_cast<u64>(labelComponent.p_font->get_uuid()) : 0u);
 		});
 	}
 
@@ -44,7 +45,6 @@ namespace fif::gfx {
 			spriteComponent.tint = spriteComponentNode["Tint"].as<Color>();
 
 			const core::UUID textureUUID = spriteComponentNode["TextureUUID"].as<u64>();
-			core::Logger::debug("%llu", textureUUID.get_value());
 			if(textureUUID != 0u)
 				spriteComponent.p_texture = core::Project::get_resource_manager().get_resource<Texture>(textureUUID);
 		});
@@ -68,6 +68,9 @@ namespace fif::gfx {
 			labelComponent.color = labelComponentNode["Color"].as<Color>();
 			labelComponent.horizontalAlign = static_cast<HorizontalTextAlign>(labelComponentNode["HorizontalAlign"].as<int>());
 			labelComponent.verticalAlign = static_cast<VerticalTextAlign>(labelComponentNode["VerticalAlign"].as<int>());
+			core::UUID uuid = labelComponentNode["FontUUID"].as<u64>();
+			if(uuid != 0u)
+				labelComponent.p_font = core::Project::get_resource_manager().get_resource<Font>(uuid);
 		});
 	}
 }// namespace fif::gfx

@@ -11,9 +11,7 @@ namespace fif::gfx {
 		create(width, height, internalFormat, dataFormat, filter, wrap, data);
 	}
 
-	Texture::Texture(const std::filesystem::path &path, GLenum filter, GLenum wrap) {
-		m_Path = path;
-
+	Texture::Texture(const std::filesystem::path &path, GLenum filter, GLenum wrap) : core::Resource(path) {
 		i32 width, height, channels;
 		stbi_set_flip_vertically_on_load(true);
 		stbi_uc *data = stbi_load(path.string().c_str(), &width, &height, &channels, 0);

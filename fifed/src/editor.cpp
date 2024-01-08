@@ -80,7 +80,7 @@ namespace fifed {
 
 		SceneSerializer serializer(m_FifedModule.get_application()->get_scene());
 		serializer.serialize(m_CurrentScenePath);
-		Logger::info("Scene saved to: %s", m_CurrentScenePath.c_str());
+		Logger::debug("Scene saved to: %s", m_CurrentScenePath.c_str());
 
 		std::filesystem::path &startingScenePath = Project::get_config().startingScenePath;
 
@@ -101,7 +101,7 @@ namespace fifed {
 		SceneSerializer serializer(m_FifedModule.get_application()->get_scene());
 		serializer.deserialize(path);
 
-		Logger::info("Scene loaded: %s", path.c_str());
+		Logger::debug("Scene loaded: %s", path.c_str());
 	}
 
 	void Editor::open_scene_dialog() {

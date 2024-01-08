@@ -17,9 +17,11 @@ namespace fif::gfx {
 		FIF_MODULE_INIT();
 		FIF_ASSERT(FT_Init_FreeType(&m_FreeType) == 0, "Failed to init freetype");
 
+		// Texture loader
 		core::ResourceManager::add_loader_func(
 			Texture::get_type_static(), [](const std::filesystem::path &path) -> std::shared_ptr<core::Resource> { return std::dynamic_pointer_cast<core::Resource>(std::make_shared<Texture>(path)); });
 
+		// Font loader
 		core::ResourceManager::add_loader_func(
 			Font::get_type_static(), [](const std::filesystem::path &path) -> std::shared_ptr<core::Resource> { return std::dynamic_pointer_cast<core::Resource>(std::make_shared<Font>(path)); });
 

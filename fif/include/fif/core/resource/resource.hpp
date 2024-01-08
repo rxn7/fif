@@ -29,7 +29,9 @@ namespace fif::core {
 		virtual inline constexpr std::string get_type() const = 0;
 
 	protected:
-		Resource() = default;
+		Resource() {
+		}
+		Resource(const std::filesystem::path &path);
 
 	protected:
 		bool m_IsEditorResource = false;

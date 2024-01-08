@@ -10,7 +10,7 @@ namespace fif::core {
 
 	void SceneSerializer::serialize(const std::filesystem::path &path) {
 		const std::filesystem::path resourcePath = Project::get_resource_path(path);
-		Logger::info("Serializing scene: %s", path.c_str());
+		Logger::debug("Serializing scene: %s", path.c_str());
 
 		YAML::Emitter yaml;
 		yaml << YAML::BeginMap;
@@ -36,7 +36,7 @@ namespace fif::core {
 
 	void SceneSerializer::deserialize(const std::filesystem::path &path) {
 		const std::filesystem::path resourcePath = Project::get_resource_path(path);
-		Logger::info("Deserializing scene: %s", path.c_str());
+		Logger::debug("Deserializing scene: %s", path.c_str());
 
 		m_Scene.clear();
 

@@ -1,6 +1,8 @@
 #include "fif/core/resource/resource_manager.hpp"
 #include "fif/core/resource/resource.hpp"
 
+// TODO: Somehow add metadata to the resources. (i.e. font size, texture filter)
+
 namespace fif::core {
 	void ResourceManager::serialize(YAML::Emitter &yaml) const {
 		yaml << YAML::Key << "Resources" << YAML::Value << YAML::BeginSeq;

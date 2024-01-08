@@ -1,3 +1,13 @@
 Config:
   Name: Text Rendering Test
   StartingScene: assets/scenes/scene.yaml
+Resources:
+  - UUID: 3168012614176207954
+    Path: assets/fonts/Novem.ttf
+    Type: Font
+  - UUID: 1255678113681594063
+    Path: assets/fonts/CrayonLibre.ttf
+    Type: Font
+  - UUID: 7374029712310856549
+    Path: assets/fonts/PublicPixel.ttf
+    Type: Font

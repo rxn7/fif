@@ -22,5 +22,7 @@ return {
             self.label.text = self.label.text .. random_char
             self.label.color = Color.random()
         end
+
+        Logger.info(self.label.text)
     end
 }
