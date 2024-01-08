@@ -39,12 +39,12 @@ namespace fif::gfx {
 			return m_Size;
 		}
 
-		static inline const std::shared_ptr<Font> &get_default() {
-			return sp_DefaultFont;
+		static inline const Font &get_default() {
+			return *sp_DefaultFont;
 		}
 
 	private:
-		inline static std::shared_ptr<Font> sp_DefaultFont;
+		inline static std::unique_ptr<Font> sp_DefaultFont;
 		FT_Face m_Face;
 
 		std::shared_ptr<Texture> mp_Texture;

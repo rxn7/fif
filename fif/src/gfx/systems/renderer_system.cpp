@@ -32,7 +32,7 @@ namespace fif::gfx {
 
 		registry.view<LabelComponent, core::TransformComponent>().each([&]([[maybe_unused]] core::EntityID entity, LabelComponent &label, core::TransformComponent &trans) {
 			// TODO: Add scale
-			renderer.render_text(label.p_font ? label.p_font : Font::get_default(), trans.position, trans.scale, label.fontSize, label.text, label.color, label.verticalAlign, label.horizontalAlign);
+			renderer.render_text(label.p_font ? *label.p_font : Font::get_default(), trans.position, trans.scale, label.fontSize, label.text, label.color, label.verticalAlign, label.horizontalAlign);
 		});
 	}
 }// namespace fif::gfx

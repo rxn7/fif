@@ -17,9 +17,6 @@ Resources:
   - UUID: 1550398899997558112
     Path: assets/textures/ai5.jpg
     Type: Texture
-  - UUID: 15851029309917689623
-    Path: assets/textures/preview16-257501127.jpg
-    Type: Texture
   - UUID: 12176293295089256961
     Path: assets/textures/logo.png
     Type: Texture

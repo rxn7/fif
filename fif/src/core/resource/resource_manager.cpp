@@ -1,4 +1,5 @@
 #include "fif/core/resource/resource_manager.hpp"
+#include "fif/core/project.hpp"
 #include "fif/core/resource/resource.hpp"
 
 // TODO: Somehow add metadata to the resources. (i.e. font size, texture filter)
@@ -23,16 +24,21 @@ namespace fif::core {
 			return;
 
 		for(const YAML::Node &resourceNode : projectResourcesNode) {
+			const std::filesystem::path resourcePath = resourceNode["Path"].as<std::string>();
 			const std::string resourceType = resourceNode["Type"].as<std::string>();
+
+			if(!std::filesystem::exists(Project::get_resource_path(resourcePath))) {
+				Logger::error("Resource '%s' of type '%s' doesn't exist", resourcePath.string().c_str(), resourceType.c_str());
+				continue;
+			}
 
 			const ResourceLoaderFunc loader = get_loader_func(resourceType);
 			if(!loader)
 				continue;
 
-			const std::filesystem::path resourcePath = resourceNode["Path"].as<std::string>();
-			const UUID resourceUuid = resourceNode["UUID"].as<u64>();
-
 			std::shared_ptr<Resource> loadedResource = loader(resourcePath);
+
+			const UUID resourceUuid = resourceNode["UUID"].as<u64>();
 			loadedResource->m_UUID = resourceUuid;
 
 			m_Resources.insert({resourceUuid, loadedResource});

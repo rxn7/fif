@@ -25,7 +25,7 @@ namespace fif::gfx {
 		core::ResourceManager::add_loader_func(
 			Font::get_type_static(), [](const std::filesystem::path &path) -> std::shared_ptr<core::Resource> { return std::dynamic_pointer_cast<core::Resource>(std::make_shared<Font>(path)); });
 
-		Font::sp_DefaultFont = std::make_shared<Font>(defaultFontPath, 64, 512);
+		Font::sp_DefaultFont = std::make_unique<Font>(defaultFontPath, 32, 512);
 	}
 
 	GfxModule::~GfxModule() {
