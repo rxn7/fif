@@ -69,7 +69,11 @@ namespace fifed {
 	}
 
 	void Editor::save_project() {
-		// TODO: Confirmation prompt when in play mode
+		if(m_PlayMode) {
+			if(!tinyfd_messageBox("Are you sure?", "Do you want to save? You are in play mode!", "yesno", "question", 0)) {
+				return;
+			}
+		}
 
 		if(m_CurrentScenePath.empty()) {
 			const char *filter = "*.yaml";
@@ -120,8 +124,6 @@ namespace fifed {
 	}
 
 	void Editor::set_play_mode(const bool playMode) {
-		m_PlayMode = playMode;
-
 		// Load the scene if play mode has ended
 		if(!playMode) {
 			if(!m_CurrentScenePath.empty())
@@ -131,6 +133,7 @@ namespace fifed {
 			save_project();// Save the scene if play mode has been entered
 
 		m_FifedModule.get_application()->set_pause(!playMode);
+		m_PlayMode = playMode;
 	}
 
 	void Editor::follow_selected_entity() {
