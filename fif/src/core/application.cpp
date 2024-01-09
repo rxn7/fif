@@ -35,14 +35,13 @@ namespace fif::core {
 		while(m_Status.running)
 			game_loop();
 
+		Project::get_active().reset();
+		mp_Scene.reset();
+
 		for(std::unique_ptr<Module> &module : m_Modules) {
 			Logger::debug("Destroying module '%s'", module->get_name().data());
 			module.reset();
 		}
-
-		Project::get_active().reset();
-
-		mp_Window->end_frame();
 	}
 
 	void Application::game_loop() {

@@ -13,7 +13,7 @@ namespace fif::core {
 		for(const auto &entry : m_Resources) {
 			yaml << YAML::BeginMap;
 			yaml << YAML::Key << "UUID" << entry.second->get_uuid();
-			yaml << YAML::Key << "Path" << entry.second->get_path();
+			yaml << YAML::Key << "Path" << entry.second->get_path().string();
 			yaml << YAML::Key << "Type" << entry.second->get_type().c_str();
 			yaml << YAML::EndMap;
 		}

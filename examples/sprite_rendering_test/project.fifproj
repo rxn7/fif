@@ -2,21 +2,21 @@ Config:
   Name: Sprite Rendering Test
   StartingScene: assets/scenes/scene.yaml
 Resources:
-  - UUID: 526609366054991609
-    Path: assets/textures/ai4.jpg
-    Type: Texture
-  - UUID: 14785093585399857093
-    Path: assets/textures/ai3.jpg
-    Type: Texture
-  - UUID: 16667367772186671693
-    Path: assets/textures/ai2.jpg
-    Type: Texture
-  - UUID: 4259663049351221275
-    Path: assets/textures/ai.jpg
+  - UUID: 12176293295089256961
+    Path: assets/textures/logo.png
     Type: Texture
   - UUID: 1550398899997558112
     Path: assets/textures/ai5.jpg
     Type: Texture
-  - UUID: 12176293295089256961
-    Path: assets/textures/logo.png
+  - UUID: 4259663049351221275
+    Path: assets/textures/ai.jpg
+    Type: Texture
+  - UUID: 16667367772186671693
+    Path: assets/textures/ai2.jpg
+    Type: Texture
+  - UUID: 14785093585399857093
+    Path: assets/textures/ai3.jpg
+    Type: Texture
+  - UUID: 526609366054991609
+    Path: assets/textures/ai4.jpg
     Type: Texture

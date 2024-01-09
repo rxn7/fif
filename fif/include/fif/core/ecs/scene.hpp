@@ -7,9 +7,10 @@
 namespace fif::core {
 	typedef entt::entity EntityID;
 
-	// TODO: Inherit resource probably?
 	class Scene final {
 	public:
+		~Scene();
+
 		EntityID create_entity(const char *name = "Entity");
 		EntityID create_entity_with_uuid(UUID uuid, const char *name = "Entity");
 
