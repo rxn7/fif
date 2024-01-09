@@ -51,8 +51,8 @@ namespace fif::gfx {
 
 		flush_batch(*mp_QuadBatch);
 		flush_batch(*mp_CircleBatch);
-		flush_batch(*mp_SpriteBatch);
 		flush_batch(*mp_GlyphBatch);
+		flush_batch(*mp_SpriteBatch);
 
 		m_Stats = m_TempStats;
 		m_Stats.textures = m_TextureIdx;

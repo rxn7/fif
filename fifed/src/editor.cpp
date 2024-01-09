@@ -160,8 +160,9 @@ namespace fifed {
 	}
 
 	void Editor::on_event(Event &event) {
+		m_Gizmo.on_event(event);
+
 		if(mp_ViewportPanel->is_hovered()) {
-			m_Gizmo.on_event(event);
 			m_CameraController.on_event(event);
 		}
 

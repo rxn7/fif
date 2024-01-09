@@ -30,6 +30,7 @@ namespace fifed {
 		inline bool is_play_mode() const { return m_PlayMode; }
 		inline void toggle_play_mode() { set_play_mode(!m_PlayMode); }
 		inline FrameBuffer &get_frame_buffer() { return m_FrameBuffer; }
+		inline ViewportPanel &get_viewport_panel() { return *mp_ViewportPanel; }
 		inline Gizmo &get_gizmo() { return m_Gizmo; }
 
 	private:

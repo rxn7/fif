@@ -1,5 +1,6 @@
 #include "gizmo.hpp"
 #include "editor.hpp"
+#include "panels/viewport/viewport_panel.hpp"
 
 #include <fif/core/event/mouse_event.hpp>
 
@@ -123,6 +124,9 @@ namespace fifed {
 		});
 
 		EventDispatcher::dispatch<MouseButtonPressedEvent>(event, [&](MouseButtonPressedEvent &event) {
+			if(!m_Editor.get_viewport_panel().is_hovered())
+				return false;
+
 			if(!mp_HoveredPart || event.get_button() != GLFW_MOUSE_BUTTON_LEFT)
 				return false;
 
