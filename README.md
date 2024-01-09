@@ -3,6 +3,9 @@
   <img src="docs/logo.png" width="256">
 </p>
 Fif is a 2D game engine with an editor (fifed).
+<br>
+<br>
+<a href="https://trello.com/b/LZ8CY4sI/fif">Trello board</a>
 
 # Table of contents
 - [Features](#features)  
