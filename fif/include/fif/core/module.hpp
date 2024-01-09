@@ -7,7 +7,7 @@ namespace fif::core {
 
 	class Module {
 	public:
-		virtual ~Module() {}
+		virtual ~Module() = default;
 
 		virtual constexpr std::string_view get_name() const = 0;
 
@@ -33,4 +33,5 @@ namespace fif::core {
 
 #define FIF_MODULE_INIT()                                                                                                                                                                              \
 	FIF_ASSERT(sp_Instance == nullptr, "There can only one instance of this module");                                                                                                                  \
-	sp_Instance = this;
+	sp_Instance = this;                                                                                                                                                                                \
+	fif::core::Logger::debug("Module '%s' started", get_name().data());

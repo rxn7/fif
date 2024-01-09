@@ -45,8 +45,6 @@ namespace fifed {
 		m_XAxisPart({.rotation = glm::radians(-90.0f), .offset = {ARROW_SIZE.y * 0.5f, 0}, .size = ARROW_SIZE, .color = X_AXIS_COLOR, .hoverColor = X_AXIS_COLOR_HOVERED}),
 		m_YAxisPart({.rotation = glm::radians(180.0f), .offset = {0, ARROW_SIZE.y * 0.5f}, .size = ARROW_SIZE, .color = Y_AXIS_COLOR, .hoverColor = Y_AXIS_COLOR_HOVERED}) {}
 
-	Gizmo::~Gizmo() { Logger::debug("F: %l", mp_Texture.use_count()); }
-
 	void Gizmo::render() {
 		if(!m_Editor.m_SelectedEntity) {
 			return;

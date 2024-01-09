@@ -20,6 +20,7 @@ namespace fif::core {
 		if(appProperties.createDefaultScene)
 			mp_Scene = std::make_unique<Scene>();
 	}
+
 	Application::~Application() {}
 
 	void Application::start() {
@@ -28,11 +29,17 @@ namespace fif::core {
 		setup_modules();
 
 		SceneSerializer::add_serializer<CoreEntitySerializer>();
-
 		m_StartHook.invoke();
 
 		while(m_Status.running)
 			game_loop();
+
+		for(std::unique_ptr<Module> &module : m_Modules) {
+			Logger::debug("Destroying module '%s'", module->get_name().data());
+			module.reset();
+		}
+
+		mp_Window->end_frame();
 	}
 
 	void Application::game_loop() {

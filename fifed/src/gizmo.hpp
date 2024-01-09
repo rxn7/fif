@@ -17,7 +17,6 @@ namespace fifed {
 	class Gizmo {
 	public:
 		Gizmo(Editor &editor);
-		~Gizmo();
 		void render();
 		void on_event(Event &event);
 
@@ -37,7 +36,7 @@ namespace fifed {
 		GizmoPart m_XAxisPart;
 		GizmoPart m_YAxisPart;
 
-		GizmoPart *mp_HoveredPart;
-		GizmoPart *mp_ActivePart;
+		GizmoPart *mp_HoveredPart = nullptr;
+		GizmoPart *mp_ActivePart = nullptr;
 	};
 }// namespace fifed
