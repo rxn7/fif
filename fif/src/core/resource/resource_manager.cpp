@@ -5,6 +5,8 @@
 // TODO: Somehow add metadata to the resources. (i.e. font size, texture filter)
 
 namespace fif::core {
+	ResourceManager::~ResourceManager() { Logger::debug("ResourceManager::dtor"); }
+
 	void ResourceManager::serialize(YAML::Emitter &yaml) const {
 		yaml << YAML::Key << "Resources" << YAML::Value << YAML::BeginSeq;
 
@@ -45,6 +47,11 @@ namespace fif::core {
 
 			Logger::debug("Resource '%s' of type '%s' has been loaded", resourcePath.string().c_str(), resourceType.c_str());
 		}
+	}
+
+	void ResourceManager::clear() {
+		m_Resources.clear();
+		Logger::debug("ResourceManager cleared");
 	}
 
 	void ResourceManager::add_loader_func(const std::string &type, const ResourceLoaderFunc loader) {

@@ -11,6 +11,7 @@ namespace fif::core {
 
 	class ResourceManager final {
 	public:
+		~ResourceManager();
 		void serialize(YAML::Emitter &yaml) const;
 		void deserialize(const YAML::Node &projectResourcesNode);
 
@@ -51,6 +52,8 @@ namespace fif::core {
 
 			return std::dynamic_pointer_cast<T>(it->second);
 		}
+
+		void clear();
 
 		static void add_loader_func(const std::string &type, const ResourceLoaderFunc loader);
 		ResourceLoaderFunc get_loader_func(const std::string &type);

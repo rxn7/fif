@@ -2,6 +2,8 @@
 #include "fif/core/serialization/project_serializer.hpp"
 
 namespace fif::core {
+	Project::~Project() { Logger::debug("Project::dtor"); }
+
 	void Project::create(const std::string &name, const std::filesystem::path &projectPath) {
 		Application::get_instance().get_scene().clear();
 

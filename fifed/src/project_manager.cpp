@@ -9,7 +9,10 @@
 namespace fifed {
 	static const std::filesystem::path s_ProjectListPath = "./recent_projects.txt";
 
-	ProjectManager::ProjectManager(FifedModule &fifedModule) : Stage(fifedModule) { load_project_list(); }
+	ProjectManager::ProjectManager(FifedModule &fifedModule) : Stage(fifedModule) {
+		Project::s_ActiveProject.reset();
+		load_project_list();
+	}
 
 	void ProjectManager::update() {
 		if(m_ProjectLoaded) {

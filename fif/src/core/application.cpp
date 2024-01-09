@@ -3,6 +3,7 @@
 #include "fif/core/application.hpp"
 #include "fif/core/event/event_dispatcher.hpp"
 #include "fif/core/event/window_event.hpp"
+#include "fif/core/project.hpp"
 #include "fif/core/serialization/scene_serializer.hpp"
 #include "fif/core/util/logger.hpp"
 
@@ -38,6 +39,8 @@ namespace fif::core {
 			Logger::debug("Destroying module '%s'", module->get_name().data());
 			module.reset();
 		}
+
+		Project::get_active().reset();
 
 		mp_Window->end_frame();
 	}

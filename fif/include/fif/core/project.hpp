@@ -11,6 +11,8 @@ namespace fif::core {
 
 	class Project final {
 	public:
+		~Project();
+
 		static void create(const std::string &name, const std::filesystem::path &projectPath);
 		static bool load(const std::filesystem::path &rootDirectory);
 		static void save();
@@ -41,13 +43,14 @@ namespace fif::core {
 
 		static inline ResourceManager &get_resource_manager() { return s_ActiveProject->m_ResourceManager; }
 
+	public:
+		inline static std::shared_ptr<Project> s_ActiveProject;
+
 	private:
 		ProjectConfig m_Config;
 		ResourceManager m_ResourceManager;
 		std::filesystem::path m_RootDir;
 		std::string m_AbsolutePath;
-
-		inline static std::shared_ptr<Project> s_ActiveProject;
 
 		friend class ProjectSerializer;
 	};
