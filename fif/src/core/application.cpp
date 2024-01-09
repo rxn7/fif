@@ -20,7 +20,6 @@ namespace fif::core {
 		if(appProperties.createDefaultScene)
 			mp_Scene = std::make_unique<Scene>();
 	}
-
 	Application::~Application() {}
 
 	void Application::start() {
@@ -34,8 +33,6 @@ namespace fif::core {
 
 		while(m_Status.running)
 			game_loop();
-
-		Logger::info("Game loop finished");
 	}
 
 	void Application::game_loop() {
@@ -56,8 +53,6 @@ namespace fif::core {
 		if(!m_Status.running)
 			return;
 
-		render();
-
 		m_EndFrameHook.invoke();
 
 		mp_Window->end_frame();
@@ -69,15 +64,6 @@ namespace fif::core {
 
 		for(auto &updateSystem : m_UpdateSystems)
 			updateSystem(m_Status, mp_Scene->get_registry(), Timing::get_delta_time());
-	}
-
-	void Application::render() {
-		m_PreRenderHook.invoke();
-
-		for(auto &renderSystem : m_RenderSystems)
-			renderSystem(m_Status, mp_Scene->get_registry());
-
-		m_RenderHook.invoke();
 	}
 
 	void Application::on_event(Event &event) {

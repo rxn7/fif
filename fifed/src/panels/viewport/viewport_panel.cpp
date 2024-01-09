@@ -2,6 +2,7 @@
 #include "application.hpp"
 #include "editor.hpp"
 #include "fifed_module.hpp"
+#include "imgui.h"
 
 namespace fifed {
 	ViewportPanel::ViewportPanel(Editor &editor, FrameBuffer &frameBuffer) : EditorPanel(editor), m_FrameBuffer(frameBuffer) {}
@@ -14,6 +15,21 @@ namespace fifed {
 		const bool isPaused = app->get_status().paused;
 		const f32 windowWidth = ImGui::GetWindowSize().x;
 
+		if(m_Editor.get_gizmo().m_Mode == GizmoMode::Translate) {
+			ImGui::TextDisabled("Translate");
+		} else if(ImGui::SmallButton("Translate")) {
+			m_Editor.get_gizmo().m_Mode = GizmoMode::Translate;
+		}
+
+		ImGui::SameLine();
+
+		if(m_Editor.get_gizmo().m_Mode == GizmoMode::Scale) {
+			ImGui::TextDisabled("Scale");
+		} else if(ImGui::SmallButton("Scale")) {
+			m_Editor.get_gizmo().m_Mode = GizmoMode::Scale;
+		}
+
+		ImGui::SameLine();
 		ImGui::SetCursorPosX((windowWidth - 32.0f) * 0.5f);
 
 		if(isPlayMode) {
@@ -22,25 +38,29 @@ namespace fifed {
 
 			ImGui::SameLine();
 
-			if(ImGui::Button("Stop"))
+			if(ImGui::SmallButton("Stop"))
 				m_Editor.set_play_mode(false);
 		} else {
-			if(ImGui::Button("Start"))
+			if(ImGui::SmallButton("Start"))
 				m_Editor.set_play_mode(true);
 		}
 
 		ImGui::BeginChild("FrameBuffer");
 
+		static vec2 lastPos = {-1, -1};
+		static vec2 lastSize = {-1, -1};
 		const vec2 pos = ImGui::GetWindowPos();
 		const vec2 size = ImGui::GetWindowSize();
 
-		if(m_LastSize != size || m_Resize) {
+		if(m_Resize || lastPos != pos || lastSize != size) {
 			m_Resize = false;
 
 			m_FrameBuffer.set_size(size);
 			GfxModule::get_instance().set_viewport(size, pos);
 		}
-		m_LastSize = size;
+
+		lastSize = size;
+		lastPos = pos;
 
 		ImGui::Image(reinterpret_cast<ImTextureID>(m_FrameBuffer.get_texture().get_id()), size, ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f));
 		m_Hovered = ImGui::IsItemHovered();

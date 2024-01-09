@@ -10,7 +10,7 @@ namespace fifed {
 
 		if(!isInRoot) {
 			const std::string relativePath = std::filesystem::relative(m_CurrentDirectory, m_RootDirectory).string();
-			if(ImGui::Button(("<-- " + relativePath + "###resourceBrowserGoBack").c_str())) {
+			if(ImGui::ArrowButton(relativePath.c_str(), ImGuiDir_Left)) {
 				current_directory_go_back();
 			}
 		}

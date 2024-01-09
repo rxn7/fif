@@ -4,7 +4,7 @@ namespace fifed {
 	class CameraController final {
 	public:
 		void update();
-		void on_event(Event &event, bool viewportHovered);
+		void on_event(Event &event);
 
 	private:
 		vec2 m_StartMousePositionLocal;

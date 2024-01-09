@@ -28,6 +28,7 @@ namespace fifed {
 		void on_update();
 		void pre_render();
 		void on_render();
+		void post_render();
 		void on_render_imgui();
 		void on_event(Event &event);
 
@@ -36,6 +37,7 @@ namespace fifed {
 		Callback<> m_UpdateCallback;
 		Callback<> m_PreRenderCallback;
 		Callback<> m_RenderCallback;
+		Callback<> m_PostRenderCallback;
 		Callback<Event &> m_EventCallback;
 		Callback<> m_ImGuiRenderCallback;
 

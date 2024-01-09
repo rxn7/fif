@@ -11,11 +11,11 @@ namespace fif::gfx::shaders {
 		layout(location = 0) in vec2 a_Position;
 		layout(location = 1) in vec2 a_UV;
 		layout(location = 2) in vec4 a_Color;
-		layout(location = 3) in float a_TextureSlot;
+		layout(location = 3) in int a_TextureSlot;
 
 		out vec2 v_UV;
 		out vec4 v_Color;
-		out float v_TextureSlot;
+		flat out int v_TextureSlot;
 
 		void main() {
 			v_UV = a_UV;
@@ -28,14 +28,14 @@ namespace fif::gfx::shaders {
 			R"(
 		in vec4 v_Color;
 		in vec2 v_UV;
-		in float v_TextureSlot;
+		flat in int v_TextureSlot;
 
 		out vec4 f_Color;
 
 		uniform sampler2D u_Textures[$textureSlotCount];
 
 		void main() {
-			switch(int(v_TextureSlot))  {
+			switch(v_TextureSlot)  {
 				$textureSlotSwitch
 			}
 			f_Color *= v_Color;

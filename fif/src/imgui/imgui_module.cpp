@@ -12,11 +12,11 @@
 
 namespace fif::imgui {
 	ImGuiModule::ImGuiModule() :
-		m_StartCallback(std::bind(&ImGuiModule::on_start, this)), m_RenderCallback(std::bind(&ImGuiModule::on_render, this)), m_EventCallback(std::bind(&ImGuiModule::on_event, this, std::placeholders::_1)) {
+		m_StartCallback(std::bind(&ImGuiModule::on_start, this)), m_PostRenderCallback(std::bind(&ImGuiModule::post_render, this)), m_EventCallback(std::bind(&ImGuiModule::on_event, this, std::placeholders::_1)) {
 		FIF_MODULE_INIT();
 
 		core::Application::get_instance().m_StartHook.hook(m_StartCallback);
-		core::Application::get_instance().m_RenderHook.hook(m_RenderCallback);
+		core::Application::get_instance().m_PostRenderHook.hook(m_PostRenderCallback);
 		core::Application::get_instance().m_EventHook.hook(m_EventCallback);
 
 		IMGUI_CHECKVERSION();
@@ -25,7 +25,7 @@ namespace fif::imgui {
 
 	ImGuiModule::~ImGuiModule() {
 		mp_Application->m_StartHook.unhook(m_StartCallback);
-		mp_Application->m_RenderHook.unhook(m_RenderCallback);
+		mp_Application->m_EndFrameHook.unhook(m_PostRenderCallback);
 		mp_Application->m_EventHook.unhook(m_EventCallback);
 
 		ImGui_ImplOpenGL3_Shutdown();
@@ -43,7 +43,7 @@ namespace fif::imgui {
 		apply_default_theme();
 	}
 
-	void ImGuiModule::on_render() {
+	void ImGuiModule::post_render() {
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();

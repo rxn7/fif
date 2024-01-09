@@ -10,7 +10,7 @@ namespace fif::gfx {
 		Texture();
 
 		Texture(u16 width, u16 height, const GLenum internalFormat = GL_RGBA8, const GLenum dataFormat = GL_RGBA, const GLenum filter = GL_LINEAR, const GLenum wrap = GL_CLAMP_TO_EDGE, void *data = nullptr);
-		Texture(const std::filesystem::path &path, GLenum filter = GL_LINEAR, GLenum wrap = GL_CLAMP_TO_EDGE);
+		Texture(const std::filesystem::path &path, const bool isEditorResource = true, GLenum filter = GL_LINEAR, GLenum wrap = GL_CLAMP_TO_EDGE);
 
 		~Texture();
 
@@ -24,7 +24,7 @@ namespace fif::gfx {
 
 		inline bool operator==(const Texture &other) const { return other.get_id() == get_id(); }
 
-		void bind_on_slot(const u32 slot) const;
+		void bind_on_slot(const u16 slot) const;
 		void create(const u16 width, const u16 height, const GLenum internalFormat, const GLenum dataFormat, const GLenum filter, const GLenum wrap, void *data);
 
 	public:

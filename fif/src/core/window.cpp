@@ -39,6 +39,7 @@ namespace fif::core {
 
 	Window::~Window() {
 		FIF_ASSERT(mp_GlfwWindow != nullptr, "Glfw window is not created!");
+		Logger::debug("GLFW destroyed");
 		glfwDestroyWindow(mp_GlfwWindow);
 		glfwTerminate();
 	}

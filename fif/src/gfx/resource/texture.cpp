@@ -11,7 +11,7 @@ namespace fif::gfx {
 		create(width, height, internalFormat, dataFormat, filter, wrap, data);
 	}
 
-	Texture::Texture(const std::filesystem::path &path, GLenum filter, GLenum wrap) : core::Resource(path) {
+	Texture::Texture(const std::filesystem::path &path, const bool isEditorResource, GLenum filter, GLenum wrap) : core::Resource(path, isEditorResource) {
 		i32 width, height, channels;
 		stbi_set_flip_vertically_on_load(true);
 		stbi_uc *data = stbi_load(get_path_relative().string().c_str(), &width, &height, &channels, 0);
@@ -61,7 +61,7 @@ namespace fif::gfx {
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
-	void Texture::bind_on_slot(const u32 slot) const {
+	void Texture::bind_on_slot(const u16 slot) const {
 		glActiveTexture(GL_TEXTURE0 + slot);
 		glBindTexture(GL_TEXTURE_2D, m_ID);
 	}

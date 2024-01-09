@@ -2,7 +2,7 @@
 #include "fifed_module.hpp"
 
 namespace fifed {
-	IconManager::IconManager(const std::filesystem::path &path) : m_Texture(path, GL_NEAREST) {
+	IconManager::IconManager(const std::filesystem::path &path) : m_Texture(path, true, GL_NEAREST) {
 		m_IconInfos.emplace(IconType::GITHUB, IconInfo{{0.0f, 0.0f}, {230.0f, 225.0f}});
 		m_IconInfos.emplace(IconType::LOGO, IconInfo{{0.0f, 225.0f}, {48.0f, 48.0f}});
 		m_IconInfos.emplace(IconType::PAUSE, IconInfo{{48.0f, 225.0f}, {32.0f, 32.0f}});

@@ -9,13 +9,13 @@ namespace fif::gfx {
 		vec2 position;
 		vec2 uv;
 		Color color;
-		f32 textureSlot;
+		i32 textureSlot;
 	};
 
 	inline const VertexBufferLayout SPRITE_VERTEX_BUFFER_LAYOUT = {
-		{GlslDataType::Float2, "a_Position", false},
-		{GlslDataType::Float2, "a_UV", false},
-		{GlslDataType::UByte4, "a_Color", true},
-		{GlslDataType::Float, "a_TextureSlot", false},
+		{GlslDataType::Float2, false, true},// a_Position
+		{GlslDataType::Float2, false, true},// a_UV
+		{GlslDataType::UByte4, true, true}, // a_Color
+		{GlslDataType::Int, false, false},	// a_TextureSlot
 	};
 }// namespace fif::gfx

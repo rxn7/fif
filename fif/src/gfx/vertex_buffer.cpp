@@ -50,7 +50,12 @@ namespace fif::gfx {
 		u8 i = 0;
 		for(const VertexBufferElement &el : m_Layout.get_elements()) {
 			glEnableVertexAttribArray(i);
-			glVertexAttribPointer(i, get_glsl_data_type_component_count(el.type), glsl_data_type_to_opengl_enum(el.type), el.normalized, m_Layout.get_stride(), reinterpret_cast<void *>(el.offset));
+
+			if(el.asFloat)
+				glVertexAttribPointer(i, get_glsl_data_type_component_count(el.type), glsl_data_type_to_opengl_enum(el.type), el.normalized, m_Layout.get_stride(), reinterpret_cast<void *>(el.offset));
+			else
+				glVertexAttribIPointer(i, get_glsl_data_type_component_count(el.type), glsl_data_type_to_opengl_enum(el.type), m_Layout.get_stride(), reinterpret_cast<void *>(el.offset));
+
 			++i;
 		}
 	}
