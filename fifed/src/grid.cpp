@@ -35,8 +35,8 @@ namespace fifed {
 	static constexpr std::array<u16, 6> ELEMENTS = {0u, 1u, 2u, 2u, 3u, 0u};
 
 	static const VertexBufferLayout VERTEX_LAYOUT = {
-		{GlslDataType::Float2, "a_Position", false},
-		{GlslDataType::Float2, "a_UV", false},
+		{GlslDataType::Float2, false, true},// a_Position
+		{GlslDataType::Float2, false, true},// a_UV
 	};
 
 	Grid::Grid(const OrthoCamera &cam, const FrameBuffer &frameBuffer) :

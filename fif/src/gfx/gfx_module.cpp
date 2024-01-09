@@ -14,33 +14,30 @@
 
 namespace fif::gfx {
 	GfxModule::GfxModule(const std::filesystem::path &defaultFontPath) :
-		m_StartCallback(std::bind(&GfxModule::on_start, this)), m_PreRenderCallback(std::bind(&GfxModule::pre_render, this)), m_RenderCallback(std::bind(&GfxModule::on_render, this)), m_EndFrameCallback(std::bind(&GfxModule::end_frame, this)), m_EventCallback(std::bind(&GfxModule::on_event, this, std::placeholders::_1)) {
+		m_StartCallback(std::bind(&GfxModule::on_start, this)), m_EndFrameCallback(std::bind(&GfxModule::end_frame, this)), m_EventCallback(std::bind(&GfxModule::on_event, this, std::placeholders::_1)) {
 		FIF_MODULE_INIT();
 
 		core::Application &app = core::Application::get_instance();
 		app.m_StartHook.hook(m_StartCallback);
-		app.m_PreRenderHook.hook(m_PreRenderCallback);
-		app.m_RenderHook.hook(m_RenderCallback);
 		app.m_EndFrameHook.hook(m_EndFrameCallback);
 		app.m_EventHook.hook(m_EventCallback);
 
 		FIF_ASSERT(FT_Init_FreeType(&m_FreeType) == 0, "Failed to init freetype");
 
 		// Texture loader
-		core::ResourceManager::add_loader_func(
-			Texture::get_type_static(), [](const std::filesystem::path &path) -> std::shared_ptr<core::Resource> { return std::dynamic_pointer_cast<core::Resource>(std::make_shared<Texture>(path)); });
+		core::ResourceManager::add_loader_func(Texture::get_type_static(), [](const std::filesystem::path &path) -> std::shared_ptr<core::Resource> {
+			return std::dynamic_pointer_cast<core::Resource>(std::make_shared<Texture>(path, false));
+		});
 
 		// Font loader
 		core::ResourceManager::add_loader_func(
-			Font::get_type_static(), [](const std::filesystem::path &path) -> std::shared_ptr<core::Resource> { return std::dynamic_pointer_cast<core::Resource>(std::make_shared<Font>(path)); });
+			Font::get_type_static(), [](const std::filesystem::path &path) -> std::shared_ptr<core::Resource> { return std::dynamic_pointer_cast<core::Resource>(std::make_shared<Font>(path, false)); });
 
-		Font::sp_DefaultFont = std::make_unique<Font>(defaultFontPath, 32, 512);
+		Font::sp_DefaultFont = std::make_unique<Font>(defaultFontPath, true, 32, 512);
 	}
 
 	GfxModule::~GfxModule() {
 		mp_Application->m_StartHook.unhook(m_StartCallback);
-		mp_Application->m_PreRenderHook.unhook(m_PreRenderCallback);
-		mp_Application->m_RenderHook.unhook(m_RenderCallback);
 		mp_Application->m_EndFrameHook.hook(m_EndFrameCallback);
 		mp_Application->m_EventHook.unhook(m_EventCallback);
 
@@ -59,22 +56,24 @@ namespace fif::gfx {
 		core::Logger::info("OpenGL Vendor: %s", glGetString(GL_VENDOR));
 
 		mp_Application->add_render_system(&fif::gfx::renderer_system);
-
 		core::SceneSerializer::add_serializer<GfxEntitySerializer>();
 	}
 
-	void GfxModule::pre_render() {
+	void GfxModule::end_frame() {
 		glClear(GL_COLOR_BUFFER_BIT);
 		m_Renderer2D.start();
-	}
 
-	void GfxModule::on_render() {
+		mp_Application->m_PreRenderHook.invoke();
+
+		for(auto &renderSystem : mp_Application->m_RenderSystems)
+			renderSystem(mp_Application->get_status(), mp_Application->get_scene().get_registry());
+
+		mp_Application->m_RenderHook.invoke();
+
 		m_Renderer2D.end();
-		m_Renderer2D.start_ui();
-		m_UIRenderCallback.invoke();
-	}
 
-	void GfxModule::end_frame() { m_Renderer2D.end_ui(); }
+		mp_Application->m_PostRenderHook.invoke();
+	}
 
 	void GfxModule::on_event(fif::core::Event &event) {
 		fif::core::EventDispatcher::dispatch<fif::core::WindowResizeEvent>(event, [&](fif::core::WindowResizeEvent &resizeEvent) {

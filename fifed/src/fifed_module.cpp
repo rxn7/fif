@@ -13,22 +13,24 @@
 
 namespace fifed {
 	FifedModule::FifedModule() :
-		m_StartCallback(std::bind(&FifedModule::on_start, this)), m_UpdateCallback(std::bind(&FifedModule::on_update, this)), m_PreRenderCallback(std::bind(&FifedModule::pre_render, this)), m_RenderCallback(std::bind(&FifedModule::on_render, this)), m_EventCallback(std::bind(&FifedModule::on_event, this, std::placeholders::_1)), m_ImGuiRenderCallback(std::bind(&FifedModule::on_render_imgui, this)), m_IconManager("assets/textures/icons.png") {
+		m_StartCallback(std::bind(&FifedModule::on_start, this)), m_UpdateCallback(std::bind(&FifedModule::on_update, this)), m_PreRenderCallback(std::bind(&FifedModule::pre_render, this)), m_RenderCallback(std::bind(&FifedModule::on_render, this)), m_PostRenderCallback(std::bind(std::bind(&FifedModule::post_render, this))), m_EventCallback(std::bind(&FifedModule::on_event, this, std::placeholders::_1)), m_ImGuiRenderCallback(std::bind(&FifedModule::on_render_imgui, this)), m_IconManager("assets/textures/icons.png") {
 		FIF_MODULE_INIT();
 
 		core::Application &app = core::Application::get_instance();
 		app.m_StartHook.hook(m_StartCallback);
 		app.m_UpdateHook.hook(m_UpdateCallback);
-		app.m_RenderHook.hook(m_RenderCallback);
 		app.m_PreRenderHook.hook(m_PreRenderCallback);
+		app.m_RenderHook.hook(m_RenderCallback);
+		app.m_PostRenderHook.hook(m_PostRenderCallback);
 		app.m_EventHook.hook(m_EventCallback);
 	}
 
 	FifedModule::~FifedModule() {
 		mp_Application->m_StartHook.unhook(m_StartCallback);
 		mp_Application->m_UpdateHook.unhook(m_UpdateCallback);
-		mp_Application->m_RenderHook.unhook(m_RenderCallback);
 		mp_Application->m_PreRenderHook.unhook(m_PreRenderCallback);
+		mp_Application->m_RenderHook.unhook(m_RenderCallback);
+		mp_Application->m_PostRenderHook.unhook(m_PostRenderCallback);
 		mp_Application->m_EventHook.unhook(m_EventCallback);
 		ImGuiModule::get_instance().m_RenderHook.unhook(m_ImGuiRenderCallback);
 	}
@@ -62,6 +64,8 @@ namespace fifed {
 	void FifedModule::pre_render() { mp_Stage->pre_render(); }
 
 	void FifedModule::on_render() { mp_Stage->render(); }
+
+	void FifedModule::post_render() { mp_Stage->post_render(); }
 
 	void FifedModule::on_render_imgui() { mp_Stage->render_imgui(); }
 

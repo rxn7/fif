@@ -4,11 +4,11 @@
 
 namespace fif::gfx {
 	struct VertexBufferElement final {
-		VertexBufferElement(GlslDataType type, std::string name, bool normalized) : type(type), name(name), normalized(normalized), size(get_glsl_data_type_size(type)) {}
+		VertexBufferElement(GlslDataType type, const bool normalized, const bool asFloat) : type(type), normalized(normalized), asFloat(asFloat), size(get_glsl_data_type_size(type)) {}
 
 		GlslDataType type;
-		std::string name;
 		bool normalized;
+		bool asFloat;
 
 		u32 size;
 		u32 offset;

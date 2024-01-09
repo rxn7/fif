@@ -26,6 +26,8 @@ namespace fif::gfx {
 		glCullFace(GL_BACK);
 
 		glDisable(GL_DEPTH_TEST);
+		glDepthFunc(GL_NEVER);
+
 		glDisable(GL_DITHER);
 
 		glGetIntegerv(GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS, &m_TextureSlotCount);
@@ -33,25 +35,19 @@ namespace fif::gfx {
 
 		mp_QuadBatch = std::make_unique<Batch<QuadVertex>>(4, 6, BATCH_SIZE, QUAD_VERTEX_BUFFER_LAYOUT, shaders::Quad::VERTEX, shaders::Quad::FRAGMENT);
 		mp_CircleBatch = std::make_unique<Batch<CircleVertex>>(4, 6, BATCH_SIZE, CIRCLE_VERTEX_BUFFER_LAYOUT, shaders::Circle::VERTEX, shaders::Circle::FRAGMENT);
-		mp_GlyphBatch = setup_textured_batch<SpriteVertex>(SPRITE_VERTEX_BUFFER_LAYOUT, shaders::Glyph::VERTEX, shaders::Glyph::FRAGMENT);
+		mp_GlyphBatch = setup_textured_batch<SpriteVertex>(SPRITE_VERTEX_BUFFER_LAYOUT, shaders::Sprite::VERTEX, shaders::Glyph::FRAGMENT);
 		mp_SpriteBatch = setup_textured_batch<SpriteVertex>(SPRITE_VERTEX_BUFFER_LAYOUT, shaders::Sprite::VERTEX, shaders::Sprite::FRAGMENT);
 	}
 
-	void Renderer2D::start() { m_BeginTime = core::Clock::now(); }
+	void Renderer2D::start() {
+		m_BeginTime = core::Clock::now();
+
+		m_TextureIdx = 0;
+		std::fill(m_Textures.begin(), m_Textures.end(), nullptr);
+	}
 
 	void Renderer2D::end() {
 		m_Camera.update();
-
-		flush_batch(*mp_QuadBatch);
-		flush_batch(*mp_CircleBatch);
-		flush_batch(*mp_SpriteBatch);
-		flush_batch(*mp_GlyphBatch);
-	}
-
-	void Renderer2D::start_ui() {}
-
-	void Renderer2D::end_ui() {
-		m_UICamera.update();
 
 		flush_batch(*mp_QuadBatch);
 		flush_batch(*mp_CircleBatch);
@@ -63,32 +59,12 @@ namespace fif::gfx {
 
 		// Clean up
 		m_TempStats = {0};
-		m_TextureIdx = 0;
 	}
 
-	f32 Renderer2D::assign_texture_slot(const std::shared_ptr<Texture> &texture) {
-		for(i32 i = 0; i < m_TextureIdx; ++i) {
-			if(m_Textures[i]->get_id() == texture->get_id())
-				return static_cast<f32>(i);
-		}
-
-		// FLush the batch if it's full
-		if(m_TextureIdx == m_TextureSlotCount) {
-			flush_batch(*mp_SpriteBatch);
-			m_TextureIdx = 0;
-		}
-
-		const f32 textureSlot = static_cast<f32>(m_TextureIdx);
-		m_Textures[m_TextureIdx++] = texture;
-		m_Textures[textureSlot]->bind_on_slot(textureSlot);
-
-		return textureSlot;
-	}
-
-	void Renderer2D::render_sprite(const std::shared_ptr<Texture> &texture, const vec2 &position, const vec2 &size, f32 angle, const Color &color) {
+	void Renderer2D::render_sprite(const std::shared_ptr<Texture> &texture, const vec2 &position, const vec2 &size, f32 angle, const Color &color, const std::array<vec2, 4> &uvs) {
 		FLUSH_IF_FULL(mp_SpriteBatch)
 
-		const f32 textureSlot = assign_texture_slot(texture);
+		const u8 textureSlot = assign_texture_slot(texture, *mp_SpriteBatch);
 		const u32 vertCount = mp_SpriteBatch->get_vertex_count();
 
 		if(glm::mod(angle, glm::two_pi<f32>())) {
@@ -99,16 +75,16 @@ namespace fif::gfx {
 			matrix = rotate(matrix, -angle, {0, 0, 1});
 			matrix = scale(matrix, vec3(size, 1.0));
 
-			mp_SpriteBatch->add_vertex({vec3(matrix * vec4(-1.0f, -1.0f, 0.0f, 1.0f)), vec2(0.0f, 0.0f), color, textureSlot});
-			mp_SpriteBatch->add_vertex({vec3(matrix * vec4(-1.0f, 1.0f, 0.0f, 1.0f)), vec2(0.0f, 1.0f), color, textureSlot});
-			mp_SpriteBatch->add_vertex({vec3(matrix * vec4(1.0f, 1.0f, 0.0f, 1.0f)), vec2(1.0f, 1.0f), color, textureSlot});
-			mp_SpriteBatch->add_vertex({vec3(matrix * vec4(1.0f, -1.0f, 0.0f, 1.0f)), vec2(1.0f, 0.0f), color, textureSlot});
+			mp_SpriteBatch->add_vertex({vec3(matrix * vec4(-1.0f, -1.0f, 0.0f, 1.0f)), uvs[0], color, textureSlot});
+			mp_SpriteBatch->add_vertex({vec3(matrix * vec4(-1.0f, 1.0f, 0.0f, 1.0f)), uvs[1], color, textureSlot});
+			mp_SpriteBatch->add_vertex({vec3(matrix * vec4(1.0f, 1.0f, 0.0f, 1.0f)), uvs[2], color, textureSlot});
+			mp_SpriteBatch->add_vertex({vec3(matrix * vec4(1.0f, -1.0f, 0.0f, 1.0f)), uvs[3], color, textureSlot});
 		} else {
 			m_TempStats.spriteCount++;
-			mp_SpriteBatch->add_vertex({vec2(position.x - size.x, position.y - size.y), vec2(0.0f, 0.0f), color, textureSlot});
-			mp_SpriteBatch->add_vertex({vec2(position.x - size.x, position.y + size.y), vec2(0.0f, 1.0f), color, textureSlot});
-			mp_SpriteBatch->add_vertex({vec2(position.x + size.x, position.y + size.y), vec2(1.0f, 1.0f), color, textureSlot});
-			mp_SpriteBatch->add_vertex({vec2(position.x + size.x, position.y - size.y), vec2(1.0f, 0.0f), color, textureSlot});
+			mp_SpriteBatch->add_vertex({vec2(position.x - size.x, position.y - size.y), uvs[0], color, textureSlot});
+			mp_SpriteBatch->add_vertex({vec2(position.x - size.x, position.y + size.y), uvs[1], color, textureSlot});
+			mp_SpriteBatch->add_vertex({vec2(position.x + size.x, position.y + size.y), uvs[2], color, textureSlot});
+			mp_SpriteBatch->add_vertex({vec2(position.x + size.x, position.y - size.y), uvs[3], color, textureSlot});
 		}
 
 		mp_SpriteBatch->add_element(vertCount);
@@ -183,7 +159,7 @@ namespace fif::gfx {
 	void Renderer2D::render_text(const Font &font, const vec2 &position, const vec2 &scale, f32 fontSize, const std::string &text, const Color &color, const VerticalTextAlign vAlign, const HorizontalTextAlign hAlign) {
 		FLUSH_IF_FULL(mp_GlyphBatch)
 
-		const f32 textureSlot = assign_texture_slot(font.get_texture());
+		const u8 textureSlot = assign_texture_slot(font.get_texture(), *mp_GlyphBatch);
 		const vec2 textSize = font.calculate_text_size(text, scale * fontSize);
 		const vec2 origin = position + TextAlign::get_text_align_offset(hAlign, vAlign, textSize, font.get_font_height() * fontSize);
 

@@ -62,7 +62,7 @@ namespace fif::gfx {
 			*/
 			std::vector<i32> textureIndicesUniform(m_TextureSlotCount);
 			std::ostringstream textureSlotSwitchContent;
-			for(i32 i = 0; i < m_TextureSlotCount; ++i) {
+			for(u16 i = 0; i < m_TextureSlotCount; ++i) {
 				textureIndicesUniform[i] = i;
 				textureSlotSwitchContent << "case " << i << ": f_Color = texture(u_Textures[" << i << "], v_UV); break;\n";
 			}
@@ -78,17 +78,41 @@ namespace fif::gfx {
 			return batch;
 		}
 
+		template<typename VertexType> u8 assign_texture_slot(const std::shared_ptr<Texture> &texture, Batch<VertexType> &batch) {
+			for(i32 i = 0; i < m_TextureIdx; ++i) {
+				if(m_Textures[i]->get_id() == texture->get_id())
+					return i;
+			}
+
+			// TOOD: This probably won't work when multiple batches have
+			// FLush the batch if it's full
+			if(m_TextureIdx == m_TextureSlotCount) {
+				flush_batch(batch);
+				m_TextureIdx = 0;
+			}
+
+			const u8 textureSlot = m_TextureIdx;
+			m_Textures[m_TextureIdx++] = texture;
+			m_Textures[textureSlot]->bind_on_slot(textureSlot);
+
+			return textureSlot;
+		}
+
 		void start();
 		void end();
 
-		void start_ui();
-		void end_ui();
-
 		void render_quad(const vec2 &position, const vec2 &size, f32 angle = 0.0f, const Color &color = {255, 255, 255, 255});
-		void render_sprite(const std::shared_ptr<Texture> &texture, const vec2 &position, const vec2 &size, f32 angle = 0.0f, const Color &color = {255, 255, 255, 255});
+
+		void render_sprite(const std::shared_ptr<Texture> &texture, const vec2 &position, const vec2 &size, f32 angle = 0.0f, const Color &color = {255, 255, 255, 255},
+						   const std::array<vec2, 4> &uvs = {
+							   vec2(0.0f, 0.0f),
+							   vec2(0.0f, 1.0f),
+							   vec2(1.0f, 1.0f),
+							   vec2(1.0f, 0.0f),
+						   });
+
 		void render_circle(const vec2 &position, f32 radius, const Color &color = Colors::WHITE);
 		void render_text(const Font &font, const vec2 &position, const vec2 &scale, f32 size, const std::string &text, const Color &color = Colors::BLACK, const VerticalTextAlign vAlign = VerticalTextAlign::Center, const HorizontalTextAlign hAlign = HorizontalTextAlign::Left);
-		f32 assign_texture_slot(const std::shared_ptr<Texture> &texture);
 
 	private:
 		static constexpr u32 BATCH_SIZE = 1000;
@@ -99,7 +123,6 @@ namespace fif::gfx {
 		std::unique_ptr<Batch<SpriteVertex>> mp_GlyphBatch;
 
 		OrthoCamera m_Camera;
-		OrthoCamera m_UICamera;
 
 		std::array<std::shared_ptr<Texture>, 32> m_Textures;
 		i32 m_TextureIdx = 0;

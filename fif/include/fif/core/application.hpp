@@ -54,9 +54,16 @@ namespace fif::core {
 		Invokable<Event &> m_EventHook;
 		Invokable<> m_PreUpdateHook;
 		Invokable<> m_UpdateHook;
+
 		Invokable<> m_PreRenderHook;
 		Invokable<> m_RenderHook;
+		Invokable<> m_PostRenderHook;
+
 		Invokable<> m_EndFrameHook;
+
+		std::vector<RenderSystem> m_RenderSystems;
+		std::vector<UpdateSystem> m_UpdateSystems;
+		std::vector<EventSystem> m_EventSystems;
 
 	protected:
 		std::unique_ptr<Window> mp_Window;
@@ -64,10 +71,6 @@ namespace fif::core {
 	private:
 		std::vector<std::unique_ptr<Module>> m_Modules;
 		std::unique_ptr<Scene> mp_Scene;
-
-		std::vector<RenderSystem> m_RenderSystems;
-		std::vector<UpdateSystem> m_UpdateSystems;
-		std::vector<EventSystem> m_EventSystems;
 
 		PerformanceStats m_PerformanceStats;
 		ApplicationStatus m_Status;

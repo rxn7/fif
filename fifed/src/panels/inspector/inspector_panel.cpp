@@ -1,4 +1,5 @@
 #include "inspector_panel.hpp"
+#include "editor.hpp"
 
 #include <fif/core/ecs/components/tag_component.hpp>
 #include <fif/core/ecs/components/transform_component.hpp>
@@ -17,10 +18,10 @@
 #include <tinyfiledialogs.h>
 
 namespace fifed {
-	InspectorPanel::InspectorPanel(Editor &editor, Scene &scene) : EditorPanel(editor), m_SelectedEntity(scene, entt::null) {}
+	InspectorPanel::InspectorPanel(Editor &editor) : EditorPanel(editor) {}
 
 	void InspectorPanel::on_render() {
-		if(m_SelectedEntity.m_ID == entt::null)
+		if(m_Editor.m_SelectedEntity.m_ID == entt::null)
 			return;
 
 		Scene &scene = Application::get_instance().get_scene();
@@ -35,13 +36,13 @@ namespace fifed {
 			draw_add_component_entry<QuadComponent>("Quad");
 			draw_add_component_entry<CircleComponent>("Circle");
 			draw_add_component_entry<LabelComponent>("Label");
-			draw_add_component_entry<LuaScriptComponent>("LuaScript", nullptr, m_SelectedEntity);
+			draw_add_component_entry<LuaScriptComponent>("LuaScript", nullptr, m_Editor.m_SelectedEntity);
 			ImGui::EndPopup();
 		}
 
 		ImGui::Spacing();
 
-		if(TagComponent *tag = m_SelectedEntity.try_get_component<TagComponent>()) {
+		if(TagComponent *tag = m_Editor.m_SelectedEntity.try_get_component<TagComponent>()) {
 			std::strncpy(m_TextBuffer.data(), tag->tag.c_str(), tag->tag.size() + 1);
 			if(ImGui::InputText("Tag", m_TextBuffer.data(), m_TextBuffer.size()))
 				tag->tag = m_TextBuffer.data();

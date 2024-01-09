@@ -12,8 +12,8 @@ namespace fif::gfx {
 	};
 
 	inline const VertexBufferLayout CIRCLE_VERTEX_BUFFER_LAYOUT = {
-		{GlslDataType::Float2, "a_Position", false},
-		{GlslDataType::Float2, "a_UV", false},
-		{GlslDataType::UByte4, "a_Color", true},
+		{GlslDataType::Float2, false, true},// a_Position
+		{GlslDataType::Float2, false, true},// a_UV
+		{GlslDataType::UByte4, true, true}, // a_Color
 	};
 }// namespace fif::gfx

@@ -10,6 +10,8 @@ namespace fifed {
 		virtual void update() {}
 		virtual void pre_render() {}
 		virtual void render() {}
+		virtual void post_render() {}
+		virtual void end_frame() {}
 		virtual void render_imgui() {}
 		virtual void on_event([[maybe_unused]] Event &event) {}
 

@@ -1,10 +1,13 @@
 #include "editor.hpp"
+#include "event/window_event.hpp"
 #include "fifed_module.hpp"
 #include "panels/console/console_panel.hpp"
+#include "panels/inspector/inspector_panel.hpp"
 #include "panels/performance/performance_panel.hpp"
 #include "panels/resource_browser/resource_browser.hpp"
 #include "panels/scene/scene_panel.hpp"
 #include "panels/settings/settings_panel.hpp"
+#include "panels/viewport/viewport_panel.hpp"
 #include "project_manager.hpp"
 
 #include <fif/core/ecs/components/transform_component.hpp>
@@ -17,7 +20,8 @@
 #include <tinyfiledialogs.h>
 
 namespace fifed {
-	Editor::Editor(FifedModule &fifedModule) : Stage(fifedModule), m_FrameBuffer({0, 0}), m_Grid(fif::gfx::GfxModule::get_instance().get_renderer2D().get_camera(), m_FrameBuffer) {
+	Editor::Editor(FifedModule &fifedModule) :
+		Stage(fifedModule), m_SelectedEntity(Application::get_instance().get_scene(), entt::null), m_FrameBuffer({0, 0}), m_Grid(fif::gfx::GfxModule::get_instance().get_renderer2D().get_camera(), m_FrameBuffer), m_Gizmo(*this) {
 		m_FifedModule.get_application()->get_window().set_title(Project::get_config().name + " | Fifed"
 #ifdef FIF_DEBUG
 																+ " [DEBUG]"
@@ -42,10 +46,10 @@ namespace fifed {
 
 	void Editor::init_panels() {
 		mp_ViewportPanel = add_panel<ViewportPanel>(*this, m_FrameBuffer);
-		mp_InspectorPanel = add_panel<InspectorPanel>(*this, m_FifedModule.get_application()->get_scene());
+		add_panel<InspectorPanel>(*this);
 		add_panel<PerformancePanel>(*this);
 		add_panel<SettingsPanel>(*this, m_Grid, m_FrameBuffer, m_CameraController);
-		add_panel<ScenePanel>(*this, *mp_InspectorPanel);
+		add_panel<ScenePanel>(*this);
 		add_panel<ResourceBrowserPanel>(*this);
 		add_panel<ConsolePanel>(*this);
 	}
@@ -64,7 +68,11 @@ namespace fifed {
 		m_Grid.render();
 	}
 
-	void Editor::render() { m_FrameBuffer.end(); }
+	void Editor::render() { m_Gizmo.render(); }
+
+	void Editor::post_render() { m_FrameBuffer.end(); }
+
+	void Editor::end_frame() {}
 
 	void Editor::save_project() {
 		if(m_PlayMode) {
@@ -135,21 +143,19 @@ namespace fifed {
 	}
 
 	void Editor::follow_selected_entity() {
-		if(TransformComponent *trans = mp_InspectorPanel->m_SelectedEntity.try_get_component<TransformComponent>())
+		if(TransformComponent *trans = m_SelectedEntity.try_get_component<TransformComponent>())
 			GfxModule::get_instance().get_renderer2D().get_camera().m_Position = trans->position;
 		else
 			GfxModule::get_instance().get_renderer2D().get_camera().m_Position = vec2(0, 0);
 	}
 
 	void Editor::delete_selected_entity() {
-		if(mp_InspectorPanel->m_SelectedEntity)
-			mp_InspectorPanel->m_SelectedEntity.delete_self();
+		if(m_SelectedEntity)
+			m_SelectedEntity.delete_self();
 	}
 
 	void Editor::on_event(Event &event) {
-		if(mp_ViewportPanel) {
-			m_CameraController.on_event(event, mp_ViewportPanel->is_hovered());
-		}
+		m_CameraController.on_event(event, mp_ViewportPanel->is_hovered());
 
 		EventDispatcher::dispatch<KeyPressedEvent>(event, [&](KeyPressedEvent &keyEvent) {
 			for(const Shortcut &shortcut : m_Shortcuts) {
@@ -159,6 +165,11 @@ namespace fifed {
 				}
 			}
 
+			return false;
+		});
+
+		EventDispatcher::dispatch<WindowResizeEvent>(event, [&]([[maybe_unused]] WindowResizeEvent &ev) {
+			mp_ViewportPanel->m_Resize = true;
 			return false;
 		});
 	}

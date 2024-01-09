@@ -31,12 +31,12 @@ namespace fif::imgui {
 	private:
 		void apply_default_theme() const;
 		void on_start();
-		void on_render();
+		void post_render();
 		void on_event(core::Event &event);
 
 	private:
 		Callback<> m_StartCallback;
-		Callback<> m_RenderCallback;
+		Callback<> m_PostRenderCallback;
 		Callback<core::Event &> m_EventCallback;
 	};
 }// namespace fif::imgui

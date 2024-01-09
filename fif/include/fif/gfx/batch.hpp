@@ -7,7 +7,7 @@
 namespace fif::gfx {
 	template<typename Vertex> class Batch {
 	public:
-		Batch(u32 verticesPerInstance, u32 elementsPerInstance, u32 size, const VertexBufferLayout &layout, const std::string &shaderVert, const std::string &shaderFrag) :
+		Batch(const u32 verticesPerInstance, const u32 elementsPerInstance, const u32 size, const VertexBufferLayout &layout, const std::string &shaderVert, const std::string &shaderFrag) :
 			m_MaxElements(elementsPerInstance * size), m_MaxVertices(verticesPerInstance * size), mp_Vertices(new Vertex[m_MaxVertices]), mp_Elements(new u16[m_MaxElements]), m_Buffer(m_MaxVertices, m_MaxElements, sizeof(Vertex), layout), m_Shader(shaderVert, shaderFrag) {}
 
 		virtual ~Batch() {
@@ -20,7 +20,7 @@ namespace fif::gfx {
 		inline u32 get_element_count() const { return m_ElementCount; }
 
 		inline bool is_full() const { return m_VertexCount >= m_MaxVertices; }
-		inline bool can_fit(u32 vertexCount, u32 elementCount) const { return m_VertexCount + vertexCount <= m_MaxVertices && m_ElementCount + elementCount <= m_MaxElements; }
+		inline bool can_fit(const u32 vertexCount, const u32 elementCount) const { return m_VertexCount + vertexCount <= m_MaxVertices && m_ElementCount + elementCount <= m_MaxElements; }
 		inline bool is_empty() const { return m_VertexCount == 0; }
 
 		void flush() {

@@ -1,10 +1,9 @@
 #pragma once
 
+#include "editor.hpp"
 #include <fif/core/event/event.hpp>
 
 namespace fifed {
-	class Editor;
-
 	class EditorPanel {
 	public:
 		virtual inline constexpr std::string_view get_title() const = 0;

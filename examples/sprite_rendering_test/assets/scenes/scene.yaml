@@ -50,8 +50,8 @@ Entities:
       AngleRadians: 0
     fif::gfx::SpriteComponent:
       Tint: [255, 255, 255, 255]
-      Size: [220, 227]
-      TextureUUID: 14785093585399857093
+      Size: [1024, 1024]
+      TextureUUID: 526609366054991609
   - UUID: 10722237235971723058
     Tag: Sprite
     fif::core::TransformComponent:

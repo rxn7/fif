@@ -22,7 +22,7 @@ namespace fif::core {
 
 	protected:
 		Resource() {}
-		Resource(const std::filesystem::path &path);
+		Resource(const std::filesystem::path &path, const bool isEditorResource = false);
 
 	protected:
 		bool m_IsEditorResource = false;
