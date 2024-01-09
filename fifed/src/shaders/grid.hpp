@@ -53,9 +53,9 @@ namespace fifed::shaders::Grid {
 			float lod1 = lod0 * 10.0;
 			float lod2 = lod1 * 10.0;
 
-			float lod0a = max2(vec2(1.0) - abs(clamp(mod(uv, lod0) / dudv / u_LineThickness, 0.0, 1.0) * 2.0 - vec2(1.0)));
-			float lod1a = max2(vec2(1.0) - abs(clamp(mod(uv, lod1) / dudv / u_LineThickness, 0.0, 1.0) * 2.0 - vec2(1.0)));
-			float lod2a = max2(vec2(1.0) - abs(clamp(mod(uv, lod2) / dudv / u_LineThickness, 0.0, 1.0) * 2.0 - vec2(1.0)));
+			float lod0a = max2(vec2(1.0) - abs(clamp(mod(uv + 0.5 * dudv * u_LineThickness, lod0) / dudv / u_LineThickness, 0.0, 1.0) * 2.0 - vec2(1.0)));
+			float lod1a = max2(vec2(1.0) - abs(clamp(mod(uv + 0.5 * dudv * u_LineThickness, lod1) / dudv / u_LineThickness, 0.0, 1.0) * 2.0 - vec2(1.0)));
+			float lod2a = max2(vec2(1.0) - abs(clamp(mod(uv + 0.5 * dudv * u_LineThickness, lod2) / dudv / u_LineThickness, 0.0, 1.0) * 2.0 - vec2(1.0)));
 
 			return vec4(
 				lod2a > 0.0 ? u_LineColor : lod1a > 0.0 ? mix(u_LineColor, u_BackgroundColor, fade) : u_BackgroundColor,

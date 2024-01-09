@@ -64,6 +64,7 @@ namespace fif::gfx {
 	void Renderer2D::render_sprite(const std::shared_ptr<Texture> &texture, const vec2 &position, const vec2 &size, f32 angle, const Color &color, const std::array<vec2, 4> &uvs) {
 		FLUSH_IF_FULL(mp_SpriteBatch)
 
+		const vec2 halfSize = size * 0.5f;
 		const u8 textureSlot = assign_texture_slot(texture, *mp_SpriteBatch);
 		const u32 vertCount = mp_SpriteBatch->get_vertex_count();
 
@@ -73,7 +74,7 @@ namespace fif::gfx {
 			mat4 matrix(1.0f);
 			matrix = translate(mat4(1.0f), vec3(position, 0.0f));
 			matrix = rotate(matrix, -angle, {0, 0, 1});
-			matrix = scale(matrix, vec3(size, 1.0));
+			matrix = scale(matrix, vec3(halfSize, 1.0));
 
 			mp_SpriteBatch->add_vertex({vec3(matrix * vec4(-1.0f, -1.0f, 0.0f, 1.0f)), uvs[0], color, textureSlot});
 			mp_SpriteBatch->add_vertex({vec3(matrix * vec4(-1.0f, 1.0f, 0.0f, 1.0f)), uvs[1], color, textureSlot});
@@ -81,10 +82,10 @@ namespace fif::gfx {
 			mp_SpriteBatch->add_vertex({vec3(matrix * vec4(1.0f, -1.0f, 0.0f, 1.0f)), uvs[3], color, textureSlot});
 		} else {
 			m_TempStats.spriteCount++;
-			mp_SpriteBatch->add_vertex({vec2(position.x - size.x, position.y - size.y), uvs[0], color, textureSlot});
-			mp_SpriteBatch->add_vertex({vec2(position.x - size.x, position.y + size.y), uvs[1], color, textureSlot});
-			mp_SpriteBatch->add_vertex({vec2(position.x + size.x, position.y + size.y), uvs[2], color, textureSlot});
-			mp_SpriteBatch->add_vertex({vec2(position.x + size.x, position.y - size.y), uvs[3], color, textureSlot});
+			mp_SpriteBatch->add_vertex({vec2(position.x - halfSize.x, position.y - halfSize.y), uvs[0], color, textureSlot});
+			mp_SpriteBatch->add_vertex({vec2(position.x - halfSize.x, position.y + halfSize.y), uvs[1], color, textureSlot});
+			mp_SpriteBatch->add_vertex({vec2(position.x + halfSize.x, position.y + halfSize.y), uvs[2], color, textureSlot});
+			mp_SpriteBatch->add_vertex({vec2(position.x + halfSize.x, position.y - halfSize.y), uvs[3], color, textureSlot});
 		}
 
 		mp_SpriteBatch->add_element(vertCount);

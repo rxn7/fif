@@ -28,9 +28,9 @@ namespace fifed {
 		void set_play_mode(const bool playMode);
 
 		inline bool is_play_mode() const { return m_PlayMode; }
-
 		inline void toggle_play_mode() { set_play_mode(!m_PlayMode); }
 		inline FrameBuffer &get_frame_buffer() { return m_FrameBuffer; }
+		inline Gizmo &get_gizmo() { return m_Gizmo; }
 
 	private:
 		void save_project();

@@ -28,7 +28,6 @@ namespace fif::core {
 		void set_title(const std::string &title);
 
 		inline GLFWwindow *get_glfw_window() const { return mp_GlfwWindow; }
-
 		inline Application &get_application() const { return m_App; }
 
 	private:

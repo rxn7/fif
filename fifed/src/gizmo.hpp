@@ -4,7 +4,7 @@
 namespace fifed {
 	class Editor;
 
-	enum class GizmoType : u8 { Translate, Scale, Rotate };
+	enum class GizmoMode : u8 { Translate, Scale, Rotate };
 
 	struct GizmoPart {
 		f32 rotation = 0.0f;
@@ -19,19 +19,25 @@ namespace fifed {
 		Gizmo(Editor &editor);
 		~Gizmo();
 		void render();
+		void on_event(Event &event);
 
 	private:
 		void render_arrow(const Color &color, const Color &hoverColor, const vec2 &position);
+		void update_hover(const f32 zoomFactor, const OrthoCamera &cam, const TransformComponent &trans);
 
 	public:
-		GizmoType m_Type;
+		GizmoMode m_Mode = GizmoMode::Translate;
 
 	private:
 		Editor &m_Editor;
+		OrthoCamera &m_Camera;
 		std::shared_ptr<Texture> mp_Texture;
+
 		GizmoPart m_OriginPart;
 		GizmoPart m_XAxisPart;
 		GizmoPart m_YAxisPart;
+
 		GizmoPart *mp_HoveredPart;
+		GizmoPart *mp_ActivePart;
 	};
 }// namespace fifed

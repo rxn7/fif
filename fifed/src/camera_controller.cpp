@@ -40,8 +40,8 @@ namespace fifed {
 		}
 	}
 
-	void CameraController::on_event(Event &event, bool viewportHovered) {
-		if(event.m_Handled || !viewportHovered)
+	void CameraController::on_event(Event &event) {
+		if(event.m_Handled)
 			return;
 
 		GfxModule &gfx = GfxModule::get_instance();
@@ -71,6 +71,9 @@ namespace fifed {
 		});
 
 		EventDispatcher::dispatch<MouseMovedEvent>(event, [&](MouseMovedEvent &movedEvent) {
+			if(movedEvent.m_Handled)
+				return false;
+
 			if(!input.is_button_held(GLFW_MOUSE_BUTTON_RIGHT))
 				return false;
 

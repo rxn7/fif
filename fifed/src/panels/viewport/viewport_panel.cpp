@@ -15,6 +15,21 @@ namespace fifed {
 		const bool isPaused = app->get_status().paused;
 		const f32 windowWidth = ImGui::GetWindowSize().x;
 
+		if(m_Editor.get_gizmo().m_Mode == GizmoMode::Translate) {
+			ImGui::TextDisabled("Translate");
+		} else if(ImGui::SmallButton("Translate")) {
+			m_Editor.get_gizmo().m_Mode = GizmoMode::Translate;
+		}
+
+		ImGui::SameLine();
+
+		if(m_Editor.get_gizmo().m_Mode == GizmoMode::Scale) {
+			ImGui::TextDisabled("Scale");
+		} else if(ImGui::SmallButton("Scale")) {
+			m_Editor.get_gizmo().m_Mode = GizmoMode::Scale;
+		}
+
+		ImGui::SameLine();
 		ImGui::SetCursorPosX((windowWidth - 32.0f) * 0.5f);
 
 		if(isPlayMode) {
@@ -23,10 +38,10 @@ namespace fifed {
 
 			ImGui::SameLine();
 
-			if(ImGui::Button("Stop"))
+			if(ImGui::SmallButton("Stop"))
 				m_Editor.set_play_mode(false);
 		} else {
-			if(ImGui::Button("Start"))
+			if(ImGui::SmallButton("Start"))
 				m_Editor.set_play_mode(true);
 		}
 

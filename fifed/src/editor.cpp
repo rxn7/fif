@@ -39,7 +39,12 @@ namespace fifed {
 	void Editor::init_shortcuts() {
 		m_Shortcuts.emplace_back(GLFW_KEY_O, GLFW_MOD_CONTROL, "Open a scene", std::bind(&Editor::open_scene_dialog, this));
 		m_Shortcuts.emplace_back(GLFW_KEY_S, GLFW_MOD_CONTROL, "Save project", std::bind(&Editor::save_project, this));
+
 		m_Shortcuts.emplace_back(GLFW_KEY_F, 0, "Follow/focus selected entity", std::bind(&Editor::follow_selected_entity, this));
+
+		m_Shortcuts.emplace_back(GLFW_KEY_Q, 0, "Gizmo Mode: Translate", [this]() { m_Gizmo.m_Mode = GizmoMode::Translate; });
+		m_Shortcuts.emplace_back(GLFW_KEY_W, 0, "Gizmo Mode: Scale", [this]() { m_Gizmo.m_Mode = GizmoMode::Scale; });
+
 		m_Shortcuts.emplace_back(GLFW_KEY_DELETE, 0, "Delete selected entity", std::bind(&Editor::delete_selected_entity, this));
 		m_Shortcuts.emplace_back(GLFW_KEY_F5, 0, "Toggle play mode", std::bind(&Editor::toggle_play_mode, this));
 	}
@@ -155,7 +160,10 @@ namespace fifed {
 	}
 
 	void Editor::on_event(Event &event) {
-		m_CameraController.on_event(event, mp_ViewportPanel->is_hovered());
+		if(mp_ViewportPanel->is_hovered()) {
+			m_Gizmo.on_event(event);
+			m_CameraController.on_event(event);
+		}
 
 		EventDispatcher::dispatch<KeyPressedEvent>(event, [&](KeyPressedEvent &keyEvent) {
 			for(const Shortcut &shortcut : m_Shortcuts) {
