@@ -114,7 +114,7 @@ namespace fifed {
 		std::ifstream fileStream(s_ProjectListPath);
 
 		if(!fileStream.is_open()) {
-			Logger::error("Failed to open recent_projects.txt");
+			Logger::warn("Failed to open recent_projects.txt, you can ignore this warning if running fifed for the first time.");
 			return;
 		}
 
