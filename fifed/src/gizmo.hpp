@@ -5,10 +5,10 @@ namespace fifed {
 	class Editor;
 
 	enum class GizmoMode : u8 { Translate, Scale, Rotate };
+	enum class GizmoSpace : bool { Global, Local };
 
 	struct GizmoPart {
 		f32 rotation = 0.0f;
-		vec2 offset;
 		vec2 size;
 		Color color;
 		Color hoverColor;
@@ -26,6 +26,7 @@ namespace fifed {
 
 	public:
 		GizmoMode m_Mode = GizmoMode::Translate;
+		GizmoSpace m_Space = GizmoSpace::Local;
 
 	private:
 		Editor &m_Editor;

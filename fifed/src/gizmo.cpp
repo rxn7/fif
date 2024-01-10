@@ -36,14 +36,10 @@ namespace fifed {
 	};
 
 	constexpr vec2 ARROW_SIZE = vec2(16 * 2.0f, 48 * 2.0f);
+	constexpr vec2 ARROW_PIVOT = vec2(0.0f, -ARROW_SIZE.y * 0.5f);
 
 	Gizmo::Gizmo(Editor &editor) :
-		m_Editor(editor),
-		m_Camera(GfxModule::get_instance().get_renderer2D().get_camera()),
-		mp_Texture(std::make_shared<Texture>("assets/textures/gizmos.png", true, GL_NEAREST)),
-		m_OriginPart({.offset = {0, 0}, .size = {16, 16}, .color = ORIGIN_COLOR, .hoverColor = ORIGIN_COLOR_HOVERED}),
-		m_XAxisPart({.rotation = glm::radians(-90.0f), .offset = {ARROW_SIZE.y * 0.5f, 0}, .size = ARROW_SIZE, .color = X_AXIS_COLOR, .hoverColor = X_AXIS_COLOR_HOVERED}),
-		m_YAxisPart({.rotation = glm::radians(180.0f), .offset = {0, ARROW_SIZE.y * 0.5f}, .size = ARROW_SIZE, .color = Y_AXIS_COLOR, .hoverColor = Y_AXIS_COLOR_HOVERED}) {}
+		m_Editor(editor), m_Camera(GfxModule::get_instance().get_renderer2D().get_camera()), mp_Texture(std::make_shared<Texture>("assets/textures/gizmos.png", true, GL_NEAREST)), m_OriginPart({.size = {16, 16}, .color = ORIGIN_COLOR, .hoverColor = ORIGIN_COLOR_HOVERED}), m_XAxisPart({.rotation = glm::radians(-90.0f), .size = ARROW_SIZE, .color = X_AXIS_COLOR, .hoverColor = X_AXIS_COLOR_HOVERED}), m_YAxisPart({.rotation = glm::radians(180.0f), .size = ARROW_SIZE, .color = Y_AXIS_COLOR, .hoverColor = Y_AXIS_COLOR_HOVERED}) {}
 
 	void Gizmo::render() {
 		if(!m_Editor.m_SelectedEntity) {
@@ -58,20 +54,21 @@ namespace fifed {
 
 			update_hover(zoomFactor, cam, *trans);
 
-			const auto render_gizmo_part = [&](GizmoPart &part, const std::array<vec2, 4> &uvs) {
-				renderer.render_sprite(mp_Texture, trans->position + part.offset * zoomFactor, part.size * zoomFactor, part.rotation, &part == mp_HoveredPart ? part.hoverColor : part.color, uvs);
+			const auto render_gizmo_part = [&](GizmoPart &part, const std::array<vec2, 4> &uvs, const vec2 &pivot = vec2(0.0f)) {
+				const f32 angleRadians = m_Space == GizmoSpace::Local ? part.rotation + trans->angleRadians : part.rotation;
+				renderer.render_sprite(mp_Texture, trans->position, part.size * zoomFactor, angleRadians, &part == mp_HoveredPart ? part.hoverColor : part.color, pivot * zoomFactor, uvs);
 			};
 
 			switch(m_Mode) {
 			case GizmoMode::Translate:
-				render_gizmo_part(m_XAxisPart, TRANSLATE_UVS);
-				render_gizmo_part(m_YAxisPart, TRANSLATE_UVS);
+				render_gizmo_part(m_XAxisPart, TRANSLATE_UVS, ARROW_PIVOT);
+				render_gizmo_part(m_YAxisPart, TRANSLATE_UVS, ARROW_PIVOT);
 				render_gizmo_part(m_OriginPart, ORIGIN_UVS);
 				break;
 
 			case GizmoMode::Scale:
-				render_gizmo_part(m_XAxisPart, SCALE_UVS);
-				render_gizmo_part(m_YAxisPart, SCALE_UVS);
+				render_gizmo_part(m_XAxisPart, SCALE_UVS, ARROW_PIVOT);
+				render_gizmo_part(m_YAxisPart, SCALE_UVS, ARROW_PIVOT);
 				render_gizmo_part(m_OriginPart, ORIGIN_UVS);
 				break;
 
@@ -81,39 +78,55 @@ namespace fifed {
 		}
 	}
 
-	// TODO: Local/Global modes!
-
 	void Gizmo::on_event(Event &event) {
+		InputModule &input = InputModule::get_instance();
+
 		EventDispatcher::dispatch<MouseMovedEvent>(event, [&](MouseMovedEvent &movedEvent) {
 			if(mp_ActivePart == nullptr)
 				return false;
 
-			InputModule &input = InputModule::get_instance();
-
 			if(TransformComponent *trans = m_Editor.m_SelectedEntity.try_get_component<TransformComponent>()) {
-				const vec2 mouseWorldPosition = m_Camera.screen_to_world(movedEvent.get_position());
-				const vec2 lastMouseWorldPosition = m_Camera.screen_to_world(input.get_last_mouse_position());
-				const vec2 delta = mouseWorldPosition - lastMouseWorldPosition;
+				const vec2 lastGlobalMousePosition = m_Camera.screen_to_world(input.get_last_mouse_position());
+				const vec2 mouseGlobalPosition = m_Camera.screen_to_world(movedEvent.get_position());
+				const vec2 mouseDelta = mouseGlobalPosition - lastGlobalMousePosition;
+				vec2 mouseRelativeDelta, up, right;
+
+				switch(m_Space) {
+				case GizmoSpace::Local: {
+					const mat3 rotationMatrix = trans->get_rotation_matrix();
+					mouseRelativeDelta = glm::inverse(rotationMatrix) * vec3(mouseGlobalPosition - lastGlobalMousePosition, 0.0f);
+					up = trans->get_up_dir_ex(rotationMatrix);
+					right = trans->get_right_dir_ex(rotationMatrix);
+					break;
+				}
+
+				case GizmoSpace::Global:
+					mouseRelativeDelta = mouseGlobalPosition - lastGlobalMousePosition;
+					up = vec2(0.0f, 1.0f);
+					right = vec2(1.0f, 0.0f);
+					break;
+				}
 
 				switch(m_Mode) {
 				default:
 				case GizmoMode::Translate:
 					if(mp_ActivePart == &m_XAxisPart)
-						trans->position.x += delta.x;
+						trans->position += right * mouseRelativeDelta.x;
 					else if(mp_ActivePart == &m_YAxisPart)
-						trans->position.y += delta.y;
+						trans->position += up * mouseRelativeDelta.y;
 					else if(mp_ActivePart == &m_OriginPart)
-						trans->position += delta;
+						trans->position += mouseDelta;
 					break;
 
 				case GizmoMode::Scale:
-					const vec2 value = delta * 0.01f;
+					const f32 multiplier = 0.01f;
+					const vec2 value = mouseRelativeDelta * multiplier;
 					if(mp_ActivePart == &m_XAxisPart)
 						trans->scale.x += value.x;
 					else if(mp_ActivePart == &m_YAxisPart)
 						trans->scale.y += value.y;
 					else if(mp_ActivePart == &m_OriginPart)
-						trans->scale += value.x + value.y;
+						trans->scale += (mouseDelta.x + mouseDelta.y) * multiplier;
 					break;
 				}
 			}
@@ -142,18 +155,17 @@ namespace fifed {
 	}
 
 	void Gizmo::update_hover(const f32 zoomFactor, const OrthoCamera &cam, const TransformComponent &trans) {
-		const vec2 mousePositionWorld = cam.screen_to_world(InputModule::get_instance().get_mouse_position());
+		const vec2 mousePositionGlobal = cam.screen_to_world(InputModule::get_instance().get_mouse_position());
 		const vec2 scaledHalfArrowSize = ARROW_SIZE * zoomFactor * 0.5f;
 		const vec2 scaledHalfOriginSize = m_OriginPart.size * zoomFactor * 0.5f;
+		const vec2 mousePositionLocal = m_Space == GizmoSpace::Local ? vec2(glm::inverse(trans.get_rotation_matrix()) * vec3(mousePositionGlobal - trans.position, 0.0f)) : (mousePositionGlobal - trans.position);
 
-		if(mousePositionWorld.x >= trans.position.x - scaledHalfOriginSize.x && mousePositionWorld.x <= trans.position.x + scaledHalfOriginSize.x &&
-		   mousePositionWorld.y >= trans.position.y - scaledHalfOriginSize.y && mousePositionWorld.y <= trans.position.y + scaledHalfOriginSize.y) {
+		if(mousePositionLocal.x >= -scaledHalfOriginSize.x && mousePositionLocal.x <= scaledHalfOriginSize.x && mousePositionLocal.y >= -scaledHalfOriginSize.y &&
+		   mousePositionLocal.y <= scaledHalfOriginSize.y) {
 			mp_HoveredPart = &m_OriginPart;
-		} else if(mousePositionWorld.x >= trans.position.x - scaledHalfOriginSize.x && mousePositionWorld.x <= trans.position.x + scaledHalfArrowSize.x && mousePositionWorld.y >= trans.position.y &&
-				  mousePositionWorld.y <= trans.position.y + scaledHalfArrowSize.y * 2) {
+		} else if(mousePositionLocal.x >= -scaledHalfOriginSize.x && mousePositionLocal.x <= scaledHalfArrowSize.x && mousePositionLocal.y >= 0 && mousePositionLocal.y <= scaledHalfArrowSize.y * 2) {
 			mp_HoveredPart = &m_YAxisPart;
-		} else if(mousePositionWorld.x >= trans.position.x && mousePositionWorld.x <= trans.position.x + scaledHalfArrowSize.y * 2 && mousePositionWorld.y >= trans.position.y - scaledHalfArrowSize.x &&
-				  mousePositionWorld.y <= trans.position.y + scaledHalfArrowSize.x) {
+		} else if(mousePositionLocal.x >= 0 && mousePositionLocal.x <= scaledHalfArrowSize.y * 2 && mousePositionLocal.y >= -scaledHalfArrowSize.x && mousePositionLocal.y <= scaledHalfArrowSize.x) {
 			mp_HoveredPart = &m_XAxisPart;
 		} else {
 			mp_HoveredPart = nullptr;

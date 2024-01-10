@@ -61,7 +61,7 @@ namespace fif::gfx {
 		m_TempStats = {0};
 	}
 
-	void Renderer2D::render_sprite(const std::shared_ptr<Texture> &texture, const vec2 &position, const vec2 &size, f32 angle, const Color &color, const std::array<vec2, 4> &uvs) {
+	void Renderer2D::render_sprite(const std::shared_ptr<Texture> &texture, const vec2 &position, const vec2 &size, f32 angle, const Color &color, const vec2 &pivot, const std::array<vec2, 4> &uvs) {
 		FLUSH_IF_FULL(mp_SpriteBatch)
 
 		const vec2 halfSize = size * 0.5f;
@@ -71,15 +71,11 @@ namespace fif::gfx {
 		if(glm::mod(angle, glm::two_pi<f32>())) {
 			m_TempStats.rotatedSpriteCount++;
 
-			mat4 matrix(1.0f);
-			matrix = translate(mat4(1.0f), vec3(position, 0.0f));
-			matrix = rotate(matrix, -angle, {0, 0, 1});
-			matrix = scale(matrix, vec3(halfSize, 1.0));
-
-			mp_SpriteBatch->add_vertex({vec3(matrix * vec4(-1.0f, -1.0f, 0.0f, 1.0f)), uvs[0], color, textureSlot});
-			mp_SpriteBatch->add_vertex({vec3(matrix * vec4(-1.0f, 1.0f, 0.0f, 1.0f)), uvs[1], color, textureSlot});
-			mp_SpriteBatch->add_vertex({vec3(matrix * vec4(1.0f, 1.0f, 0.0f, 1.0f)), uvs[2], color, textureSlot});
-			mp_SpriteBatch->add_vertex({vec3(matrix * vec4(1.0f, -1.0f, 0.0f, 1.0f)), uvs[3], color, textureSlot});
+			const mat4 matrix = calculate_rotation_matrix(position, halfSize, pivot, angle);
+			mp_SpriteBatch->add_vertex({matrix * vec4(-1.0f, -1.0f, 0.0f, 1.0f), uvs[0], color, textureSlot});
+			mp_SpriteBatch->add_vertex({matrix * vec4(-1.0f, +1.0f, 0.0f, 1.0f), uvs[1], color, textureSlot});
+			mp_SpriteBatch->add_vertex({matrix * vec4(+1.0f, +1.0f, 0.0f, 1.0f), uvs[2], color, textureSlot});
+			mp_SpriteBatch->add_vertex({matrix * vec4(+1.0f, -1.0f, 0.0f, 1.0f), uvs[3], color, textureSlot});
 		} else {
 			m_TempStats.spriteCount++;
 			mp_SpriteBatch->add_vertex({vec2(position.x - halfSize.x, position.y - halfSize.y), uvs[0], color, textureSlot});
@@ -99,21 +95,18 @@ namespace fif::gfx {
 		m_TempStats.elementCount += 6;
 	}
 
-	void Renderer2D::render_quad(const vec2 &position, const vec2 &size, f32 angle, const Color &color) {
+	void Renderer2D::render_quad(const vec2 &position, const vec2 &size, f32 angle, const Color &color, const vec2 &pivot) {
 		FLUSH_IF_FULL(mp_QuadBatch)
 
 		const vec2 halfSize = size * 0.5f;
 		const u32 vertCount = mp_QuadBatch->get_vertex_count();
 
 		if(glm::mod(angle, glm::two_pi<f32>())) {
-			mat4 matrix(1.0f);
-			matrix = translate(mat4(1.0f), vec3(position, 0.0f));
-			matrix = rotate(matrix, -angle, {0, 0, 1});
-			matrix = scale(matrix, vec3(halfSize, 1.0));
-			mp_QuadBatch->add_vertex({vec2(matrix * vec4(-1.0f, -1.0f, 0.0f, 1.0f)), color});
-			mp_QuadBatch->add_vertex({vec2(matrix * vec4(-1.0f, 1.0f, 0.0f, 1.0f)), color});
-			mp_QuadBatch->add_vertex({vec2(matrix * vec4(1.0f, 1.0f, 0.0f, 1.0f)), color});
-			mp_QuadBatch->add_vertex({vec2(matrix * vec4(1.0f, -1.0f, 0.0f, 1.0f)), color});
+			const mat4 matrix = calculate_rotation_matrix(position, halfSize, pivot, angle);
+			mp_QuadBatch->add_vertex({matrix * vec4(-1.0f, -1.0f, 0.0f, 1.0f), color});
+			mp_QuadBatch->add_vertex({matrix * vec4(-1.0f, +1.0f, 0.0f, 1.0f), color});
+			mp_QuadBatch->add_vertex({matrix * vec4(+1.0f, +1.0f, 0.0f, 1.0f), color});
+			mp_QuadBatch->add_vertex({matrix * vec4(+1.0f, -1.0f, 0.0f, 1.0f), color});
 			m_TempStats.rotatedQuadCount++;
 		} else {
 			mp_QuadBatch->add_vertex({vec2(position.x - halfSize.x, position.y - halfSize.y), color});
@@ -219,5 +212,17 @@ namespace fif::gfx {
 				currentPosition.x += glyph.advance.x * fontSize * scale.x;
 			}
 		}
+	}
+
+	mat4 Renderer2D::calculate_rotation_matrix(const vec2 &position, const vec2 &halfSize, const vec2 &pivot, const f32 angleRadians) {
+		const glm::mat4 translateToPivot = glm::translate(mat4(1.0f), vec3(-pivot, 0.0f));
+		const glm::mat4 translateFromPivot = glm::translate(mat4(1.0f), vec3(pivot, 0.0f));
+		const glm::mat4 rotate = translateToPivot * glm::rotate(mat4(1.0f), -angleRadians, {0, 0, 1}) * translateFromPivot;
+
+		mat4 matrix = glm::translate(mat4(1.0f), vec3(position + pivot, 0.0f));
+		matrix *= rotate;
+		matrix = glm::scale(matrix, vec3(halfSize, 1.0));
+
+		return matrix;
 	}
 }// namespace fif::gfx

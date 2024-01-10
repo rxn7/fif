@@ -8,28 +8,24 @@ namespace fifed {
 	ViewportPanel::ViewportPanel(Editor &editor, FrameBuffer &frameBuffer) : EditorPanel(editor), m_FrameBuffer(frameBuffer) {}
 
 	void ViewportPanel::on_render() {
-		ImGui::SameLine();
-
 		Application *app = FifedModule::get_instance().get_application();
 		const bool isPlayMode = m_Editor.is_play_mode();
 		const bool isPaused = app->get_status().paused;
+
+		{
+			static const char *items[]{"Translate", "Scale"};
+			int currentItem = static_cast<int>(m_Editor.get_gizmo().m_Mode);
+			ImGui::Combo("Gizmo Mode", &currentItem, items, IM_ARRAYSIZE(items));
+			m_Editor.get_gizmo().m_Mode = static_cast<GizmoMode>(currentItem);
+		}
+		{
+			static const char *items[]{"Global", "Local"};
+			int currentItem = static_cast<int>(m_Editor.get_gizmo().m_Space);
+			ImGui::Combo("Gizmo Space", &currentItem, items, IM_ARRAYSIZE(items));
+			m_Editor.get_gizmo().m_Space = static_cast<GizmoSpace>(currentItem);
+		}
+
 		const f32 windowWidth = ImGui::GetWindowSize().x;
-
-		if(m_Editor.get_gizmo().m_Mode == GizmoMode::Translate) {
-			ImGui::TextDisabled("Translate");
-		} else if(ImGui::SmallButton("Translate")) {
-			m_Editor.get_gizmo().m_Mode = GizmoMode::Translate;
-		}
-
-		ImGui::SameLine();
-
-		if(m_Editor.get_gizmo().m_Mode == GizmoMode::Scale) {
-			ImGui::TextDisabled("Scale");
-		} else if(ImGui::SmallButton("Scale")) {
-			m_Editor.get_gizmo().m_Mode = GizmoMode::Scale;
-		}
-
-		ImGui::SameLine();
 		ImGui::SetCursorPosX((windowWidth - 32.0f) * 0.5f);
 
 		if(isPlayMode) {

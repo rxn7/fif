@@ -101,9 +101,9 @@ namespace fif::gfx {
 		void start();
 		void end();
 
-		void render_quad(const vec2 &position, const vec2 &size, f32 angle = 0.0f, const Color &color = {255, 255, 255, 255});
+		void render_quad(const vec2 &position, const vec2 &size, f32 angle = 0.0f, const Color &color = {255, 255, 255, 255}, const vec2 &pivot = vec2(0.0f));
 
-		void render_sprite(const std::shared_ptr<Texture> &texture, const vec2 &position, const vec2 &size, f32 angle = 0.0f, const Color &color = {255, 255, 255, 255},
+		void render_sprite(const std::shared_ptr<Texture> &texture, const vec2 &position, const vec2 &size, f32 angle = 0.0f, const Color &color = {255, 255, 255, 255}, const vec2 &pivot = vec2(0.0f),
 						   const std::array<vec2, 4> &uvs = {
 							   vec2(0.0f, 0.0f),
 							   vec2(0.0f, 1.0f),
@@ -113,6 +113,9 @@ namespace fif::gfx {
 
 		void render_circle(const vec2 &position, f32 radius, const Color &color = Colors::WHITE);
 		void render_text(const Font &font, const vec2 &position, const vec2 &scale, f32 size, const std::string &text, const Color &color = Colors::BLACK, const VerticalTextAlign vAlign = VerticalTextAlign::Center, const HorizontalTextAlign hAlign = HorizontalTextAlign::Left);
+
+	private:
+		mat4 calculate_rotation_matrix(const vec2 &position, const vec2 &halfSize, const vec2 &pivot, const f32 angleRadians);
 
 	private:
 		static constexpr u32 BATCH_SIZE = 1000;
