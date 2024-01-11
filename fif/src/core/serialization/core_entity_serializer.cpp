@@ -7,7 +7,7 @@
 
 namespace fif::core {
 	void CoreEntitySerializer::serialize(core::Entity &entity, YAML::Emitter &emitter) {
-		const UUIDComponent &uuidComponent = entity.require_component<UUIDComponent>();
+		const UuidComponent &uuidComponent = entity.require_component<UuidComponent>();
 		emitter << YAML::Key << "UUID" << YAML::Value << uuidComponent.uuid;
 
 		if(TagComponent *tagComponent = entity.try_get_component<TagComponent>())
@@ -22,7 +22,7 @@ namespace fif::core {
 
 	void CoreEntitySerializer::deserialize(core::Entity &entity, const YAML::Node &entityNode) {
 		if(const YAML::Node uuidNode = entityNode["UUID"])
-			entity.add_component<UUIDComponent>().uuid = uuidNode.as<u64>();
+			entity.add_component<UuidComponent>().uuid = uuidNode.as<u64>();
 
 		if(const YAML::Node tagNode = entityNode["Tag"])
 			entity.add_component<TagComponent>().tag = tagNode.as<std::string>();

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "fif/core/module.hpp"
+#include "fif/core/system.hpp"
 #include "fif/lua_scripting/components/lua_script_component.hpp"
 
 namespace fif::lua_scripting {
@@ -14,22 +15,15 @@ namespace fif::lua_scripting {
 		void attach_script(core::Entity &ent, const std::string &path);
 		void init_script(LuaScriptComponent &luaScript);
 
-		template<typename T, typename... Args> void register_component(std::string_view name, Args &&...args) {
+		template<typename T, typename... Args> void register_component(Args &&...args) {
+			std::string name = core::System::get_type_name<T>();
+			name = name.substr(name.find_last_of(':') + 1);// Remove the namespaces
+
 			m_Lua.new_usertype<T>(name, std::forward<Args>(args)...);
 
-			std::string nameSnakeCase;
-			nameSnakeCase.reserve(name.length());
-			nameSnakeCase += std::tolower(name[0]);
+			const std::string nameSnakeCase = core::System::camel_case_to_snake_case(name);
 
-			for(u8 i = 1; i < name.length(); ++i) {
-				const char c = name[i];
-				if(std::isupper(c)) {
-					nameSnakeCase += '_';
-					nameSnakeCase += std::tolower(c);
-				} else {
-					nameSnakeCase += c;
-				}
-			}
+			core::Logger::debug("Lua component registered: %s", nameSnakeCase.c_str());
 
 			m_Lua["Entity"]["get_" + nameSnakeCase] = &core::Entity::get_component<T>;
 			m_Lua["Entity"]["add_" + nameSnakeCase] = &core::Entity::add_component<T>;

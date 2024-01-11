@@ -1,0 +1,5 @@
+Config:
+  Name: Lua Scripting Test
+  StartingScene: scene.yaml
+Resources:
+  []

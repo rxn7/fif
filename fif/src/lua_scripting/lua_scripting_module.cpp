@@ -1,5 +1,7 @@
 #include "./lua_scripting_entity_serializer.hpp"
 
+#include "ecs/components/tag_component.hpp"
+#include "ecs/components/uuid_component.hpp"
 #include "fif/core/ecs/components/transform_component.hpp"
 #include "fif/core/ecs/entity.hpp"
 #include "fif/core/ecs/scene.hpp"
@@ -48,11 +50,19 @@ namespace fif::lua_scripting {
 				// NOTE: Without the check glm tries to divide by 0
 				if(v.x != 0 && v.y != 0)
 					v = glm::normalize(v);
+			},
+
+			sol::meta_function::to_string, [](const vec2 &v) { 
+				std::ostringstream ss;
+				ss << "(" << v.x << ", " << v.y << ")";
+				return ss.str(); 
 			}
 		);
 		// clang-format on
 
-		register_component<core::TransformComponent>("TransformComponent", "position", &core::TransformComponent::position, "scale", &core::TransformComponent::scale, "angleRadians", &core::TransformComponent::angleRadians);
+		register_component<core::TransformComponent>("position", &core::TransformComponent::position, "scale", &core::TransformComponent::scale, "angleRadians", &core::TransformComponent::angleRadians);
+		register_component<core::TagComponent>("tag", &core::TagComponent::tag);
+		register_component<core::UuidComponent>("uuid", &core::UuidComponent::uuid);
 	}
 
 	void LuaScriptingModule::attach_script(core::Entity &ent, const std::string &path) {

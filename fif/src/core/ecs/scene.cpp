@@ -9,7 +9,7 @@ namespace fif::core {
 
 	EntityID Scene::create_entity_with_uuid(UUID uuid, const char *name) {
 		EntityID ent = m_Registry.create();
-		add_component<UUIDComponent>(ent).uuid = uuid;
+		add_component<UuidComponent>(ent).uuid = uuid;
 		add_component<TagComponent>(ent, name);
 		return ent;
 	}

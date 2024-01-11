@@ -1,10 +1,7 @@
 #pragma once
 
+#include "fif/core/system.hpp"
 #include "fif/native_scripting/components/native_script_component.hpp"
-
-#ifndef _WIN32
-#include <cxxabi.h>
-#endif
 
 namespace fif::native_scripting {
 	class NativeScriptingModule final : public fif::core::Module {
@@ -18,15 +15,7 @@ namespace fif::native_scripting {
 
 			NativeScriptComponent &nativeScriptComponent = scene.add_component<NativeScriptComponent>(ent);
 			nativeScriptComponent.p_script = std::make_unique<T>(scene, ent);
-
-#ifdef _WIN32
-			nativeScriptComponent.scriptName = typeid(T).name();
-#else
-			char *demangledName = abi::__cxa_demangle(typeid(T).name(), NULL, NULL, nullptr);
-			nativeScriptComponent.scriptName = demangledName;
-			std::free(demangledName);
-#endif
-
+			nativeScriptComponent.scriptName = core::System::get_type_name<T>();
 			nativeScriptComponent.p_script->on_create();
 
 			return *static_cast<T *>(nativeScriptComponent.p_script.get());

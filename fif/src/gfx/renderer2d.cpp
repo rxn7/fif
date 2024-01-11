@@ -159,18 +159,26 @@ namespace fif::gfx {
 
 		vec2 currentPosition = origin;
 
+		const auto break_line = [&currentPosition, &origin, &font, fontSize, &scale]() {
+			currentPosition.y -= font.get_font_height() * fontSize * scale.y;
+			currentPosition.x = origin.x;
+		};
+
 		for(std::string::const_iterator it = text.begin(); it < text.end(); ++it) {
 			const bool isLastChar = it == text.end() - 1;
 
 			switch(*it) {
+			case '\n':
+				break_line();
+				break;
+
 			case '\\':
 				if(isLastChar)
 					break;
 
 				switch(*(++it)) {
 				case 'n':
-					currentPosition.y -= font.get_font_height() * fontSize * scale.y;
-					currentPosition.x = origin.x;
+					break_line();
 					break;
 				case '\\':
 					goto nobreak;
