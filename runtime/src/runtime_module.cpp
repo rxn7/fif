@@ -26,6 +26,9 @@ namespace fif_runtime {
 		Project::load(".");
 
 		FIF_ASSERT(std::filesystem::exists(Project::get_config().startingScenePath), "Starting scene doesn't exist!");
+
+		mp_Application->get_window().set_title(Project::get_config().name);
+
 		SceneSerializer serializer(Application::get_instance().get_scene());
 		serializer.deserialize(Project::get_config().startingScenePath);
 	}

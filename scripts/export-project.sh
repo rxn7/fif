@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# TODO: Convert this script to C++ and use it inside the editor.
+
 script_dir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 pushd ${script_dir}/.. >/dev/null
 
@@ -38,7 +40,7 @@ echo "Exporting $project_dir to $export_dir"
 rm -rf $export_dir
 mkdir -p $export_dir
 
-cp $runtime_build_path $export_dir
+cp $runtime_build_path $export_dir/$(basename ${project_dir})
 cp -r ${project_dir}/* $export_dir
 cp -r $(dirname $runtime_build_path)/assets $export_dir
 
