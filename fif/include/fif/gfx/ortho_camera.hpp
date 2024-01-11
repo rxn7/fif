@@ -20,6 +20,5 @@ namespace fif::gfx {
 
 	private:
 		vec2 m_Size;
-		f32 m_Aspect;
 	};
 }// namespace fif::gfx

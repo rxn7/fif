@@ -24,8 +24,6 @@ namespace fifed {
 		if(m_Editor.m_SelectedEntity.m_ID == entt::null)
 			return;
 
-		Scene &scene = Application::get_instance().get_scene();
-
 		if(ImGui::Button("Add Component"))
 			ImGui::OpenPopup("AddComponent");
 

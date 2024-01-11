@@ -8,6 +8,7 @@
 namespace fif::core {
 	class EntitySerializer {
 	public:
+		virtual ~EntitySerializer() {}
 		virtual void serialize(Entity &entity, YAML::Emitter &yaml) = 0;
 		virtual void deserialize(Entity &entity, const YAML::Node &entityNode) = 0;
 

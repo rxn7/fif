@@ -2,4 +2,6 @@ Config:
   Name: Lua Scripting Test
   StartingScene: scene.yaml
 Resources:
-  []
+  - UUID: 8782194013072685429
+    Path: assets/textures/logo.png
+    Type: Texture

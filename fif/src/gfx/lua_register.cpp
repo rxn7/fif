@@ -31,7 +31,7 @@ namespace fif::gfx {
 		luaModule.m_Lua.new_enum("HorizontalTextAlign", "Left", HorizontalTextAlign::Left, "Center", HorizontalTextAlign::Center, "Right", HorizontalTextAlign::Right);
 		luaModule.m_Lua.new_enum("VerticalTextAlign", "Top", VerticalTextAlign::Top, "Center", VerticalTextAlign::Center, "Bottom", VerticalTextAlign::Bottom);
 
-		luaModule.register_component<SpriteComponent>("tint", &SpriteComponent::tint, "size", &SpriteComponent::size);
+		luaModule.register_component<SpriteComponent>("tint", &SpriteComponent::tint, "size", &SpriteComponent::size, "texture", &SpriteComponent::p_texture);
 		luaModule.register_component<QuadComponent>("tint", &QuadComponent::tint, "size", &QuadComponent::size);
 		luaModule.register_component<CircleComponent>("tint", &CircleComponent::tint, "radius", &CircleComponent::radius);
 		luaModule.register_component<LabelComponent>("text", &LabelComponent::text, "size", &LabelComponent::fontSize, "color", &LabelComponent::color, "horizontalAlign", &LabelComponent::horizontalAlign, "verticalAlign", &LabelComponent::verticalAlign);

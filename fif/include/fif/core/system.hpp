@@ -13,7 +13,7 @@ namespace fif::core {
 #ifdef _WIN32
 			return typeid(T).name();
 #else
-			char *demangledName = abi::__cxa_demangle(typeid(T).name(), NULL, NULL, nullptr);
+			char *demangledName = abi::__cxa_demangle(typeid(T).name(), nullptr, nullptr, nullptr);
 			std::string nameStr = demangledName;
 			std::free(demangledName);
 

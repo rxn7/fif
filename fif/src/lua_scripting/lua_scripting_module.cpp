@@ -65,7 +65,7 @@ namespace fif::lua_scripting {
 		register_component<core::UuidComponent>("uuid", &core::UuidComponent::uuid);
 	}
 
-	void LuaScriptingModule::attach_script(core::Entity &ent, const std::string &path) {
+	void LuaScriptingModule::attach_script(core::Entity &ent, const std::filesystem::path &path) {
 		LuaScriptComponent &script = ent.add_component<LuaScriptComponent>(core::Entity(ent.m_Scene, ent.m_ID));
 		script.path = path;
 
@@ -88,7 +88,7 @@ namespace fif::lua_scripting {
 			return;
 		}
 
-		const sol::protected_function_result &result = m_Lua.safe_script_file(path.string());
+		sol::protected_function_result result = m_Lua.safe_script_file(path.string());
 		if(!result.valid()) {
 			sol::error err = result;
 			core::Logger::error("Failed to load lua script '%s': %s", luaScript.path.c_str(), err.what());
@@ -111,7 +111,7 @@ namespace fif::lua_scripting {
 
 		auto init = luaScript.self["init"];
 		if(init.valid()) {
-			const sol::protected_function_result result = init(luaScript.self);
+			result = init(luaScript.self);
 			if(!result.valid()) {
 				sol::error err(result);
 				core::Logger::error("Failed to init lua script(%s): %s", luaScript.path.c_str(), err.what());
@@ -149,7 +149,7 @@ namespace fif::lua_scripting {
 	static void lua_script_render_system([[maybe_unused]] const core::ApplicationStatus &status, entt::registry &registry) {
 		registry.view<LuaScriptComponent>().each([&]([[maybe_unused]] core::EntityID entity, LuaScriptComponent &luaScript) {
 			if(luaScript.hooks.render.valid()) {
-				const auto &result = luaScript.hooks.render(luaScript.self);
+				const auto result = luaScript.hooks.render(luaScript.self);
 				if(!result.valid()) {
 					sol::error err(result);
 					core::Logger::error("Failed to run render hook in lua script(%s): %s", luaScript.path.c_str(), err.what());

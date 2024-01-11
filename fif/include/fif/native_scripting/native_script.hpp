@@ -3,6 +3,7 @@
 namespace fif::native_scripting {
 	class NativeScript {
 	public:
+		virtual ~NativeScript() {}
 		virtual void on_create() {}
 		virtual void on_update([[maybe_unused]] f32 dt) {}
 		virtual void on_render() {}

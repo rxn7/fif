@@ -38,6 +38,7 @@ namespace fif::core {
 		}
 
 		template<typename T, typename... Args> inline T &add_component(EntityID entity, Args &&...args) {
+			FIF_ASSERT(entity != entt::null, "Entity is null");
 			FIF_ASSERT(!has_component<T>(entity), "This entity already has component of this type (%s)!", typeid(T).name());
 			return m_Registry.emplace<T>(entity, std::forward<Args>(args)...);
 		}

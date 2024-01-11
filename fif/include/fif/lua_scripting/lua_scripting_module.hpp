@@ -12,7 +12,7 @@ namespace fif::lua_scripting {
 		LuaScriptingModule();
 		~LuaScriptingModule();
 
-		void attach_script(core::Entity &ent, const std::string &path);
+		void attach_script(core::Entity &ent, const std::filesystem::path &path);
 		void init_script(LuaScriptComponent &luaScript);
 
 		template<typename T, typename... Args> void register_component(Args &&...args) {

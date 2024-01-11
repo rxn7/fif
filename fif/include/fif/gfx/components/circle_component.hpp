@@ -5,6 +5,6 @@
 namespace fif::gfx {
 	struct CircleComponent final {
 		Color tint = Colors::WHITE;
-		f32 radius = 100.0f;
+		f32 radius = 50.0f;
 	};
 }// namespace fif::gfx

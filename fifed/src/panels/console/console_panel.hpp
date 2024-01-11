@@ -34,6 +34,5 @@ namespace fifed {
 	private:
 		Callback<Logger::LogType, const char *> m_LoggerCallback;
 		std::deque<ConsolePanelEntry> m_Output;
-		u32 m_LineIdx;
 	};
 }// namespace fifed
