@@ -3,8 +3,8 @@
 
 shopt -s globstar
 
-SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
-pushd ${SCRIPT_DIR}/.. >/dev/null
+script_dir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+pushd ${script_dir}/.. >/dev/null
 
 total=0
 output=""

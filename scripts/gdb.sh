@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
-pushd ${SCRIPT_DIR}/../build/debug/fifed >/dev/null
+script_dir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+pushd ${script_dir}/../build/debug/fifed >/dev/null
 
 gdb ./fifed 
 

@@ -26,12 +26,11 @@ if(WIN32)
   )
 endif()
 
-
-add_custom_target(copy_assets
+add_custom_target(copy_fifed_assets
   COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/../LICENSE ${CMAKE_CURRENT_BINARY_DIR}/LICENSE
   COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/default_layout.ini ${CMAKE_CURRENT_BINARY_DIR}/default_layout.ini
   COMMAND ${CMAKE_COMMAND} -E remove_directory ${CMAKE_CURRENT_BINARY_DIR}/assets
   COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/assets ${CMAKE_CURRENT_BINARY_DIR}/assets
 )
 
-add_dependencies(${PROJECT_NAME} copy_assets)
+add_dependencies(${PROJECT_NAME} copy_fifed_assets)

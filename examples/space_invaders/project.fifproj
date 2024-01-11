@@ -1,0 +1,7 @@
+Config:
+  Name: Space Invaders
+  StartingScene: scene.yaml
+Resources:
+  - UUID: 15600235039495965740
+    Path: assets/textures/player.png
+    Type: Texture

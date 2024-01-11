@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
-pushd ${SCRIPT_DIR}/.. >/dev/null
+script_dir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+pushd ${script_dir}/.. >/dev/null
 
 cmake . -Bbuild/debug -GNinja -DCMAKE_BUILD_TYPE=Debug -DBUILD_SHARED_LIBS=FALSE
 cmake . -Bbuild/release -GNinja -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=FALSE

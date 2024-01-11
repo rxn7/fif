@@ -23,6 +23,7 @@
 build*
 
 **/imgui.ini
+examples/**_export
 
 **/libs/**/*.pc
 **/libs/**/*.cmake

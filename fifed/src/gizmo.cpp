@@ -35,7 +35,7 @@ namespace fifed {
 		vec2(1.0f, 0.0f),
 	};
 
-	constexpr vec2 ARROW_SIZE = vec2(16 * 2.0f, 48 * 2.0f);
+	constexpr vec2 ARROW_SIZE = vec2(16 * 4.f, 48 * 4.f);
 	constexpr vec2 ARROW_PIVOT = vec2(0.0f, -ARROW_SIZE.y * 0.5f);
 
 	Gizmo::Gizmo(Editor &editor) :

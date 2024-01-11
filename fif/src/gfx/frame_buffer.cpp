@@ -35,8 +35,4 @@ namespace fif::gfx {
 		Texture::unbind();
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
-
-	void FrameBuffer::bind() { glBindFramebuffer(GL_FRAMEBUFFER, m_FboID); }
-
-	void FrameBuffer::unbind() { glBindFramebuffer(GL_FRAMEBUFFER, 0); }
 }// namespace fif::gfx

@@ -62,7 +62,11 @@ namespace fif::input {
 			{"Z", GLFW_KEY_Z},
 			{"LeftBracket", GLFW_KEY_LEFT_BRACKET},
 			{"Backslash", GLFW_KEY_BACKSLASH},
-			{"RightBracket", GLFW_KEY_RIGHT_BRACKET}
+			{"RightBracket", GLFW_KEY_RIGHT_BRACKET},
+			{"Left", GLFW_KEY_LEFT},
+			{"Right", GLFW_KEY_RIGHT},
+			{"Up", GLFW_KEY_UP},
+			{"Down", GLFW_KEY_DOWN},
 		});
 		// clang-format on
 	}

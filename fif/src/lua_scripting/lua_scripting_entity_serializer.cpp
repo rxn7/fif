@@ -11,7 +11,6 @@ namespace fif::lua_scripting {
 	void LuaScriptingEntitySerializer::deserialize(core::Entity &entity, const YAML::Node &entityNode) {
 		try_get_component_node<LuaScriptComponent>(entityNode, [&entity](const YAML::Node &luaScriptComponentNode) {
 			const std::string path = luaScriptComponentNode["Path"].as<std::string>();
-			core::Logger::debug(path);
 			LuaScriptingModule::get_instance().attach_script(entity, path);
 		});
 	}

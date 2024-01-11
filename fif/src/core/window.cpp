@@ -33,7 +33,7 @@ namespace fif::core {
 
 		glfwSwapInterval(static_cast<i32>(props.vsync));
 
-		if(!props.iconPath.empty())
+		if(!props.iconPath.empty() && std::filesystem::exists(props.iconPath))
 			set_icon(props.iconPath);
 	}
 

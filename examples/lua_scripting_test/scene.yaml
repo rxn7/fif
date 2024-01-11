@@ -1,70 +1,15 @@
 Entities:
-  - UUID: 4851004494681986563
-    Tag: Sprite Test
+  - UUID: 8573280388048541388
+    Tag: Transform Test
     fif::core::TransformComponent:
-      Position: [5000, -5000]
+      Position: [500, 0]
       Scale: [1, 1]
       AngleRadians: 0
     fif::lua_scripting::LuaScriptComponent:
-      Path: assets/scripts/sprite_test.lua
-    fif::gfx::SpriteComponent:
-      Tint: [255, 255, 255, 255]
-      Size: [50, 50]
-      TextureUUID: 8782194013072685429
+      Path: assets/scripts/transform_test.lua
     fif::gfx::LabelComponent:
-      Text: Sprite Test
-      Size: 10
-      Color: [0, 0, 0, 255]
-      HorizontalAlign: 0
-      VerticalAlign: 0
-      FontUUID: 0
-  - UUID: 7311302833061053281
-    Tag: Quad Test
-    fif::core::TransformComponent:
-      Position: [-5000, -5000]
-      Scale: [1, 1]
-      AngleRadians: 0
-    fif::lua_scripting::LuaScriptComponent:
-      Path: assets/scripts/quad_test.lua
-    fif::gfx::QuadComponent:
-      Tint: [255, 255, 255, 255]
-      Size: [100, 100]
-    fif::gfx::LabelComponent:
-      Text: Quad Test
-      Size: 10
-      Color: [0, 0, 0, 255]
-      HorizontalAlign: 0
-      VerticalAlign: 0
-      FontUUID: 0
-  - UUID: 12565440647129563198
-    Tag: Circle Test
-    fif::core::TransformComponent:
-      Position: [0, -5000]
-      Scale: [1, 1]
-      AngleRadians: 0
-    fif::lua_scripting::LuaScriptComponent:
-      Path: assets/scripts/circle_test.lua
-    fif::gfx::CircleComponent:
-      Tint: [255, 255, 255, 255]
-      Radius: 50
-    fif::gfx::LabelComponent:
-      Text: Circle Test
-      Size: 10
-      Color: [0, 0, 0, 255]
-      HorizontalAlign: 0
-      VerticalAlign: 0
-      FontUUID: 0
-  - UUID: 4534028432933503474
-    Tag: UUID Test
-    fif::core::TransformComponent:
-      Position: [-5000, 0]
-      Scale: [1, 1]
-      AngleRadians: 0
-    fif::lua_scripting::LuaScriptComponent:
-      Path: assets/scripts/uuid_test.lua
-    fif::gfx::LabelComponent:
-      Text: UUID Test
-      Size: 10
+      Text: Transform Test
+      Size: 1
       Color: [0, 0, 0, 255]
       HorizontalAlign: 0
       VerticalAlign: 0
@@ -79,22 +24,77 @@ Entities:
       Path: assets/scripts/tag_test.lua
     fif::gfx::LabelComponent:
       Text: Tag Test
-      Size: 10
+      Size: 1
       Color: [0, 0, 0, 255]
       HorizontalAlign: 0
       VerticalAlign: 0
       FontUUID: 0
-  - UUID: 8573280388048541388
-    Tag: Transform Test
+  - UUID: 4534028432933503474
+    Tag: UUID Test
     fif::core::TransformComponent:
-      Position: [5000, 0]
+      Position: [-500, 0]
       Scale: [1, 1]
       AngleRadians: 0
     fif::lua_scripting::LuaScriptComponent:
-      Path: assets/scripts/transform_test.lua
+      Path: assets/scripts/uuid_test.lua
     fif::gfx::LabelComponent:
-      Text: Transform Test
-      Size: 10
+      Text: UUID Test
+      Size: 1
+      Color: [0, 0, 0, 255]
+      HorizontalAlign: 0
+      VerticalAlign: 0
+      FontUUID: 0
+  - UUID: 12565440647129563198
+    Tag: Circle Test
+    fif::core::TransformComponent:
+      Position: [0, -500]
+      Scale: [1, 1]
+      AngleRadians: 0
+    fif::lua_scripting::LuaScriptComponent:
+      Path: assets/scripts/circle_test.lua
+    fif::gfx::CircleComponent:
+      Tint: [255, 255, 255, 255]
+      Radius: 50
+    fif::gfx::LabelComponent:
+      Text: Circle Test
+      Size: 1
+      Color: [0, 0, 0, 255]
+      HorizontalAlign: 0
+      VerticalAlign: 0
+      FontUUID: 0
+  - UUID: 7311302833061053281
+    Tag: Quad Test
+    fif::core::TransformComponent:
+      Position: [-500, -500]
+      Scale: [1, 1]
+      AngleRadians: 0
+    fif::lua_scripting::LuaScriptComponent:
+      Path: assets/scripts/quad_test.lua
+    fif::gfx::QuadComponent:
+      Tint: [255, 255, 255, 255]
+      Size: [100, 100]
+    fif::gfx::LabelComponent:
+      Text: Quad Test
+      Size: 1
+      Color: [0, 0, 0, 255]
+      HorizontalAlign: 0
+      VerticalAlign: 0
+      FontUUID: 0
+  - UUID: 4851004494681986563
+    Tag: Sprite Test
+    fif::core::TransformComponent:
+      Position: [500, -500]
+      Scale: [1, 1]
+      AngleRadians: 0
+    fif::lua_scripting::LuaScriptComponent:
+      Path: assets/scripts/sprite_test.lua
+    fif::gfx::SpriteComponent:
+      Tint: [255, 255, 255, 255]
+      Size: [50, 50]
+      TextureUUID: 8782194013072685429
+    fif::gfx::LabelComponent:
+      Text: Sprite Test
+      Size: 1
       Color: [0, 0, 0, 255]
       HorizontalAlign: 0
       VerticalAlign: 0

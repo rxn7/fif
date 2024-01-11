@@ -60,7 +60,7 @@ namespace fif::lua_scripting {
 		);
 		// clang-format on
 
-		register_component<core::TransformComponent>("position", &core::TransformComponent::position, "scale", &core::TransformComponent::scale, "angleRadians", &core::TransformComponent::angleRadians);
+		register_component<core::TransformComponent>("position", &core::TransformComponent::position, "scale", &core::TransformComponent::scale, "angleRadians", &core::TransformComponent::angleRadians, "get_right_dir", &core::TransformComponent::get_right_dir, "get_up_dir", &core::TransformComponent::get_up_dir);
 		register_component<core::TagComponent>("tag", &core::TagComponent::tag);
 		register_component<core::UuidComponent>("uuid", &core::UuidComponent::uuid);
 	}

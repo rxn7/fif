@@ -16,9 +16,8 @@ namespace fif::gfx {
 		void start();
 		void end();
 
-		void bind();
-		void unbind();
-		void invalidate();
+		inline void bind() { glBindFramebuffer(GL_FRAMEBUFFER, m_FboID); }
+		inline void unbind() { glBindFramebuffer(GL_FRAMEBUFFER, 0); }
 
 		void set_size(const vec2 &size);
 		inline const vec2 &get_size() const { return m_Size; }

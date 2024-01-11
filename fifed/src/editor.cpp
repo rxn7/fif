@@ -1,5 +1,4 @@
 #include "editor.hpp"
-#include "event/window_event.hpp"
 #include "fifed_module.hpp"
 #include "panels/console/console_panel.hpp"
 #include "panels/inspector/inspector_panel.hpp"
@@ -12,6 +11,7 @@
 
 #include <fif/core/ecs/components/transform_component.hpp>
 #include <fif/core/event/key_event.hpp>
+#include <fif/core/event/window_event.hpp>
 #include <fif/core/project.hpp>
 #include <fif/core/serialization/scene_serializer.hpp>
 #include <fif/core/system.hpp>
