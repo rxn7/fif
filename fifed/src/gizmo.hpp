@@ -1,6 +1,7 @@
 #pragma once
 
-#include "ecs/components/transform_component.hpp"
+#include <fif/core/ecs/components/transform_component.hpp>
+
 namespace fifed {
 	class Editor;
 

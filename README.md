@@ -41,7 +41,7 @@ Fif is split into core module and other independent modules:
 - native_scripting
 
 # Building
-- ```./scripts/configure.sh``` - configure the build targets
+- ```./scripts/configure.sh``` - configure the build targets (needs to be called first and after creating a new source file to update the globs)
 - ```./scripts/run-debug.sh``` - compile and run a debug build
 - ```./scripts/run-release.sh``` - compile and run  a release build
 - ```cmake --build build/debug``` - compile a debug build
