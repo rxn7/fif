@@ -14,7 +14,7 @@ namespace fifed {
 	private:
 		bool m_Enabled = true;
 		Color3 m_LineColor = Color3(20, 20, 20);
-		f32 m_LineThickness = 5.0f;
+		f32 m_LineThickness = 1.5f;
 		f32 m_MinCellSize = 0.05f;
 		VertexBuffer m_VertexBuffer;
 		Shader m_Shader;

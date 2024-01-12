@@ -14,7 +14,10 @@ namespace fif::input {
 		GLFWwindow *glfwWindow = app.get_window().get_glfw_window();
 
 		glfwSetKeyCallback(glfwWindow, []([[maybe_unused]] GLFWwindow *glfwWindow, int key, [[maybe_unused]] int scancode, int action, [[maybe_unused]] int mods) {
-			FIF_ASSERT(key >= 0 && key <= KEY_COUNT, "The key %d is out of range", key);
+			if(key < 0 && key >= KEY_COUNT) {
+				core::Logger::warn("The key %i is out of range", key);
+				return;
+			}
 
 			core::Window *window = FIF_GET_WINDOW_FROM_GLFW_WINDOW(glfwWindow);
 			if(action == GLFW_PRESS) {
