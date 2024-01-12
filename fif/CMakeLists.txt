@@ -18,7 +18,6 @@ set(INC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
 add_compile_options(-fPIC)
 add_compile_options(-ffast-math)
 add_compile_options(-fno-stack-protector)
-add_compile_options(-fcolor-diagnostics)
 
 message("Build type: ${CMAKE_BUILD_TYPE}")
 if(CMAKE_BUILD_TYPE STREQUAL "Release")

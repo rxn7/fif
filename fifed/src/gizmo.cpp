@@ -171,6 +171,10 @@ namespace fifed {
 			mp_HoveredPart = nullptr;
 		}
 
-		ImGui::SetMouseCursor(mp_HoveredPart ? ImGuiMouseCursor_Hand : ImGuiMouseCursor_Arrow);
+		if(mp_ActivePart) {
+			ImGui::SetMouseCursor(ImGuiMouseCursor_ResizeNWSE);
+		} else if(mp_HoveredPart) {
+			ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
+		}
 	}
 }// namespace fifed
