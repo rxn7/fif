@@ -2,6 +2,7 @@
 
 #include "fif/gfx/batch.hpp"
 #include "fif/gfx/ortho_camera.hpp"
+#include "fif/gfx/render_command.hpp"
 #include "fif/gfx/resource/font.hpp"
 #include "fif/gfx/resource/texture.hpp"
 #include "fif/gfx/text/text_align.hpp"
@@ -10,6 +11,7 @@
 #include "vertices/quad_vertex.hpp"
 #include "vertices/sprite_vertex.hpp"
 
+#include <queue>
 #include <regex>
 
 namespace fif::gfx {
@@ -101,30 +103,32 @@ namespace fif::gfx {
 		void start();
 		void end();
 
-		void render_quad(const vec2 &position, const vec2 &size, f32 angle = 0.0f, const Color &color = {255, 255, 255, 255}, const vec2 &pivot = vec2(0.0f));
-
-		void render_sprite(const std::shared_ptr<Texture> &texture, const vec2 &position, const vec2 &size, f32 angle = 0.0f, const Color &color = {255, 255, 255, 255}, const vec2 &pivot = vec2(0.0f),
-						   const std::array<vec2, 4> &uvs = {
-							   vec2(0.0f, 0.0f),
-							   vec2(0.0f, 1.0f),
-							   vec2(1.0f, 1.0f),
-							   vec2(1.0f, 0.0f),
-						   });
-
-		void render_circle(const vec2 &position, f32 radius, const Color &color = Colors::WHITE);
-		void render_text(const Font &font, const vec2 &position, const vec2 &scale, f32 size, const std::string &text, const Color &color = Colors::BLACK, const VerticalTextAlign vAlign = VerticalTextAlign::Center, const HorizontalTextAlign hAlign = HorizontalTextAlign::Left);
+		void add_quad(const QuadRenderCommand &cmd);
+		void add_sprite(const SpriteRenderCommand &cmd);
+		void add_circle(const CircleRenderCommand &cmd);
+		void add_text(const TextRenderCommand &cmd);
 
 	private:
+		void reset_textures();
+		void flush_all_batches();
 		mat4 calculate_rotation_matrix(const vec2 &position, const vec2 &halfSize, const vec2 &pivot, const f32 angleRadians);
 
+	public:
+		void render_quad(const QuadRenderCommand &cmd);
+		void render_sprite(const SpriteRenderCommand &cmd);
+		void render_circle(const CircleRenderCommand &cmd);
+		void render_text(const TextRenderCommand &cmd);
+
 	private:
-		static constexpr u32 BATCH_SIZE = 1000;
+		// TODO: Find a middle ground for memory usage and performance.
+		static constexpr u32 BATCH_SIZE = 1000;// In objects (4 vertices, 6 indices)
 
 		std::unique_ptr<Batch<QuadVertex>> mp_QuadBatch;
 		std::unique_ptr<Batch<CircleVertex>> mp_CircleBatch;
 		std::unique_ptr<Batch<SpriteVertex>> mp_SpriteBatch;
 		std::unique_ptr<Batch<SpriteVertex>> mp_GlyphBatch;
 
+		std::priority_queue<std::unique_ptr<RenderCommand>, std::vector<std::unique_ptr<RenderCommand>>, RenderCommandComparator> m_RenderCommandsQueue;
 		OrthoCamera m_Camera;
 
 		std::array<std::shared_ptr<Texture>, 32> m_Textures;

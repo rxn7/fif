@@ -24,6 +24,9 @@ namespace fif::gfx {
 		inline bool is_empty() const { return m_VertexCount == 0; }
 
 		void flush() {
+			if(m_VertexCount == 0)
+				return;
+
 			m_Buffer.set_vertices_and_elements(mp_Vertices, m_VertexCount, mp_Elements, m_ElementCount);
 			m_Buffer.render();
 

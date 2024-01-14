@@ -67,8 +67,8 @@ namespace fifed {
 			ImGui::Separator();
 
 			ImGui::Text("Texture: ");
-			if(sprite.p_texture) {
-				ImGui::Image(reinterpret_cast<ImTextureID>(sprite.p_texture->get_id()), ImVec2(100, 100), ImVec2(0, 1), ImVec2(1, 0));
+			if(sprite.p_Texture) {
+				ImGui::Image(reinterpret_cast<ImTextureID>(sprite.p_Texture->get_id()), ImVec2(100, 100), ImVec2(0, 1), ImVec2(1, 0));
 			} else {
 				ImGui::SameLine();
 				ImGui::Text("No texture is selected");
@@ -87,7 +87,7 @@ namespace fifed {
 				if(!texture)
 					return;
 
-				sprite.p_texture = texture;
+				sprite.p_Texture = texture;
 				sprite.size = texture->get_size();
 			}
 		});

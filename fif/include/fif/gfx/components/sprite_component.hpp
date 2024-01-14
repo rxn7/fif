@@ -10,6 +10,6 @@ namespace fif::gfx {
 		Color tint = Colors::WHITE;
 		vec2 size = {100.0f, 100.0f};
 
-		std::shared_ptr<Texture> p_texture = nullptr;
+		std::shared_ptr<Texture> p_Texture = nullptr;
 	};
 }// namespace fif::gfx

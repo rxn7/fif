@@ -13,26 +13,53 @@ namespace fif::gfx {
 		Renderer2D &renderer = GfxModule::get_instance().get_renderer2D();
 
 		registry.view<CircleComponent, core::TransformComponent>().each([&]([[maybe_unused]] core::EntityID entity, CircleComponent &circle, core::TransformComponent &trans) {
-			// TODO: Should the radius be scaled by trans.scale.x or trans.scale.y or not at all?
-			renderer.render_circle(trans.position, circle.radius, circle.tint);
+			const CircleRenderCommand cmd = {.position = trans.position, .radius = circle.radius, .color = circle.tint};
+			renderer.render_circle(cmd);
 		});
 
 		registry.view<QuadComponent, core::TransformComponent>().each([&]([[maybe_unused]] core::EntityID entity, QuadComponent &quad, core::TransformComponent &trans) {
-			renderer.render_quad(trans.position, quad.size * trans.scale, trans.angleRadians, quad.tint);
+			const QuadRenderCommand cmd = {
+				.position = trans.position,
+				.size = trans.scale * quad.size,
+				.angle = trans.angleRadians,
+				.color = quad.tint,
+			};
+			renderer.render_quad(cmd);
 		});
 
 		registry.view<SpriteComponent, core::TransformComponent>().each([&]([[maybe_unused]] core::EntityID entity, SpriteComponent &sprite, core::TransformComponent &trans) {
-			if(!sprite.p_texture) {
-				renderer.render_quad(trans.position, sprite.size * trans.scale, trans.angleRadians, sprite.tint);
+			if(!sprite.p_Texture) {
+				const QuadRenderCommand cmd = {
+					.position = trans.position,
+					.size = trans.scale * sprite.size,
+					.angle = trans.angleRadians,
+					.color = sprite.tint,
+				};
+				renderer.render_quad(cmd);
 				return;
 			}
 
-			renderer.render_sprite(sprite.p_texture, trans.position, sprite.size * trans.scale, trans.angleRadians, sprite.tint);
+			const SpriteRenderCommand cmd = {
+				.position = trans.position,
+				.size = trans.scale * sprite.size,
+				.angle = trans.angleRadians,
+				.color = sprite.tint,
+				.p_Texture = sprite.p_Texture,
+			};
+
+			renderer.render_sprite(cmd);
 		});
 
 		registry.view<LabelComponent, core::TransformComponent>().each([&]([[maybe_unused]] core::EntityID entity, LabelComponent &label, core::TransformComponent &trans) {
+			const TextRenderCommand cmd = {.text = label.text,
+										   .font = label.p_font ? *label.p_font : Font::get_default(),
+										   .position = trans.position,
+										   .size = trans.scale * label.fontSize,
+										   .color = label.color,
+										   .vAlign = label.verticalAlign,
+										   .hAlign = label.horizontalAlign};
 			// TODO: Add scale
-			renderer.render_text(label.p_font ? *label.p_font : Font::get_default(), trans.position, trans.scale, label.fontSize, label.text, label.color, label.verticalAlign, label.horizontalAlign);
+			renderer.render_text(cmd);
 		});
 	}
 }// namespace fif::gfx

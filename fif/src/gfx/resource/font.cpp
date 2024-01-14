@@ -18,7 +18,7 @@ namespace fif::gfx {
 		u32 row = 0;
 		u32 col = glyphPadding;
 
-		u8 *textureBuffer = new u8[textureSize * textureSize];
+		u8 *textureBuffer = (u8 *)alloca(textureSize * textureSize * sizeof(u8));
 		std::fill_n(textureBuffer, textureSize * textureSize, 0);
 
 		for(char c = 32; c < 127; ++c) {
@@ -61,7 +61,6 @@ namespace fif::gfx {
 		FT_Done_Face(m_Face);
 
 		mp_Texture = std::make_shared<Texture>(textureSize, textureSize, GL_R8, GL_RED, filter, GL_CLAMP_TO_BORDER, textureBuffer);
-		delete[] textureBuffer;
 
 		core::Logger::info("Font %s has been loaded", path.c_str());
 	}

@@ -21,9 +21,9 @@ namespace fif::gfx {
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-		glEnable(GL_CULL_FACE);
-		glFrontFace(GL_CW);
-		glCullFace(GL_BACK);
+		// glEnable(GL_CULL_FACE);
+		// glFrontFace(GL_CW);
+		// glCullFace(GL_BACK);
 
 		glDisable(GL_DEPTH_TEST);
 		glDepthFunc(GL_NEVER);
@@ -41,18 +41,14 @@ namespace fif::gfx {
 
 	void Renderer2D::start() {
 		m_BeginTime = core::Clock::now();
-
-		m_TextureIdx = 0;
-		std::fill(m_Textures.begin(), m_Textures.end(), nullptr);
+		reset_textures();
 	}
 
 	void Renderer2D::end() {
 		m_Camera.update();
 
-		flush_batch(*mp_QuadBatch);
-		flush_batch(*mp_CircleBatch);
-		flush_batch(*mp_GlyphBatch);
-		flush_batch(*mp_SpriteBatch);
+		// TODO: Render the render commands
+		flush_all_batches();
 
 		m_Stats = m_TempStats;
 		m_Stats.textures = m_TextureIdx;
@@ -61,27 +57,44 @@ namespace fif::gfx {
 		m_TempStats = {0};
 	}
 
-	void Renderer2D::render_sprite(const std::shared_ptr<Texture> &texture, const vec2 &position, const vec2 &size, f32 angle, const Color &color, const vec2 &pivot, const std::array<vec2, 4> &uvs) {
+	void Renderer2D::reset_textures() {
+		m_TextureIdx = 0;
+		std::fill(m_Textures.begin(), m_Textures.end(), nullptr);
+	}
+
+	void Renderer2D::flush_all_batches() {
+		flush_batch(*mp_QuadBatch);
+		flush_batch(*mp_CircleBatch);
+		flush_batch(*mp_GlyphBatch);
+		flush_batch(*mp_SpriteBatch);
+	}
+
+	void Renderer2D::render_sprite(const SpriteRenderCommand &cmd) {
 		FLUSH_IF_FULL(mp_SpriteBatch)
 
-		const vec2 halfSize = size * 0.5f;
-		const u8 textureSlot = assign_texture_slot(texture, *mp_SpriteBatch);
+		const vec2 halfSize = cmd.size * 0.5f;
+		const u8 textureSlot = assign_texture_slot(cmd.p_Texture, *mp_SpriteBatch);
 		const u32 vertCount = mp_SpriteBatch->get_vertex_count();
 
-		if(glm::mod(angle, glm::two_pi<f32>())) {
+		const u16vec2 uvSize = cmd.uvSize == u16vec2(0, 0) ? u16vec2(cmd.p_Texture->get_size()) : cmd.uvSize;
+
+		const vec2 uvStart = vec2(cmd.uvPivot) / vec2(cmd.p_Texture->get_size());
+		const vec2 uvEnd = vec2(cmd.uvPivot + uvSize) / vec2(cmd.p_Texture->get_size());
+
+		if(glm::mod(cmd.angle, glm::two_pi<f32>())) {
 			m_TempStats.rotatedSpriteCount++;
 
-			const mat4 matrix = calculate_rotation_matrix(position, halfSize, pivot, angle);
-			mp_SpriteBatch->add_vertex({matrix * vec4(-1.0f, -1.0f, 0.0f, 1.0f), uvs[0], color, textureSlot});
-			mp_SpriteBatch->add_vertex({matrix * vec4(-1.0f, +1.0f, 0.0f, 1.0f), uvs[1], color, textureSlot});
-			mp_SpriteBatch->add_vertex({matrix * vec4(+1.0f, +1.0f, 0.0f, 1.0f), uvs[2], color, textureSlot});
-			mp_SpriteBatch->add_vertex({matrix * vec4(+1.0f, -1.0f, 0.0f, 1.0f), uvs[3], color, textureSlot});
+			const mat4 matrix = calculate_rotation_matrix(cmd.position, halfSize, cmd.pivot, cmd.angle);
+			mp_SpriteBatch->add_vertex({matrix * vec4(-1.0f, -1.0f, 0.0f, 1.0f), uvStart, cmd.color, textureSlot});
+			mp_SpriteBatch->add_vertex({matrix * vec4(-1.0f, +1.0f, 0.0f, 1.0f), {uvStart.x, uvEnd.y}, cmd.color, textureSlot});
+			mp_SpriteBatch->add_vertex({matrix * vec4(+1.0f, +1.0f, 0.0f, 1.0f), {uvEnd.x, uvEnd.y}, cmd.color, textureSlot});
+			mp_SpriteBatch->add_vertex({matrix * vec4(+1.0f, -1.0f, 0.0f, 1.0f), {uvEnd.x, uvStart.y}, cmd.color, textureSlot});
 		} else {
 			m_TempStats.spriteCount++;
-			mp_SpriteBatch->add_vertex({vec2(position.x - halfSize.x, position.y - halfSize.y), uvs[0], color, textureSlot});
-			mp_SpriteBatch->add_vertex({vec2(position.x - halfSize.x, position.y + halfSize.y), uvs[1], color, textureSlot});
-			mp_SpriteBatch->add_vertex({vec2(position.x + halfSize.x, position.y + halfSize.y), uvs[2], color, textureSlot});
-			mp_SpriteBatch->add_vertex({vec2(position.x + halfSize.x, position.y - halfSize.y), uvs[3], color, textureSlot});
+			mp_SpriteBatch->add_vertex({vec2(cmd.position.x - halfSize.x, cmd.position.y - halfSize.y), uvStart, cmd.color, textureSlot});
+			mp_SpriteBatch->add_vertex({vec2(cmd.position.x - halfSize.x, cmd.position.y + halfSize.y), {uvStart.x, uvEnd.y}, cmd.color, textureSlot});
+			mp_SpriteBatch->add_vertex({vec2(cmd.position.x + halfSize.x, cmd.position.y + halfSize.y), {uvEnd.x, uvEnd.y}, cmd.color, textureSlot});
+			mp_SpriteBatch->add_vertex({vec2(cmd.position.x + halfSize.x, cmd.position.y - halfSize.y), {uvEnd.x, uvStart.y}, cmd.color, textureSlot});
 		}
 
 		mp_SpriteBatch->add_element(vertCount);
@@ -95,24 +108,24 @@ namespace fif::gfx {
 		m_TempStats.elementCount += 6;
 	}
 
-	void Renderer2D::render_quad(const vec2 &position, const vec2 &size, f32 angle, const Color &color, const vec2 &pivot) {
+	void Renderer2D::render_quad(const QuadRenderCommand &cmd) {
 		FLUSH_IF_FULL(mp_QuadBatch)
 
-		const vec2 halfSize = size * 0.5f;
+		const vec2 halfSize = cmd.size * 0.5f;
 		const u32 vertCount = mp_QuadBatch->get_vertex_count();
 
-		if(glm::mod(angle, glm::two_pi<f32>())) {
-			const mat4 matrix = calculate_rotation_matrix(position, halfSize, pivot, angle);
-			mp_QuadBatch->add_vertex({matrix * vec4(-1.0f, -1.0f, 0.0f, 1.0f), color});
-			mp_QuadBatch->add_vertex({matrix * vec4(-1.0f, +1.0f, 0.0f, 1.0f), color});
-			mp_QuadBatch->add_vertex({matrix * vec4(+1.0f, +1.0f, 0.0f, 1.0f), color});
-			mp_QuadBatch->add_vertex({matrix * vec4(+1.0f, -1.0f, 0.0f, 1.0f), color});
+		if(glm::mod(cmd.angle, glm::two_pi<f32>())) {
+			const mat4 matrix = calculate_rotation_matrix(cmd.position, halfSize, cmd.pivot, cmd.angle);
+			mp_QuadBatch->add_vertex({matrix * vec4(-1.0f, -1.0f, 0.0f, 1.0f), cmd.color});
+			mp_QuadBatch->add_vertex({matrix * vec4(-1.0f, +1.0f, 0.0f, 1.0f), cmd.color});
+			mp_QuadBatch->add_vertex({matrix * vec4(+1.0f, +1.0f, 0.0f, 1.0f), cmd.color});
+			mp_QuadBatch->add_vertex({matrix * vec4(+1.0f, -1.0f, 0.0f, 1.0f), cmd.color});
 			m_TempStats.rotatedQuadCount++;
 		} else {
-			mp_QuadBatch->add_vertex({vec2(position.x - halfSize.x, position.y - halfSize.y), color});
-			mp_QuadBatch->add_vertex({vec2(position.x - halfSize.x, position.y + halfSize.y), color});
-			mp_QuadBatch->add_vertex({vec2(position.x + halfSize.x, position.y + halfSize.y), color});
-			mp_QuadBatch->add_vertex({vec2(position.x + halfSize.x, position.y - halfSize.y), color});
+			mp_QuadBatch->add_vertex({vec2(cmd.position.x - halfSize.x, cmd.position.y - halfSize.y), cmd.color});
+			mp_QuadBatch->add_vertex({vec2(cmd.position.x - halfSize.x, cmd.position.y + halfSize.y), cmd.color});
+			mp_QuadBatch->add_vertex({vec2(cmd.position.x + halfSize.x, cmd.position.y + halfSize.y), cmd.color});
+			mp_QuadBatch->add_vertex({vec2(cmd.position.x + halfSize.x, cmd.position.y - halfSize.y), cmd.color});
 			m_TempStats.quadCount++;
 		}
 
@@ -127,15 +140,15 @@ namespace fif::gfx {
 		m_TempStats.elementCount += 6;
 	}
 
-	void Renderer2D::render_circle(const vec2 &position, f32 radius, const Color &color) {
+	void Renderer2D::render_circle(const CircleRenderCommand &cmd) {
 		FLUSH_IF_FULL(mp_CircleBatch)
 
 		const u32 vertCount = mp_CircleBatch->get_vertex_count();
 
-		mp_CircleBatch->add_vertex({vec2(position.x - radius, position.y - radius), vec2(0.0f, 0.0f), color});
-		mp_CircleBatch->add_vertex({vec2(position.x - radius, position.y + radius), vec2(0.0f, 1.0f), color});
-		mp_CircleBatch->add_vertex({vec2(position.x + radius, position.y + radius), vec2(1.0f, 1.0f), color});
-		mp_CircleBatch->add_vertex({vec2(position.x + radius, position.y - radius), vec2(1.0f, 0.0f), color});
+		mp_CircleBatch->add_vertex({vec2(cmd.position.x - cmd.radius, cmd.position.y - cmd.radius), vec2(0.0f, 0.0f), cmd.color});
+		mp_CircleBatch->add_vertex({vec2(cmd.position.x - cmd.radius, cmd.position.y + cmd.radius), vec2(0.0f, 1.0f), cmd.color});
+		mp_CircleBatch->add_vertex({vec2(cmd.position.x + cmd.radius, cmd.position.y + cmd.radius), vec2(1.0f, 1.0f), cmd.color});
+		mp_CircleBatch->add_vertex({vec2(cmd.position.x + cmd.radius, cmd.position.y - cmd.radius), vec2(1.0f, 0.0f), cmd.color});
 
 		mp_CircleBatch->add_element(vertCount);
 		mp_CircleBatch->add_element(vertCount + 1u);
@@ -150,22 +163,22 @@ namespace fif::gfx {
 	}
 
 	// TODO: Support rotations
-	void Renderer2D::render_text(const Font &font, const vec2 &position, const vec2 &scale, f32 fontSize, const std::string &text, const Color &color, const VerticalTextAlign vAlign, const HorizontalTextAlign hAlign) {
+	void Renderer2D::render_text(const TextRenderCommand &cmd) {
 		FLUSH_IF_FULL(mp_GlyphBatch)
 
-		const u8 textureSlot = assign_texture_slot(font.get_texture(), *mp_GlyphBatch);
-		const vec2 textSize = font.calculate_text_size(text, scale * fontSize);
-		const vec2 origin = position + TextAlign::get_text_align_offset(hAlign, vAlign, textSize, font.get_font_height() * fontSize);
+		const u8 textureSlot = assign_texture_slot(cmd.font.get_texture(), *mp_GlyphBatch);
+		const vec2 textSize = cmd.font.calculate_text_size(cmd.text, cmd.size);
+		const vec2 origin = cmd.position + TextAlign::get_text_align_offset(cmd.hAlign, cmd.vAlign, textSize, cmd.font.get_font_height() * cmd.size.y);
 
 		vec2 currentPosition = origin;
 
-		const auto break_line = [&currentPosition, &origin, &font, fontSize, &scale]() {
-			currentPosition.y -= font.get_font_height() * fontSize * scale.y;
+		const auto break_line = [&currentPosition, &origin, &cmd]() {
+			currentPosition.y -= cmd.font.get_font_height() * cmd.size.y;
 			currentPosition.x = origin.x;
 		};
 
-		for(std::string::const_iterator it = text.begin(); it < text.end(); ++it) {
-			const bool isLastChar = it == text.end() - 1;
+		for(std::string::const_iterator it = cmd.text.begin(); it < cmd.text.end(); ++it) {
+			const bool isLastChar = it == cmd.text.end() - 1;
 
 			switch(*it) {
 			case '\n':
@@ -194,17 +207,17 @@ namespace fif::gfx {
 					break;
 				}
 
-				const Glyph &glyph = font.get_glyph(*it);
-				const vec2 glyphSize = static_cast<vec2>(glyph.size) * fontSize * scale;
+				const Glyph &glyph = cmd.font.get_glyph(*it);
+				const vec2 glyphSize = static_cast<vec2>(glyph.size) * cmd.size;
 				const u32 vertCount = mp_GlyphBatch->get_vertex_count();
 
-				f32 x = currentPosition.x + glyph.offset.x * fontSize;
-				f32 y = currentPosition.y - (glyph.size.y - glyph.offset.y) * fontSize;
+				f32 x = currentPosition.x + glyph.offset.x * cmd.size.x;
+				f32 y = currentPosition.y - (glyph.size.y - glyph.offset.y) * cmd.size.x;
 
-				mp_GlyphBatch->add_vertex({vec2(x, y), {glyph.startUv.x, glyph.endUv.y}, color, textureSlot});
-				mp_GlyphBatch->add_vertex({vec2(x, y + glyphSize.y), glyph.startUv, color, textureSlot});
-				mp_GlyphBatch->add_vertex({vec2(x + glyphSize.x, y + glyphSize.y), {glyph.endUv.x, glyph.startUv.y}, color, textureSlot});
-				mp_GlyphBatch->add_vertex({vec2(x + glyphSize.x, y), glyph.endUv, color, textureSlot});
+				mp_GlyphBatch->add_vertex({vec2(x, y), {glyph.startUv.x, glyph.endUv.y}, cmd.color, textureSlot});
+				mp_GlyphBatch->add_vertex({vec2(x, y + glyphSize.y), glyph.startUv, cmd.color, textureSlot});
+				mp_GlyphBatch->add_vertex({vec2(x + glyphSize.x, y + glyphSize.y), {glyph.endUv.x, glyph.startUv.y}, cmd.color, textureSlot});
+				mp_GlyphBatch->add_vertex({vec2(x + glyphSize.x, y), glyph.endUv, cmd.color, textureSlot});
 
 				mp_GlyphBatch->add_element(vertCount);
 				mp_GlyphBatch->add_element(vertCount + 1);
@@ -217,7 +230,7 @@ namespace fif::gfx {
 				m_TempStats.elementCount += 6;
 				m_TempStats.glyphCount++;
 
-				currentPosition.x += glyph.advance.x * fontSize * scale.x;
+				currentPosition.x += glyph.advance.x * cmd.size.x;
 			}
 		}
 	}
