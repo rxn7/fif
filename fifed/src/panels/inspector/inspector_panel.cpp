@@ -56,11 +56,14 @@ namespace fifed {
 		});
 
 		draw_component<QuadComponent>("Quad", [](QuadComponent &quad) {
+			draw_z_index_selector(quad.zIndex);
 			draw_color_selector(quad.tint);
 			ImGui::DragFloat2("Size", glm::value_ptr(quad.size));
 		});
 
 		draw_component<SpriteComponent>("Sprite", [](SpriteComponent &sprite) {
+			draw_z_index_selector(sprite.zIndex);
+
 			draw_color_selector(sprite.tint);
 			ImGui::DragFloat2("Size", glm::value_ptr(sprite.size), 1.0f, 0.0f, std::numeric_limits<float>::max());
 
@@ -93,11 +96,15 @@ namespace fifed {
 		});
 
 		draw_component<CircleComponent>("Circle", [](CircleComponent &circle) {
+			draw_z_index_selector(circle.zIndex);
+
 			draw_color_selector(circle.tint);
 			ImGui::DragFloat("Radius", &circle.radius, 1.0f, 0.0f, std::numeric_limits<float>::max());
 		});
 
 		draw_component<LabelComponent>("Label", [&](LabelComponent &label) {
+			draw_z_index_selector(label.zIndex);
+
 			std::strncpy(m_TextBuffer.data(), label.text.c_str(), label.text.size() + 1);
 			if(ImGui::InputText("Text", m_TextBuffer.data(), m_TextBuffer.size()))
 				label.text = m_TextBuffer.data();
@@ -185,6 +192,13 @@ namespace fifed {
 		});
 
 		draw_component<NativeScriptComponent>("Native Script", [](NativeScriptComponent &script) { ImGui::Text("Loaded script: %s", script.scriptName.c_str()); });
+	}
+
+	void InspectorPanel::draw_z_index_selector(i8 &zIndex) {
+		int zIndexInt = zIndex;
+		const i8 step = 1;
+		ImGui::InputScalar("Z Index", ImGuiDataType_S8, &zIndexInt, &step);
+		zIndex = std::min(zIndexInt, 125);// NOTE: 127 is reserved by gizmos, and 126 by outlines! (TODO: we probably should render them seperately)
 	}
 
 	void InspectorPanel::draw_color_selector(Color &color) {

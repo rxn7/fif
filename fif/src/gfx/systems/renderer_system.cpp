@@ -13,53 +13,25 @@ namespace fif::gfx {
 		Renderer2D &renderer = GfxModule::get_instance().get_renderer2D();
 
 		registry.view<CircleComponent, core::TransformComponent>().each([&]([[maybe_unused]] core::EntityID entity, CircleComponent &circle, core::TransformComponent &trans) {
-			const CircleRenderCommand cmd = {.position = trans.position, .radius = circle.radius, .color = circle.tint};
-			renderer.render_circle(cmd);
+			renderer.add_render_command<CircleRenderCommand>(circle.zIndex, trans.position, circle.radius, circle.tint);
 		});
 
 		registry.view<QuadComponent, core::TransformComponent>().each([&]([[maybe_unused]] core::EntityID entity, QuadComponent &quad, core::TransformComponent &trans) {
-			const QuadRenderCommand cmd = {
-				.position = trans.position,
-				.size = trans.scale * quad.size,
-				.angle = trans.angleRadians,
-				.color = quad.tint,
-			};
-			renderer.render_quad(cmd);
+			renderer.add_render_command<QuadRenderCommand>(quad.zIndex, trans.position, trans.scale * quad.size, trans.angleRadians, quad.tint);
 		});
 
 		registry.view<SpriteComponent, core::TransformComponent>().each([&]([[maybe_unused]] core::EntityID entity, SpriteComponent &sprite, core::TransformComponent &trans) {
 			if(!sprite.p_Texture) {
-				const QuadRenderCommand cmd = {
-					.position = trans.position,
-					.size = trans.scale * sprite.size,
-					.angle = trans.angleRadians,
-					.color = sprite.tint,
-				};
-				renderer.render_quad(cmd);
+				renderer.add_render_command<QuadRenderCommand>(sprite.zIndex, trans.position, trans.scale * sprite.size, trans.angleRadians, sprite.tint);
 				return;
 			}
 
-			const SpriteRenderCommand cmd = {
-				.position = trans.position,
-				.size = trans.scale * sprite.size,
-				.angle = trans.angleRadians,
-				.color = sprite.tint,
-				.p_Texture = sprite.p_Texture,
-			};
-
-			renderer.render_sprite(cmd);
+			renderer.add_render_command<SpriteRenderCommand>(sprite.zIndex, trans.position, trans.scale * sprite.size, trans.angleRadians, sprite.tint, sprite.p_Texture);
 		});
 
 		registry.view<LabelComponent, core::TransformComponent>().each([&]([[maybe_unused]] core::EntityID entity, LabelComponent &label, core::TransformComponent &trans) {
-			const TextRenderCommand cmd = {.text = label.text,
-										   .font = label.p_font ? *label.p_font : Font::get_default(),
-										   .position = trans.position,
-										   .size = trans.scale * label.fontSize,
-										   .color = label.color,
-										   .vAlign = label.verticalAlign,
-										   .hAlign = label.horizontalAlign};
-			// TODO: Add scale
-			renderer.render_text(cmd);
+			renderer.add_render_command<TextRenderCommand>(
+				label.zIndex, label.text, label.p_font ? *label.p_font : Font::get_default(), trans.position, trans.scale * label.fontSize, label.color, label.verticalAlign, label.horizontalAlign);
 		});
 	}
 }// namespace fif::gfx

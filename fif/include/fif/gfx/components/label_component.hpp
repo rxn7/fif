@@ -6,6 +6,8 @@
 
 namespace fif::gfx {
 	struct LabelComponent final {
+		i8 zIndex = 0;
+
 		std::string text = "";
 		f32 fontSize = 1.0f;
 		Color color = Colors::BLACK;

@@ -1,13 +1,13 @@
 Entities:
-  - UUID: 2709269738779063742
+  - UUID: 13521856650476765178
     Tag: Player
     fif::core::TransformComponent:
-      Position: [0, 0]
+      Position: [0, -960]
       Scale: [1, 1]
       AngleRadians: 0
     fif::lua_scripting::LuaScriptComponent:
       Path: assets/scripts/player.lua
     fif::gfx::SpriteComponent:
       Tint: [255, 255, 255, 255]
-      Size: [100, 100]
+      Size: [128, 128]
       TextureUUID: 15600235039495965740

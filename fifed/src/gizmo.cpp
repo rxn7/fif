@@ -14,17 +14,19 @@ namespace fifed {
 	constexpr Color Y_AXIS_COLOR = Color(20, 255, 20, 155);
 	constexpr Color Y_AXIS_COLOR_HOVERED = Colors::GREEN;
 
-	constexpr u16vec2 ORIGIN_UV_PIVOT{0, 0};
+	constexpr u16vec2 ORIGIN_UV_PIVOT{0, 48};
 	constexpr u16vec2 ORIGIN_UV_SIZE{24, 24};
+
 	constexpr u16vec2 TRANSLATE_UV_PIVOT{24, 0};
 	constexpr u16vec2 SCALE_UV_PIVOT{48, 0};
+
 	constexpr u16vec2 ARROW_UV_SIZE{24, 48};
 
 	constexpr vec2 ARROW_SIZE = vec2(16 * 4.f, 48 * 4.f);
 	constexpr vec2 ARROW_PIVOT = vec2(0.0f, -ARROW_SIZE.y * 0.55f);
 
 	Gizmo::Gizmo(Editor &editor) :
-		m_Editor(editor), m_Camera(GfxModule::get_instance().get_renderer2D().get_camera()), mp_Texture(std::make_shared<Texture>("assets/textures/gizmos.png", true, GL_NEAREST)), m_OriginPart({.size = {16, 16}, .color = ORIGIN_COLOR, .hoverColor = ORIGIN_COLOR_HOVERED}), m_XAxisPart({.rotation = glm::radians(-90.0f), .size = ARROW_SIZE, .color = X_AXIS_COLOR, .hoverColor = X_AXIS_COLOR_HOVERED}), m_YAxisPart({.rotation = glm::radians(180.0f), .size = ARROW_SIZE, .color = Y_AXIS_COLOR, .hoverColor = Y_AXIS_COLOR_HOVERED}) {}
+		m_Editor(editor), m_Camera(GfxModule::get_instance().get_renderer2D().get_camera()), mp_Texture(std::make_shared<Texture>("assets/textures/gizmos.png", true, GL_NEAREST)), m_OriginPart({.size = {24 * 2, 24 * 2}, .color = ORIGIN_COLOR, .hoverColor = ORIGIN_COLOR_HOVERED}), m_XAxisPart({.rotation = glm::radians(-90.0f), .size = ARROW_SIZE, .color = X_AXIS_COLOR, .hoverColor = X_AXIS_COLOR_HOVERED}), m_YAxisPart({.rotation = glm::radians(180.0f), .size = ARROW_SIZE, .color = Y_AXIS_COLOR, .hoverColor = Y_AXIS_COLOR_HOVERED}) {}
 
 	void Gizmo::render() {
 		if(!m_Editor.m_SelectedEntity) {
@@ -52,8 +54,7 @@ namespace fifed {
 			}
 			const auto render_gizmo_part = [&](GizmoPart &part, const u16vec2 &uvPivot, const u16vec2 &uvSize, const vec2 &pivot = vec2(0.0f)) {
 				const f32 angleRadians = m_Space == GizmoSpace::Local ? part.rotation + trans->angleRadians : part.rotation;
-				const SpriteRenderCommand cmd = {.position = trans->position, .size = part.size * zoomFactor, .angle = angleRadians, .color = (&part == mp_HoveredPart || &part == mp_ActivePart) ? part.hoverColor : part.color, .pivot = pivot * zoomFactor, .p_Texture = mp_Texture, .uvPivot = uvPivot, .uvSize = uvSize};
-				renderer.render_sprite(cmd);
+				renderer.add_render_command<SpriteRenderCommand>(127, trans->position, part.size * zoomFactor, angleRadians, (&part == mp_HoveredPart || &part == mp_ActivePart) ? part.hoverColor : part.color, mp_Texture, pivot * zoomFactor, uvPivot, uvSize);
 			};
 
 			switch(m_Mode) {

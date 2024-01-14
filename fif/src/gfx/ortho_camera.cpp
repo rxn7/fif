@@ -11,8 +11,8 @@ namespace fif::gfx {
 
 	void OrthoCamera::update_size() {
 		const vec2 viewportSize = GfxModule::get_instance().get_viewport_size();
-		const f32 aspect = static_cast<f32>(viewportSize.y) / static_cast<f32>(viewportSize.x);
-		m_Size = vec2(1.0f, aspect) * m_Zoom * BASE_ZOOM;
+		const f32 aspect = static_cast<f32>(viewportSize.x) / static_cast<f32>(viewportSize.y);
+		m_Size = vec2(aspect, 1.0f) * m_Zoom * BASE_ZOOM;
 	}
 
 	vec2 OrthoCamera::screen_to_world(const vec2 &position) const {

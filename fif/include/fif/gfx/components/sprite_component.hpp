@@ -7,6 +7,8 @@ namespace fif::gfx {
 	struct SpriteComponent final {
 		SpriteComponent() {}
 
+		i8 zIndex = 0;
+
 		Color tint = Colors::WHITE;
 		vec2 size = {100.0f, 100.0f};
 

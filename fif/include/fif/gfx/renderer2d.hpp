@@ -103,21 +103,25 @@ namespace fif::gfx {
 		void start();
 		void end();
 
-		void add_quad(const QuadRenderCommand &cmd);
-		void add_sprite(const SpriteRenderCommand &cmd);
-		void add_circle(const CircleRenderCommand &cmd);
-		void add_text(const TextRenderCommand &cmd);
+		template<class T, class... Args> inline void add_render_command(i8 zIndex, Args &&...args) {
+			static_assert(std::is_base_of<RenderCommand, T>().value, "T must inherit RenderCommand");
 
-	private:
-		void reset_textures();
-		void flush_all_batches();
-		mat4 calculate_rotation_matrix(const vec2 &position, const vec2 &halfSize, const vec2 &pivot, const f32 angleRadians);
+			std::shared_ptr<RenderCommand> cmd = std::make_shared<T>(args...);
+			cmd->zIndex = zIndex;
 
-	public:
+			m_RenderCommandsQueue.push(cmd);
+		}
+
 		void render_quad(const QuadRenderCommand &cmd);
 		void render_sprite(const SpriteRenderCommand &cmd);
 		void render_circle(const CircleRenderCommand &cmd);
 		void render_text(const TextRenderCommand &cmd);
+
+	private:
+		void reset_textures();
+		void execute_render_commands();
+		void flush_all_batches();
+		mat4 calculate_rotation_matrix(const vec2 &position, const vec2 &halfSize, const vec2 &pivot, const f32 angleRadians);
 
 	private:
 		// TODO: Find a middle ground for memory usage and performance.
@@ -128,7 +132,7 @@ namespace fif::gfx {
 		std::unique_ptr<Batch<SpriteVertex>> mp_SpriteBatch;
 		std::unique_ptr<Batch<SpriteVertex>> mp_GlyphBatch;
 
-		std::priority_queue<std::unique_ptr<RenderCommand>, std::vector<std::unique_ptr<RenderCommand>>, RenderCommandComparator> m_RenderCommandsQueue;
+		std::priority_queue<std::shared_ptr<RenderCommand>, std::vector<std::shared_ptr<RenderCommand>>, RenderCommandComparator> m_RenderCommandsQueue;
 		OrthoCamera m_Camera;
 
 		std::array<std::shared_ptr<Texture>, 32> m_Textures;

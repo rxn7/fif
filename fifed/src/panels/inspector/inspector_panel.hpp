@@ -11,6 +11,7 @@ namespace fifed {
 		void on_render() override;
 
 	private:
+		static void draw_z_index_selector(i8 &zIndex);
 		static void draw_color_selector(Color &color);
 
 		template<typename T, typename... Args> void draw_add_component_entry(const std::string &name, std::function<void(T &comp)> callback = nullptr, Args &&...args) {

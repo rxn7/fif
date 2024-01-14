@@ -47,7 +47,7 @@ namespace fif::gfx {
 	void Renderer2D::end() {
 		m_Camera.update();
 
-		// TODO: Render the render commands
+		execute_render_commands();
 		flush_all_batches();
 
 		m_Stats = m_TempStats;
@@ -60,6 +60,22 @@ namespace fif::gfx {
 	void Renderer2D::reset_textures() {
 		m_TextureIdx = 0;
 		std::fill(m_Textures.begin(), m_Textures.end(), nullptr);
+	}
+
+	void Renderer2D::execute_render_commands() {
+		i8 lastZIndex = std::numeric_limits<i8>::min();
+		while(!m_RenderCommandsQueue.empty()) {
+			std::shared_ptr<RenderCommand> cmd = m_RenderCommandsQueue.top();
+			m_RenderCommandsQueue.pop();
+
+			cmd->render(*this);
+
+			if(cmd->zIndex != lastZIndex) {
+				flush_all_batches();
+			}
+
+			lastZIndex = cmd->zIndex;
+		}
 	}
 
 	void Renderer2D::flush_all_batches() {
