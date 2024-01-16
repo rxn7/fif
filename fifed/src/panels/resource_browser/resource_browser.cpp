@@ -30,14 +30,13 @@ namespace fifed {
 		u32 entryIdx = 0;
 		for(const std::filesystem::directory_entry &entry : std::filesystem::directory_iterator(m_CurrentDirectory)) {
 			const std::string entryFileName = entry.path().filename().string();
-			ImGui::PushID((entryFileName + "##resourceBrowserEntry").c_str());
-
 			const vec2 size{32, 32};
+
+			ImGui::Separator();
 
 			if(entry.is_directory()) {
 				bool pressed = FifedModule::get_instance().get_icon_manager().imgui_button(entryFileName.c_str(), IconType::DIRECTORY, size);
 				ImGui::SameLine(0.0f, 0.0f);
-
 				pressed |= ImGui::Button((entryFileName + "##btn").c_str(), {0, size.y});
 
 				if(pressed) {
@@ -46,7 +45,6 @@ namespace fifed {
 			} else {
 				bool pressed = FifedModule::get_instance().get_icon_manager().imgui_button(entryFileName.c_str(), IconType::FILE, size);
 				ImGui::SameLine(0.0f, 0.0f);
-
 				pressed |= ImGui::ButtonEx((entryFileName + "##btn").c_str(), {0, size.y}, ImGuiButtonFlags_PressedOnDoubleClick);
 
 				if(pressed) {
@@ -59,8 +57,6 @@ namespace fifed {
 				render_file_context_menu(entry.path());
 				ImGui::EndPopup();
 			}
-
-			ImGui::PopID();
 
 			++entryIdx;
 		}

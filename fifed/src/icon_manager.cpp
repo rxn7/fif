@@ -25,8 +25,8 @@ namespace fifed {
 
 	bool IconManager::imgui_button(const std::string_view idStr, IconType type, const vec2 &size) const {
 		const IconInfo &info = get_icon(type);
-		const vec2 uv0 = vec2(info.offset.x / m_Texture.get_width(), 1.0f - info.offset.y / m_Texture.get_height());
-		const vec2 uv1 = vec2((info.offset.x + info.size.x) / m_Texture.get_width(), 1.0f - (info.offset.y + info.size.y) / m_Texture.get_height());
-		return ImGui::ImageButton(idStr.data(), reinterpret_cast<ImTextureID>(m_Texture.get_id()), ImVec2(size.x, size.y), ImVec2(uv0.x, uv0.y), ImVec2(uv1.x, uv1.y));
+		const vec2 uv0{info.offset.x / m_Texture.get_width(), 1.0f - info.offset.y / m_Texture.get_height()};
+		const vec2 uv1{(info.offset.x + info.size.x) / m_Texture.get_width(), 1.0f - (info.offset.y + info.size.y) / m_Texture.get_height()};
+		return ImGui::ImageButton(idStr.data(), reinterpret_cast<ImTextureID>(m_Texture.get_id()), size, uv0, uv1);
 	}
 }// namespace fifed

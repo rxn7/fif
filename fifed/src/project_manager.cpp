@@ -60,17 +60,24 @@ namespace fifed {
 					for(i32 i = clipper.DisplayStart; i < clipper.DisplayEnd; ++i) {
 						ProjectListItem &item = *std::next(m_ProjectListItems.begin(), i);
 
-						if(ImGui::Button(item.name.c_str()))
+						ImGui::Separator();
+
+						const vec2 size{32, 32};
+
+						if(ImGui::Button(item.name.c_str(), {0.0f, size.y}))
 							m_ProjectLoaded = open_project(item.path);
 
 						ImGui::SameLine();
 
-						if(m_FifedModule.get_icon_manager().imgui_button(("Delete#" + std::to_string(i)).c_str(), IconType::DELETE)) {
+						ImGui::SetCursorPosX(ImGui::GetWindowWidth() - size.x);
+
+						if(m_FifedModule.get_icon_manager().imgui_button(("Delete#" + std::to_string(i)).c_str(), IconType::DELETE, size)) {
 							deleteModalContextItemIdx = i;
 							openDeleteModal = true;
 						}
 					}
 				}
+				ImGui::Separator();
 
 				clipper.End();
 			}
