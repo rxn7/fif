@@ -48,8 +48,8 @@ namespace fif::gfx {
 			}
 
 			Glyph glyph;
-			glyph.startUv = {static_cast<f32>(col) / textureSize, static_cast<f32>(row) / textureSize};
-			glyph.endUv = {static_cast<f32>(col + m_Face->glyph->bitmap.width) / textureSize, static_cast<f32>(row + m_Face->glyph->bitmap.rows) / textureSize};
+			glyph.uvStart = {static_cast<f32>(col) / textureSize, static_cast<f32>(row) / textureSize};
+			glyph.uvEnd = {static_cast<f32>(col + m_Face->glyph->bitmap.width) / textureSize, static_cast<f32>(row + m_Face->glyph->bitmap.rows) / textureSize};
 			glyph.size = {m_Face->glyph->bitmap.width, m_Face->glyph->bitmap.rows};
 			glyph.advance = {m_Face->glyph->advance.x >> 6, m_Face->glyph->advance.y >> 6};
 			glyph.offset = {m_Face->glyph->bitmap_left, m_Face->glyph->bitmap_top};

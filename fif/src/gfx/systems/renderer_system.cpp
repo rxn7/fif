@@ -31,7 +31,7 @@ namespace fif::gfx {
 
 		registry.view<LabelComponent, core::TransformComponent>().each([&]([[maybe_unused]] core::EntityID entity, LabelComponent &label, core::TransformComponent &trans) {
 			renderer.add_render_command<TextRenderCommand>(
-				label.zIndex, label.text, label.p_font ? *label.p_font : Font::get_default(), trans.position, trans.scale * label.fontSize, label.color, label.verticalAlign, label.horizontalAlign);
+				label.zIndex, label.text, label.p_font ? *label.p_font : Font::get_default(), trans.position, trans.scale * label.fontSize, trans.angleRadians, label.color, label.verticalAlign, label.horizontalAlign);
 		});
 	}
 }// namespace fif::gfx

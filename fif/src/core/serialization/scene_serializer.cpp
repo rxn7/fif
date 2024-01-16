@@ -15,8 +15,9 @@ namespace fif::core {
 		yaml << YAML::BeginMap;
 		yaml << YAML::Key << "Entities" << YAML::Value << YAML::BeginSeq;
 
-		m_Scene.for_each([&](EntityID id) {
-			Entity entity(m_Scene, id);
+		// NOTE: We have to read it backwards, otherwise the order gets flipped (possible bug in entt)
+		for(auto it = m_Scene.get_registry().storage<EntityID>().rbegin(); it != m_Scene.get_registry().storage<EntityID>().rend(); ++it) {
+			Entity entity(m_Scene, *it);
 
 			yaml << YAML::BeginMap;
 
@@ -24,7 +25,7 @@ namespace fif::core {
 				serializer->serialize(entity, yaml);
 
 			yaml << YAML::EndMap;
-		});
+		}
 
 		yaml << YAML::EndSeq;
 		yaml << YAML::EndMap;

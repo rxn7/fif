@@ -30,6 +30,7 @@ namespace fif::gfx {
 		u32 rotatedSpriteCount = 0;
 
 		u32 glyphCount = 0;
+		u32 rotatedGlyphCount = 0;
 
 		u32 textures = 0;
 	};

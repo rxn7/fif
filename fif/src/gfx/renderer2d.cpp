@@ -96,14 +96,14 @@ namespace fif::gfx {
 
 		const vec2 uvStart = vec2(cmd.uvPivot) / vec2(cmd.p_Texture->get_size());
 		const vec2 uvEnd = vec2(cmd.uvPivot + uvSize) / vec2(cmd.p_Texture->get_size());
+		const bool isRotated = glm::mod(cmd.angle, glm::two_pi<f32>());
 
-		if(glm::mod(cmd.angle, glm::two_pi<f32>())) {
+		if(isRotated) {
 			m_TempStats.rotatedSpriteCount++;
-
 			const mat4 matrix = calculate_rotation_matrix(cmd.position, halfSize, cmd.pivot, cmd.angle);
 			mp_SpriteBatch->add_vertex({matrix * vec4(-1.0f, -1.0f, 0.0f, 1.0f), uvStart, cmd.color, textureSlot});
 			mp_SpriteBatch->add_vertex({matrix * vec4(-1.0f, +1.0f, 0.0f, 1.0f), {uvStart.x, uvEnd.y}, cmd.color, textureSlot});
-			mp_SpriteBatch->add_vertex({matrix * vec4(+1.0f, +1.0f, 0.0f, 1.0f), {uvEnd.x, uvEnd.y}, cmd.color, textureSlot});
+			mp_SpriteBatch->add_vertex({matrix * vec4(+1.0f, +1.0f, 0.0f, 1.0f), uvEnd, cmd.color, textureSlot});
 			mp_SpriteBatch->add_vertex({matrix * vec4(+1.0f, -1.0f, 0.0f, 1.0f), {uvEnd.x, uvStart.y}, cmd.color, textureSlot});
 		} else {
 			m_TempStats.spriteCount++;
@@ -129,8 +129,9 @@ namespace fif::gfx {
 
 		const vec2 halfSize = cmd.size * 0.5f;
 		const u32 vertCount = mp_QuadBatch->get_vertex_count();
+		const bool isRotated = glm::mod(cmd.angle, glm::two_pi<f32>());
 
-		if(glm::mod(cmd.angle, glm::two_pi<f32>())) {
+		if(isRotated) {
 			const mat4 matrix = calculate_rotation_matrix(cmd.position, halfSize, cmd.pivot, cmd.angle);
 			mp_QuadBatch->add_vertex({matrix * vec4(-1.0f, -1.0f, 0.0f, 1.0f), cmd.color});
 			mp_QuadBatch->add_vertex({matrix * vec4(-1.0f, +1.0f, 0.0f, 1.0f), cmd.color});
@@ -158,7 +159,6 @@ namespace fif::gfx {
 
 	void Renderer2D::render_circle(const CircleRenderCommand &cmd) {
 		FLUSH_IF_FULL(mp_CircleBatch)
-
 		const u32 vertCount = mp_CircleBatch->get_vertex_count();
 
 		mp_CircleBatch->add_vertex({vec2(cmd.position.x - cmd.radius, cmd.position.y - cmd.radius), vec2(0.0f, 0.0f), cmd.color});
@@ -185,6 +185,7 @@ namespace fif::gfx {
 		const u8 textureSlot = assign_texture_slot(cmd.font.get_texture(), *mp_GlyphBatch);
 		const vec2 textSize = cmd.font.calculate_text_size(cmd.text, cmd.size);
 		const vec2 origin = cmd.position + TextAlign::get_text_align_offset(cmd.hAlign, cmd.vAlign, textSize, cmd.font.get_font_height() * cmd.size.y);
+		const bool isRotated = glm::mod(cmd.angle, glm::two_pi<f32>());
 
 		vec2 currentPosition = origin;
 
@@ -219,21 +220,27 @@ namespace fif::gfx {
 
 			default:
 				if(*it < 32 || *it >= 127) {
-					core::Logger::error("Char '%c' (%i) is out of supported range (32-127)", *it, static_cast<int>(*it));
+					core::Logger::error("Char '%c' (%i) is out of supported range (32-127)", *it, static_cast<int>(*it));
 					break;
 				}
 
-				const Glyph &glyph = cmd.font.get_glyph(*it);
-				const vec2 glyphSize = static_cast<vec2>(glyph.size) * cmd.size;
 				const u32 vertCount = mp_GlyphBatch->get_vertex_count();
 
-				f32 x = currentPosition.x + glyph.offset.x * cmd.size.x;
-				f32 y = currentPosition.y - (glyph.size.y - glyph.offset.y) * cmd.size.x;
+				const Glyph &glyph = cmd.font.get_glyph(*it);
+				const vec2 glyphSize = static_cast<vec2>(glyph.size) * cmd.size;
+				const vec2 glyphPosition = vec2(currentPosition.x + glyph.offset.x * cmd.size.x, currentPosition.y - (glyph.size.y - glyph.offset.y) * cmd.size.x);
 
-				mp_GlyphBatch->add_vertex({vec2(x, y), {glyph.startUv.x, glyph.endUv.y}, cmd.color, textureSlot});
-				mp_GlyphBatch->add_vertex({vec2(x, y + glyphSize.y), glyph.startUv, cmd.color, textureSlot});
-				mp_GlyphBatch->add_vertex({vec2(x + glyphSize.x, y + glyphSize.y), {glyph.endUv.x, glyph.startUv.y}, cmd.color, textureSlot});
-				mp_GlyphBatch->add_vertex({vec2(x + glyphSize.x, y), glyph.endUv, cmd.color, textureSlot});
+				// TODO: Rotated text rendering
+				if(isRotated) {
+					m_TempStats.rotatedGlyphCount++;
+				} else {
+					m_TempStats.glyphCount++;
+				}
+
+				mp_GlyphBatch->add_vertex({glyphPosition, {glyph.uvStart.x, glyph.uvEnd.y}, cmd.color, textureSlot});
+				mp_GlyphBatch->add_vertex({vec2(glyphPosition.x, glyphPosition.y + glyphSize.y), glyph.uvStart, cmd.color, textureSlot});
+				mp_GlyphBatch->add_vertex({vec2(glyphPosition.x + glyphSize.x, glyphPosition.y + glyphSize.y), {glyph.uvEnd.x, glyph.uvStart.y}, cmd.color, textureSlot});
+				mp_GlyphBatch->add_vertex({vec2(glyphPosition.x + glyphSize.x, glyphPosition.y), glyph.uvEnd, cmd.color, textureSlot});
 
 				mp_GlyphBatch->add_element(vertCount);
 				mp_GlyphBatch->add_element(vertCount + 1);
@@ -244,7 +251,6 @@ namespace fif::gfx {
 
 				m_TempStats.vertexCount += 4;
 				m_TempStats.elementCount += 6;
-				m_TempStats.glyphCount++;
 
 				currentPosition.x += glyph.advance.x * cmd.size.x;
 			}

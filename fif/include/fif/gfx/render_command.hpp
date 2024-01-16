@@ -58,8 +58,8 @@ namespace fif::gfx {
 	};
 
 	struct TextRenderCommand final : public RenderCommand {
-		TextRenderCommand(const std::string &_text, const Font &_font, const vec2 &_position, const vec2 &_size, const Color &_color = Colors::BLACK, const VerticalTextAlign _vAlign = VerticalTextAlign::Center, const HorizontalTextAlign _hAlign = HorizontalTextAlign::Left) :
-			text(_text), font(_font), position(_position), size(_size), color(_color), vAlign(_vAlign), hAlign(_hAlign) {}
+		TextRenderCommand(const std::string &_text, const Font &_font, const vec2 &_position, const vec2 &_size, const f32 _angle, const Color &_color = Colors::BLACK, const VerticalTextAlign _vAlign = VerticalTextAlign::Center, const HorizontalTextAlign _hAlign = HorizontalTextAlign::Left) :
+			text(_text), font(_font), position(_position), size(_size), angle(_angle), color(_color), vAlign(_vAlign), hAlign(_hAlign) {}
 
 		void render(Renderer2D &renderer) override;
 
@@ -67,6 +67,7 @@ namespace fif::gfx {
 		const Font &font;
 		vec2 position;
 		vec2 size;
+		f32 angle;
 		Color color = Colors::BLACK;
 		VerticalTextAlign vAlign = VerticalTextAlign::Center;
 		HorizontalTextAlign hAlign = HorizontalTextAlign::Left;

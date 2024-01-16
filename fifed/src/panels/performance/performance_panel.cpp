@@ -27,6 +27,7 @@ namespace fifed {
 			ImGui::Text("Quads: %u", rendererStats.quadCount);
 			ImGui::Text("Rotated quads: %u", rendererStats.rotatedQuadCount);
 			ImGui::Text("Glyphs: %u", rendererStats.glyphCount);
+			ImGui::Text("Rotated glyphs: %u", rendererStats.rotatedGlyphCount);
 			ImGui::Text("Textures: %u", rendererStats.textures);
 
 			ImGui::TreePop();
