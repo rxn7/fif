@@ -95,7 +95,8 @@ if(FIF_BUILD_NATIVE_SCRIPTING)
 endif()
 
 if(FIF_BUILD_GFX)
-  set(FT_DISABLE_HARFBUZZ ON)
+  set(CMAKE_DISABLE_FIND_PACKAGE_HarfBuzz ON)
+  set(CMAKE_DISABLE_FIND_PACKAGE_BrotliDec ON)
   add_subdirectory(${LIB_DIR}/freetype)
 
   include_directories(SYSTEM ${LIB_DIR}/stb)

@@ -5,7 +5,8 @@
 
 namespace fif::lua_scripting {
 	void LuaScriptingEntitySerializer::serialize(core::Entity &entity, YAML::Emitter &emitter) {
-		serialize_component<LuaScriptComponent>(entity, emitter, [&emitter](LuaScriptComponent &luaScriptComponent) { emitter << YAML::Key << "Path" << YAML::Value << luaScriptComponent.path; });
+		serialize_component<LuaScriptComponent>(
+			entity, emitter, [&emitter](LuaScriptComponent &luaScriptComponent) { emitter << YAML::Key << "Path" << YAML::Value << luaScriptComponent.path.string(); });
 	}
 
 	void LuaScriptingEntitySerializer::deserialize(core::Entity &entity, const YAML::Node &entityNode) {
