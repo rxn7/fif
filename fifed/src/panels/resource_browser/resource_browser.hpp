@@ -10,6 +10,7 @@ namespace fifed {
 
 		void on_render() override;
 		void current_directory_go_back();
+		void on_file_double_click(const std::filesystem::path &path);
 
 	private:
 		std::filesystem::path m_RootDirectory;

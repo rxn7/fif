@@ -26,6 +26,7 @@ namespace fifed {
 		void render_imgui() override;
 		void on_event(Event &event) override;
 		void set_play_mode(const bool playMode);
+		void open_scene(const std::filesystem::path &path);
 
 		inline bool is_play_mode() const { return m_PlayMode; }
 		inline void toggle_play_mode() { set_play_mode(!m_PlayMode); }
@@ -36,7 +37,6 @@ namespace fifed {
 	private:
 		void save_project();
 		void open_scene_dialog();
-		void open_scene(const std::filesystem::path &path);
 		void follow_selected_entity();
 		void delete_selected_entity();
 

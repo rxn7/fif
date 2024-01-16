@@ -87,8 +87,8 @@ namespace fifed {
 		}
 
 		if(m_CurrentScenePath.empty()) {
-			const char *filter = "*.yaml";
-			const char *result = tinyfd_saveFileDialog("Save scene", (Project::get_absolute_path() + "scene.yaml").c_str(), 1, &filter, "YAML file");
+			const char *filter = "*.fifscene";
+			const char *result = tinyfd_saveFileDialog("Save scene", (Project::get_absolute_path() + "scene.fifscene").c_str(), 1, &filter, "Fif Scene");
 
 			if(result == NULL) {
 				Logger::error("Failed to get path of the scene to save");
@@ -99,8 +99,11 @@ namespace fifed {
 		}
 
 		SceneSerializer serializer(m_FifedModule.get_application()->get_scene());
-		serializer.serialize(m_CurrentScenePath);
-		Logger::debug("Scene saved to: %s", m_CurrentScenePath.c_str());
+		if(!serializer.serialize(m_CurrentScenePath)) {
+			Logger::error("Failed to save scene to: %s", m_CurrentScenePath.c_str());
+		} else {
+			Logger::debug("Scene saved to: %s", m_CurrentScenePath.c_str());
+		}
 
 		std::filesystem::path &startingScenePath = Project::get_config().startingScenePath;
 
@@ -119,14 +122,17 @@ namespace fifed {
 		m_CurrentScenePath = path;
 
 		SceneSerializer serializer(m_FifedModule.get_application()->get_scene());
-		serializer.deserialize(path);
+		if(!serializer.deserialize(path)) {
+			Logger::error("Failed to load scene '%s'", path.c_str());
+			return;
+		}
 
 		Logger::debug("Scene loaded: %s", path.c_str());
 	}
 
 	void Editor::open_scene_dialog() {
-		const char *filter = "*.yaml";
-		const char *path = tinyfd_openFileDialog("Select scene", Project::get_absolute_path().c_str(), 1, &filter, "YAML scene", false);
+		const char *filter = "*.fifscene";
+		const char *path = tinyfd_openFileDialog("Select scene", Project::get_absolute_path().c_str(), 1, &filter, "Fif Scene", false);
 
 		if(!path)
 			return;
@@ -137,11 +143,12 @@ namespace fifed {
 	void Editor::set_play_mode(const bool playMode) {
 		// Load the scene if play mode has ended
 		if(!playMode) {
-			if(!m_CurrentScenePath.empty())
+			if(!m_CurrentScenePath.empty()) {
 				open_scene(m_CurrentScenePath);
-
-		} else
+			}
+		} else {
 			save_project();// Save the scene if play mode has been entered
+		}
 
 		m_FifedModule.get_application()->set_pause(!playMode);
 		m_PlayMode = playMode;

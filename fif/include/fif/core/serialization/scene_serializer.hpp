@@ -11,13 +11,15 @@ namespace fif::core {
 	class SceneSerializer final {
 	public:
 		SceneSerializer(Scene &scene);
-		void deserialize(const std::filesystem::path &path);
-		void serialize(const std::filesystem::path &path);
+		bool deserialize(const std::filesystem::path &path);
+		bool serialize(const std::filesystem::path &path);
 
 		template<class T> static void add_serializer() {
 			static_assert(std::is_base_of<EntitySerializer, T>().value, "T doesn't derive from Serializer!");
 			s_Serializers.emplace_back(std::make_unique<T>());
 		}
+
+		constexpr static std::string_view get_file_extension() { return ".fifscene"; }
 
 	private:
 		inline static std::vector<std::unique_ptr<EntitySerializer>> s_Serializers;

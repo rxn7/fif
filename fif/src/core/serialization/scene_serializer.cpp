@@ -7,7 +7,7 @@
 namespace fif::core {
 	SceneSerializer::SceneSerializer(Scene &scene) : m_Scene(scene) {}
 
-	void SceneSerializer::serialize(const std::filesystem::path &path) {
+	bool SceneSerializer::serialize(const std::filesystem::path &path) {
 		const std::filesystem::path resourcePath = Project::get_resource_path(path);
 		Logger::debug("Serializing scene: %s", path.c_str());
 
@@ -32,11 +32,18 @@ namespace fif::core {
 
 		std::ofstream fileStream(resourcePath);
 		fileStream << yaml.c_str();
+
+		return true;
 	}
 
-	void SceneSerializer::deserialize(const std::filesystem::path &path) {
+	bool SceneSerializer::deserialize(const std::filesystem::path &path) {
 		const std::filesystem::path resourcePath = Project::get_resource_path(path);
 		Logger::debug("Deserializing scene: %s", path.c_str());
+
+		if(!std::filesystem::exists(resourcePath)) {
+			Logger::error("Scene '%s' doesn't exist!", path.c_str());
+			return false;
+		}
 
 		m_Scene.clear();
 
@@ -45,17 +52,16 @@ namespace fif::core {
 		ss << fileStream.rdbuf();
 
 		const YAML::Node rootNode = YAML::Load(ss.str());
+		if(const YAML::Node entitiesNode = rootNode["Entities"]) {
+			for(const YAML::Node &entityNode : entitiesNode) {
+				Entity entity(m_Scene, m_Scene.get_registry().create());
 
-		const YAML::Node entitiesNode = rootNode["Entities"];
-		if(!entitiesNode)
-			return;
-
-		for(const YAML::Node &entityNode : entitiesNode) {
-			Entity entity(m_Scene, m_Scene.get_registry().create());
-
-			for(const auto &serializer : s_Serializers)
-				serializer->deserialize(entity, entityNode);
+				for(const auto &serializer : s_Serializers)
+					serializer->deserialize(entity, entityNode);
+			}
 		}
+
+		return true;
 	}
 }// namespace fif::core
 
