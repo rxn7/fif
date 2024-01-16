@@ -10,6 +10,9 @@ namespace fifed {
 
 		void on_render() override;
 		void current_directory_go_back();
+
+		void render_window_context_menu();
+		void render_file_context_menu(const std::filesystem::path &path);
 		void on_file_double_click(const std::filesystem::path &path);
 
 	private:
