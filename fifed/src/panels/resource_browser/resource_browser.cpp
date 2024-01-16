@@ -1,4 +1,6 @@
 #include "resource_browser.hpp"
+#include "imgui.h"
+#include "imgui_internal.h"
 
 #include <fif/core/project.hpp>
 #include <fif/core/serialization/scene_serializer.hpp>
@@ -28,8 +30,7 @@ namespace fifed {
 					m_CurrentDirectory = entry.path();
 				}
 			} else {
-				ImGui::Button(buttonId.c_str());
-				if(ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) {
+				if(ImGui::ButtonEx(buttonId.c_str(), vec2(0, 0), ImGuiButtonFlags_PressedOnDoubleClick)) {
 					on_file_double_click(entry.path());
 				}
 			}
@@ -38,6 +39,7 @@ namespace fifed {
 
 	void ResourceBrowserPanel::on_file_double_click(const std::filesystem::path &path) {
 		Logger::debug("Double clicked file with extension: %s", path.extension().c_str());
+
 		if(path.extension() == SceneSerializer::get_file_extension()) {
 			m_Editor.open_scene(Project::get_resource_path(path));
 		}
