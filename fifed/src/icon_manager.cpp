@@ -8,6 +8,8 @@ namespace fifed {
 		m_IconInfos.emplace(IconType::PAUSE, IconInfo{{48.0f, 225.0f}, {32.0f, 32.0f}});
 		m_IconInfos.emplace(IconType::UNPAUSE, IconInfo{{80.0f, 225.0f}, {32.0f, 32.0f}});
 		m_IconInfos.emplace(IconType::DELETE, IconInfo{{112.0f, 225.0f}, {32.0f, 32.0f}});
+		m_IconInfos.emplace(IconType::DIRECTORY, IconInfo{{148.0f, 225.0f}, {32.0f, 32.0f}});
+		m_IconInfos.emplace(IconType::FILE, IconInfo{{180.0f, 225.0f}, {32.0f, 32.0f}});
 	}
 
 	const IconInfo &IconManager::get_icon(IconType type) const {

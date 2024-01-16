@@ -1,4 +1,5 @@
 #include "resource_browser.hpp"
+#include "fifed_module.hpp"
 
 #include <fif/core/project.hpp>
 #include <fif/core/serialization/scene_serializer.hpp>
@@ -29,14 +30,26 @@ namespace fifed {
 		u32 entryIdx = 0;
 		for(const std::filesystem::directory_entry &entry : std::filesystem::directory_iterator(m_CurrentDirectory)) {
 			const std::string entryFileName = entry.path().filename().string();
-			const std::string buttonId = entryFileName + "##resourceBrowserEntry";
+			ImGui::PushID((entryFileName + "##resourceBrowserEntry").c_str());
+
+			const vec2 size{32, 32};
 
 			if(entry.is_directory()) {
-				if(ImGui::Button(buttonId.c_str())) {
+				bool pressed = FifedModule::get_instance().get_icon_manager().imgui_button(entryFileName.c_str(), IconType::DIRECTORY, size);
+				ImGui::SameLine(0.0f, 0.0f);
+
+				pressed |= ImGui::Button((entryFileName + "##btn").c_str(), {0, size.y});
+
+				if(pressed) {
 					m_CurrentDirectory = entry.path();
 				}
 			} else {
-				if(ImGui::ButtonEx(buttonId.c_str(), vec2(0, 0), ImGuiButtonFlags_PressedOnDoubleClick)) {
+				bool pressed = FifedModule::get_instance().get_icon_manager().imgui_button(entryFileName.c_str(), IconType::FILE, size);
+				ImGui::SameLine(0.0f, 0.0f);
+
+				pressed |= ImGui::ButtonEx((entryFileName + "##btn").c_str(), {0, size.y}, ImGuiButtonFlags_PressedOnDoubleClick);
+
+				if(pressed) {
 					on_file_double_click(entry.path());
 				}
 			}
@@ -46,6 +59,8 @@ namespace fifed {
 				render_file_context_menu(entry.path());
 				ImGui::EndPopup();
 			}
+
+			ImGui::PopID();
 
 			++entryIdx;
 		}
