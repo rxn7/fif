@@ -23,7 +23,7 @@ namespace fif_runtime {
 	void Runtime::setup_modules() {
 		attach_module<LuaScriptingModule>();
 		attach_module<InputModule>();
-		attach_module<GfxModule>("./assets/fonts/iosevka-regular.ttf");
+		attach_module<GfxModule>("./assets/fonts/CozetteVector.ttf");
 		attach_module<RuntimeModule>();
 	}
 }// namespace fif_runtime

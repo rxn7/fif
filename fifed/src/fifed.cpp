@@ -26,7 +26,7 @@ namespace fifed {
 	void Fifed::setup_modules() {
 		attach_module<LuaScriptingModule>();
 		attach_module<InputModule>();
-		attach_module<GfxModule>("./assets/fonts/iosevka-regular.ttf");
+		attach_module<GfxModule>("./assets/fonts/CozetteVector.ttf");
 		attach_module<FifedModule>();
 		attach_module<ImGuiModule>();
 	}

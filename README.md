@@ -69,4 +69,4 @@ The dependencies are used as submodules:
 - [freetype](https://gitlab.freedesktop.org/freetype/freetype) ([FreeType Project LICENSE](https://gitlab.freedesktop.org/freetype/freetype/-/blob/master/docs/FTL.TXT))
 
 ## Fonts
-- [iosevka](https://github.com/be5invis/Iosevka) ([SIL Open Font License 1.1](https://github.com/be5invis/Iosevka/blob/main/LICENSE.md))
+- [Cozette](https://github.com/slavfox/Cozette) ([MIT lIcense](https://github.com/slavfox/Cozette/blob/main/LICENSE))
