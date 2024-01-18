@@ -30,7 +30,7 @@ Entities:
       VerticalAlign: 1
       FontUUID: 1255678113681594063
   - UUID: 18177811006792117037
-    Tag: Iosevka
+    Tag: Default
     fif::core::TransformComponent:
       Position: [0, 0]
       Scale: [1, 1]
@@ -44,10 +44,10 @@ Entities:
       HorizontalAlign: 0
       VerticalAlign: 1
       FontUUID: 0
-  - UUID: 7504281144021107597
+  - UUID: 13386690551718446769
     Tag: Public Pixel
     fif::core::TransformComponent:
-      Position: [7.93145752, -79]
+      Position: [7.93145752, -74.61409]
       Scale: [1, 1]
       AngleRadians: 0
     fif::lua_scripting::LuaScriptComponent:
@@ -59,3 +59,12 @@ Entities:
       HorizontalAlign: 0
       VerticalAlign: 0
       FontUUID: 7374029712310856549
+  - UUID: 10334767896068946918
+  - UUID: 10373904528838381741
+  - UUID: 17809978112605409135
+  - UUID: 15169605460334834164
+  - UUID: 318001726495604928
+  - UUID: 11574698809349662974
+  - UUID: 17828880912463220849
+  - UUID: 13896084550332474664
+  - UUID: 1895166640958479037

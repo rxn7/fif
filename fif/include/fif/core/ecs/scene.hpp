@@ -11,10 +11,9 @@ namespace fif::core {
 	public:
 		~Scene();
 
-		EntityID create_entity(const char *name = "Entity");
-		EntityID create_entity_with_uuid(UUID uuid, const char *name = "Entity");
-
-		EntityID duplicate_entity(EntityID source);
+		EntityID create_entity(const std::string &name = "Entity");
+		EntityID create_entity_with_uuid(const UUID uuid, const std::string &name = "Entity");
+		EntityID duplicate_entity(const EntityID source);
 
 		inline void for_each(const std::function<void(EntityID entityID)> &func) {
 			for(EntityID entityID : m_Registry.view<EntityID>()) {
@@ -37,13 +36,13 @@ namespace fif::core {
 			return m_Registry.get<T>(entity);
 		}
 
-		template<typename T, typename... Args> inline T &add_component(EntityID entity, Args &&...args) {
+		template<typename T, typename... Args> inline T &add_component(const EntityID entity, Args &&...args) {
 			FIF_ASSERT(entity != entt::null, "Entity is null");
 			FIF_ASSERT(!has_component<T>(entity), "This entity already has component of this type (%s)!", typeid(T).name());
 			return m_Registry.emplace<T>(entity, std::forward<Args>(args)...);
 		}
 
-		template<typename T> inline void remove_component(EntityID entity) {
+		template<typename T> inline void remove_component(const EntityID entity) {
 			FIF_ASSERT(has_component<T>(entity), "This entity doesn't have a component of this type (%s)!", typeid(T).name());
 			m_Registry.erase<T>(entity);
 		}

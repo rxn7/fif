@@ -61,6 +61,7 @@ namespace fifed {
 
 		const bool open = ImGui::TreeNodeEx(name, flags);
 		bool deleteEntity = false;
+		bool duplicateEntity = false;
 
 		if(ImGui::IsItemClicked(ImGuiMouseButton_Right))
 			ImGui::OpenPopup("EntitySettings");
@@ -70,6 +71,7 @@ namespace fifed {
 
 		if(ImGui::BeginPopup("EntitySettings")) {
 			deleteEntity = ImGui::MenuItem("Delete entity");
+			duplicateEntity = ImGui::MenuItem("Duplicate entity");
 			ImGui::EndPopup();
 		}
 
@@ -77,6 +79,11 @@ namespace fifed {
 			scene.delete_entity(ent);
 			if(m_Editor.m_SelectedEntity.m_ID == ent)
 				m_Editor.m_SelectedEntity.m_ID = entt::null;
+		}
+
+		if(duplicateEntity) {
+			const EntityID duplicatedEntityID = scene.duplicate_entity(ent);
+			m_Editor.m_SelectedEntity.m_ID = duplicatedEntityID;
 		}
 
 		if(open) {

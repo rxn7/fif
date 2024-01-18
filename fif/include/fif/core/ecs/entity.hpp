@@ -12,6 +12,8 @@ namespace fif::core {
 			m_ID = entt::null;
 		}
 
+		inline EntityID duplicate() const { return m_Scene.duplicate_entity(m_ID); }
+
 		template<typename T> bool has_component() const { return m_Scene.has_component<T>(m_ID); }
 
 		template<typename T> T &get_component() const { return m_Scene.get_component<T>(m_ID); }
@@ -28,6 +30,8 @@ namespace fif::core {
 
 			return m_Scene.add_component<T>(m_ID, std::forward<Args>(args)...);
 		}
+
+		EntityID duplicate_entity() const;
 
 	public:
 		Scene &m_Scene;

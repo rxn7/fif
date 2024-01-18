@@ -44,7 +44,7 @@ namespace fifed {
 		void init_panels();
 
 		template<class T, class... Args> std::shared_ptr<T> add_panel(Args &&...args) {
-			std::shared_ptr<EditorPanel> &panel = m_Panels.emplace_back(std::make_shared<T>(std::forward<Args>(args)...));
+			std::shared_ptr<EditorPanel> &panel = m_Panels.emplace_back(std::make_shared<T>(*this, std::forward<Args>(args)...));
 			return std::static_pointer_cast<T, EditorPanel>(panel);
 		}
 
