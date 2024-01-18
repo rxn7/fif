@@ -11,22 +11,27 @@ namespace fif::gfx {
 		~FrameBuffer();
 
 		inline u32 get_fbo_id() const { return m_FboID; }
-		inline const Texture &get_texture() const { return m_Texture; }
+		inline const std::shared_ptr<Texture> &get_texture() const { return mp_Texture; }
+		inline const std::shared_ptr<Texture> &get_entity_id_texture() const { return mp_EntityIdTexture; }
 
 		void start();
 		void end();
 
-		inline void bind() { glBindFramebuffer(GL_FRAMEBUFFER, m_FboID); }
-		inline void unbind() { glBindFramebuffer(GL_FRAMEBUFFER, 0); }
+		inline void bind() const { glBindFramebuffer(GL_FRAMEBUFFER, m_FboID); }
+		inline void unbind() const { glBindFramebuffer(GL_FRAMEBUFFER, 0); }
 
+		void invalidate();
 		void set_size(const vec2 &size);
 		inline const vec2 &get_size() const { return m_Size; }
 
+		u32 read_entity_id_buffer_pixel(const u32vec2 &point) const;
+
 	public:
-		Color3 m_Color = {200u, 200u, 200u};
+		Color3 m_ClearColor = {200u, 200u, 200u};
 
 	private:
-		Texture m_Texture;
+		std::shared_ptr<Texture> mp_Texture;
+		std::shared_ptr<Texture> mp_EntityIdTexture;
 		vec2 m_Size;
 		u32 m_FboID = 0;
 	};

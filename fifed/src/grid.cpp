@@ -50,7 +50,7 @@ namespace fifed {
 		m_Shader.set_uniform_vec2("u_CameraSize", m_Camera.get_size());
 		m_Shader.set_uniform_vec2("u_CameraPosition", m_Camera.m_Position);
 		m_Shader.set_uniform_vec3("u_LineColor", normalize_color3(m_LineColor));
-		m_Shader.set_uniform_vec3("u_BackgroundColor", normalize_color3(m_FrameBuffer.m_Color));
+		m_Shader.set_uniform_vec3("u_BackgroundColor", normalize_color3(m_FrameBuffer.m_ClearColor));
 		m_Shader.set_uniform_f32("u_LineThickness", m_LineThickness);
 		m_Shader.set_uniform_f32("u_MinCellSize", m_MinCellSize);
 

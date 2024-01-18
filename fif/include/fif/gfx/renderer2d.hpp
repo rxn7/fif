@@ -104,11 +104,12 @@ namespace fif::gfx {
 		void start();
 		void end();
 
-		template<class T, class... Args> inline void add_render_command(i8 zIndex, Args &&...args) {
+		template<class T, class... Args> inline void add_render_command(i8 zIndex, u32 entityId, Args &&...args) {
 			static_assert(std::is_base_of<RenderCommand, T>().value, "T must inherit RenderCommand");
 
 			std::shared_ptr<RenderCommand> cmd = std::make_shared<T>(args...);
 			cmd->zIndex = zIndex;
+			cmd->entityID = entityId;
 
 			m_RenderCommandsQueue.push(cmd);
 		}
@@ -124,10 +125,12 @@ namespace fif::gfx {
 		void flush_all_batches();
 		mat4 calculate_rotation_matrix(const vec2 &position, const vec2 &halfSize, const vec2 &pivot, const f32 angleRadians);
 
-	private:
+	public:
 		// TODO: Find a middle ground for memory usage and performance.
 		static constexpr u32 BATCH_SIZE = 1000;// In objects (4 vertices, 6 indices)
+		static constexpr u32 INVALID_ENTITY_ID = std::numeric_limits<u32>().max();
 
+	private:
 		std::unique_ptr<Batch<QuadVertex>> mp_QuadBatch;
 		std::unique_ptr<Batch<CircleVertex>> mp_CircleBatch;
 		std::unique_ptr<Batch<SpriteVertex>> mp_SpriteBatch;

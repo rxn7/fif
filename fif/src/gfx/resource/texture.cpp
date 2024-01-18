@@ -6,9 +6,9 @@
 #include <stb_image.h>
 
 namespace fif::gfx {
-	Texture::Texture(const u16 width, const u16 height, const GLenum internalFormat, const GLenum dataFormat, const GLenum filter, const GLenum wrap, void *data) {
+	Texture::Texture(const u16vec2 &size, const GLenum internalFormat, const GLenum dataFormat, const GLenum filter, const GLenum wrap, void *data) {
 		glGenTextures(1, &m_ID);
-		create(width, height, internalFormat, dataFormat, filter, wrap, data);
+		create(size, internalFormat, dataFormat, filter, wrap, data);
 	}
 
 	Texture::Texture(const std::filesystem::path &path, const bool isEditorResource, GLenum filter, GLenum wrap) : core::Resource(path, isEditorResource) {
@@ -37,20 +37,19 @@ namespace fif::gfx {
 			break;
 		}
 
-		create(static_cast<u16>(width), static_cast<u16>(height), internalFormat, dataFormat, filter, wrap, data);
+		create(u16vec2(width, height), internalFormat, dataFormat, filter, wrap, data);
 		stbi_image_free(data);
 	}
 
 	Texture::~Texture() { glDeleteTextures(1, &m_ID); }
 
-	void Texture::create(const u16 width, const u16 height, const GLenum internalFormat, const GLenum dataFormat, const GLenum filter, const GLenum wrap, void *data) {
-		m_Width = width;
-		m_Height = height;
+	void Texture::create(const u16vec2 &size, const GLenum internalFormat, const GLenum dataFormat, const GLenum filter, const GLenum wrap, void *data) {
+		m_Size = size;
 		m_InternalFormat = internalFormat;
 		m_DataFormat = dataFormat;
 
-		glBindTexture(GL_TEXTURE_2D, m_ID);
-		glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, dataFormat, GL_UNSIGNED_BYTE, data);
+		bind();
+		glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, m_Size.x, m_Size.y, 0, dataFormat, GL_UNSIGNED_BYTE, data);
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filter);
@@ -58,7 +57,7 @@ namespace fif::gfx {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrap);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrap);
 
-		glBindTexture(GL_TEXTURE_2D, 0);
+		unbind();
 	}
 
 	void Texture::bind_on_slot(const u16 slot) const {

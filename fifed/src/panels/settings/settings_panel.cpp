@@ -12,7 +12,7 @@ namespace fifed {
 
 	void SettingsPanel::on_render() {
 		if(ImGui::TreeNode("Viewport")) {
-			utils::imgui::draw_color3_picker("Viewport clear color", m_FrameBuffer.m_Color);
+			utils::imgui::draw_color3_picker("Viewport clear color", m_FrameBuffer.m_ClearColor);
 			ImGui::TreePop();
 		}
 

@@ -1,4 +1,5 @@
 #include "editor.hpp"
+#include "event/mouse_event.hpp"
 #include "fifed_module.hpp"
 #include "panels/console/console_panel.hpp"
 #include "panels/inspector/inspector_panel.hpp"
@@ -182,6 +183,24 @@ namespace fifed {
 			}
 
 			return false;
+		});
+
+		EventDispatcher::dispatch<MouseButtonPressedEvent>(event, [&](MouseButtonPressedEvent &mouseEvent) {
+			if(mouseEvent.is_hanlded() || mouseEvent.get_button() != GLFW_MOUSE_BUTTON_LEFT) {
+				return false;
+			}
+
+			vec2 point = InputModule::get_instance().get_mouse_position() - GfxModule::get_instance().get_viewport_position();
+			point.y = GfxModule::get_instance().get_viewport_size().y - point.y;
+
+			const u32 hoveredEntity = get_frame_buffer().read_entity_id_buffer_pixel(point);
+			if(hoveredEntity == Renderer2D::INVALID_ENTITY_ID) {
+				m_SelectedEntity.m_ID = entt::null;
+			} else {
+				m_SelectedEntity.m_ID = (EntityID)hoveredEntity;
+			}
+
+			return true;
 		});
 
 		EventDispatcher::dispatch<WindowResizeEvent>(event, [&]([[maybe_unused]] WindowResizeEvent &ev) {

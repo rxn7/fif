@@ -12,6 +12,7 @@ namespace fif::gfx {
 		virtual void render(Renderer2D &renderer) = 0;
 
 		i8 zIndex = 0;
+		u32 entityID = std::numeric_limits<u32>().max();
 	};
 
 	struct RenderCommandComparator final {

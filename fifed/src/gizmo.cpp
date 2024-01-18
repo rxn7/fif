@@ -54,7 +54,7 @@ namespace fifed {
 			}
 			const auto render_gizmo_part = [&](GizmoPart &part, const u16vec2 &uvPivot, const u16vec2 &uvSize, const vec2 &pivot = vec2(0.0f)) {
 				const f32 angleRadians = m_Space == GizmoSpace::Local ? part.rotation + trans->angleRadians : part.rotation;
-				renderer.add_render_command<SpriteRenderCommand>(127, trans->position, part.size * zoomFactor, angleRadians, (&part == mp_HoveredPart || &part == mp_ActivePart) ? part.hoverColor : part.color, mp_Texture, pivot * zoomFactor, uvPivot, uvSize);
+				renderer.add_render_command<SpriteRenderCommand>(127, Renderer2D::INVALID_ENTITY_ID, trans->position, part.size * zoomFactor, angleRadians, (&part == mp_HoveredPart || &part == mp_ActivePart) ? part.hoverColor : part.color, mp_Texture, pivot * zoomFactor, uvPivot, uvSize);
 			};
 
 			switch(m_Mode) {

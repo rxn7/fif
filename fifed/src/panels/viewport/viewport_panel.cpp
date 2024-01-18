@@ -58,7 +58,7 @@ namespace fifed {
 		lastSize = size;
 		lastPos = pos;
 
-		ImGui::Image(reinterpret_cast<ImTextureID>(m_FrameBuffer.get_texture().get_id()), size, ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f));
+		ImGui::Image(reinterpret_cast<ImTextureID>(m_FrameBuffer.get_texture()->get_id()), size, ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f));
 		m_Hovered = ImGui::IsItemHovered();
 
 		ImGui::EndChild();
