@@ -53,8 +53,7 @@ namespace fifed {
 		ImGuiIO &io = ImGui::GetIO();
 
 		// TODO: Load from memory instead.
-		Logger::debug("%s", Font::get_default().get_path().c_str());
-		io.Fonts->AddFontFromFileTTF(Font::get_default().get_path().c_str(), 20, nullptr, ranges);
+		io.Fonts->AddFontFromFileTTF(Font::get_default().get_path().string().c_str(), 20, nullptr, ranges);
 
 		io.IniFilename = "layout.ini";
 

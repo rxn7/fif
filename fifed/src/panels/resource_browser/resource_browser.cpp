@@ -70,7 +70,7 @@ namespace fifed {
 	void ResourceBrowserPanel::render_window_context_menu() {
 		if(ImGui::SmallButton("Create new scene")) {
 			const char *filter = "*.fifscene";
-			if(const char *path = tinyfd_saveFileDialog("Create new scene", (m_CurrentDirectory / "scene.fifscene").c_str(), 1, &filter, "Fif Scene")) {
+			if(const char *path = tinyfd_saveFileDialog("Create new scene", (m_CurrentDirectory / "scene.fifscene").string().c_str(), 1, &filter, "Fif Scene")) {
 				std::ofstream fileStream(path);
 			}
 			ImGui::CloseCurrentPopup();
@@ -78,7 +78,7 @@ namespace fifed {
 
 		if(ImGui::SmallButton("Create new lua script")) {
 			const char *filter = "*.lua";
-			if(const char *path = tinyfd_saveFileDialog("Create new lua script", (m_CurrentDirectory / "script.lua").c_str(), 1, &filter, "Lua Script")) {
+			if(const char *path = tinyfd_saveFileDialog("Create new lua script", (m_CurrentDirectory / "script.lua").string().c_str(), 1, &filter, "Lua Script")) {
 				std::ofstream fileStream(path);
 			}
 			ImGui::CloseCurrentPopup();
@@ -87,7 +87,7 @@ namespace fifed {
 
 	void ResourceBrowserPanel::render_file_context_menu(const std::filesystem::path &path) {
 		const std::filesystem::path relativePath = std::filesystem::relative(path, Project::get_absolute_path());
-		ImGui::Text("%s", relativePath.c_str());
+		ImGui::Text("%s", relativePath.string().c_str());
 
 		if(ImGui::SmallButton("Delete")) {
 			if(tinyfd_messageBox("Are you sure?", ("Do you want to delete " + relativePath.string() + "?").c_str(), "yesno", "question", 0)) {

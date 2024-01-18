@@ -9,7 +9,7 @@ namespace fif::core {
 
 	bool SceneSerializer::serialize(const std::filesystem::path &path) {
 		const std::filesystem::path resourcePath = Project::get_resource_path(path);
-		Logger::debug("Serializing scene: %s", path.c_str());
+		Logger::debug("Serializing scene: %s", path.string().c_str());
 
 		YAML::Emitter yaml;
 		yaml << YAML::BeginMap;

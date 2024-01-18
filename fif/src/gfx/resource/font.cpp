@@ -61,8 +61,6 @@ namespace fif::gfx {
 		FT_Done_Face(m_Face);
 
 		mp_Texture = std::make_shared<Texture>(u16vec2(textureSize, textureSize), GL_R8, GL_RED, filter, GL_CLAMP_TO_BORDER, textureBuffer);
-
-		core::Logger::info("Font %s has been loaded", path.c_str());
 	}
 
 	Font::~Font() {}

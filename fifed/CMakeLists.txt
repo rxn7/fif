@@ -16,10 +16,9 @@ target_precompile_headers(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/pc
 target_link_libraries(${PROJECT_NAME} fif-core tinyfd fif-gfx fif-input fif-imgui fif-lua_scripting)
 add_compile_options(-fno-stack-protector)
 
-set(CMAKE_CXX_STANDARD_LIBRARIES "-static-libgcc -static-libstdc++ ${CMAKE_CXX_STANDARD_LIBRARIES}")
-
 if(WIN32)
-  target_link_libraries(${PROJECT_NAME} comdlg32 ole32)
+  target_link_options(${PROJECT_NAME} PUBLIC -static-libgcc -static-libstdc++)
+  target_link_libraries(${PROJECT_NAME} comdlg32 ole32 -static pthread)
   add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy -t $<TARGET_FILE_DIR:${PROJECT_NAME}> $<TARGET_RUNTIME_DLLS:${PROJECT_NAME}>
     COMMAND_EXPAND_LISTS
