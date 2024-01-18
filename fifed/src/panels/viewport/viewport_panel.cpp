@@ -8,9 +8,8 @@ namespace fifed {
 	ViewportPanel::ViewportPanel(Editor &editor, FrameBuffer &frameBuffer) : EditorPanel(editor), m_FrameBuffer(frameBuffer) {}
 
 	void ViewportPanel::on_render() {
-		Application *app = FifedModule::get_instance().get_application();
 		const bool isPlayMode = m_Editor.is_play_mode();
-		const bool isPaused = app->get_status().paused;
+		const bool isPaused = Application::get_instance().get_status().paused;
 
 		{
 			static const char *items[]{"Translate", "Scale"};
@@ -30,7 +29,7 @@ namespace fifed {
 
 		if(isPlayMode) {
 			if(FifedModule::get_instance().get_icon_manager().imgui_button("Pause", isPaused ? IconType::UNPAUSE : IconType::PAUSE))
-				app->set_pause(!isPaused);
+				Application::get_instance().set_pause(!isPaused);
 
 			ImGui::SameLine();
 

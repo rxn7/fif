@@ -7,16 +7,16 @@
 
 namespace fif_runtime {
 	RuntimeModule::RuntimeModule() :
-		m_FrameBuffer({0, 0}), m_StartCallback(std::bind(&RuntimeModule::on_start, this)), m_RenderCallback(std::bind(&RuntimeModule::on_render, this)), m_EventCallback(std::bind(&RuntimeModule::on_event, this, std::placeholders::_1)) {
+		m_FrameBuffer({0, 0}), m_StartCallback(std::bind(&RuntimeModule::on_start, this)), m_UpdateCallback(std::bind(&RuntimeModule::on_update, this)), m_EventCallback(std::bind(&RuntimeModule::on_event, this, std::placeholders::_1)) {
 		FIF_MODULE_INIT();
 		Application::get_instance().m_StartHook.hook(m_StartCallback);
-		Application::get_instance().m_RenderHook.hook(m_RenderCallback);
+		Application::get_instance().m_UpdateHook.hook(m_UpdateCallback);
 		Application::get_instance().m_EventHook.hook(m_EventCallback);
 	}
 
 	RuntimeModule::~RuntimeModule() {
 		mp_Application->m_StartHook.unhook(m_StartCallback);
-		mp_Application->m_RenderHook.unhook(m_RenderCallback);
+		mp_Application->m_UpdateHook.unhook(m_UpdateCallback);
 		mp_Application->m_EventHook.unhook(m_EventCallback);
 	}
 
@@ -33,7 +33,7 @@ namespace fif_runtime {
 		serializer.deserialize(Project::get_config().startingScenePath);
 	}
 
-	void RuntimeModule::on_render() {}
+	void RuntimeModule::on_update() {}
 
 	void RuntimeModule::on_event(Event &event) {
 		EventDispatcher::dispatch<WindowResizeEvent>(event, [&](WindowResizeEvent &resizeEvent) -> bool {

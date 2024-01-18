@@ -44,10 +44,7 @@ namespace fif::core {
 		glfwTerminate();
 	}
 
-	void Window::end_frame() {
-		glfwSwapBuffers(mp_GlfwWindow);
-		glfwPollEvents();
-	}
+	void Window::swap_buffers() { glfwSwapBuffers(mp_GlfwWindow); }
 
 	void Window::close(const bool value) { glfwSetWindowShouldClose(mp_GlfwWindow, value); }
 

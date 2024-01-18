@@ -44,4 +44,8 @@ cp $runtime_build_path $export_dir/$(basename ${project_dir})
 cp -r ${project_dir}/* $export_dir
 cp -r $(dirname $runtime_build_path)/assets $export_dir
 
+# Export the default font
+mkdir -p $export_dir/assets ; mkdir -p $export_dir/assets/fonts
+cp fifed/assets/fonts/CozetteVector.ttf $export_dir/assets/fonts/CozetteVector.ttf
+
 popd >/dev/null

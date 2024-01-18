@@ -16,6 +16,7 @@
 
 namespace fif::gfx {
 	struct Renderer2DStats {
+		u32 renderCommands = 0;
 		u32 drawCallCount = 0;
 		u32 batchesFlushed = 0;
 		u32 vertexCount = 0;

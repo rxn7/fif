@@ -8,10 +8,7 @@ namespace fif::core {
 	class Module {
 	public:
 		virtual ~Module() = default;
-
 		virtual constexpr std::string_view get_name() const = 0;
-
-		Application *get_application() const { return mp_Application; }
 
 	protected:
 		Module() {}

@@ -6,6 +6,7 @@
 #include "fif/core/event/event.hpp"
 #include "fif/core/module.hpp"
 #include "fif/core/performance_stats.hpp"
+#include "fif/core/util/timer.hpp"
 #include "fif/core/window.hpp"
 
 namespace fif::core {
@@ -70,7 +71,9 @@ namespace fif::core {
 		std::vector<std::unique_ptr<Module>> m_Modules;
 		std::unique_ptr<Scene> mp_Scene;
 
+		Timer m_FpsUpdateTimer;
 		PerformanceStats m_PerformanceStats;
+
 		ApplicationStatus m_Status;
 		static inline Application *sp_Instance;
 	};

@@ -31,7 +31,7 @@ namespace fif::core {
 		inline Application &get_application() const { return m_App; }
 
 	private:
-		void end_frame();
+		void swap_buffers();
 
 	private:
 		i16vec2 m_Size;

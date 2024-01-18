@@ -23,9 +23,9 @@
 namespace fifed {
 	Editor::Editor(FifedModule &fifedModule) :
 		Stage(fifedModule), m_SelectedEntity(Application::get_instance().get_scene(), entt::null), m_FrameBuffer({0, 0}), m_Grid(fif::gfx::GfxModule::get_instance().get_renderer2D().get_camera(), m_FrameBuffer), m_Gizmo(*this) {
-		m_FifedModule.get_application()->get_window().set_title(Project::get_config().name + " | Fifed"
+		Application::get_instance().get_window().set_title(Project::get_config().name + " | Fifed"
 #ifdef FIF_DEBUG
-																+ " [DEBUG]"
+														   + " [DEBUG]"
 #endif
 		);
 
@@ -104,7 +104,7 @@ namespace fifed {
 			m_CurrentScenePath = result;
 		}
 
-		SceneSerializer serializer(m_FifedModule.get_application()->get_scene());
+		SceneSerializer serializer(Application::get_instance().get_scene());
 		if(!serializer.serialize(m_CurrentScenePath)) {
 			Logger::error("Failed to save scene to: %s", m_CurrentScenePath.c_str());
 		} else {
@@ -127,7 +127,7 @@ namespace fifed {
 
 		m_CurrentScenePath = path;
 
-		SceneSerializer serializer(m_FifedModule.get_application()->get_scene());
+		SceneSerializer serializer(Application::get_instance().get_scene());
 		if(!serializer.deserialize(path)) {
 			Logger::error("Failed to load scene '%s'", path.c_str());
 			return;
@@ -156,7 +156,7 @@ namespace fifed {
 			save_project();// Save the scene if play mode has been entered
 		}
 
-		m_FifedModule.get_application()->set_pause(!playMode);
+		Application::get_instance().set_pause(!playMode);
 		m_PlayMode = playMode;
 	}
 

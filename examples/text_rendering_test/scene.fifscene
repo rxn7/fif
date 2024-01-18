@@ -33,7 +33,7 @@ Entities:
     Tag: Default
     fif::core::TransformComponent:
       Position: [0, 0]
-      Scale: [1, 1]
+      Scale: [1.60770023, 1]
       AngleRadians: 0
     fif::lua_scripting::LuaScriptComponent:
       Path: assets/scripts/random_text.lua

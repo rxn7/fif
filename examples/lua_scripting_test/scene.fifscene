@@ -8,7 +8,7 @@ Entities:
     fif::lua_scripting::LuaScriptComponent:
       Path: assets/scripts/transform_test.lua
     fif::gfx::LabelComponent:
-      Text: Transform Test
+      Text: "transform.position: (500, 0)\ntransform.scale: (1, 1)\ntransform.angleRadians: 0.0"
       Size: 1
       Color: [0, 0, 0, 255]
       HorizontalAlign: 0
@@ -23,7 +23,7 @@ Entities:
     fif::lua_scripting::LuaScriptComponent:
       Path: assets/scripts/tag_test.lua
     fif::gfx::LabelComponent:
-      Text: Tag Test
+      Text: "tag.tag: Tag Test"
       Size: 1
       Color: [0, 0, 0, 255]
       HorizontalAlign: 0
@@ -38,7 +38,7 @@ Entities:
     fif::lua_scripting::LuaScriptComponent:
       Path: assets/scripts/uuid_test.lua
     fif::gfx::LabelComponent:
-      Text: UUID Test
+      Text: "uuid.uuid: 4534028432933503474"
       Size: 1
       Color: [0, 0, 0, 255]
       HorizontalAlign: 0
@@ -56,7 +56,7 @@ Entities:
       Tint: [255, 255, 255, 255]
       Radius: 50
     fif::gfx::LabelComponent:
-      Text: Circle Test
+      Text: "circle.tint: (255, 255, 255, 255)\ncircle.radius: 50.0\n"
       Size: 1
       Color: [0, 0, 0, 255]
       HorizontalAlign: 0
@@ -74,7 +74,7 @@ Entities:
       Tint: [255, 255, 255, 255]
       Size: [100, 100]
     fif::gfx::LabelComponent:
-      Text: Quad Test
+      Text: "quad.tint: (255, 255, 255, 255)\nquad.size: (100, 100)\n"
       Size: 1
       Color: [0, 0, 0, 255]
       HorizontalAlign: 0
@@ -93,9 +93,16 @@ Entities:
       Size: [50, 50]
       TextureUUID: 8782194013072685429
     fif::gfx::LabelComponent:
-      Text: Sprite Test
+      Text: "sprite.tint: (255, 255, 255, 255)\nsprite.size: (50, 50)\nsprite.texture: sol.sol::d::u<fif::gfx::Texture>: 0x5617ddcb65a8\n"
       Size: 1
       Color: [0, 0, 0, 255]
       HorizontalAlign: 0
       VerticalAlign: 0
       FontUUID: 0
+  - UUID: 1017161272472896449
+  - UUID: 11917882525495939526
+  - UUID: 7294276655598576170
+  - UUID: 8446545311402110206
+  - UUID: 11221986863205767590
+  - UUID: 12185323366077482480
+  - UUID: 16143276279854952694

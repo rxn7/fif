@@ -13,13 +13,13 @@ namespace fif_runtime {
 
 	private:
 		void on_start();
-		void on_render();
+		void on_update();
 		void on_event(Event &event);
 
 	private:
 		FrameBuffer m_FrameBuffer;
 		Callback<> m_StartCallback;
-		Callback<> m_RenderCallback;
+		Callback<> m_UpdateCallback;
 		Callback<Event &> m_EventCallback;
 	};
 }// namespace fif_runtime

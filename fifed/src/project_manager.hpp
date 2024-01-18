@@ -10,6 +10,7 @@ namespace fifed {
 	struct ProjectListItem final {
 		std::string name;
 		std::filesystem::path path;
+		std::string lastTimeModifiedString = "?";
 	};
 
 	class ProjectManager final : public Stage {

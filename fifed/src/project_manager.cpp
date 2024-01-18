@@ -39,7 +39,7 @@ namespace fifed {
 		static i32 deleteModalContextItemIdx = -1;
 
 		if(ImGui::Begin("Project Manager", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoResize)) {
-			constexpr ImVec2 BUTTON_SIZE{200, 50};
+			constexpr ImVec2 BUTTON_SIZE{180, 40};
 
 			if(ImGui::Button("Create new project", BUTTON_SIZE))
 				m_ProjectLoaded = create_project_dialog();
@@ -49,39 +49,44 @@ namespace fifed {
 			if(ImGui::Button("Open project", BUTTON_SIZE))
 				m_ProjectLoaded = open_project_dialog();
 
-			ImGui::Separator();
+			ImGui::Dummy(vec2(0.0f, 20.0f));
 
-			if(ImGui::BeginChild("Project List")) {
+			if(m_ProjectListItems.size() == 0) {
+				ImGui::Text("No recent projects.");
+			} else {
 				ImGui::Text("Recent Projects:");
-				ImGuiListClipper clipper;
-				clipper.Begin(m_ProjectListItems.size());
 
-				while(clipper.Step()) {
-					for(i32 i = clipper.DisplayStart; i < clipper.DisplayEnd; ++i) {
-						ProjectListItem &item = *std::next(m_ProjectListItems.begin(), i);
+				if(ImGui::BeginTable("Project List", 3, ImGuiTableFlags_Borders | ImGuiTableFlags_NoSavedSettings | ImGuiTableFlags_SizingFixedFit)) {
+					ImGui::TableSetupColumn("Name");
+					ImGui::TableSetupColumn("Path");
+					ImGui::TableSetupColumn("Last modified");
+					ImGui::TableHeadersRow();
 
-						ImGui::Separator();
+					for(u32 i = 0; i < m_ProjectListItems.size(); ++i) {
+						const ProjectListItem &item = m_ProjectListItems[i];
 
-						const vec2 size{32, 32};
-
-						if(ImGui::Button(item.name.c_str(), {0.0f, size.y}))
+						ImGui::TableNextColumn();
+						if(ImGui::Selectable(std::format("{}##{}", item.name, i).c_str(), false, ImGuiSelectableFlags_SpanAllColumns)) {
 							m_ProjectLoaded = open_project(item.path);
-
-						ImGui::SameLine();
-
-						ImGui::SetCursorPosX(ImGui::GetWindowWidth() - size.x);
-
-						if(m_FifedModule.get_icon_manager().imgui_button(("Delete#" + std::to_string(i)).c_str(), IconType::DELETE, size)) {
-							deleteModalContextItemIdx = i;
-							openDeleteModal = true;
 						}
-					}
-				}
-				ImGui::Separator();
+						if(ImGui::BeginPopupContextItem(std::format("ProjectListEntryContext##{}", i).c_str())) {
+							if(ImGui::SmallButton("Delete")) {
+								deleteModalContextItemIdx = i;
+								openDeleteModal = true;
+								ImGui::CloseCurrentPopup();
+							}
+							ImGui::EndPopup();
+						}
 
-				clipper.End();
+						ImGui::TableNextColumn();
+						ImGui::Text("%s", item.path.string().c_str());
+
+						ImGui::TableNextColumn();
+						ImGui::Text("%s", item.lastTimeModifiedString.c_str());
+					}
+					ImGui::EndTable();
+				}
 			}
-			ImGui::EndChild();
 		}
 		ImGui::End();
 		ImGui::PopStyleVar();
@@ -118,6 +123,7 @@ namespace fifed {
 	}
 
 	void ProjectManager::load_project_list() {
+		// TODO: Use yaml instead of txt
 		std::ifstream fileStream(s_ProjectListPath);
 
 		if(!fileStream.is_open()) {
@@ -151,16 +157,17 @@ namespace fifed {
 
 		// TODO: Read only Config part of .fifproj?
 
-		std::ifstream fileStream(projectFilePath);
-		std::stringstream ss;
-		ss << fileStream.rdbuf();
-
 		ProjectListItem projectListItem;
 		projectListItem.path = path;
 
+		std::ifstream fileStream(projectFilePath);
+		std::stringstream ss;
+		ss << fileStream.rdbuf();
 		const YAML::Node yaml = YAML::Load(ss);
 		const YAML::Node configNode = yaml["Config"];
 		projectListItem.name = configNode["Name"].as<std::string>();
+
+		projectListItem.lastTimeModifiedString = std::format("{:%Y/%m/%d %H:%M}", std::filesystem::last_write_time(path));
 
 		m_ProjectListItems.push_back(projectListItem);
 	}

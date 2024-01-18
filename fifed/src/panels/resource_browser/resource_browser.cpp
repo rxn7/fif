@@ -52,7 +52,7 @@ namespace fifed {
 				}
 			}
 
-			if(ImGui::BeginPopupContextItem(("ResourceBrowserFileContextMenu##" + std::to_string(entryIdx)).c_str())) {
+			if(ImGui::BeginPopupContextItem(std::format("ResourceBrowserFileContextMenu##{}", entryIdx).c_str())) {
 				fileContextPopupOpen = true;
 				render_file_context_menu(entry.path());
 				ImGui::EndPopup();

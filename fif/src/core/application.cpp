@@ -5,7 +5,6 @@
 #include "fif/core/event/window_event.hpp"
 #include "fif/core/project.hpp"
 #include "fif/core/serialization/scene_serializer.hpp"
-#include "fif/core/util/logger.hpp"
 
 namespace fif::core {
 	Application::Application(const ApplicationProperties &appProperties) {
@@ -32,8 +31,9 @@ namespace fif::core {
 		SceneSerializer::add_serializer<CoreEntitySerializer>();
 		m_StartHook.invoke();
 
-		while(m_Status.running)
+		while(m_Status.running) {
 			game_loop();
+		}
 
 		Project::get_active().reset();
 		mp_Scene.reset();
@@ -45,16 +45,18 @@ namespace fif::core {
 	}
 
 	void Application::game_loop() {
+		const Clock::time_point frameTimeStart = Clock::now();
+
 		Timing::update();
 
-		m_PerformanceStats.timer += Timing::get_delta_time();
+		glfwPollEvents();
+
 		m_PerformanceStats.frameCount++;
-		if(m_PerformanceStats.timer >= 1.0f) {
+		if(m_FpsUpdateTimer.get_duration_ms() >= 1000.0f) {
 			m_PerformanceStats.fps = m_PerformanceStats.frameCount;
-			m_PerformanceStats.timer = 0.0f;
+			m_FpsUpdateTimer.reset();
 			m_PerformanceStats.frameCount = 0u;
 		}
-		m_PerformanceStats.frameTimeMs = Timing::get_delta_time() * 1000.0f;
 
 		update();
 
@@ -64,7 +66,12 @@ namespace fif::core {
 
 		m_EndFrameHook.invoke();
 
-		mp_Window->end_frame();
+		m_PerformanceStats.cpuTimeMs = std::chrono::duration_cast<std::chrono::duration<f32, std::milli>>(Clock::now() - frameTimeStart).count();
+
+		const Clock::time_point gpuTimeStart = Clock::now();
+		mp_Window->swap_buffers();
+		m_PerformanceStats.gpuTimeMs = std::chrono::duration_cast<std::chrono::duration<f32, std::milli>>(Clock::now() - gpuTimeStart).count();
+		m_PerformanceStats.frameTimeMs = std::chrono::duration_cast<std::chrono::duration<f32, std::milli>>(Clock::now() - frameTimeStart).count();
 	}
 
 	void Application::update() {

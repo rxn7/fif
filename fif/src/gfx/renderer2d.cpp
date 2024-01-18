@@ -21,6 +21,7 @@ namespace fif::gfx {
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+		// NOTE: Disabled, culling in 2D isn't needed
 		// glEnable(GL_CULL_FACE);
 		// glFrontFace(GL_CW);
 		// glCullFace(GL_BACK);
@@ -47,13 +48,14 @@ namespace fif::gfx {
 	void Renderer2D::end() {
 		m_Camera.update();
 
+		m_TempStats.renderCommands = m_RenderCommandsQueue.size();
+
 		execute_render_commands();
 		flush_all_batches();
 
 		m_Stats = m_TempStats;
 		m_Stats.textures = m_TextureIdx;
 
-		// Clean up
 		m_TempStats = {0};
 	}
 
