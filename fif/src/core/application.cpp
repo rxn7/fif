@@ -83,8 +83,5 @@ namespace fif::core {
 		});
 
 		m_EventHook.invoke(event);
-
-		for(auto &eventSystem : m_EventSystems)
-			eventSystem(m_Status, mp_Scene->get_registry(), event);
 	}
 }// namespace fif::core

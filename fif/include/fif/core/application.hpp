@@ -28,7 +28,6 @@ namespace fif::core {
 
 		inline void add_render_system(RenderSystem system) { m_RenderSystems.push_back(system); }
 		inline void add_update_system(UpdateSystem system) { m_UpdateSystems.push_back(system); }
-		inline void add_event_system(EventSystem system) { m_EventSystems.push_back(system); }
 
 		inline static Application &get_instance() { return *sp_Instance; }
 		inline const PerformanceStats &get_performance_stats() const { return m_PerformanceStats; }
@@ -63,7 +62,6 @@ namespace fif::core {
 
 		std::vector<RenderSystem> m_RenderSystems;
 		std::vector<UpdateSystem> m_UpdateSystems;
-		std::vector<EventSystem> m_EventSystems;
 
 	protected:
 		std::unique_ptr<Window> mp_Window;

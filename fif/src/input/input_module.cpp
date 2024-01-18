@@ -22,10 +22,12 @@ namespace fif::input {
 			core::Window *window = FIF_GET_WINDOW_FROM_GLFW_WINDOW(glfwWindow);
 			if(action == GLFW_PRESS) {
 				sp_Instance->m_State.keys[key] = true;
+
 				core::KeyPressedEvent event(key, mods);
 				window->get_application().on_event(event);
 			} else if(action == GLFW_RELEASE) {
 				sp_Instance->m_State.keys[key] = false;
+
 				core::KeyReleasedEvent event(key, mods);
 				window->get_application().on_event(event);
 			}

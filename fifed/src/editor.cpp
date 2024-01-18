@@ -186,7 +186,7 @@ namespace fifed {
 		});
 
 		EventDispatcher::dispatch<MouseButtonPressedEvent>(event, [&](MouseButtonPressedEvent &mouseEvent) {
-			if(mouseEvent.is_hanlded() || mouseEvent.get_button() != GLFW_MOUSE_BUTTON_LEFT) {
+			if(mouseEvent.is_hanlded() || !mp_ViewportPanel->is_hovered() || mouseEvent.get_button() != GLFW_MOUSE_BUTTON_LEFT) {
 				return false;
 			}
 
