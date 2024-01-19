@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 script_dir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
-pushd ${script_dir}/../build/release/fifed >/dev/null
+pushd ${script_dir}/../fifed/build/release >/dev/null
 
 if ! command -v valgrind &> /dev/null ; then 
 	echo "Valgrind is not installed!"

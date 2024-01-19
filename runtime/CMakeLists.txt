@@ -3,9 +3,19 @@ project(fif-runtime)
 
 set(CMAKE_CXX_STANDARD 20)
 set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
+
 set(FIF_BUILD_NATIVE_SCRIPTING OFF)
 set(FIF_BUILD_IMGUI OFF)
-set(FIF_ENABLE_MOUSE_PICKING OFF)
+set(FIF_ENABLE_MOUSE_PICKING OFF CACHE BOOL "Disable mouse picking")
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../fif ${CMAKE_CURRENT_BINARY_DIR}/fif)
+
+if(CMAKE_BUILD_TYPE MATCHES "Debug")
+  if(NOT WIN32)
+    add_link_options(-fsanitize=undefined)
+  endif()
+elseif(CMAKE_BUILD_TYPE MATCHES "Release")
+  add_compile_options(-fno-omit-frame-pointer)
+endif()
 
 file(GLOB_RECURSE SOURCES ${SRC_DIR}/*.cpp)
 add_executable(${PROJECT_NAME} ${SOURCES})

@@ -6,7 +6,7 @@ script_dir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 pushd ${script_dir}/.. >/dev/null
 
 project_dir=$1
-runtime_build_path="build/release/runtime/fif-runtime"
+runtime_build_path="runtime/build/release/fif-runtime"
 
 function print_usage () {
 	echo "Usage: ./export-project.sh <project_directory_path>"
