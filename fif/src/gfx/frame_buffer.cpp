@@ -1,7 +1,11 @@
 #include "fif/gfx/frame_buffer.hpp"
 
 namespace fif::gfx {
-	FrameBuffer::FrameBuffer(const vec2 &size) : mp_Texture(std::make_shared<Texture>(size, GL_NEAREST)), mp_EntityIdTexture(std::make_shared<Texture>(size, GL_NEAREST)) {
+	FrameBuffer::FrameBuffer(const vec2 &size) : mp_Texture(std::make_shared<Texture>(size, GL_NEAREST)) {
+#if FIF_MOUSE_PICKING
+		mp_EntityIdTexture = std::make_shared<Texture>(size, GL_NEAREST);
+#endif
+
 		glGenFramebuffers(1, &m_FboID);
 		set_size(size);
 
@@ -20,25 +24,29 @@ namespace fif::gfx {
 		glClearColor(clearColor.r, clearColor.g, clearColor.b, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
+#if FIF_MOUSE_PICKING
 		const u32 invalidId = std::numeric_limits<u32>::max();
 		glClearBufferuiv(GL_COLOR, 1, &invalidId);
+#endif
 	}
 
 	void FrameBuffer::end() { unbind(); }
 
 	void FrameBuffer::invalidate() {
-		mp_Texture->create(m_Size, GL_RGB8, GL_RGB, GL_NEAREST, GL_CLAMP_TO_EDGE, nullptr);
-		mp_EntityIdTexture->create(m_Size, GL_R32UI, GL_RED_INTEGER, GL_NEAREST, GL_CLAMP_TO_EDGE, nullptr);
-
 		bind();
 
-		glViewport(0, 0, m_Size.x, m_Size.y);
+		mp_Texture->create(m_Size, GL_RGB8, GL_RGB, GL_NEAREST, GL_CLAMP_TO_EDGE, nullptr);
 
+		glViewport(0, 0, m_Size.x, m_Size.y);
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mp_Texture->get_id(), 0);
+
+#if FIF_MOUSE_PICKING
+		mp_EntityIdTexture->create(m_Size, GL_R32UI, GL_RED_INTEGER, GL_NEAREST, GL_CLAMP_TO_EDGE, nullptr);
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, mp_EntityIdTexture->get_id(), 0);
 
 		constexpr std::array<u32, 2> attachments{GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1};
 		glDrawBuffers(attachments.size(), attachments.data());
+#endif
 
 		unbind();
 	}
@@ -48,6 +56,7 @@ namespace fif::gfx {
 		invalidate();
 	}
 
+#if FIF_MOUSE_PICKING
 	u32 FrameBuffer::read_entity_id_buffer_pixel(const u32vec2 &point) const {
 		bind();
 		glReadBuffer(GL_COLOR_ATTACHMENT1);
@@ -59,4 +68,5 @@ namespace fif::gfx {
 
 		return clickedId;
 	}
+#endif
 }// namespace fif::gfx

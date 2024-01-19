@@ -17,6 +17,14 @@ namespace fif::gfx {
 		m_StartCallback(std::bind(&GfxModule::on_start, this)), m_EndFrameCallback(std::bind(&GfxModule::end_frame, this)), m_EventCallback(std::bind(&GfxModule::on_event, this, std::placeholders::_1)) {
 		FIF_MODULE_INIT();
 
+		core::Logger::debug("Mouse picking is "
+#if FIF_MOUSE_PICKING
+							"ENABLED"
+#else
+							"DISABLED"
+#endif
+		);
+
 		core::Application &app = core::Application::get_instance();
 		app.m_StartHook.hook(m_StartCallback);
 		app.m_EndFrameHook.hook(m_EndFrameCallback);

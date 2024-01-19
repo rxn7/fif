@@ -10,7 +10,9 @@ namespace fif::gfx {
 		vec2 uv;
 		Color color;
 		i32 textureSlot;
-		u32 entityID;// TODO: Use this only in editor?
+#if FIF_MOUSE_PICKING
+		u32 entityID;
+#endif
 	};
 
 	inline const VertexBufferLayout SPRITE_VERTEX_BUFFER_LAYOUT = {
@@ -18,6 +20,8 @@ namespace fif::gfx {
 		{GlslDataType::Float2, false, true},// a_UV
 		{GlslDataType::UByte4, true, true}, // a_Color
 		{GlslDataType::Int, false, false},	// a_TextureSlot
-		{GlslDataType::UInt, false, false}, // a_EntityID
+#if FIF_MOUSE_PICKING
+		{GlslDataType::UInt, false, false},// a_EntityID
+#endif
 	};
 }// namespace fif::gfx

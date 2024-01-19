@@ -8,12 +8,16 @@ namespace fif::gfx {
 	struct QuadVertex final {
 		vec2 position;
 		Color color;
-		u32 entityID;// TODO: Use this only in editor?
+#if FIF_MOUSE_PICKING
+		u32 entityID;
+#endif
 	};
 
 	inline const VertexBufferLayout QUAD_VERTEX_BUFFER_LAYOUT = {
 		{GlslDataType::Float2, false, true},// a_Position
 		{GlslDataType::UByte4, true, true}, // a_Color
-		{GlslDataType::UInt, false, false}, // a_EntityID
+#if FIF_MOUSE_PICKING
+		{GlslDataType::UInt, false, false},// a_EntityID
+#endif
 	};
 }// namespace fif::gfx

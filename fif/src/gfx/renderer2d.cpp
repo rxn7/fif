@@ -103,16 +103,66 @@ namespace fif::gfx {
 		if(isRotated) {
 			m_TempStats.rotatedSpriteCount++;
 			const mat4 matrix = calculate_rotation_matrix(cmd.position, halfSize, cmd.pivot, cmd.angle);
-			mp_SpriteBatch->add_vertex({matrix * vec4(-1.0f, -1.0f, 0.0f, 1.0f), uvStart, cmd.color, textureSlot, cmd.entityID});
-			mp_SpriteBatch->add_vertex({matrix * vec4(-1.0f, +1.0f, 0.0f, 1.0f), {uvStart.x, uvEnd.y}, cmd.color, textureSlot, cmd.entityID});
-			mp_SpriteBatch->add_vertex({matrix * vec4(+1.0f, +1.0f, 0.0f, 1.0f), uvEnd, cmd.color, textureSlot, cmd.entityID});
-			mp_SpriteBatch->add_vertex({matrix * vec4(+1.0f, -1.0f, 0.0f, 1.0f), {uvEnd.x, uvStart.y}, cmd.color, textureSlot, cmd.entityID});
+			mp_SpriteBatch->add_vertex({
+				matrix *vec4(-1.0f, -1.0f, 0.0f, 1.0f), uvStart, cmd.color, textureSlot
+#if FIF_MOUSE_PICKING
+					,
+					cmd.entityID
+#endif
+			});
+			mp_SpriteBatch->add_vertex({
+				matrix *vec4(-1.0f, +1.0f, 0.0f, 1.0f), {uvStart.x, uvEnd.y}, cmd.color, textureSlot
+#if FIF_MOUSE_PICKING
+					,
+					cmd.entityID
+#endif
+			});
+			mp_SpriteBatch->add_vertex({
+				matrix *vec4(+1.0f, +1.0f, 0.0f, 1.0f), uvEnd, cmd.color, textureSlot
+#if FIF_MOUSE_PICKING
+					,
+					cmd.entityID
+#endif
+			});
+
+			mp_SpriteBatch->add_vertex({
+				matrix *vec4(+1.0f, -1.0f, 0.0f, 1.0f), {uvEnd.x, uvStart.y}, cmd.color, textureSlot
+#if FIF_MOUSE_PICKING
+					,
+					cmd.entityID
+#endif
+			});
 		} else {
 			m_TempStats.spriteCount++;
-			mp_SpriteBatch->add_vertex({vec2(cmd.position.x - halfSize.x, cmd.position.y - halfSize.y), uvStart, cmd.color, textureSlot, cmd.entityID});
-			mp_SpriteBatch->add_vertex({vec2(cmd.position.x - halfSize.x, cmd.position.y + halfSize.y), {uvStart.x, uvEnd.y}, cmd.color, textureSlot, cmd.entityID});
-			mp_SpriteBatch->add_vertex({vec2(cmd.position.x + halfSize.x, cmd.position.y + halfSize.y), {uvEnd.x, uvEnd.y}, cmd.color, textureSlot, cmd.entityID});
-			mp_SpriteBatch->add_vertex({vec2(cmd.position.x + halfSize.x, cmd.position.y - halfSize.y), {uvEnd.x, uvStart.y}, cmd.color, textureSlot, cmd.entityID});
+			mp_SpriteBatch->add_vertex({
+				{cmd.position.x - halfSize.x, cmd.position.y - halfSize.y}, uvStart, cmd.color, textureSlot
+#if FIF_MOUSE_PICKING
+					,
+					cmd.entityID
+#endif
+			});
+			mp_SpriteBatch->add_vertex({
+				{cmd.position.x - halfSize.x, cmd.position.y + halfSize.y}, {uvStart.x, uvEnd.y}, cmd.color, textureSlot
+#if FIF_MOUSE_PICKING
+					,
+					cmd.entityID
+#endif
+			});
+			mp_SpriteBatch->add_vertex({
+				{cmd.position.x + halfSize.x, cmd.position.y + halfSize.y}, {uvEnd.x, uvEnd.y}, cmd.color, textureSlot
+#if FIF_MOUSE_PICKING
+					,
+					cmd.entityID
+#endif
+			});
+
+			mp_SpriteBatch->add_vertex({
+				{cmd.position.x + halfSize.x, cmd.position.y - halfSize.y}, {uvEnd.x, uvStart.y}, cmd.color, textureSlot
+#if FIF_MOUSE_PICKING
+					,
+					cmd.entityID
+#endif
+			});
 		}
 
 		mp_SpriteBatch->add_element(vertCount);
@@ -135,16 +185,64 @@ namespace fif::gfx {
 
 		if(isRotated) {
 			const mat4 matrix = calculate_rotation_matrix(cmd.position, halfSize, cmd.pivot, cmd.angle);
-			mp_QuadBatch->add_vertex({matrix * vec4(-1.0f, -1.0f, 0.0f, 1.0f), cmd.color, cmd.entityID});
-			mp_QuadBatch->add_vertex({matrix * vec4(-1.0f, +1.0f, 0.0f, 1.0f), cmd.color, cmd.entityID});
-			mp_QuadBatch->add_vertex({matrix * vec4(+1.0f, +1.0f, 0.0f, 1.0f), cmd.color, cmd.entityID});
-			mp_QuadBatch->add_vertex({matrix * vec4(+1.0f, -1.0f, 0.0f, 1.0f), cmd.color, cmd.entityID});
+			mp_QuadBatch->add_vertex({
+				matrix *vec4(-1.0f, -1.0f, 0.0f, 1.0f), cmd.color
+#if FIF_MOUSE_PICKING
+					,
+					cmd.entityID
+#endif
+			});
+			mp_QuadBatch->add_vertex({
+				matrix *vec4(-1.0f, +1.0f, 0.0f, 1.0f), cmd.color
+#if FIF_MOUSE_PICKING
+					,
+					cmd.entityID
+#endif
+			});
+			mp_QuadBatch->add_vertex({
+				matrix *vec4(+1.0f, +1.0f, 0.0f, 1.0f), cmd.color
+#if FIF_MOUSE_PICKING
+					,
+					cmd.entityID
+#endif
+			});
+			mp_QuadBatch->add_vertex({
+				matrix *vec4(+1.0f, -1.0f, 0.0f, 1.0f), cmd.color
+#if FIF_MOUSE_PICKING
+					,
+					cmd.entityID
+#endif
+			});
 			m_TempStats.rotatedQuadCount++;
 		} else {
-			mp_QuadBatch->add_vertex({vec2(cmd.position.x - halfSize.x, cmd.position.y - halfSize.y), cmd.color, cmd.entityID});
-			mp_QuadBatch->add_vertex({vec2(cmd.position.x - halfSize.x, cmd.position.y + halfSize.y), cmd.color, cmd.entityID});
-			mp_QuadBatch->add_vertex({vec2(cmd.position.x + halfSize.x, cmd.position.y + halfSize.y), cmd.color, cmd.entityID});
-			mp_QuadBatch->add_vertex({vec2(cmd.position.x + halfSize.x, cmd.position.y - halfSize.y), cmd.color, cmd.entityID});
+			mp_QuadBatch->add_vertex({
+				{cmd.position.x - halfSize.x, cmd.position.y - halfSize.y}, cmd.color
+#if FIF_MOUSE_PICKING
+					,
+					cmd.entityID
+#endif
+			});
+			mp_QuadBatch->add_vertex({
+				{cmd.position.x - halfSize.x, cmd.position.y + halfSize.y}, cmd.color
+#if FIF_MOUSE_PICKING
+					,
+					cmd.entityID
+#endif
+			});
+			mp_QuadBatch->add_vertex({
+				{cmd.position.x + halfSize.x, cmd.position.y + halfSize.y}, cmd.color
+#if FIF_MOUSE_PICKING
+					,
+					cmd.entityID
+#endif
+			});
+			mp_QuadBatch->add_vertex({
+				{cmd.position.x + halfSize.x, cmd.position.y - halfSize.y}, cmd.color
+#if FIF_MOUSE_PICKING
+					,
+					cmd.entityID
+#endif
+			});
 			m_TempStats.quadCount++;
 		}
 
@@ -163,10 +261,34 @@ namespace fif::gfx {
 		FLUSH_IF_FULL(mp_CircleBatch)
 		const u32 vertCount = mp_CircleBatch->get_vertex_count();
 
-		mp_CircleBatch->add_vertex({vec2(cmd.position.x - cmd.radius, cmd.position.y - cmd.radius), vec2(0.0f, 0.0f), cmd.color, cmd.entityID});
-		mp_CircleBatch->add_vertex({vec2(cmd.position.x - cmd.radius, cmd.position.y + cmd.radius), vec2(0.0f, 1.0f), cmd.color, cmd.entityID});
-		mp_CircleBatch->add_vertex({vec2(cmd.position.x + cmd.radius, cmd.position.y + cmd.radius), vec2(1.0f, 1.0f), cmd.color, cmd.entityID});
-		mp_CircleBatch->add_vertex({vec2(cmd.position.x + cmd.radius, cmd.position.y - cmd.radius), vec2(1.0f, 0.0f), cmd.color, cmd.entityID});
+		mp_CircleBatch->add_vertex({
+			{cmd.position.x - cmd.radius, cmd.position.y - cmd.radius}, vec2(0.0f, 0.0f), cmd.color
+#if FIF_MOUSE_PICKING
+				,
+				cmd.entityID
+#endif
+		});
+		mp_CircleBatch->add_vertex({
+			{cmd.position.x - cmd.radius, cmd.position.y + cmd.radius}, vec2(0.0f, 1.0f), cmd.color
+#if FIF_MOUSE_PICKING
+				,
+				cmd.entityID
+#endif
+		});
+		mp_CircleBatch->add_vertex({
+			{cmd.position.x + cmd.radius, cmd.position.y + cmd.radius}, vec2(1.0f, 1.0f), cmd.color
+#if FIF_MOUSE_PICKING
+				,
+				cmd.entityID
+#endif
+		});
+		mp_CircleBatch->add_vertex({
+			{cmd.position.x + cmd.radius, cmd.position.y - cmd.radius}, vec2(1.0f, 0.0f), cmd.color
+#if FIF_MOUSE_PICKING
+				,
+				cmd.entityID
+#endif
+		});
 
 		mp_CircleBatch->add_element(vertCount);
 		mp_CircleBatch->add_element(vertCount + 1u);
@@ -239,10 +361,34 @@ namespace fif::gfx {
 					m_TempStats.glyphCount++;
 				}
 
-				mp_GlyphBatch->add_vertex({glyphPosition, {glyph.uvStart.x, glyph.uvEnd.y}, cmd.color, textureSlot, cmd.entityID});
-				mp_GlyphBatch->add_vertex({vec2(glyphPosition.x, glyphPosition.y + glyphSize.y), glyph.uvStart, cmd.color, textureSlot, cmd.entityID});
-				mp_GlyphBatch->add_vertex({vec2(glyphPosition.x + glyphSize.x, glyphPosition.y + glyphSize.y), {glyph.uvEnd.x, glyph.uvStart.y}, cmd.color, textureSlot, cmd.entityID});
-				mp_GlyphBatch->add_vertex({vec2(glyphPosition.x + glyphSize.x, glyphPosition.y), glyph.uvEnd, cmd.color, textureSlot, cmd.entityID});
+				mp_GlyphBatch->add_vertex({
+					glyphPosition, {glyph.uvStart.x, glyph.uvEnd.y}, cmd.color, textureSlot
+#if FIF_MOUSE_PICKING
+						,
+						cmd.entityID
+#endif
+				});
+				mp_GlyphBatch->add_vertex({
+					{glyphPosition.x, glyphPosition.y + glyphSize.y}, glyph.uvStart, cmd.color, textureSlot
+#if FIF_MOUSE_PICKING
+						,
+						cmd.entityID
+#endif
+				});
+				mp_GlyphBatch->add_vertex({
+					{glyphPosition.x + glyphSize.x, glyphPosition.y + glyphSize.y}, {glyph.uvEnd.x, glyph.uvStart.y}, cmd.color, textureSlot
+#if FIF_MOUSE_PICKING
+						,
+						cmd.entityID
+#endif
+				});
+				mp_GlyphBatch->add_vertex({
+					{glyphPosition.x + glyphSize.x, glyphPosition.y}, glyph.uvEnd, cmd.color, textureSlot
+#if FIF_MOUSE_PICKING
+						,
+						cmd.entityID
+#endif
+				});
 
 				mp_GlyphBatch->add_element(vertCount);
 				mp_GlyphBatch->add_element(vertCount + 1);

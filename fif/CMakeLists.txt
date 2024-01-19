@@ -7,6 +7,7 @@ option(FIF_BUILD_INPUT "Build the input module" ON)
 option(FIF_BUILD_IMGUI "Build the imgui module" ON)
 option(FIF_BUILD_LUA_SCRIPTING "Build the lua_scripting module" ON)
 option(FIF_BUILD_NATIVE_SCRIPTING "Build the native_scripting module" ON)
+option(FIF_ENABLE_MOUSE_PICKING "Enable mouse picking" ON)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_PCH_INSTANTIATE_TEMPLATES ON)
@@ -19,6 +20,7 @@ add_compile_options(-fPIC)
 add_compile_options(-ffast-math)
 add_compile_options(-fno-stack-protector)
 
+message("Mouse picking: " ${FIF_ENABLE_MOUSE_PICKING})
 message("Build type: ${CMAKE_BUILD_TYPE}")
 if(CMAKE_BUILD_TYPE STREQUAL "Release")
   add_compile_options(-g3)
@@ -60,6 +62,11 @@ function(build_module target dir libs definitions)
     set(definitions "${definitions};FIF_LUA_SCRIPTING")
     set(libs "${libs};lua::lib;sol2")
   endif()
+
+  if(FIF_ENABLE_MOUSE_PICKING)
+    target_compile_definitions(${target} INTERFACE FIF_MOUSE_PICKING)
+  endif()
+
 
   set_target_properties(${target} PROPERTIES PUBLIC_HEADER ${INC_DIR}/fif/${dir})
 

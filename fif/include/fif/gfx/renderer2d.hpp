@@ -105,12 +105,15 @@ namespace fif::gfx {
 		void start();
 		void end();
 
-		template<class T, class... Args> inline void add_render_command(i8 zIndex, u32 entityId, Args &&...args) {
+		template<class T, class... Args> inline void add_render_command(const i8 zIndex, [[maybe_unused]] const u32 entityId = INVALID_ENTITY_ID, Args &&...args) {
 			static_assert(std::is_base_of<RenderCommand, T>().value, "T must inherit RenderCommand");
 
 			std::shared_ptr<RenderCommand> cmd = std::make_shared<T>(args...);
 			cmd->zIndex = zIndex;
+
+#if FIF_MOUSE_PICKING
 			cmd->entityID = entityId;
+#endif
 
 			m_RenderCommandsQueue.push(cmd);
 		}

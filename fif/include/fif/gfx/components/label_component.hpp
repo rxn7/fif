@@ -13,8 +13,6 @@ namespace fif::gfx {
 		Color color = Colors::BLACK;
 		HorizontalTextAlign horizontalAlign = HorizontalTextAlign::Left;
 		VerticalTextAlign verticalAlign = VerticalTextAlign::Center;
-
-		// TODO: Use the default font. (we would need to copy it to the runtime in the future)
 		std::shared_ptr<Font> p_font;
 	};
 }// namespace fif::gfx
