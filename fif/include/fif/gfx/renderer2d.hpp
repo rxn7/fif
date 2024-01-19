@@ -146,7 +146,6 @@ namespace fif::gfx {
 		std::array<std::shared_ptr<Texture>, 32> m_Textures;
 		i32 m_TextureIdx = 0;
 
-		core::Clock::time_point m_BeginTime;
 		Renderer2DStats m_Stats, m_TempStats;
 		i32 m_TextureSlotCount;
 	};

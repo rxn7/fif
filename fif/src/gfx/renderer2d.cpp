@@ -40,10 +40,7 @@ namespace fif::gfx {
 		mp_SpriteBatch = setup_textured_batch<SpriteVertex>(SPRITE_VERTEX_BUFFER_LAYOUT, shaders::Sprite::VERTEX, shaders::Sprite::FRAGMENT);
 	}
 
-	void Renderer2D::start() {
-		m_BeginTime = core::Clock::now();
-		reset_textures();
-	}
+	void Renderer2D::start() { reset_textures(); }
 
 	void Renderer2D::end() {
 		m_Camera.update();
