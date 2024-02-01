@@ -49,6 +49,9 @@ namespace fif::core {
 		void update();
 		void render();
 
+	protected:
+		std::unique_ptr<Window> mp_Window;
+
 	public:
 		Invokable<> m_StartHook;
 		Invokable<Event &> m_EventHook;
@@ -63,9 +66,6 @@ namespace fif::core {
 
 		std::vector<RenderSystem> m_RenderSystems;
 		std::vector<UpdateSystem> m_UpdateSystems;
-
-	protected:
-		std::unique_ptr<Window> mp_Window;
 
 	private:
 		std::vector<std::unique_ptr<Module>> m_Modules;
