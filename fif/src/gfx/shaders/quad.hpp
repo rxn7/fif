@@ -10,12 +10,22 @@ namespace fif::gfx::shaders {
 
 		layout(location = 0) in vec2 a_Position;
 		layout(location = 1) in vec4 a_Color;
-		layout(location = 2) in uint a_EntityID;
+		)"
+#if FIF_MOUSE_PICKING
+			"layout(location = 2) in uint a_EntityID;"
+#endif
 
+			R"(
 		out vec4 v_Color;
-		flat out uint v_EntityID;
+		)"
 
-		void main() {
+#if FIF_MOUSE_PICKING
+			"flat out uint v_EntityID;"
+#endif
+
+			R"(
+		void
+			main() {
 			v_Color = a_Color;
 			v_EntityID = a_EntityID;
 			gl_Position = u_ProjectionMatrix * vec4(a_Position, 0.0, 1.0);

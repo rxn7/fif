@@ -6,6 +6,11 @@
 #include <fif/gfx/vertex_buffer_layout.hpp>
 
 namespace fifed {
+	struct GridVertex {
+		fif::vec2 position;
+		fif::vec2 uv;
+	};
+
 	class Grid final {
 	public:
 		Grid(const OrthoCamera &camera, const FrameBuffer &frameBuffer);
@@ -16,7 +21,7 @@ namespace fifed {
 		Color3 m_LineColor = Color3(20, 20, 20);
 		f32 m_LineThickness = 1.5f;
 		f32 m_MinCellSize = 0.05f;
-		VertexBuffer m_VertexBuffer;
+		VertexBuffer<GridVertex> m_VertexBuffer;
 		Shader m_Shader;
 		const OrthoCamera &m_Camera;
 		const FrameBuffer &m_FrameBuffer;

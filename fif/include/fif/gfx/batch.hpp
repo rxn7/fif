@@ -8,12 +8,9 @@ namespace fif::gfx {
 	template<typename Vertex> class Batch {
 	public:
 		Batch(const u32 verticesPerInstance, const u32 elementsPerInstance, const u32 size, const VertexBufferLayout &layout, const std::string &shaderVert, const std::string &shaderFrag) :
-			m_MaxElements(elementsPerInstance * size), m_MaxVertices(verticesPerInstance * size), mp_Vertices(new Vertex[m_MaxVertices]), mp_Elements(new u16[m_MaxElements]), m_Buffer(m_MaxVertices, m_MaxElements, sizeof(Vertex), layout), m_Shader(shaderVert, shaderFrag) {}
+			m_MaxElements(elementsPerInstance * size), m_MaxVertices(verticesPerInstance * size), m_Vertices(m_MaxVertices), m_Elements(m_MaxElements), m_Buffer(m_MaxVertices, m_MaxElements, sizeof(Vertex), layout), m_Shader(shaderVert, shaderFrag) {}
 
-		virtual ~Batch() {
-			delete[] mp_Vertices;
-			delete[] mp_Elements;
-		}
+		virtual ~Batch() {}
 
 		inline Shader &get_shader() { return m_Shader; }
 		inline u32 get_vertex_count() const { return m_VertexCount; }
@@ -27,7 +24,7 @@ namespace fif::gfx {
 			if(m_VertexCount == 0)
 				return;
 
-			m_Buffer.set_vertices_and_elements(mp_Vertices, m_VertexCount, mp_Elements, m_ElementCount);
+			m_Buffer.set_vertices_and_elements(m_Vertices, m_Elements);
 			m_Buffer.render();
 
 			m_VertexCount = m_ElementCount = 0;
@@ -39,7 +36,7 @@ namespace fif::gfx {
 				return;
 			}
 
-			mp_Vertices[m_VertexCount++] = vertex;
+			m_Vertices[m_VertexCount++] = vertex;
 		}
 
 		void add_element(u16 element) {
@@ -48,17 +45,17 @@ namespace fif::gfx {
 				return;
 			}
 
-			mp_Elements[m_ElementCount++] = element;
+			m_Elements[m_ElementCount++] = element;
 		}
 
 	private:
 		u32 m_ElementCount = 0, m_MaxElements;
 		u32 m_VertexCount = 0, m_MaxVertices;
 
-		Vertex *mp_Vertices;
-		u16 *mp_Elements;
+		std::vector<Vertex> m_Vertices;
+		std::vector<u16> m_Elements;
 
-		VertexBuffer m_Buffer;
+		VertexBuffer<Vertex> m_Buffer;
 		Shader m_Shader;
 
 		friend class Renderer2D;

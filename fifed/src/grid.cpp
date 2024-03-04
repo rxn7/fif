@@ -6,13 +6,9 @@
 #include <fif/gfx/renderer2d.hpp>
 #include <fif/gfx/shader.hpp>
 #include <fif/gfx/vertex_buffer.hpp>
+#include <span>
 
 namespace fifed {
-	struct GridVertex {
-		fif::vec2 position;
-		fif::vec2 uv;
-	};
-
 	static constexpr std::array<GridVertex, 4> VERTICES = {
 		GridVertex{
 			.position = {-1.0f, -1.0f},
@@ -40,7 +36,7 @@ namespace fifed {
 	};
 
 	Grid::Grid(const OrthoCamera &cam, const FrameBuffer &frameBuffer) :
-		m_VertexBuffer(VERTICES.data(), VERTICES.size(), ELEMENTS.data(), ELEMENTS.size(), sizeof(GridVertex), VERTEX_LAYOUT), m_Shader(shaders::Grid::VERTEX, shaders::Grid::FRAGMENT), m_Camera(cam), m_FrameBuffer(frameBuffer) {}
+		m_VertexBuffer(VERTICES, ELEMENTS, VERTEX_LAYOUT), m_Shader(shaders::Grid::VERTEX, shaders::Grid::FRAGMENT), m_Camera(cam), m_FrameBuffer(frameBuffer) {}
 
 	void Grid::render() {
 		if(!m_Enabled)
