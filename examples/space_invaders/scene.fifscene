@@ -16,3 +16,22 @@ Entities:
   - UUID: 10351626529090989615
   - UUID: 2222490367885087893
   - UUID: 18282126380387080975
+  - UUID: 9129693398012066763
+  - UUID: 6572100124031690438
+  - UUID: 4266274069285079441
+  - UUID: 8810931458401074390
+  - UUID: 17248393622099490438
+  - UUID: 6207406182432961136
+  - UUID: 8415030050378192196
+  - UUID: 5392549918503984767
+    Tag: Sprite
+    fif::core::TransformComponent:
+      Position: [0, 0]
+      Scale: [1, 1]
+      AngleRadians: 0
+    fif::lua_scripting::LuaScriptComponent:
+      Path: assets/scripts/player.lua
+    fif::gfx::SpriteComponent:
+      Tint: [255, 255, 255, 255]
+      Size: [48, 48]
+      TextureUUID: 15600235039495965740

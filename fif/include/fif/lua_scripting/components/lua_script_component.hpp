@@ -6,16 +6,15 @@
 
 namespace fif::lua_scripting {
 	struct LuaScriptComponent final {
-		LuaScriptComponent(const core::Entity &ent) : entity(ent) {}
+		LuaScriptComponent(const core::Entity &ent, const std::string &path = "") : path(path), entity(ent) {}
 
 		sol::table self;
-		struct {
-			sol::function start;
-			sol::function update;
-			sol::function render;
-		} hooks;
 
-		std::filesystem::path path = "";
+		sol::function start_hook;
+		sol::function update_hook;
+		sol::function render_hook;
+
+		std::string path = "";
 		bool inited = false;
 		bool firstFrame = true;
 		core::Entity entity;

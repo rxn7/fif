@@ -74,6 +74,7 @@ namespace fif::gfx {
 
 		mp_Application->m_PreRenderHook.invoke();
 
+		mp_Application->m_RenderHook.invoke();
 		for(auto &renderSystem : mp_Application->m_RenderSystems)
 			renderSystem(mp_Application->get_status(), mp_Application->get_scene().get_registry());
 

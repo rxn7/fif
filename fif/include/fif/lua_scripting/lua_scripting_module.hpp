@@ -12,7 +12,7 @@ namespace fif::lua_scripting {
 		LuaScriptingModule();
 		~LuaScriptingModule();
 
-		void attach_script(core::Entity &ent, const std::filesystem::path &path);
+		void attach_script(core::Entity &ent, const std::string &path);
 		void init_script(LuaScriptComponent &luaScript);
 
 		template<typename T, typename... Args> void register_component(Args &&...args) {
@@ -20,7 +20,6 @@ namespace fif::lua_scripting {
 			name = name.substr(name.find_last_of(':') + 1);// Remove the namespaces
 
 			m_Lua.new_usertype<T>(name, std::forward<Args>(args)...);
-
 			const std::string nameSnakeCase = core::System::camel_case_to_snake_case(name);
 
 			core::Logger::debug("Lua component registered: %s", nameSnakeCase.c_str());

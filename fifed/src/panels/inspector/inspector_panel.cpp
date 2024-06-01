@@ -164,7 +164,7 @@ namespace fifed {
 				return;
 			}
 
-			ImGui::Text("Script: %s", script.path.string().c_str());
+			ImGui::Text("Script: %s", script.path.c_str());
 
 			if(ImGui::CollapsingHeader("Properties")) {
 				script.self.for_each([](const sol::object &key, const sol::object &value) {

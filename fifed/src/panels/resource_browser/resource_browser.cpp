@@ -112,6 +112,9 @@ namespace fifed {
 
 		if(path.extension() == SceneSerializer::get_file_extension()) {
 			m_Editor.open_scene(Project::get_resource_path(path));
+		} else {
+			// TODO: This is probably extremely unsafe
+			System::open_file(path);
 		}
 	}
 
