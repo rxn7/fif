@@ -25,7 +25,7 @@
 	url = http://git.code.sf.net/p/tinyfiledialogs/code
 [submodule "fif/vendor/yaml-cpp"]
 	path = fif/vendor/yaml-cpp
-	url = https://github.com/t123yh/yaml-cpp
+	url = https://github.com/jbeder/yaml-cpp
 [submodule "fif/vendor/freetype"]
 	path = fif/vendor/freetype
 	url = https://github.com/cpuimage/freetype
