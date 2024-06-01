@@ -48,7 +48,7 @@ namespace fif::gfx {
 			const i32 location = glGetUniformLocation(m_ID, name.data());
 			if(location == -1) {
 				core::Logger::error("Cannot find uniform '%s'", name.data());
-				return -1;
+				// return -1;
 			}
 
 			return m_UniformLocations.insert({name, location}).second;

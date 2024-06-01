@@ -3,9 +3,14 @@
 script_dir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 pushd ${script_dir}/.. >/dev/null
 
+echo "Initializing the submodules..."
+git submodule update --init --recursive
+
+echo "Setting up cmake..."
+
 COMMON_FLAGS="-DBUILD_SHARED_LIBS=FALSE -GNinja"
 
-cmake fifed -Bfifed/build/debug -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS $COMMON_FLAGS 
+cmake fifed -Bfifed/build/debug -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=TRUE $COMMON_FLAGS 
 cmake fifed -Bfifed/build/release -DCMAKE_BUILD_TYPE=Release $COMMON_FLAGS 
 
 cmake runtime -Bruntime/build/debug -DCMAKE_BUILD_TYPE=Debug $COMMON_FLAGS 
