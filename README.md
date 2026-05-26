@@ -1,5 +1,5 @@
 # ⚠️ REPOSITORY MOVED ⚠️
-### this repository is now hosted at [https://codeberg/rxn/vox](https://codeberg/rxn/vox)</b>
+### this repository is now hosted at [https://codeberg/rxn/fif](https://codeberg/rxn/fif)</b>
 
 # Fif
 <p align=center>
